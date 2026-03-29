@@ -1,23 +1,39 @@
 {
-  "name": "fipto-slides",
-  "version": "1.0.0",
-  "description": "CLI pour générer des présentations comptables riches pour Fipto",
+  "name": "gamma-slides",
+  "version": "2.0.0",
+  "description": "Professional presentation & video generator — declarative YAML/JSON decks, narrated videos, LLM-pilotable via MCP",
   "type": "module",
   "bin": {
-    "fipto-slides": "./bin/fipto-slides.js"
+    "gamma-slides": "./bin/gamma-slides.js"
   },
   "scripts": {
-    "start": "node bin/fipto-slides.js",
-    "dev": "node bin/fipto-slides.js serve"
+    "start": "node bin/gamma-slides.js",
+    "mcp": "node src/mcp/server.js"
   },
-  "keywords": ["slides", "presentation", "accounting", "fec", "fipto", "stablecoin"],
+  "keywords": [
+    "slides",
+    "presentation",
+    "video",
+    "tts",
+    "mcp",
+    "llm",
+    "charts",
+    "reveal.js",
+    "youtube"
+  ],
   "license": "MIT",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1",
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
     "express": "^5.2.1",
+    "googleapis": "^171.4.0",
+    "js-yaml": "^4.1.1",
     "open": "^11.0.0",
     "ora": "^9.3.0",
-    "puppeteer": "^24.40.0"
+    "puppeteer": "^24.40.0",
+    "zod": "^3.25.76"
   }
 }

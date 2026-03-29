@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Gamma Slides Deck",
+  "description": "Declarative presentation/video specification for gamma-slides",
+  "type": "object",
+  "required": ["slides"],
+  "properties": {
+    "version": { "type": "string", "default": "1" },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "author": { "type": "string" },
+        "company": { "type": "string" },
+        "date": { "type": "string" },
+        "language": { "type": "string", "default": "en" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" }
+      }
+    },
+    "branding": {
+      "type": "object",
+      "properties": {
+        "logo": { "type": "string" },
+        "watermark": { "type": "string" },
+        "favicon": { "type": "string" },
+        "company_url": { "type": "string" }
+      }
+    },
+    "theme": { "type": "string", "default": "corporate" },
+    "style": {
+      "type": "object",
+      "properties": {
+        "primary_color": { "type": "string" },
+        "secondary_color": { "type": "string" },
+        "accent_color": { "type": "string" },
+        "font_heading": { "type": "string" },
+        "font_body": { "type": "string" },
+        "font_mono": { "type": "string" }
+      }
+    },
+    "narration": {
+      "type": "object",
+      "properties": {
+        "voice": { "type": "string", "default": "en-US-AndrewNeural" },
+        "rate": { "type": "string", "default": "-5%" },
+        "pitch": { "type": "string", "default": "+0Hz" }
+      }
+    },
+    "music": {
+      "type": "object",
+      "properties": {
+        "track": { "type": ["string", "null"] },
+        "volume": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.08 },
+        "fade_in": { "type": "number", "default": 3 },
+        "fade_out": { "type": "number", "default": 4 }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "resolution": { "type": "string", "default": "1920x1080" },
+        "fps": { "type": "number", "default": 30 },
+        "format": { "type": "string", "default": "mp4" },
+        "subtitles": { "type": "boolean", "default": true },
+        "thumbnail": {
+          "type": "object",
+          "properties": {
+            "slide": { "type": "number", "default": 0 },
+            "text_overlay": { "type": "string" }
+          }
+        },
+        "youtube": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "category": { "type": "string" },
+            "chapters": { "type": "boolean", "default": true },
+            "playlist": { "type": "string" }
+          }
+        }
+      }
+    },
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/slide" }
+    }
+  },
+  "definitions": {
+    "slide": {
+      "type": "object",
+      "required": ["layout"],
+      "properties": {
+        "layout": {
+          "type": "string",
+          "enum": ["title", "closing", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank"]
+        },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "badge": { "type": "string" },
+        "transition": { "type": "string", "enum": ["slide", "fade", "convex", "concave", "zoom", "none"] },
+        "background": { "$ref": "#/definitions/background" },
+        "narration": { "type": "string" },
+        "notes": { "type": "string" },
+        "columns": { },
+        "metrics": { "type": "array", "items": { "$ref": "#/definitions/metric" } },
+        "chart": { "$ref": "#/definitions/chartSpec" },
+        "left": { "$ref": "#/definitions/panel" },
+        "right": { "$ref": "#/definitions/panel" },
+        "callout": { "$ref": "#/definitions/callout" },
+        "table": { "$ref": "#/definitions/tableSpec" },
+        "items": { "type": "array", "items": { "$ref": "#/definitions/listItem" } },
+        "image": { "$ref": "#/definitions/imageSpec" },
+        "icon": { "type": "string" },
+        "quote": { "type": "string" },
+        "author": { "type": "string" },
+        "role": { "type": "string" },
+        "contact": { "type": "object" },
+        "html": { "type": "string" }
+      }
+    },
+    "background": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["solid", "gradient", "image"] },
+        "value": { "type": "string" }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "required": ["label", "value"],
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "delta": { "type": "string" },
+        "trend": { "type": "string", "enum": ["up", "down", "neutral"] },
+        "icon": { "type": "string" }
+      }
+    },
+    "chartSpec": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": { "type": "string", "enum": ["bar", "line", "doughnut", "pie", "radar", "area"] },
+        "data": {
+          "type": "object",
+          "properties": {
+            "labels": { "type": "array", "items": { "type": "string" } },
+            "datasets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": { "type": "string" },
+                  "values": { "type": "array", "items": { "type": "number" } },
+                  "color": { "type": "string" },
+                  "colors": { "type": "array", "items": { "type": "string" } },
+                  "y_axis": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "options": {
+          "type": "object",
+          "properties": {
+            "format_y": { "type": "string" },
+            "format_y_right": { "type": "string" },
+            "show_legend": { "type": "boolean" },
+            "stacked": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "tableSpec": {
+      "type": "object",
+      "required": ["headers", "rows"],
+      "properties": {
+        "headers": { "type": "array", "items": { "type": "string" } },
+        "rows": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
+        "column_types": { "type": "array", "items": { "type": "string" } },
+        "highlight_column": { "type": "number" },
+        "max_rows": { "type": "number" }
+      }
+    },
+    "panel": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["table", "chart", "bullets", "image", "metrics"] },
+        "chart": { "$ref": "#/definitions/chartSpec" },
+        "table": { "$ref": "#/definitions/tableSpec" },
+        "headers": { "type": "array" },
+        "rows": { "type": "array" },
+        "items": { "type": "array" },
+        "image": { "$ref": "#/definitions/imageSpec" },
+        "metrics": { "type": "array", "items": { "$ref": "#/definitions/metric" } },
+        "highlight_column": { "type": "number" }
+      }
+    },
+    "callout": {
+      "type": "object",
+      "properties": {
+        "icon": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+    "listItem": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "text": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" }
+      }
+    },
+    "imageSpec": {
+      "type": "object",
+      "properties": {
+        "src": { "type": "string" },
+        "alt": { "type": "string" },
+        "fit": { "type": "string", "enum": ["contain", "cover", "fill"] },
+        "caption": { "type": "string" }
+      }
+    }
+  }
+}

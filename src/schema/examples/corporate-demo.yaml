@@ -1,0 +1,243 @@
+version: "1"
+
+meta:
+  title: "Q4 2025 Revenue Report"
+  subtitle: "Board Presentation"
+  author: "Sarah Chen"
+  company: "Acme Corp"
+  date: "2025-12-15"
+  language: "en"
+  tags: ["finance", "quarterly", "board"]
+  description: "Quarterly revenue analysis with growth metrics and projections"
+
+branding:
+  watermark: "CONFIDENTIAL"
+  company_url: "acme.com"
+
+theme: "corporate"
+
+narration:
+  voice: "en-US-AndrewNeural"
+  rate: "-5%"
+
+music:
+  track: null
+  volume: 0.08
+
+video:
+  subtitles: true
+  thumbnail:
+    slide: 0
+    text_overlay: "Q4 Revenue Report"
+  youtube:
+    title: "Acme Corp Q4 2025 Revenue Report"
+    description: "Full quarterly revenue analysis with projections for FY26"
+    tags: ["finance", "revenue", "Q4", "2025"]
+    category: "Education"
+    chapters: true
+
+slides:
+  - layout: title
+    title: "Q4 2025 Revenue Report"
+    subtitle: "Board Presentation — December 2025"
+    badge: "Quarterly Review"
+    narration: >
+      Welcome to Acme Corp's Q4 2025 revenue report.
+      We'll cover performance, unit economics, and our 2026 outlook.
+
+  - layout: metrics
+    title: "Key Performance Indicators"
+    subtitle: "FY 2025 at a glance"
+    columns: 4
+    metrics:
+      - label: "Annual Revenue"
+        value: "$16.2M"
+        delta: "+95% YoY"
+        trend: up
+        icon: "dollar-sign"
+      - label: "Gross Margin"
+        value: "72%"
+        delta: "+4pp"
+        trend: up
+        icon: "trending-up"
+      - label: "Net Retention"
+        value: "135%"
+        delta: "+12pp"
+        trend: up
+        icon: "users"
+      - label: "Customers"
+        value: "85"
+        delta: "+67 new"
+        trend: up
+        icon: "building"
+    narration: >
+      Our four north-star metrics all improved significantly this year.
+      Revenue nearly doubled to 16.2 million dollars, with gross margin
+      expanding to 72 percent. Net revenue retention of 135 percent shows
+      strong expansion within our existing customer base.
+
+  - layout: chart
+    title: "Revenue by Quarter"
+    subtitle: "Consistent acceleration throughout FY25"
+    chart:
+      type: bar
+      data:
+        labels: ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025"]
+        datasets:
+          - label: "Revenue ($M)"
+            values: [3200000, 3800000, 4300000, 4900000]
+            color: "primary"
+      options:
+        format_y: "currency_m"
+        show_legend: false
+    narration: >
+      Quarterly revenue shows consistent acceleration.
+      We started Q1 at 3.2 million and ended Q4 at 4.9 million,
+      representing roughly 15 percent quarter-over-quarter growth
+      sustained throughout the year.
+
+  - layout: split
+    title: "Revenue Mix"
+    left:
+      type: chart
+      chart:
+        type: doughnut
+        data:
+          labels: ["Transfer Fees", "FX Spread", "SaaS", "Treasury", "Compliance"]
+          datasets:
+            - values: [8400000, 3150000, 2400000, 1200000, 940000]
+              colors: ["primary", "secondary", "accent", "#74B9FF", "#FFEAA7"]
+        options:
+          show_legend: true
+    right:
+      type: metrics
+      metrics:
+        - label: "Transfer Fees"
+          value: "$8.4M"
+          delta: "+100% YoY"
+          trend: up
+        - label: "SaaS Revenue"
+          value: "$2.4M"
+          delta: "+100% YoY"
+          trend: up
+        - label: "FX Spread"
+          value: "$3.15M"
+          delta: "+75% YoY"
+          trend: up
+    callout:
+      text: "Hybrid **transaction-based + SaaS** model captures volume growth while building predictable recurring revenue."
+    narration: >
+      Our revenue is diversified across five streams. Transfer fees lead
+      at 8.4 million, followed by FX spread at 3.15 million and SaaS
+      subscriptions at 2.4 million. The hybrid model captures both
+      volume growth and predictable recurring revenue.
+
+  - layout: table
+    title: "Top Accounts Performance"
+    subtitle: "Enterprise clients driving expansion"
+    table:
+      headers: ["Client", "Tier", "MRR", "Growth", "Status"]
+      rows:
+        - ["GlobalTech Inc", "Enterprise", "$12,500", "+45%", "Expanding"]
+        - ["PayFlow SA", "Enterprise", "$8,200", "+120%", "Expanding"]
+        - ["Nordic Finance", "Premium", "$5,800", "+30%", "Stable"]
+        - ["Latam Transfers", "Premium", "$4,100", "+85%", "Expanding"]
+        - ["Asia Connect", "Standard", "$2,400", "+60%", "Upgrading"]
+      column_types: ["text", "tag", "amount", "amount", "tag"]
+    narration: >
+      Our top five accounts show strong expansion across the board.
+      GlobalTech remains our largest client with 12,500 dollars in
+      monthly recurring revenue. PayFlow grew fastest at 120 percent.
+
+  - layout: comparison
+    title: "Traditional vs Stablecoin Rails"
+    columns:
+      - heading: "Traditional SWIFT"
+        items:
+          - "3-5 day settlement"
+          - "2-4% total fees"
+          - "Limited corridors"
+          - "Manual reconciliation"
+          - "FX exposure for days"
+        style: negative
+      - heading: "Stablecoin Rails"
+        items:
+          - "T+0 instant settlement"
+          - "0.5-1.5% total fees"
+          - "Global corridors"
+          - "Auto-reconciled on-chain"
+          - "Minimal FX exposure"
+        style: positive
+    narration: >
+      The contrast between traditional and stablecoin rails is dramatic.
+      We reduce settlement from days to seconds, cut fees by more than
+      half, and eliminate manual reconciliation through blockchain
+      automation.
+
+  - layout: timeline
+    title: "FY26 Roadmap"
+    items:
+      - title: "Q1 — Latin America Launch"
+        description: "Brazil and Mexico corridors, local stablecoin support"
+        icon: "globe"
+      - title: "Q2 — Enterprise Platform"
+        description: "White-label API, multi-currency treasury dashboard"
+        icon: "building"
+      - title: "Q3 — Compliance Suite"
+        description: "Embedded KYB/KYC, real-time monitoring for partners"
+        icon: "shield"
+      - title: "Q4 — Scale & Optimize"
+        description: "Target 200+ clients, 78% gross margin"
+        icon: "rocket"
+    narration: >
+      Our FY26 roadmap has four phases. Q1 focuses on Latin America
+      expansion. Q2 delivers our enterprise platform. Q3 launches
+      the compliance suite, and Q4 is about scaling to 200 clients.
+
+  - layout: bullets
+    title: "Key Growth Levers"
+    icon: "target"
+    items:
+      - text: "Geographic expansion into LatAm and Southeast Asia"
+        icon: "map-pin"
+      - text: "New stablecoin support — USDT, PYUSD, and local currencies"
+        icon: "coins"
+      - text: "Enterprise upselling — 2.5x ARPC on top accounts"
+        icon: "trending-up"
+      - text: "Treasury optimization via T+0 settlement yields"
+        icon: "dollar-sign"
+      - text: "Embedded compliance for partner fintechs"
+        icon: "shield"
+    narration: >
+      Five strategic levers will drive our 74 percent growth target
+      for FY26. Geographic expansion, new stablecoin support,
+      enterprise upselling, treasury optimization, and embedded
+      compliance services.
+
+  - layout: quote
+    quote: "They reduced our cross-border settlement from 3 days to 3 minutes. The ROI was obvious within the first month."
+    author: "James Wright"
+    role: "CFO, GlobalTech Inc."
+    narration: >
+      Our clients consistently highlight the speed improvement.
+      James Wright, CFO of our largest customer, saw immediate ROI
+      within the first month of switching to our stablecoin rails.
+
+  - layout: closing
+    title: "Thank You"
+    badge: "Q4 2025 Complete"
+    metrics:
+      - label: "Revenue"
+        value: "$16.2M"
+      - label: "Growth"
+        value: "+95%"
+      - label: "NRR"
+        value: "135%"
+    contact:
+      email: "ir@acme.com"
+      website: "acme.com"
+    narration: >
+      Thank you for reviewing our Q4 2025 results. With 95 percent
+      year-over-year growth and clear expansion levers ahead, we're
+      well-positioned for an exceptional FY26. We look forward to
+      your questions.

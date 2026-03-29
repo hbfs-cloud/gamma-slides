@@ -1,0 +1,16 @@
+services:
+  fipto-slides:
+    build: .
+    image: fipto-slides:latest
+    volumes:
+      - ./output:/app/output
+      - ./assets:/app/assets:ro
+    shm_size: '2gb'
+    # Usage:
+    #   docker compose run fipto-slides list
+    #   docker compose run fipto-slides generate -t revenue-model
+    #   docker compose run fipto-slides video -t fec
+    #   docker compose run fipto-slides video -t revenue-model --music /app/assets/bg-music.mp3
+    #
+    # To serve locally:
+    #   docker compose run --service-ports -p 3000:3000 fipto-slides serve

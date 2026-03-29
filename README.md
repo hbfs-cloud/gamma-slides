@@ -1,85 +1,178 @@
-# fipto-slides
+# gamma-slides
 
-CLI tool to generate rich, animated presentations for accounting and fintech topics — built for [Fipto](https://fipto.com), cross-border payments powered by stablecoins.
+Professional presentation & video generator. Declarative YAML/JSON decks, narrated HD videos, 6 themes, YouTube-ready metadata, and LLM-pilotable via MCP.
 
-Think **Gamma.app**, but as a CLI with narrated video export.
-
-## Features
-
-- **3 templates**: FEC (General Ledger Export), Consolidation, Revenue Model
-- **Rich slides**: Reveal.js + Chart.js with animated transitions
-- **Narrated video**: Auto-generated HD video with neural TTS (edge-tts)
-- **PDF export**: Via Puppeteer
-- **Live preview**: Local server with hot reload
-- **Fipto theme**: Dark mode with purple/green gradient, metric cards, data tables
-- **Mock data**: Realistic fintech accounting data (stablecoin wallets, cross-border flows)
+**Think Gamma.app, but as a CLI + MCP server.**
 
 ## Quick Start
 
 ```bash
+# Install
 npm install
 
 # Generate a presentation
-node bin/fipto-slides.js generate -t revenue-model
+node bin/gamma-slides.js generate -f src/schema/examples/corporate-demo.yaml
 
 # Preview in browser
-node bin/fipto-slides.js serve -f ./output/revenue-model.html
+node bin/gamma-slides.js serve -f ./output/q4-2025-revenue-report.html
 
-# Generate narrated video (requires edge-tts + ffmpeg)
-node bin/fipto-slides.js video -t revenue-model
+# Generate narrated video + subtitles + YouTube metadata
+node bin/gamma-slides.js video -f src/schema/examples/corporate-demo.yaml
 
-# Export to PDF
-node bin/fipto-slides.js export -f ./output/revenue-model.html
+# Try different themes
+node bin/gamma-slides.js generate -f deck.yaml --theme neon
+node bin/gamma-slides.js generate -f deck.yaml --theme minimal
+```
+
+## Docker
+
+```bash
+# Build
+docker compose build
+
+# Generate
+docker compose run fipto-slides generate -f src/schema/examples/corporate-demo.yaml
+
+# Video
+docker compose run fipto-slides video -f src/schema/examples/corporate-demo.yaml
 ```
 
 ## Commands
 
 | Command | Description |
 |---|---|
-| `generate -t <template>` | Generate HTML slides |
-| `serve -f <file>` | Live preview in browser |
-| `export -f <file>` | Export to PDF |
-| `video -t <template>` | Generate narrated HD video |
-| `list` | List available templates |
+| `generate -f <deck>` | Generate HTML presentation |
+| `video -f <deck>` | Generate narrated HD video + SRT + YouTube metadata |
+| `serve -f <html>` | Preview in browser |
+| `export -f <html>` | Export to PDF |
+| `thumbnail -f <html>` | Generate thumbnail image |
+| `validate -f <deck>` | Validate a deck spec |
+| `themes` | List available themes |
+| `voices` | List TTS voices |
+| `mcp` | Start MCP server for LLM integration |
 
-## Templates
+## Themes
 
-| Template | Slides | Content |
+| Theme | Style | Description |
 |---|---|---|
-| `fec` | 10 | KPIs, trial balance, journal entries, compliance, stablecoin accounting |
-| `consolidation` | 10 | Group scope (5 entities), IC eliminations, consolidated P&L/BS, FX impact |
-| `revenue-model` | 10 | 5 revenue streams, unit economics, cohorts, quarterly trajectory, projections |
+| `corporate` | Dark blue | Professional business presentations |
+| `startup` | Dark purple | Vibrant pitch decks |
+| `dark` | Pure dark | Sleek high-contrast |
+| `neon` | Electric | Neon accents on dark canvas |
+| `minimal` | Light | Clean whitespace |
+| `nature` | Earth tones | Warm organic feel |
 
-## Options
+## Deck Format
 
+Write a YAML file — any LLM can produce this:
+
+```yaml
+version: "1"
+meta:
+  title: "My Presentation"
+  author: "Jane Doe"
+  company: "Acme Corp"
+theme: "corporate"
+narration:
+  voice: "en-US-AndrewNeural"
+slides:
+  - layout: title
+    title: "Welcome"
+    narration: "Welcome to our presentation."
+  - layout: metrics
+    title: "KPIs"
+    metrics:
+      - label: "Revenue"
+        value: "$10M"
+        delta: "+50%"
+        trend: up
+  - layout: chart
+    title: "Growth"
+    chart:
+      type: bar
+      data:
+        labels: ["Q1", "Q2", "Q3", "Q4"]
+        datasets:
+          - label: "Revenue"
+            values: [2.5, 3.1, 3.8, 4.6]
+            color: "primary"
+  - layout: closing
+    title: "Thank You"
 ```
---template, -t    Template name (fec, consolidation, revenue-model)
---output, -o      Output file path
---theme           Visual theme: fipto (default), dark, light
---title           Custom presentation title
---data            External JSON data file
+
+### Layout Types
+
+| Layout | Purpose |
+|---|---|
+| `title` | Opening slide with gradient title |
+| `metrics` | KPI cards in grid |
+| `chart` | Bar, line, doughnut, pie, radar, area |
+| `split` | Two-panel (table+chart, chart+chart, etc.) |
+| `table` | Data table with typed columns |
+| `timeline` | Vertical timeline with icons |
+| `bullets` | Icon + text list |
+| `image` | Full/contained image with caption |
+| `comparison` | Side-by-side positive/negative columns |
+| `quote` | Testimonial with author |
+| `closing` | Closing slide with optional KPIs |
+| `blank` | Raw HTML passthrough |
+
+## Video Output
+
+Each video generates:
+- `*.mp4` — 1920x1080 H.264 video with narration
+- `*.srt` — Subtitles
+- `*.description.txt` — YouTube description with chapters
+- `*.tags.txt` — YouTube tags
+- `*.meta.json` — Full metadata (chapters, tags, category, playlist)
+
+## MCP Server (LLM Integration)
+
+gamma-slides includes an MCP server so any LLM (Claude, Gemini, etc.) can generate presentations programmatically:
+
+```json
+{
+  "mcpServers": {
+    "gamma-slides": {
+      "command": "node",
+      "args": ["src/mcp/server.js"],
+      "cwd": "/path/to/gamma-slides"
+    }
+  }
+}
 ```
 
-## Video Generation
+### MCP Tools
 
-Requires:
-- [edge-tts](https://github.com/rany2/edge-tts): `pip install edge-tts`
-- [ffmpeg](https://ffmpeg.org/): `brew install ffmpeg`
+| Tool | Description |
+|---|---|
+| `gamma_generate_deck` | Generate HTML from YAML/JSON spec |
+| `gamma_generate_video` | Generate narrated video |
+| `gamma_validate_deck` | Validate deck spec |
+| `gamma_list_themes` | List themes |
+| `gamma_list_voices` | List TTS voices |
+| `gamma_get_schema` | Get full JSON Schema |
+| `gamma_generate_thumbnail` | Generate thumbnail from slide |
+| `gamma_youtube_metadata` | Generate YouTube metadata |
 
-The video pipeline:
-1. Generates narration audio per slide using Microsoft Neural TTS
-2. Captures 1920x1080 screenshots via Puppeteer
-3. Composites each slide with synchronized audio + fade transitions
-4. Concatenates into a final MP4 (H.264 + AAC)
+## Setup (bare metal)
+
+```bash
+./setup.sh           # Check dependencies
+./setup.sh --install # Auto-install everything (macOS/Linux)
+```
+
+Requirements: Node.js 18+, ffmpeg, Python 3, edge-tts
 
 ## Stack
 
-- **Node.js** CLI with Commander.js
-- **Reveal.js** for slide rendering
-- **Chart.js** for interactive charts
-- **Puppeteer** for screenshots & PDF
-- **edge-tts** for neural voice narration
-- **ffmpeg** for video compositing
+- **Reveal.js** — slide rendering & transitions
+- **Chart.js** — interactive charts
+- **edge-tts** — Microsoft Neural TTS
+- **ffmpeg** — video compositing
+- **Puppeteer** — screenshots & PDF
+- **MCP SDK** — LLM integration
+- **AJV** — schema validation
 
 ## License
 

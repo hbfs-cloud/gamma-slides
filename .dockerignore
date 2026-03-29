@@ -1,0 +1,8 @@
+node_modules/
+output/
+.git/
+.omc/
+.video-tmp/
+.DS_Store
+*.mp4
+*.pdf
