@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "siren": "912345678",
+    "denomination": "FIPTO SAS",
+    "exercice": {
+      "debut": "2025-01-01",
+      "fin": "2025-12-31"
+    },
+    "devise": "EUR",
+    "logiciel": "Fipto Accounting Suite v2.1"
+  },
+  "summary": {
+    "total_ecritures": 14832,
+    "total_debit": 28450000.00,
+    "total_credit": 28450000.00,
+    "journaux": ["PUR", "SAL", "BNK", "MIS", "OPN"],
+    "comptes_utilises": 247
+  },
+  "balance_generale": [
+    { "compte": "101000", "libelle": "Share capital", "debit": 0, "credit": 5000000, "solde": -5000000 },
+    { "compte": "164000", "libelle": "Bank loans", "debit": 200000, "credit": 2200000, "solde": -2000000 },
+    { "compte": "401000", "libelle": "Accounts payable", "debit": 3200000, "credit": 3850000, "solde": -650000 },
+    { "compte": "411000", "libelle": "Accounts receivable", "debit": 12500000, "credit": 11200000, "solde": 1300000 },
+    { "compte": "445710", "libelle": "VAT collected", "debit": 0, "credit": 1890000, "solde": -1890000 },
+    { "compte": "445660", "libelle": "VAT deductible", "debit": 1420000, "credit": 0, "solde": 1420000 },
+    { "compte": "512000", "libelle": "Bank account (EUR)", "debit": 8900000, "credit": 5600000, "solde": 3300000 },
+    { "compte": "512100", "libelle": "Stablecoin Wallet (USDC)", "debit": 4200000, "credit": 2800000, "solde": 1400000 },
+    { "compte": "512200", "libelle": "Stablecoin Wallet (EURC)", "debit": 2100000, "credit": 1500000, "solde": 600000 },
+    { "compte": "606100", "libelle": "Office supplies", "debit": 180000, "credit": 0, "solde": 180000 },
+    { "compte": "613000", "libelle": "Rent & leases", "debit": 420000, "credit": 0, "solde": 420000 },
+    { "compte": "621000", "libelle": "External contractors", "debit": 680000, "credit": 0, "solde": 680000 },
+    { "compte": "641000", "libelle": "Salaries & wages", "debit": 3200000, "credit": 0, "solde": 3200000 },
+    { "compte": "645000", "libelle": "Payroll taxes", "debit": 1440000, "credit": 0, "solde": 1440000 },
+    { "compte": "706000", "libelle": "Service revenue", "debit": 0, "credit": 8400000, "solde": -8400000 },
+    { "compte": "708000", "libelle": "Cross-border commissions", "debit": 0, "credit": 3150000, "solde": -3150000 },
+    { "compte": "766000", "libelle": "Stablecoin FX gains", "debit": 0, "credit": 285000, "solde": -285000 }
+  ],
+  "journal_sample": [
+    { "date": "2025-01-15", "journal": "SAL", "piece": "SAL-2025-0001", "compte": "411000", "libelle": "Client XPay - Transfer fees Q1", "debit": 125000, "credit": 0 },
+    { "date": "2025-01-15", "journal": "SAL", "piece": "SAL-2025-0001", "compte": "706000", "libelle": "Client XPay - Transfer fees Q1", "debit": 0, "credit": 104167 },
+    { "date": "2025-01-15", "journal": "SAL", "piece": "SAL-2025-0001", "compte": "445710", "libelle": "VAT collected 20%", "debit": 0, "credit": 20833 },
+    { "date": "2025-02-03", "journal": "BNK", "piece": "BNK-2025-0042", "compte": "512100", "libelle": "USDC received - Settlement batch #1842", "debit": 450000, "credit": 0 },
+    { "date": "2025-02-03", "journal": "BNK", "piece": "BNK-2025-0042", "compte": "411000", "libelle": "Client payment batch #1842", "debit": 0, "credit": 450000 },
+    { "date": "2025-03-12", "journal": "MIS", "piece": "MIS-2025-0015", "compte": "766000", "libelle": "FX gain USDC/EUR - March", "debit": 0, "credit": 23400 },
+    { "date": "2025-03-12", "journal": "MIS", "piece": "MIS-2025-0015", "compte": "512100", "libelle": "USDC wallet revaluation", "debit": 23400, "credit": 0 }
+  ],
+  "kpis": {
+    "volume_transactions": { "value": "€28.4M", "delta": "+34%", "period": "YTD 2025" },
+    "volume_stablecoin": { "value": "€6.3M", "delta": "+128%", "period": "YTD 2025" },
+    "revenus_services": { "value": "€8.4M", "delta": "+42%", "period": "YTD 2025" },
+    "commissions_crossborder": { "value": "€3.15M", "delta": "+67%", "period": "YTD 2025" },
+    "gains_change": { "value": "€285K", "delta": "+15%", "period": "YTD 2025" },
+    "ratio_stablecoin": { "value": "22%", "delta": "+8pts", "period": "vs 2024" }
+  }
+}

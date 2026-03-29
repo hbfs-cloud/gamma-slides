@@ -1,0 +1,5 @@
+node_modules/
+output/
+.omc/
+.video-tmp/
+.DS_Store

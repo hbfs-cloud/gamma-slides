@@ -1,0 +1,105 @@
+{
+  "company": "Fipto",
+  "period": "FY 2025",
+  "model_type": "Transaction-based + SaaS hybrid",
+  "revenue_streams": [
+    {
+      "name": "Cross-border Transfer Fees",
+      "type": "Transaction-based",
+      "description": "Commission on every cross-border payment via stablecoin rails",
+      "pricing": "0.5% - 1.5% of transfer amount",
+      "revenue_2024": 4200000,
+      "revenue_2025": 8400000,
+      "growth": 100,
+      "share": 52.2,
+      "volume_drivers": {
+        "total_transfers": 42000,
+        "avg_transfer_size": 12500,
+        "avg_fee_rate": 0.016
+      }
+    },
+    {
+      "name": "FX & Stablecoin Spread",
+      "type": "Spread",
+      "description": "Margin on fiat-to-stablecoin and cross-currency conversions",
+      "pricing": "15-30 bps on conversion",
+      "revenue_2024": 1800000,
+      "revenue_2025": 3150000,
+      "growth": 75,
+      "share": 19.6,
+      "volume_drivers": {
+        "conversion_volume": 210000000,
+        "avg_spread_bps": 15
+      }
+    },
+    {
+      "name": "Platform SaaS",
+      "type": "Subscription",
+      "description": "API & Dashboard access for enterprises",
+      "pricing": "€500 - €5,000/month per tier",
+      "revenue_2024": 1200000,
+      "revenue_2025": 2400000,
+      "growth": 100,
+      "share": 14.9,
+      "volume_drivers": {
+        "enterprise_clients": 85,
+        "avg_mrr": 2353,
+        "churn_monthly": 0.02
+      }
+    },
+    {
+      "name": "Treasury & Yield",
+      "type": "Interest/Yield",
+      "description": "Yield on stablecoin float and reserves",
+      "pricing": "3-5% APY on reserves",
+      "revenue_2024": 650000,
+      "revenue_2025": 1200000,
+      "growth": 84.6,
+      "share": 7.5,
+      "volume_drivers": {
+        "avg_float": 30000000,
+        "avg_yield_pct": 4
+      }
+    },
+    {
+      "name": "Compliance & KYB Services",
+      "type": "Value-added service",
+      "description": "KYB/KYC verification and monitoring for clients",
+      "pricing": "€50-200 per verification",
+      "revenue_2024": 420000,
+      "revenue_2025": 940000,
+      "growth": 123.8,
+      "share": 5.8,
+      "volume_drivers": {
+        "verifications": 6200,
+        "avg_price": 151.6
+      }
+    }
+  ],
+  "totals": {
+    "revenue_2024": 8270000,
+    "revenue_2025": 16090000,
+    "growth": 94.6,
+    "gross_margin": 72,
+    "ltv_cac_ratio": 8.2,
+    "nrr": 135
+  },
+  "quarterly_breakdown": [
+    { "quarter": "Q1 2025", "revenue": 3200000, "transactions": 8400, "new_clients": 12 },
+    { "quarter": "Q2 2025", "revenue": 3800000, "transactions": 9800, "new_clients": 18 },
+    { "quarter": "Q3 2025", "revenue": 4200000, "transactions": 11200, "new_clients": 22 },
+    { "quarter": "Q4 2025", "revenue": 4890000, "transactions": 12600, "new_clients": 15 }
+  ],
+  "cohort_analysis": {
+    "months": [1, 2, 3, 6, 12],
+    "retention": [100, 95, 91, 84, 72],
+    "revenue_expansion": [100, 108, 118, 142, 185]
+  },
+  "unit_economics": {
+    "cac": 1200,
+    "ltv": 9840,
+    "payback_months": 4.2,
+    "avg_revenue_per_client": 15776,
+    "transactions_per_client_month": 41
+  }
+}

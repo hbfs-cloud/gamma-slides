@@ -1,0 +1,69 @@
+{
+  "group": {
+    "name": "Fipto Group",
+    "parent": "Fipto SAS (France)",
+    "currency": "EUR",
+    "closing_date": "2025-12-31",
+    "method": "Full consolidation"
+  },
+  "entities": [
+    { "name": "Fipto SAS", "country": "France", "currency": "EUR", "ownership": 100, "method": "Parent", "revenue": 8400000, "ebitda": 2100000, "assets": 12500000 },
+    { "name": "Fipto UK Ltd", "country": "UK", "currency": "GBP", "ownership": 100, "method": "Full", "revenue": 3200000, "ebitda": 640000, "assets": 4800000 },
+    { "name": "Fipto Singapore Pte", "country": "Singapore", "currency": "SGD", "ownership": 100, "method": "Full", "revenue": 2800000, "ebitda": 560000, "assets": 3200000 },
+    { "name": "Fipto UAE LLC", "country": "UAE", "currency": "AED", "ownership": 80, "method": "Full", "revenue": 1900000, "ebitda": 475000, "assets": 2100000 },
+    { "name": "Fipto Latam SpA", "country": "Chile", "currency": "CLP", "ownership": 60, "method": "Full", "revenue": 850000, "ebitda": 127500, "assets": 980000 }
+  ],
+  "intercompany_eliminations": [
+    { "from": "Fipto SAS", "to": "Fipto UK Ltd", "type": "Management fees", "amount": 480000 },
+    { "from": "Fipto SAS", "to": "Fipto Singapore Pte", "type": "License fees", "amount": 320000 },
+    { "from": "Fipto UK Ltd", "to": "Fipto UAE LLC", "type": "Referral commissions", "amount": 190000 },
+    { "from": "Fipto SAS", "to": "Fipto Latam SpA", "type": "Tech platform fee", "amount": 120000 }
+  ],
+  "consolidated_pl": {
+    "revenue": 17150000,
+    "eliminations_revenue": -1110000,
+    "consolidated_revenue": 16040000,
+    "cost_of_revenue": -6416000,
+    "gross_profit": 9624000,
+    "opex": -5614000,
+    "ebitda": 4010000,
+    "depreciation": -820000,
+    "ebit": 3190000,
+    "financial_result": -285000,
+    "ebt": 2905000,
+    "tax": -726250,
+    "net_income": 2178750,
+    "minority_interests": -120450,
+    "group_net_income": 2058300
+  },
+  "consolidated_bs": {
+    "assets": {
+      "intangible": 4200000,
+      "tangible": 1800000,
+      "financial": 850000,
+      "total_non_current": 6850000,
+      "receivables": 3800000,
+      "stablecoin_wallets": 2000000,
+      "cash": 5200000,
+      "total_current": 11000000,
+      "total": 17850000
+    },
+    "liabilities": {
+      "equity": 8500000,
+      "minority": 680000,
+      "long_term_debt": 3200000,
+      "total_non_current": 3200000,
+      "short_term_debt": 1200000,
+      "payables": 2870000,
+      "tax_liabilities": 1400000,
+      "total_current": 5470000,
+      "total": 17850000
+    }
+  },
+  "fx_impacts": [
+    { "entity": "Fipto UK Ltd", "currency": "GBP/EUR", "rate_open": 1.156, "rate_close": 1.172, "translation_impact": 76800 },
+    { "entity": "Fipto Singapore Pte", "currency": "SGD/EUR", "rate_open": 0.692, "rate_close": 0.688, "translation_impact": -12800 },
+    { "entity": "Fipto UAE LLC", "currency": "AED/EUR", "rate_open": 0.252, "rate_close": 0.255, "translation_impact": 6300 },
+    { "entity": "Fipto Latam SpA", "currency": "CLP/EUR", "rate_open": 0.00098, "rate_close": 0.00095, "translation_impact": -2940 }
+  ]
+}
