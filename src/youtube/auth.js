@@ -1,10 +1,11 @@
 import { google } from 'googleapis';
 import { createServer } from 'http';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { chmodSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
+import { homedir } from 'os';
 import open from 'open';
 
-const CONFIG_DIR = resolve(process.env.HOME || '~', '.gamma-slides');
+const CONFIG_DIR = resolve(homedir(), '.gamma-slides');
 const TOKEN_PATH = resolve(CONFIG_DIR, 'youtube-token.json');
 const CREDENTIALS_PATH = resolve(CONFIG_DIR, 'youtube-credentials.json');
 
@@ -24,8 +25,11 @@ export async function getAuthenticatedClient() {
     );
   }
 
+  mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o700 });
+  chmodSync(CONFIG_DIR, 0o700);
+  chmodSync(CREDENTIALS_PATH, 0o600);
   const credentials = JSON.parse(readFileSync(CREDENTIALS_PATH, 'utf-8'));
-  const { client_id, client_secret, redirect_uris } = credentials.installed || credentials.web || {};
+  const { client_id, client_secret } = credentials.installed || credentials.web || {};
 
   if (!client_id || !client_secret) {
     throw new Error('Invalid credentials file. Expected OAuth 2.0 Client ID JSON.');
@@ -43,7 +47,7 @@ export async function getAuthenticatedClient() {
       try {
         const { credentials: refreshed } = await oauth2Client.refreshAccessToken();
         oauth2Client.setCredentials(refreshed);
-        writeFileSync(TOKEN_PATH, JSON.stringify(refreshed, null, 2));
+        writeFileSync(TOKEN_PATH, JSON.stringify(refreshed, null, 2), { mode: 0o600 });
       } catch {
         // Token invalid, need re-auth
         return await authorize(oauth2Client);
@@ -82,8 +86,8 @@ async function authorize(oauth2Client) {
         const { tokens } = await oauth2Client.getToken(code);
         oauth2Client.setCredentials(tokens);
 
-        mkdirSync(CONFIG_DIR, { recursive: true });
-        writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
+        mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o700 });
+        writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2), { mode: 0o600 });
 
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(`
@@ -105,7 +109,8 @@ async function authorize(oauth2Client) {
       }
     });
 
-    server.listen(9876, () => {
+    server.once('error', reject);
+    server.listen(9876, '127.0.0.1', () => {
       open(authUrl);
     });
   });

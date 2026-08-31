@@ -27,13 +27,13 @@ export async function servePresentation(opts) {
   app.listen(port, () => {
     const url = `http://localhost:${port}`;
     console.log('');
-    console.log(chalk.hex('#6C5CE7').bold('  Fipto Slides') + chalk.dim(' — Serveur de prévisualisation'));
+    console.log(chalk.hex('#2563EB').bold('  gamma-slides') + chalk.dim(' — Presentation preview'));
     console.log('');
     console.log(`  ${chalk.green('▸')} Local:   ${chalk.bold.cyan(url)}`);
     console.log(`  ${chalk.green('▸')} Fichier: ${chalk.dim(filePath)}`);
     console.log('');
-    console.log(chalk.dim('  Raccourcis Reveal.js:'));
-    console.log(chalk.dim('  [F] Plein écran  [S] Mode présentateur  [O] Vue d\'ensemble  [ESC] Quitter'));
+    console.log(chalk.dim('  Reveal.js shortcuts:'));
+    console.log(chalk.dim('  [F] Fullscreen  [S] Speaker view  [O] Overview  [ESC] Exit'));
     console.log('');
     console.log(chalk.dim('  Ctrl+C pour arrêter'));
     console.log('');

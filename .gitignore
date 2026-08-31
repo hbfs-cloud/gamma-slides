@@ -3,3 +3,5 @@ output/
 .omc/
 .video-tmp/
 .DS_Store
+.impeccable/config.local.json
+.impeccable/review/

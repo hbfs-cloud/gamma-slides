@@ -1,13 +1,14 @@
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
+import { escapeHtml, safeUrl } from '../html.js';
 
 export function renderFooter(deck, theme) {
   const branding = deck.branding || {};
   const meta = deck.meta || {};
 
   const logoHtml = branding.logo ? renderLogo(branding.logo) : renderTextLogo(meta.company || 'gamma-slides', theme);
-  const titleHtml = meta.title || '';
-  const urlHtml = branding.company_url || '';
+  const titleHtml = escapeHtml(meta.title || '');
+  const urlHtml = escapeHtml(branding.company_url || '');
 
   return `
     <div class="footer-bar">
@@ -21,26 +22,22 @@ export function renderFooter(deck, theme) {
 export function renderWatermark(deck) {
   const watermark = deck.branding?.watermark;
   if (!watermark) return '';
-  return `<div class="watermark">${watermark}</div>`;
+  return `<div class="watermark">${escapeHtml(watermark)}</div>`;
 }
 
 function renderLogo(logoPath) {
   if (logoPath.startsWith('http')) {
-    return `<img src="${logoPath}" alt="Logo" style="height: 24px; object-fit: contain;">`;
+    return `<img src="${safeUrl(logoPath)}" alt="Logo" style="height: 24px; object-fit: contain;">`;
   }
   const absPath = resolve(logoPath);
   if (existsSync(absPath) && absPath.endsWith('.svg')) {
-    return readFileSync(absPath, 'utf-8');
+    const svg = readFileSync(absPath).toString('base64');
+    return `<img src="data:image/svg+xml;base64,${svg}" alt="Logo" style="height: 24px; object-fit: contain;">`;
   }
-  return `<img src="${logoPath}" alt="Logo" style="height: 24px; object-fit: contain;">`;
+  return `<img src="${safeUrl(logoPath)}" alt="Logo" style="height: 24px; object-fit: contain;">`;
 }
 
 function renderTextLogo(text, theme) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${text.length * 14} 30" width="${text.length * 12}">
-    <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:${theme.primary}"/>
-      <stop offset="100%" style="stop-color:${theme.secondary}"/>
-    </linearGradient></defs>
-    <text x="2" y="22" font-family="system-ui" font-size="20" font-weight="800" fill="url(#lg)">${text}</text>
-  </svg>`;
+  const safeText = escapeHtml(text);
+  return `<span class="footer-wordmark" style="color:${theme.primary};font-family:'${theme.fontHeading}',sans-serif;font-weight:700;letter-spacing:-.02em">${safeText}</span>`;
 }

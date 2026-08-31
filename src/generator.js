@@ -6,6 +6,7 @@ import { getTemplate } from './templates/index.js';
 import { buildFecSlides } from './templates/fec.js';
 import { buildConsolidationSlides } from './templates/consolidation.js';
 import { buildRevenueModelSlides } from './templates/revenue-model.js';
+import { embeddedFontCSS, getLegacyRuntimeAssets } from './engine/runtime-assets.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -50,6 +51,8 @@ export async function generatePresentation(opts) {
 
 function buildHTML(title, slides, theme, data) {
   const logoSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30" width="80"><defs><linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:${theme.primary}"/><stop offset="100%" style="stop-color:${theme.secondary}"/></linearGradient></defs><text x="2" y="22" font-family="system-ui" font-size="22" font-weight="800" fill="url(#fg)">fipto</text></svg>`;
+  const runtime = getLegacyRuntimeAssets();
+  const fontCSS = embeddedFontCSS({ fontFamily: theme.fontFamily, fontMono: theme.fontMono });
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -57,9 +60,10 @@ function buildHTML(title, slides, theme, data) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} — Fipto Slides</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style data-gamma-runtime="reveal.js@5.1.0">${runtime.revealCss}</style>
+  <style data-gamma-runtime="reveal-black@5.1.0">${runtime.revealThemeCss}</style>
+  <style data-gamma-fonts="embedded">${fontCSS}</style>
+  <script data-gamma-runtime="chart.js@4.4.0">${runtime.chartJs}<\/script>
   <style>
     * { box-sizing: border-box; }
     :root {
@@ -207,7 +211,7 @@ function buildHTML(title, slides, theme, data) {
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script data-gamma-runtime="reveal.js@5.1.0">${runtime.revealJs}<\/script>
   <script>
     Reveal.initialize({
       hash: true,

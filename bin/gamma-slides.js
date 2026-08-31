@@ -2,14 +2,14 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { loadDeck } from '../src/loader/index.js';
+import { loadDeckFile } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
 import { generateVideoFromDeck } from '../src/video/generate-v2.js';
 import { generateThumbnail } from '../src/video/thumbnail.js';
 import { listThemes } from '../src/themes/index.js';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 const program = new Command();
 
@@ -27,7 +27,7 @@ program
   .option('--theme <name>', 'Override theme')
   .action(async (opts) => {
     try {
-      const deck = loadDeck(opts.file);
+      const deck = loadDeckFile(opts.file);
       if (opts.theme) deck.theme = opts.theme;
       const html = renderDeck(deck);
       const slug = (deck.meta?.title || 'presentation').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
@@ -52,7 +52,7 @@ program
   .option('--theme <name>', 'Override theme')
   .action(async (opts) => {
     try {
-      const deck = loadDeck(opts.file);
+      const deck = loadDeckFile(opts.file);
       if (opts.theme) deck.theme = opts.theme;
       const html = renderDeck(deck);
       const slug = (deck.meta?.title || 'presentation').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
@@ -66,6 +66,26 @@ program
       if (result.srtPath) console.log(chalk.green('✓') + ` Subtitles: ${chalk.bold(result.srtPath)}`);
       console.log(chalk.green('✓') + ` Metadata: ${chalk.bold(result.metaFiles.meta)}`);
       console.log(chalk.dim(`  ${result.slides} slides • ${result.duration.toFixed(0)}s`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('preview')
+  .alias('dev')
+  .description('Preview a deck with live reload')
+  .requiredOption('-f, --file <path>', 'Deck YAML/JSON file')
+  .option('-p, --port <port>', 'Port', '3000')
+  .option('--host <host>', 'Host', '127.0.0.1')
+  .option('--theme <name>', 'Override theme')
+  .option('--terminal', 'Enable the localhost shell bridge for the embedded terminal')
+  .option('--no-open', 'Do not open the browser')
+  .action(async (opts) => {
+    try {
+      const { previewDeck } = await import('../src/preview.js');
+      await previewDeck(opts);
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);
@@ -87,13 +107,13 @@ program
   .command('export')
   .alias('e')
   .description('Export to PDF')
-  .option('-f, --file <path>', 'Source HTML file')
+  .requiredOption('-f, --file <path>', 'Source HTML file')
   .option('-o, --output <path>', 'Output PDF path')
   .action(async (opts) => {
     try {
       const { exportPDF } = await import('../src/export/pdf.js');
-      await exportPDF(opts);
-      console.log(chalk.green('✓') + ` PDF: ${chalk.bold(opts.output)}`);
+      const outputPath = await exportPDF(opts);
+      console.log(chalk.green('✓') + ` PDF: ${chalk.bold(outputPath)}`);
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);
@@ -124,8 +144,41 @@ program
   .requiredOption('-f, --file <path>', 'Deck YAML/JSON file')
   .action((opts) => {
     try {
-      const deck = loadDeck(opts.file);
+      const deck = loadDeckFile(opts.file);
       console.log(chalk.green('✓') + ` Valid deck: ${deck.slides.length} slides, theme: ${deck.theme}`);
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('qa')
+  .description('Run visual QA and create slide captures plus a contact sheet')
+  .requiredOption('-f, --file <path>', 'Generated HTML presentation')
+  .option('-o, --output <dir>', 'QA output directory')
+  .option('--width <px>', 'Viewport width', '1280')
+  .option('--height <px>', 'Viewport height', '720')
+  .option('--dpr <ratio>', 'Device pixel ratio', '1')
+  .option('--live', 'Audit the interactive presentation instead of export mode')
+  .action(async opts => {
+    try {
+      const { runVisualQA } = await import('../src/qa/visual.js');
+      const report = await runVisualQA({
+        file: opts.file,
+        output: opts.output,
+        width: Number(opts.width),
+        height: Number(opts.height),
+        dpr: Number(opts.dpr),
+        live: Boolean(opts.live),
+      });
+      console.log(`${report.passed ? chalk.green('✓') : chalk.red('✗')} Visual QA: ${report.slideCount} slides · ${report.blockers.length} blockers · ${report.warnings.length} warnings`);
+      console.log(chalk.dim(`  Report: ${report.reportPath}`));
+      console.log(chalk.dim(`  Contact sheet: ${report.contactSheet}`));
+      if (!report.passed) {
+        report.blockers.slice(0, 12).forEach(item => console.log(chalk.red(`  • ${item}`)));
+        process.exitCode = 1;
+      }
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);
@@ -149,8 +202,18 @@ program
   .description('List available TTS voices')
   .option('-l, --lang <code>', 'Filter by language (en, fr, es...)', 'en')
   .action((opts) => {
-    const voices = execSync(`edge-tts --list-voices 2>/dev/null | grep "${opts.lang}-"`, { encoding: 'utf-8' });
-    console.log(voices);
+    try {
+      const language = String(opts.lang).trim();
+      if (!/^[a-z]{2,3}(?:-[A-Z]{2})?$/.test(language)) {
+        throw new Error('Language must look like en, fr, or en-US');
+      }
+      const voices = execFileSync('edge-tts', ['--list-voices'], { encoding: 'utf-8' });
+      const matches = voices.split('\n').filter(line => line.includes(`${language}-`) || line.includes(language)).join('\n');
+      console.log(matches || chalk.yellow(`No voices found for ${language}`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exitCode = 1;
+    }
   });
 
 program
@@ -160,6 +223,8 @@ program
   .requiredOption('-f, --file <path>', 'Video MP4 file')
   .option('--html <path>', 'HTML file (for thumbnail generation)')
   .option('--privacy <level>', 'Privacy: public, unlisted, private', 'unlisted')
+  .option('--publish-at <iso>', 'Schedule publication (ISO 8601; video is uploaded private)')
+  .option('--playlist-id <id>', 'Add the video to an existing playlist ID')
   .option('--thumb-slide <n>', 'Slide index for thumbnail', '0')
   .option('--thumb-text <text>', 'Text overlay on thumbnail')
   .action(async (opts) => {
@@ -169,12 +234,42 @@ program
         videoPath: opts.file,
         htmlPath: opts.html,
         privacy: opts.privacy,
+        publishAt: opts.publishAt,
+        playlistId: opts.playlistId,
         thumbnailSlide: parseInt(opts.thumbSlide),
         thumbnailText: opts.thumbText,
       });
       console.log('');
       console.log(chalk.green('✓') + ` Published: ${chalk.bold.cyan(result.videoUrl)}`);
       console.log(chalk.dim(`  Video ID: ${result.videoId} • Privacy: ${opts.privacy}`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('youtube')
+  .alias('yt')
+  .description('Create a narrated video and publish it through YouTube Publisher')
+  .requiredOption('-f, --file <path>', 'Deck YAML/JSON file')
+  .option('--theme <name>', 'Override theme')
+  .option('--keep-video', 'Keep a local MP4 after upload')
+  .option('-o, --output <path>', 'Local MP4 path when --keep-video is enabled')
+  .action(async (opts) => {
+    try {
+      const { createAndPublishDeck } = await import('../src/youtube/pipeline.js');
+      const result = await createAndPublishDeck({
+        deckPath: opts.file,
+        theme: opts.theme,
+        keepVideo: opts.keepVideo,
+        output: opts.output,
+      });
+      console.log('');
+      console.log(chalk.green('✓') + ` YouTube: ${chalk.bold.cyan(result.videoUrl)}`);
+      if (result.publishAt) console.log(chalk.dim(`  Scheduled: ${result.publishAt}`));
+      console.log(chalk.dim(`  ${result.slides} slides • ${result.duration.toFixed(0)}s • temporary files released`));
+      if (result.localVideoPath) console.log(chalk.green('✓') + ` Local master: ${chalk.bold(result.localVideoPath)}`);
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);

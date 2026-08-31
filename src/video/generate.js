@@ -1,8 +1,8 @@
-import puppeteer from 'puppeteer';
 import { execSync, exec } from 'child_process';
 import { resolve, join } from 'path';
 import { existsSync, mkdirSync, readdirSync, unlinkSync, readFileSync } from 'fs';
 import { narrations } from './narration.js';
+import { launchBrowser } from '../browser.js';
 
 const VOICE = 'en-US-AndrewNeural';
 const RATE = '-5%';  // Slightly slower for clarity
@@ -64,7 +64,7 @@ export async function generateVideo(opts) {
 
   // Step 2: Capture each slide as screenshot
   console.log('  [2/4] Capturing slide screenshots...');
-  const browser = await puppeteer.launch({
+  const browser = await launchBrowser({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });

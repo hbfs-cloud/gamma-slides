@@ -9,6 +9,13 @@ export async function publishToYouTube(opts) {
     metaPath,
     htmlPath,
     privacy = 'unlisted',
+    publishAt,
+    playlistId,
+    playlist,
+    title,
+    description: descriptionOverride,
+    tags,
+    category,
     thumbnailSlide,
     thumbnailText,
   } = opts;
@@ -25,7 +32,7 @@ export async function publishToYouTube(opts) {
 
   // Load description
   const descPath = absVideo.replace(/\.mp4$/, '.description.txt');
-  const description = existsSync(descPath) ? readFileSync(descPath, 'utf-8') : meta.description || '';
+  const description = descriptionOverride ?? (existsSync(descPath) ? readFileSync(descPath, 'utf-8') : meta.description || '');
 
   // Generate thumbnail if HTML available
   let thumbnailPath = null;
@@ -45,13 +52,15 @@ export async function publishToYouTube(opts) {
   // Upload
   const result = await uploadToYouTube({
     videoPath: absVideo,
-    title: meta.title || 'Presentation',
+    title: title || meta.title || 'Presentation',
     description,
-    tags: meta.tags || [],
-    category: meta.category || 'Education',
+    tags: tags || meta.tags || [],
+    category: category || meta.category || 'Education',
     thumbnailPath,
-    playlist: meta.playlist,
+    playlist: playlist || meta.playlist,
+    playlistId,
     privacy,
+    publishAt,
   });
 
   return result;

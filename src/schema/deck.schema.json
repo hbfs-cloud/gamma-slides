@@ -28,16 +28,16 @@
         "company_url": { "type": "string" }
       }
     },
-    "theme": { "type": "string", "default": "corporate" },
+    "theme": { "type": "string", "enum": ["boardroom", "corporate", "startup", "dark", "neon", "minimal", "nature"], "default": "corporate" },
     "style": {
       "type": "object",
       "properties": {
-        "primary_color": { "type": "string" },
-        "secondary_color": { "type": "string" },
-        "accent_color": { "type": "string" },
-        "font_heading": { "type": "string" },
-        "font_body": { "type": "string" },
-        "font_mono": { "type": "string" }
+        "primary_color": { "type": "string", "pattern": "^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$" },
+        "secondary_color": { "type": "string", "pattern": "^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$" },
+        "accent_color": { "type": "string", "pattern": "^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$" },
+        "font_heading": { "type": "string", "pattern": "^[A-Za-z0-9 _-]+$", "maxLength": 80 },
+        "font_body": { "type": "string", "pattern": "^[A-Za-z0-9 _-]+$", "maxLength": 80 },
+        "font_mono": { "type": "string", "pattern": "^[A-Za-z0-9 _-]+$", "maxLength": 80 }
       }
     },
     "narration": {
@@ -79,7 +79,10 @@
             "tags": { "type": "array", "items": { "type": "string" } },
             "category": { "type": "string" },
             "chapters": { "type": "boolean", "default": true },
-            "playlist": { "type": "string" }
+            "playlist": { "type": "string" },
+            "playlist_id": { "type": "string" },
+            "privacy": { "type": "string", "enum": ["public", "unlisted", "private"], "default": "unlisted" },
+            "publish_at": { "type": "string", "format": "date-time" }
           }
         }
       }
@@ -97,7 +100,7 @@
       "properties": {
         "layout": {
           "type": "string",
-          "enum": ["title", "closing", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank"]
+          "enum": ["title", "closing", "agenda", "dashboard", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank"]
         },
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -106,7 +109,21 @@
         "background": { "$ref": "#/definitions/background" },
         "narration": { "type": "string" },
         "notes": { "type": "string" },
-        "columns": { },
+        "show_meta": { "type": "boolean" },
+        "variant": { "type": "string" },
+        "tone": { "type": "string", "enum": ["default", "dark", "light", "accent"] },
+        "kicker": { "type": "string" },
+        "label": { "type": "string" },
+        "insight": { "type": "string" },
+        "source": { "type": "string" },
+        "footnote": { "type": "string" },
+        "orientation": { "type": "string", "enum": ["vertical", "horizontal"] },
+        "columns": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "maximum": 4 },
+            { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/definitions/comparisonColumn" } }
+          ]
+        },
         "metrics": { "type": "array", "items": { "$ref": "#/definitions/metric" } },
         "chart": { "$ref": "#/definitions/chartSpec" },
         "left": { "$ref": "#/definitions/panel" },
@@ -114,6 +131,7 @@
         "callout": { "$ref": "#/definitions/callout" },
         "table": { "$ref": "#/definitions/tableSpec" },
         "items": { "type": "array", "items": { "$ref": "#/definitions/listItem" } },
+        "panels": { "type": "array", "items": { "$ref": "#/definitions/panel" } },
         "image": { "$ref": "#/definitions/imageSpec" },
         "icon": { "type": "string" },
         "quote": { "type": "string" },
@@ -138,14 +156,105 @@
         "value": { "type": "string" },
         "delta": { "type": "string" },
         "trend": { "type": "string", "enum": ["up", "down", "neutral"] },
-        "icon": { "type": "string" }
+        "icon": { "type": "string" },
+        "featured": { "type": "boolean" }
       }
+    },
+    "comparisonColumn": {
+      "type": "object",
+      "required": ["heading", "items"],
+      "properties": {
+        "heading": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "style": { "type": "string", "enum": ["positive", "negative", "neutral"] }
+      },
+      "additionalProperties": false
+    },
+    "treemapItem": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "value": { "type": "number" },
+        "children": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/treemapItem" }
+        }
+      },
+      "anyOf": [
+        { "required": ["value"] },
+        { "required": ["children"] }
+      ],
+      "additionalProperties": false
+    },
+    "sankeyNode": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sankeyLink": {
+      "type": "object",
+      "required": ["source", "target", "value"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "value": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "graphNode": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "value": { "type": "number", "minimum": 0 },
+        "category": { "oneOf": [{ "type": "string" }, { "type": "integer", "minimum": 0 }] }
+      },
+      "additionalProperties": false
+    },
+    "graphLink": {
+      "type": "object",
+      "required": ["source", "target"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "value": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "calendarValue": {
+      "type": "object",
+      "required": ["date", "value"],
+      "properties": {
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "value": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "streamValue": {
+      "type": "object",
+      "required": ["date", "value", "name"],
+      "properties": {
+        "date": { "type": "string", "minLength": 1 },
+        "value": { "type": "number", "minimum": 0 },
+        "name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
     },
     "chartSpec": {
       "type": "object",
       "required": ["type", "data"],
       "properties": {
-        "type": { "type": "string", "enum": ["bar", "line", "doughnut", "pie", "radar", "area"] },
+        "type": { "type": "string", "enum": ["bar", "line", "area", "combo", "doughnut", "pie", "radar", "waterfall", "heatmap", "scatter", "bubble", "candlestick", "treemap", "gauge", "sankey", "funnel", "bullet", "tornado", "stock", "market_depth", "boxplot", "histogram", "calendar_heatmap", "parallel", "sunburst", "network", "theme_river", "fan"] },
         "data": {
           "type": "object",
           "properties": {
@@ -156,13 +265,52 @@
                 "type": "object",
                 "properties": {
                   "label": { "type": "string" },
-                  "values": { "type": "array", "items": { "type": "number" } },
+                  "type": { "type": "string" },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        { "type": ["number", "null"] },
+                        { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } }
+                      ]
+                    }
+                  },
+                  "points": { "type": "array", "items": { "type": "object" } },
                   "color": { "type": "string" },
                   "colors": { "type": "array", "items": { "type": "string" } },
+                  "dashed": { "type": "boolean" },
                   "y_axis": { "type": "string" }
                 }
               }
-            }
+            },
+            "x_labels": { "type": "array", "items": { "type": "string" } },
+            "y_labels": { "type": "array", "items": { "type": "string" } },
+            "values": {
+              "type": "array",
+              "items": { "type": "array", "items": { "type": ["number", "null"] } }
+            },
+            "volume": { "type": "array", "items": { "type": "number" } },
+            "bids": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } } },
+            "asks": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } } },
+            "boxes": { "type": "array", "items": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "number" } } },
+            "outliers": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } } },
+            "dimensions": { "type": "array", "items": { "type": "string" } },
+            "rows": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } },
+            "calendar_values": { "type": "array", "items": { "$ref": "#/definitions/calendarValue" } },
+            "categories": { "type": "array", "items": { "type": "string" } },
+            "graph_nodes": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/graphNode" } },
+            "graph_links": { "type": "array", "items": { "$ref": "#/definitions/graphLink" } },
+            "streams": { "type": "array", "items": { "$ref": "#/definitions/streamValue" } },
+            "lower": { "type": "array", "items": { "type": ["number", "null"] } },
+            "upper": { "type": "array", "items": { "type": ["number", "null"] } },
+            "base": { "type": "array", "items": { "type": ["number", "null"] } },
+            "points": { "type": "array", "items": { "type": "object" } },
+            "items": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/treemapItem" } },
+            "nodes": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/sankeyNode" } },
+            "links": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/sankeyLink" } },
+            "targets": { "type": "array", "items": { "type": "number" } },
+            "value": { "type": "number" },
+            "label": { "type": "string" }
           }
         },
         "options": {
@@ -171,7 +319,43 @@
             "format_y": { "type": "string" },
             "format_y_right": { "type": "string" },
             "show_legend": { "type": "boolean" },
-            "stacked": { "type": "boolean" }
+            "show_values": { "type": "boolean" },
+            "center_label": { "type": "string" },
+            "stacked": { "type": "boolean" },
+            "total_indices": { "type": "array", "items": { "type": "integer" } },
+            "horizontal": { "type": "boolean" },
+            "x_label": { "type": "string" },
+            "y_label": { "type": "string" },
+            "format_x": { "type": "string" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "suffix": { "type": "string" },
+            "label": { "type": "string" },
+            "correlation": { "type": "boolean" },
+            "show_all_labels": { "type": "boolean" },
+            "legend_labels": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string" } },
+            "data_zoom": { "type": "boolean" },
+            "smooth": { "type": "boolean" },
+            "x_min": { "type": "number" },
+            "x_max": { "type": "number" },
+            "y_min": { "type": "number" },
+            "y_max": { "type": "number" },
+            "moving_averages": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "type": "integer", "minimum": 2, "maximum": 200 } },
+            "show_macd": { "type": "boolean" },
+            "show_rsi": { "type": "boolean" },
+            "rsi_period": { "type": "integer", "minimum": 2, "maximum": 100 },
+            "show_bollinger": { "type": "boolean" },
+            "bollinger_period": { "type": "integer", "minimum": 2, "maximum": 200 },
+            "bollinger_deviation": { "type": "number", "exclusiveMinimum": 0, "maximum": 10 },
+            "show_obv": { "type": "boolean" },
+            "threshold_index": { "type": "integer", "minimum": 0 },
+            "threshold_label": { "type": "string" },
+            "range": {
+              "oneOf": [
+                { "type": "string", "minLength": 4 },
+                { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string", "minLength": 10 } }
+              ]
+            }
           }
         }
       }
@@ -184,18 +368,25 @@
         "rows": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
         "column_types": { "type": "array", "items": { "type": "string" } },
         "highlight_column": { "type": "number" },
-        "max_rows": { "type": "number" }
+        "max_rows": { "type": "integer", "minimum": 1, "maximum": 20 }
       }
     },
     "panel": {
       "type": "object",
+      "required": ["type"],
       "properties": {
-        "type": { "type": "string", "enum": ["table", "chart", "bullets", "image", "metrics"] },
+        "type": { "type": "string", "enum": ["table", "chart", "bullets", "image", "metrics", "metric"] },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "value": { "type": "string" },
+        "delta": { "type": "string" },
+        "icon": { "type": "string" },
+        "span": { "type": "integer", "minimum": 1, "maximum": 3 },
         "chart": { "$ref": "#/definitions/chartSpec" },
         "table": { "$ref": "#/definitions/tableSpec" },
-        "headers": { "type": "array" },
-        "rows": { "type": "array" },
-        "items": { "type": "array" },
+        "headers": { "type": "array", "items": { "type": "string" } },
+        "rows": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
+        "items": { "type": "array", "items": { "oneOf": [{ "type": "string" }, { "$ref": "#/definitions/listItem" }] } },
         "image": { "$ref": "#/definitions/imageSpec" },
         "metrics": { "type": "array", "items": { "$ref": "#/definitions/metric" } },
         "highlight_column": { "type": "number" }

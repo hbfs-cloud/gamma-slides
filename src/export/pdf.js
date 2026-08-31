@@ -1,12 +1,16 @@
-import puppeteer from 'puppeteer';
 import { resolve } from 'path';
+import { pathToFileURL } from 'url';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 import ora from 'ora';
+import { launchBrowser } from '../browser.js';
 
 export async function exportPDF(opts) {
   const filePath = resolve(opts.file);
-  const outputPath = resolve(opts.output);
+  const defaultOutput = /\.html?$/i.test(opts.file)
+    ? opts.file.replace(/\.html?$/i, '.pdf')
+    : `${opts.file}.pdf`;
+  const outputPath = resolve(opts.output || defaultOutput);
 
   if (!existsSync(filePath)) {
     throw new Error(`Fichier source non trouvé: ${filePath}`);
@@ -17,28 +21,27 @@ export async function exportPDF(opts) {
     color: 'magenta'
   }).start();
 
-  const browser = await puppeteer.launch({
+  const browser = await launchBrowser({
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
   });
 
   try {
     const page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
 
     spinner.text = 'Chargement de la présentation...';
 
     // Use print-pdf query param for Reveal.js
-    const fileUrl = `file://${filePath}?print-pdf`;
-    await page.goto(fileUrl, { waitUntil: 'networkidle0', timeout: 30000 });
+    const fileUrl = new URL(pathToFileURL(filePath));
+    fileUrl.searchParams.set('print-pdf', '1');
+    fileUrl.searchParams.set('gamma-export', '1');
+    await page.goto(fileUrl.href, { waitUntil: 'networkidle0', timeout: 60000 });
 
     // Wait for Reveal.js to initialize
     await page.waitForFunction(() => {
-      return typeof Reveal !== 'undefined' && Reveal.isReady();
-    }, { timeout: 10000 });
-
-    // Wait a bit for charts to render
-    await new Promise(r => setTimeout(r, 2000));
+      return typeof Reveal !== 'undefined' && Reveal.isReady() && window.__GAMMA_READY__ === true;
+    }, { timeout: 30000 });
 
     spinner.text = 'Génération du PDF...';
 
@@ -47,7 +50,7 @@ export async function exportPDF(opts) {
       width: '1280px',
       height: '720px',
       printBackground: true,
-      preferCSSPageSize: true,
+      preferCSSPageSize: false,
       margin: { top: 0, right: 0, bottom: 0, left: 0 }
     });
 
@@ -55,4 +58,6 @@ export async function exportPDF(opts) {
   } finally {
     await browser.close();
   }
+
+  return outputPath;
 }

@@ -1,19 +1,25 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import yaml from 'js-yaml';
 import { validateDeck } from '../schema/validate.js';
 import { defaults, resolveVoice } from './defaults.js';
 
 export function loadDeck(pathOrString) {
-  let raw;
-  let deck;
+  const candidate = String(pathOrString);
+  const resolvedPath = resolve(candidate);
+  const raw = !candidate.includes('\n') && existsSync(resolvedPath)
+    ? readFileSync(resolvedPath, 'utf-8')
+    : candidate;
 
-  // Detect if it's a file path or inline content
-  if (pathOrString.trim().startsWith('{') || pathOrString.trim().startsWith('version') || pathOrString.trim().startsWith('slides')) {
-    raw = pathOrString;
-  } else {
-    raw = readFileSync(resolve(pathOrString), 'utf-8');
-  }
+  return parseDeck(raw);
+}
+
+export function loadDeckFile(filePath) {
+  return parseDeck(readFileSync(resolve(filePath), 'utf-8'));
+}
+
+export function parseDeck(raw) {
+  let deck;
 
   // Parse YAML or JSON
   if (raw.trim().startsWith('{')) {
@@ -30,11 +36,12 @@ export function loadDeck(pathOrString) {
   }
 
   // Apply defaults (deep merge)
+  const hasExplicitVoice = Boolean(deck.narration?.voice);
   deck = applyDefaults(deck);
 
   // Resolve voice from language if not explicit
-  if (!deck.narration.voice || deck.narration.voice === defaults.narration.voice) {
-    deck.narration.voice = resolveVoice(deck.meta.language, deck.narration.voice);
+  if (!hasExplicitVoice) {
+    deck.narration.voice = resolveVoice(deck.meta.language);
   }
 
   return deck;
@@ -58,7 +65,6 @@ function applyDefaults(deck) {
     slides: (deck.slides || []).map(slide => ({
       layout: slide.layout || 'blank',
       transition: slide.transition || 'convex',
-      columns: slide.columns || 3,
       ...slide,
     })),
   };

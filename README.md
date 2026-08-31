@@ -1,244 +1,75 @@
-# gamma-slides
+# Gamma Slides
 
-Professional presentation & video generator. Declarative YAML/JSON decks, narrated HD videos, 6 themes, YouTube publish, and LLM-pilotable via MCP.
+An editorial presentation and local video engine for finance, markets, economics, and board reporting. Decks are authored in YAML or JSON, rendered as self-contained interactive HTML, exported as vector-friendly PDF, and recorded or narrated into high-quality local video masters.
 
-**Think Gamma.app, but as a CLI + MCP server.**
-
-## Install & Use (npx)
-
-No install needed — run directly from GitHub:
+## Quick start
 
 ```bash
-# Generate a presentation
-npx github:hbfs-cloud/gamma-slides generate -f deck.yaml
-
-# Generate a narrated video
-npx github:hbfs-cloud/gamma-slides video -f deck.yaml
-
-# List themes
-npx github:hbfs-cloud/gamma-slides themes
-
-# List voices
-npx github:hbfs-cloud/gamma-slides voices
-
-# Validate a deck
-npx github:hbfs-cloud/gamma-slides validate -f deck.yaml
-```
-
-## Install Locally
-
-```bash
-git clone https://github.com/hbfs-cloud/gamma-slides.git
-cd gamma-slides
 npm install
+node bin/gamma-slides.js generate \
+  -f src/schema/examples/corporate-demo.yaml \
+  -o output/q4-2025-revenue-report.html
 
-# Run
-gamma-slides generate -f src/schema/examples/corporate-demo.yaml
-gamma-slides video -f src/schema/examples/corporate-demo.yaml
-gamma-slides serve -f ./output/q4-2025-revenue-report.html
+node bin/gamma-slides.js preview \
+  -f src/schema/examples/corporate-demo.yaml \
+  --terminal
 ```
 
-## Docker
+The 38-slide flagship exercises the complete **Gamma Finance Catalog v1**: 28 curated native ECharts families and finance-specific compositions across corporate reporting, markets, trading, portfolio, risk, liquidity, rates, and economics. Its 37 chart instances include a multi-pane stock workstation, market depth, return histogram, boxplot, calendar heatmap, parallel coordinates, sunburst allocation, exposure network, theme river, and forecast fan. This is a bounded product catalogue—not a claim that every ECharts module is exposed.
+
+Reveal, ECharts, and the presentation fonts are embedded from pinned npm packages. A generated deck does not need a CDN, Google Fonts, or a network connection to present, export, or record.
+
+## Presenter Studio
+
+Interactive decks open with a three-step, permission-safe setup wizard: choose present-only, camera, microphone, recording, or terminal; select devices, preview the camera, monitor microphone level, and select the shared screen; then review readiness before a 3–2–1 recording countdown. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
+
+| Shortcut | Action |
+| --- | --- |
+| `T` | Open the embedded presentation terminal |
+| `C` | Toggle the camera picture-in-picture |
+| `R` | Start or stop screen, camera, and audio recording |
+| `S` | Open speaker notes |
+| `F` | Toggle fullscreen |
+
+The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. It is intentionally disabled in a static `file://` export. Start preview with `--terminal` to enable it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
+
+## Quality assurance and exports
 
 ```bash
-docker compose build
-
-docker compose run gamma-slides generate -f src/schema/examples/corporate-demo.yaml
-docker compose run gamma-slides video -f src/schema/examples/corporate-demo.yaml
+node bin/gamma-slides.js validate -f src/schema/examples/corporate-demo.yaml
+node bin/gamma-slides.js qa --live -f output/q4-2025-revenue-report.html
+node bin/gamma-slides.js qa -f output/q4-2025-revenue-report.html
+node bin/gamma-slides.js export \
+  -f output/q4-2025-revenue-report.html \
+  -o output/q4-2025-revenue-report.pdf
+node bin/gamma-slides.js video \
+  -f src/schema/examples/corporate-demo.yaml \
+  -o output/q4-2025-revenue-report.mp4
 ```
 
-## Commands
+Live and export modes both render ECharts as SVG. Charts initialize only when their slide becomes visible, avoiding a deck-wide hidden Canvas allocation. Visual QA can exercise the real interactive runtime with `--live`; it verifies the startup wizard, renderer presence, non-empty SVG geometry, console chart warnings, invalid data tokens, overflow, clipping, and source/footer collisions on every slide. Export QA remains available without `--live`.
 
-| Command | Description |
-|---|---|
-| `generate -f <deck>` | YAML/JSON → HTML presentation |
-| `video -f <deck>` | YAML/JSON → MP4 + SRT + YouTube metadata |
-| `serve -f <html>` | Preview in browser |
-| `export -f <html>` | Export to PDF |
-| `thumbnail -f <html>` | Generate thumbnail PNG |
-| `validate -f <deck>` | Validate a deck spec |
-| `publish -f <mp4>` | Upload to YouTube |
-| `youtube-auth` | YouTube OAuth setup (one-time) |
-| `themes` | List available themes |
-| `voices -l <lang>` | List TTS voices |
-| `mcp` | Start MCP server for LLM integration |
+The video renderer works slide by slide: each PNG and narration file is deleted immediately after its compressed segment is produced. The temporary workspace is removed on success or failure.
 
-## Themes
+## Local video master
 
-| Theme | Style | Description |
-|---|---|---|
-| `corporate` | Dark blue | Professional business presentations |
-| `startup` | Dark purple | Vibrant pitch decks |
-| `dark` | Pure dark | Sleek high-contrast |
-| `neon` | Electric | Neon accents on dark canvas |
-| `minimal` | Light | Clean whitespace |
-| `nature` | Earth tones | Warm organic feel |
+Presenter Studio records the chosen screen, microphone, shared audio, and optional movable facecam into a local 1080p WebM master. Nothing is uploaded automatically. The resulting file can be reviewed, edited, converted, archived, or uploaded manually to YouTube.
 
-## Deck Format
-
-Write a YAML file — any LLM can produce this:
-
-```yaml
-version: "1"
-meta:
-  title: "My Presentation"
-  author: "Jane Doe"
-  company: "Acme Corp"
-theme: "corporate"
-narration:
-  voice: "en-US-AndrewNeural"
-slides:
-  - layout: title
-    title: "Welcome"
-    narration: "Welcome to our presentation."
-
-  - layout: metrics
-    title: "KPIs"
-    columns: 3
-    metrics:
-      - label: "Revenue"
-        value: "$10M"
-        delta: "+50%"
-        trend: up
-        icon: "dollar-sign"
-      - label: "Growth"
-        value: "95%"
-        delta: "+30pp"
-        trend: up
-        icon: "trending-up"
-      - label: "Clients"
-        value: "85"
-        delta: "+67 new"
-        trend: up
-        icon: "users"
-
-  - layout: chart
-    title: "Revenue by Quarter"
-    chart:
-      type: bar
-      data:
-        labels: ["Q1", "Q2", "Q3", "Q4"]
-        datasets:
-          - label: "Revenue"
-            values: [2500000, 3100000, 3800000, 4600000]
-            color: "primary"
-
-  - layout: closing
-    title: "Thank You"
-    narration: "Thank you for your attention."
-```
-
-### Layout Types
-
-| Layout | Purpose | Key Fields |
-|---|---|---|
-| `title` | Opening slide | `title`, `subtitle`, `badge` |
-| `metrics` | KPI cards grid | `metrics[]` (label, value, delta, trend, icon) |
-| `chart` | ECharts chart | `chart` (type: bar/line/doughnut/pie/radar/area) |
-| `split` | Two-panel layout | `left` + `right` (chart, table, metrics, bullets, image) |
-| `table` | Data table | `table` (headers, rows, column_types) |
-| `timeline` | Vertical timeline | `items[]` (title, description, icon) |
-| `bullets` | Icon + text list | `items[]` (text, icon) |
-| `image` | Image with caption | `image` (src, alt, fit, caption) |
-| `comparison` | Side-by-side | `columns[]` (heading, items, style: positive/negative) |
-| `quote` | Testimonial | `quote`, `author`, `role` |
-| `closing` | Closing slide | `title`, `metrics[]`, `contact` |
-| `blank` | Raw HTML | `html` |
-
-## Video Output
-
-Each `video` command generates:
-
-```
-output/
-  my-presentation.mp4              # 1920x1080 H.264 + AAC narration
-  my-presentation.srt              # Subtitles
-  my-presentation.description.txt  # YouTube description with chapters
-  my-presentation.tags.txt         # YouTube tags
-  my-presentation.meta.json        # Full metadata
-```
-
-## YouTube Publish
+For a narrated MP4 generated directly from the deck:
 
 ```bash
-# One-time: set up OAuth credentials
-# 1. Create OAuth Client ID at https://console.cloud.google.com/apis/credentials
-# 2. Enable YouTube Data API v3
-# 3. Save credentials:
-mkdir -p ~/.gamma-slides
-cp client_secret_*.json ~/.gamma-slides/youtube-credentials.json
-
-# Authenticate
-gamma-slides youtube-auth
-
-# Publish (unlisted by default)
-gamma-slides publish -f ./output/my-presentation.mp4
-
-# Publish as public with custom thumbnail
-gamma-slides publish -f ./output/my-presentation.mp4 --privacy public --thumb-text "Q4 Report"
+node bin/gamma-slides.js video \
+  -f src/schema/examples/corporate-demo.yaml \
+  -o output/q4-2025-master.mp4
 ```
 
-Auto-reads `*.meta.json`, `*.description.txt`, `*.tags.txt` generated alongside the video. Creates playlists and sets thumbnails automatically.
-
-## MCP Server (LLM Integration)
-
-Any LLM (Claude, Gemini, etc.) can generate presentations via MCP:
-
-**Claude Code** — add to `~/.claude/settings.json`:
-
-```json
-{
-  "mcpServers": {
-    "gamma-slides": {
-      "command": "node",
-      "args": ["src/mcp/server.js"],
-      "cwd": "/path/to/gamma-slides"
-    }
-  }
-}
-```
-
-**Slash command** — copy to `~/.claude/commands/`:
-
-```bash
-cp gamma-slides/.claude-commands/gamma-slides.md ~/.claude/commands/
-```
-
-Then in any Claude Code conversation: `/gamma-slides create a pitch deck for my fintech startup`
-
-### MCP Tools
-
-| Tool | Description |
-|---|---|
-| `gamma_generate_deck` | YAML/JSON → HTML |
-| `gamma_generate_video` | YAML/JSON → MP4 + SRT + metadata |
-| `gamma_validate_deck` | Validate deck spec |
-| `gamma_list_themes` | List themes |
-| `gamma_list_voices` | List TTS voices |
-| `gamma_get_schema` | Get full JSON Schema |
-| `gamma_generate_thumbnail` | Screenshot slide as PNG |
+The offline renderer produces H.264 at CRF 18 with AAC audio, creates slides and narration as a rolling stream, and deletes temporary frames and audio immediately after each compressed segment is produced.
 
 ## Requirements
 
-| Dependency | Required for | Install |
-|---|---|---|
-| Node.js 18+ | Everything | `brew install node` |
-| ffmpeg | Video | `brew install ffmpeg` |
-| Python 3 | Video | `brew install python3` |
-| edge-tts | Video narration | `pip install edge-tts` |
+- Node.js 18+
+- Chromium or Chrome (Puppeteer can provision it)
+- FFmpeg and FFprobe for video
+- `edge-tts` for narration
 
-Or auto-install: `./setup.sh --install`
-
-## Stack
-
-- **Reveal.js** — slide rendering & transitions
-- **ECharts** — rich interactive charts
-- **edge-tts** — Microsoft Neural TTS (20+ languages)
-- **ffmpeg** — video compositing
-- **Puppeteer** — screenshots & PDF
-- **MCP SDK** — LLM integration
-- **googleapis** — YouTube upload
-
-## License
-
-MIT
+All example company, market, financial, and forecast data in the flagship deck is explicitly illustrative (`DEMO`).

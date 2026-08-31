@@ -1,46 +1,61 @@
-import puppeteer from 'puppeteer';
-import { resolve } from 'path';
+import { dirname, resolve } from 'path';
+import { pathToFileURL } from 'url';
+import { mkdirSync } from 'fs';
+import { launchBrowser } from '../browser.js';
 
 export async function generateThumbnail(opts) {
   const { htmlPath, slideIndex = 0, textOverlay, outputPath } = opts;
+  const absHtml = resolve(htmlPath);
+  const absOutput = resolve(outputPath);
+  mkdirSync(dirname(absOutput), { recursive: true });
 
-  const browser = await puppeteer.launch({
+  const browser = await launchBrowser({
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
   });
 
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1920, height: 1080 });
-  await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0', timeout: 30000 });
+  try {
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
+    const url = new URL(pathToFileURL(absHtml));
+    url.searchParams.set('gamma-export', '1');
+    await page.goto(url.href, { waitUntil: 'networkidle0', timeout: 60_000 });
+    await page.waitForFunction(() => window.__GAMMA_READY__ === true, { timeout: 30_000 });
 
-  await page.waitForFunction(() => typeof Reveal !== 'undefined' && Reveal.isReady(), { timeout: 10000 });
-  await new Promise(r => setTimeout(r, 1500));
+    await page.evaluate(async index => {
+      const count = Reveal.getTotalSlides();
+      Reveal.slide(Math.max(0, Math.min(index, count - 1)));
+      document.querySelectorAll('.fragment').forEach(fragment => fragment.classList.add('visible'));
+      await document.fonts.ready;
+      await new Promise(resolveFrame => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
+      window.dispatchEvent(new Event('resize'));
+    }, Number(slideIndex) || 0);
+    await page.waitForFunction(index => {
+      const current = Reveal.getCurrentSlide();
+      return Reveal.getIndices(current).h === Math.max(0, Math.min(index, Reveal.getTotalSlides() - 1))
+        && Number.parseFloat(getComputedStyle(current).opacity) > 0.99;
+    }, { timeout: 5_000 }, Number(slideIndex) || 0);
 
-  await page.evaluate((idx) => Reveal.slide(idx), slideIndex);
-  await new Promise(r => setTimeout(r, 800));
+    if (textOverlay) {
+      await page.evaluate(text => {
+        const overlay = document.createElement('div');
+        overlay.className = 'gamma-thumbnail-overlay';
+        overlay.style.cssText = [
+          'position:fixed', 'left:92px', 'bottom:84px', 'max-width:1120px',
+          'padding:22px 30px', 'border-left:7px solid #2453FF',
+          'background:rgba(11,15,23,.92)', 'color:#F7F4EC',
+          'font:650 54px/1.04 Instrument Sans,system-ui,sans-serif',
+          'letter-spacing:-.045em', 'z-index:9999', 'text-align:left',
+        ].join(';');
+        overlay.textContent = text;
+        document.body.appendChild(overlay);
+      }, String(textOverlay));
+      await page.evaluate(() => new Promise(resolveFrame => requestAnimationFrame(resolveFrame)));
+    }
 
-  // Add text overlay if requested
-  if (textOverlay) {
-    await page.evaluate((text) => {
-      const overlay = document.createElement('div');
-      overlay.style.cssText = `
-        position: fixed; bottom: 40px; left: 40px; right: 40px;
-        text-align: center; font-size: 48px; font-weight: 900;
-        font-family: Inter, system-ui, sans-serif;
-        color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-        z-index: 9999; padding: 20px;
-        background: linear-gradient(180deg, transparent, rgba(0,0,0,0.7));
-        border-radius: 16px;
-      `;
-      overlay.textContent = text;
-      document.body.appendChild(overlay);
-    }, textOverlay);
-    await new Promise(r => setTimeout(r, 200));
+    await page.screenshot({ path: absOutput, type: 'png' });
+    return absOutput;
+  } finally {
+    await browser.close();
   }
-
-  await page.screenshot({ path: outputPath, type: 'png' });
-  await browser.close();
-
-  return outputPath;
 }

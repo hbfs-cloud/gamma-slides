@@ -14,8 +14,6 @@ export const themes = {
     fontFamily: "'Inter', 'SF Pro Display', system-ui, -apple-system, sans-serif",
     fontMono: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace",
     css: `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
       .reveal { font-family: 'Inter', system-ui, sans-serif; }
       .reveal h1, .reveal h2, .reveal h3 { font-weight: 800; letter-spacing: -0.02em; }
       .reveal h1 { font-size: 2.6em; }
@@ -116,7 +114,6 @@ export const themes = {
     gradient: 'linear-gradient(135deg, #3B82F6 0%, #10B981 100%)',
     fontFamily: "'Inter', system-ui, sans-serif",
     css: `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
       .reveal { font-family: 'Inter', system-ui, sans-serif; }
       .slide-background { background: #111827 !important; }
     `
@@ -135,7 +132,6 @@ export const themes = {
     gradient: 'linear-gradient(135deg, #6C5CE7 0%, #00B894 100%)',
     fontFamily: "'Inter', system-ui, sans-serif",
     css: `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
       .reveal { font-family: 'Inter', system-ui, sans-serif; }
       .slide-background { background: #FAFAFA !important; }
       .metric-card { background: #FFFFFF; border-color: #E5E7EB; }
