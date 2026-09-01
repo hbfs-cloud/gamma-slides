@@ -12,6 +12,7 @@ meta:
 
 branding:
   watermark: "PUBLIC DEMO"
+  favicon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2305070A'/%3E%3Cpath d='M16 16h32v8H24v16h16v-6H30v-8h18v22H16z' fill='%23FFB000'/%3E%3C/svg%3E"
   company_url: "github.com/hbfs-cloud/gamma-slides"
 
 theme: "boardroom"
