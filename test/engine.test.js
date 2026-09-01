@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { escapeHtml, safeUrl, richText } from '../src/engine/html.js';
@@ -12,6 +12,8 @@ import { renderPublishingHTML, renderYouTubeStudioHTML } from '../src/youtube/st
 import { uploadToYouTube, uploadVideoResumable } from '../src/youtube/upload.js';
 import { injectLiveReload } from '../src/preview.js';
 import { buildStaticSite } from '../src/site/build.js';
+import { buildPresentationLibrary } from '../src/site/library.js';
+import { normalizePagesRepo, presentationSlug, presentationUrl } from '../src/site/github-pages.js';
 
 test('preview runtime is injected at the real closing body, not inside bundled source strings', () => {
   const html = '<!doctype html><html><head></head><body><script>const markup="<body></body>";</script><main>Deck</main></body></html>';
@@ -67,6 +69,37 @@ slides:
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
+});
+
+test('presentation libraries expose stable routes and a machine-readable catalog', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'gamma-library-'));
+  const sourceDir = join(tempDir, 'presentations');
+  const outputDir = join(tempDir, '_site');
+  try {
+    writeFileSync(join(tempDir, 'placeholder'), '');
+    mkdirSync(sourceDir, { recursive: true });
+    writeFileSync(join(sourceDir, 'Comité FY26.yaml'), `
+meta:
+  title: Comité FY26
+slides:
+  - layout: title
+    title: Décider maintenant
+`);
+    const result = buildPresentationLibrary({ inputDir: sourceDir, outputDir });
+    assert.equal(result.entries[0].slug, 'comite-fy26');
+    assert.match(readFileSync(join(outputDir, 'index.html'), 'utf-8'), /Comité FY26/);
+    assert.match(readFileSync(join(outputDir, 'presentations.json'), 'utf-8'), /"slug": "comite-fy26"/);
+    assert.match(readFileSync(join(outputDir, 'comite-fy26', 'index.html'), 'utf-8'), /Décider maintenant/);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('GitHub Pages presentation identifiers are normalized and validated', () => {
+  assert.equal(presentationSlug('Comité FY26 / Plan'), 'comite-fy26-plan');
+  assert.equal(normalizePagesRepo('hbfs-cloud/gamma-slides'), 'hbfs-cloud/gamma-slides');
+  assert.equal(presentationUrl('hbfs-cloud/gamma-slides', 'FY26 Plan'), 'https://hbfs-cloud.github.io/gamma-slides/fy26-plan/');
+  assert.throws(() => normalizePagesRepo('not a repo'), /owner\/repository/);
 });
 
 test('the persistent brand rail carries supplied identity on every deck', () => {

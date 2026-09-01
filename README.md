@@ -2,7 +2,52 @@
 
 An editorial presentation and local video engine for finance, markets, economics, and board reporting. Decks are authored in YAML or JSON, rendered as self-contained interactive HTML, exported as vector-friendly PDF, and recorded or narrated into high-quality local video masters.
 
-## Quick start
+## One-line setup for Claude and Codex
+
+With Node.js installed, run this once from any directory:
+
+```bash
+npx -y github:hbfs-cloud/gamma-slides setup
+```
+
+It connects the same Gamma Slides MCP server to every installed client it finds: Claude Code and/or Codex. There is no local path to maintain; both clients start the current GitHub version through `npx`. Verify it with `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list`.
+
+Then ask the agent in plain language:
+
+> Create a premium 12-slide presentation in French from `brief.md`, validate every slide, deploy it as `fy26-plan`, and return the public URL. Never invent facts.
+
+The agent can inspect the schema and flagship example, choose among the three themes, generate live ECharts, validate the deck, and create or update its stable GitHub Pages URL.
+
+## Deploy and manage presentations
+
+Publishing uses the free GitHub Pages site at [hbfs-cloud.github.io/gamma-slides](https://hbfs-cloud.github.io/gamma-slides/). Run `gh auth login` once before the first write. A deployment usually appears after the GitHub Actions run completes.
+
+These are the five commands to remember:
+
+```bash
+# Create a public presentation, or update it later with the same slug
+npx -y github:hbfs-cloud/gamma-slides deploy -f deck.yaml --slug fy26-plan
+
+# List every managed presentation and URL
+npx -y github:hbfs-cloud/gamma-slides sites
+
+# Download the editable source
+npx -y github:hbfs-cloud/gamma-slides pull fy26-plan -o deck.yaml
+
+# Open it
+npx -y github:hbfs-cloud/gamma-slides open-site fy26-plan
+
+# Delete it after explicit confirmation
+npx -y github:hbfs-cloud/gamma-slides delete-site fy26-plan --yes
+```
+
+`deploy` is both Create and Update: the slug is the stable ID and URL. `pull` is Read. `delete-site` removes the source and the next Pages build removes the public route. For a fork or another Pages repository, append `--repo owner/repository`; configure that default for both agents with `setup --repo owner/repository`.
+
+If you prefer a short local command, install once with `npm install -g github:hbfs-cloud/gamma-slides`, then replace the long `npx ...` prefix above with `gamma-slides`.
+
+See [the complete Claude/Codex and CRUD guide](docs/LLM_QUICKSTART.md).
+
+## Local development
 
 ```bash
 npm install
@@ -37,12 +82,6 @@ Interactive decks open with a four-step, permission-safe setup wizard: choose on
 | `F` | Toggle fullscreen |
 
 The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. It is intentionally disabled in a static `file://` export. Start preview with `--terminal` to enable it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
-
-## Claude, Codex, and free web publishing
-
-The repository includes project-scoped MCP configuration for Claude Code and Codex. Agents can read the deck schema and flagship example, use a guided presentation prompt, validate a YAML/JSON deck, generate its interactive HTML, and build a static site. See [the LLM quickstart](docs/LLM_QUICKSTART.md).
-
-`gamma-slides site` writes a self-contained `index.html` ready for static hosting. The included GitHub Actions workflow builds the flagship and deploys it to GitHub Pages on each relevant push to `main`; enable **Settings → Pages → Source: GitHub Actions** once for the repository.
 
 ## Quality assurance and exports
 
@@ -79,6 +118,7 @@ The offline renderer produces H.264 at CRF 18 with AAC audio, creates slides and
 ## Requirements
 
 - Node.js 18+
+- GitHub CLI authenticated with `gh auth login` for managed web deployments
 - Chromium or Chrome (Puppeteer can provision it)
 - FFmpeg and FFprobe for video
 - `edge-tts` for narration

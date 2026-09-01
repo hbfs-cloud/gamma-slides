@@ -4,6 +4,13 @@ import { z } from 'zod';
 import { loadDeck } from '../loader/index.js';
 import { renderDeck } from '../engine/renderer.js';
 import { buildStaticSite } from '../site/build.js';
+import {
+  DEFAULT_PAGES_REPO,
+  deletePresentation,
+  deployPresentationSource,
+  getPresentation,
+  listPresentations,
+} from '../site/github-pages.js';
 import { generateVideoFromDeck } from '../video/generate-v2.js';
 import { generateThumbnail } from '../video/thumbnail.js';
 import { listThemes } from '../themes/index.js';
@@ -16,8 +23,9 @@ const server = new McpServer({
   name: 'gamma-slides',
   version: '2.0.0',
 }, {
-  instructions: 'Create presentation sites in this order: inspect gamma://schema/deck and gamma://examples/flagship when needed, choose one of the three presentation themes, draft a coherent narrative, validate with gamma_validate_deck, then call gamma_generate_deck or gamma_build_site. Prefer real sourced data, concise slide copy, varied layouts, native ECharts, a persistent brand identity, and speaker narration. Never invent financial facts. gamma_build_site produces a self-contained index.html ready for static hosting.',
+  instructions: 'Create presentation sites in this order: inspect gamma://schema/deck and gamma://examples/flagship when needed, choose one of the three presentation themes, draft a coherent narrative, validate with gamma_validate_deck, then call gamma_generate_deck, gamma_build_site, or gamma_deploy_site. Prefer real sourced data, concise slide copy, varied layouts, native ECharts, persistent brand identity, and speaker narration. Never invent financial facts. Deployments are CRUD-managed by stable slug: list or read first, deploy the same slug to update, and delete only after explicit user confirmation.',
 });
+const managedPagesRepo = process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO;
 
 server.registerResource('deck-schema', 'gamma://schema/deck', {
   title: 'Gamma Slides deck schema',
@@ -86,6 +94,59 @@ server.tool('gamma_build_site', 'Build a self-contained static presentation site
   if (theme) d.theme = theme;
   const result = buildStaticSite(d, output_dir || './site');
   return { content: [{ type: 'text', text: `Static site ready: ${result.siteDir}\nEntry: ${result.indexPath}\n${result.slides} slides, theme: ${result.theme}\nPublish this directory with GitHub Pages or another static host.` }] };
+});
+
+server.registerTool('gamma_deploy_site', {
+  title: 'Create or update a GitHub Pages presentation',
+  description: 'Validate a deck and create or update its stable public URL in the managed GitHub Pages library.',
+  inputSchema: {
+    deck: z.string().describe('Complete deck specification as YAML or JSON'),
+    slug: z.string().optional().describe('Stable public slug; defaults to the deck title. Reuse it to update.'),
+    repo: z.string().optional().describe(`GitHub repository, default: ${managedPagesRepo}`),
+  },
+  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+}, async ({ deck, slug, repo }) => {
+  const result = deployPresentationSource({ deck, slug, repo: repo || managedPagesRepo });
+  return { content: [{ type: 'text', text: `Presentation ${result.action}: ${result.title}\nPublic URL: ${result.url}\nSource: ${result.repo}/${result.path}\nDeployment status: ${result.actionsUrl}` }] };
+});
+
+server.registerTool('gamma_list_sites', {
+  title: 'List deployed presentations',
+  description: 'List managed presentation slugs, titles, metadata, and public URLs.',
+  inputSchema: { repo: z.string().optional().describe(`GitHub repository, default: ${managedPagesRepo}`) },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+}, async ({ repo }) => {
+  const sites = listPresentations(repo || managedPagesRepo);
+  const text = sites.length
+    ? sites.map(site => `${site.slug}\n  ${site.title} · ${site.slides} slides · ${site.theme}\n  ${site.url}`).join('\n')
+    : 'No managed presentations yet.';
+  return { content: [{ type: 'text', text }] };
+});
+
+server.registerTool('gamma_get_site', {
+  title: 'Read a deployed presentation',
+  description: 'Retrieve the editable YAML/JSON source and public metadata for one managed presentation.',
+  inputSchema: {
+    slug: z.string().describe('Presentation slug'),
+    repo: z.string().optional().describe(`GitHub repository, default: ${managedPagesRepo}`),
+  },
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+}, async ({ slug, repo }) => {
+  const site = getPresentation({ slug, repo: repo || managedPagesRepo });
+  return { content: [{ type: 'text', text: `Slug: ${site.slug}\nTitle: ${site.title}\nPublic URL: ${site.url}\n\n${site.source}` }] };
+});
+
+server.registerTool('gamma_delete_site', {
+  title: 'Delete a deployed presentation',
+  description: 'Permanently delete a managed presentation source. Call only after the user explicitly confirms the exact slug.',
+  inputSchema: {
+    slug: z.string().describe('Exact presentation slug confirmed by the user'),
+    repo: z.string().optional().describe(`GitHub repository, default: ${managedPagesRepo}`),
+  },
+  annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true },
+}, async ({ slug, repo }) => {
+  const result = deletePresentation({ slug, repo: repo || managedPagesRepo });
+  return { content: [{ type: 'text', text: `Deleted presentation: ${result.slug}\nGitHub Pages will remove the public route after the deployment workflow completes.` }] };
 });
 
 // Tool: Generate video

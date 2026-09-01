@@ -11,6 +11,16 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { execFileSync } from 'child_process';
 import { buildStaticSite } from '../src/site/build.js';
+import { buildPresentationLibrary } from '../src/site/library.js';
+import {
+  DEFAULT_PAGES_REPO,
+  deletePresentation,
+  deployPresentationFile,
+  listPresentations,
+  pullPresentation,
+  presentationUrl,
+} from '../src/site/github-pages.js';
+import { setupAgentClients } from '../src/integrations/setup.js';
 
 const program = new Command();
 
@@ -56,6 +66,130 @@ program
       const result = buildStaticSite(deck, opts.output);
       console.log(chalk.green('✓') + ` Site ready: ${chalk.bold(result.siteDir)}`);
       console.log(chalk.dim(`  ${result.slides} slides • theme: ${result.theme} • entry: ${result.indexPath}`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('library')
+  .description('Build a static library containing every managed presentation')
+  .option('-d, --directory <dir>', 'Directory containing managed YAML/JSON decks', './presentations')
+  .option('-i, --include <path...>', 'Additional deck files to include')
+  .option('-o, --output <dir>', 'Static library directory', './_site')
+  .action((opts) => {
+    try {
+      const result = buildPresentationLibrary({ inputDir: opts.directory, outputDir: opts.output, include: opts.include || [] });
+      console.log(chalk.green('✓') + ` Library ready: ${chalk.bold(result.outputDir)}`);
+      console.log(chalk.dim(`  ${result.entries.length} presentation${result.entries.length === 1 ? '' : 's'} • index.html + presentations.json`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('setup')
+  .description('Connect Gamma Slides to Claude Code and Codex in one command')
+  .option('--client <name>', 'Client: all, claude, or codex', 'all')
+  .option('--repo <owner/repo>', 'Repository used for managed GitHub Pages deployments', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .action((opts) => {
+    try {
+      const result = setupAgentClients(opts.client, opts.repo);
+      result.results.forEach(item => {
+        if (item.configured) console.log(chalk.green('✓') + ` ${item.client}: Gamma Slides connected`);
+        else console.log(chalk.yellow('•') + ` ${item.client}: skipped (${item.reason})`);
+      });
+      console.log(chalk.dim(`  MCP runner: ${result.runner}`));
+      console.log(chalk.dim(`  Deployment library: ${result.repo}`));
+      console.log(`  Ask your agent: ${chalk.cyan('Create, validate, and deploy a Gamma Slides presentation…')}`);
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('deploy')
+  .description('Create or update a presentation on the free GitHub Pages library')
+  .requiredOption('-f, --file <path>', 'Deck YAML/JSON file')
+  .option('--slug <slug>', 'Stable public slug; defaults to the deck title')
+  .option('--repo <owner/repo>', 'GitHub Pages repository', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .option('--open', 'Open the public presentation URL after deployment')
+  .action(async (opts) => {
+    try {
+      const result = deployPresentationFile({ file: opts.file, repo: opts.repo, slug: opts.slug });
+      console.log(chalk.green('✓') + ` Presentation ${result.action}: ${chalk.bold(result.title)}`);
+      console.log(chalk.cyan(result.url));
+      console.log(chalk.dim(`  ${result.slides} slides • ${result.theme} • source: ${result.repo}/${result.path}`));
+      console.log(chalk.dim(`  Deployment status: ${result.actionsUrl}`));
+      if (opts.open) (await import('open')).default(result.url);
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('sites')
+  .description('List every managed presentation and its public URL')
+  .option('--repo <owner/repo>', 'GitHub Pages repository', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .action((opts) => {
+    try {
+      const sites = listPresentations(opts.repo);
+      if (!sites.length) console.log(chalk.yellow('No managed presentations yet.'));
+      sites.forEach(site => {
+        console.log(`${chalk.bold(site.slug)}  ${site.title}`);
+        console.log(chalk.dim(`  ${site.slides} slides • ${site.theme}`));
+        console.log(`  ${chalk.cyan(site.url)}`);
+      });
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('pull <slug>')
+  .description('Download a deployed presentation source for editing')
+  .option('-o, --output <path>', 'Local YAML output path')
+  .option('--repo <owner/repo>', 'GitHub Pages repository', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .action((slug, opts) => {
+    try {
+      const result = pullPresentation({ repo: opts.repo, slug, output: opts.output });
+      console.log(chalk.green('✓') + ` Downloaded: ${chalk.bold(result.outputPath)}`);
+      console.log(chalk.dim(`  Edit it, then run deploy with the same slug to update the live site.`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('open-site <slug>')
+  .description('Open a deployed presentation in the browser')
+  .option('--repo <owner/repo>', 'GitHub Pages repository', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .action(async (slug, opts) => {
+    const url = presentationUrl(opts.repo, slug);
+    console.log(chalk.cyan(url));
+    (await import('open')).default(url);
+  });
+
+program
+  .command('delete-site <slug>')
+  .description('Delete a managed presentation from the public library')
+  .option('--repo <owner/repo>', 'GitHub Pages repository', process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO)
+  .option('--yes', 'Confirm permanent deletion of the deployed source')
+  .action((slug, opts) => {
+    if (!opts.yes) {
+      console.error(chalk.yellow(`Confirmation required. Re-run with: gamma-slides delete-site ${slug} --yes`));
+      process.exit(1);
+    }
+    try {
+      const result = deletePresentation({ repo: opts.repo, slug });
+      console.log(chalk.green('✓') + ` Deleted: ${chalk.bold(result.slug)}`);
+      console.log(chalk.dim(`  GitHub Pages will remove it when the deployment workflow completes.`));
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);

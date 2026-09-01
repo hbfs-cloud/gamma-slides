@@ -9,6 +9,7 @@ on:
       - 'bin/**'
       - 'package.json'
       - 'package-lock.json'
+      - 'presentations/**'
       - 'src/**'
   workflow_dispatch:
 
@@ -34,8 +35,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Build flagship presentation
-        run: node bin/gamma-slides.js site -f src/schema/examples/corporate-demo.yaml -o _site
+      - name: Build presentation library
+        run: node bin/gamma-slides.js library -d presentations -i src/schema/examples/corporate-demo.yaml -o _site
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
