@@ -1,0 +1,1409 @@
+version: "1"
+
+meta:
+  title: "FY2025 Board Review & FY2026 Operating Plan"
+  subtitle: "Performance, economics, liquidity, markets, and decisions"
+  author: "Sarah Chen"
+  company: "Acme Corp"
+  date: "2025-12-15"
+  language: "en"
+  tags: ["finance", "board", "markets", "strategy", "demo"]
+  description: "Illustrative boardroom flagship covering FY25 performance and the FY26 operating plan"
+
+branding:
+  watermark: "CONFIDENTIAL · DEMO"
+  company_url: "acme.com"
+
+theme: "boardroom"
+
+narration:
+  voice: "en-US-AndrewNeural"
+  rate: "-5%"
+
+music:
+  track: null
+  volume: 0.05
+
+video:
+  subtitles: true
+  thumbnail:
+    slide: 0
+    text_overlay: "FY25 Board Review"
+
+slides:
+  - layout: title
+    variant: editorial
+    tone: dark
+    transition: fade
+    background:
+      type: solid
+      value: "#0B0F17"
+    kicker: "CONFIDENTIAL · BOARD MATERIAL"
+    label: "25"
+    badge: "FY2025 REVIEW"
+    title: "FY25 strengthened the model. FY26 is the scale test."
+    subtitle: "Performance review · Operating plan · December 2025"
+    metrics:
+      - label: "Revenue"
+        value: "$16.2M"
+      - label: "Gross margin"
+        value: "72%"
+      - label: "Net retention"
+        value: "135%"
+    source: "DEMO management reporting · FY25 actuals"
+    footnote: "All companies, market series, and forward-looking assumptions are illustrative."
+    narration: >
+      FY25 strengthened the model across growth, margin, and retention.
+      The board question for FY26 is how to scale that momentum with discipline.
+
+  - layout: dashboard
+    columns: 4
+    transition: fade
+    kicker: "EXECUTIVE READOUT"
+    title: "We enter FY26 with momentum, better economics—and three decisions."
+    subtitle: "The outcome is strong; mix, working capital, and execution capacity remain the watchpoints."
+    panels:
+      - type: metric
+        title: "Outcome"
+        value: "$16.2M"
+        delta: "+8% vs plan"
+        subtitle: "Revenue finished above the FY25 operating plan."
+        icon: "trending-up"
+      - type: metric
+        title: "Quality"
+        value: "135%"
+        delta: "+12pp YoY"
+        subtitle: "Expansion and retention strengthened together."
+        icon: "users"
+      - type: metric
+        title: "Watch"
+        value: "71%"
+        delta: "rails mix"
+        subtitle: "Transfer and FX still drive most revenue."
+        icon: "alert-triangle"
+      - type: metric
+        title: "Today"
+        value: "3"
+        delta: "decisions"
+        subtitle: "Ambition, sequencing, and risk guardrails."
+        icon: "target"
+    source: "DEMO management reporting · Board synthesis"
+    footnote: "Plan and operating-risk statements are illustrative."
+    narration: >
+      The headline is positive, but the board discussion is not a victory lap.
+      We need alignment on the FY26 ambition, execution sequence, and risk limits.
+
+  - layout: metrics
+    variant: hero
+    transition: fade
+    kicker: "FY25 SCORECARD"
+    title: "Revenue nearly doubled while margin and retention expanded."
+    subtitle: "Scale did not come at the expense of economic quality."
+    columns: 4
+    metrics:
+      - label: "Revenue"
+        value: "$16.2M"
+        delta: "+95% YoY"
+        trend: up
+        featured: true
+        icon: "dollar-sign"
+      - label: "Gross margin"
+        value: "72%"
+        delta: "+4pp YoY"
+        trend: up
+        icon: "trending-up"
+      - label: "Net revenue retention"
+        value: "135%"
+        delta: "+12pp YoY"
+        trend: up
+        icon: "users"
+      - label: "Customers"
+        value: "85"
+        delta: "+67 additions"
+        trend: up
+        icon: "building"
+    insight: "All four board-level indicators moved in the same direction: more scale, better margin, deeper expansion."
+    source: "DEMO management reporting · FY25 actuals"
+    footnote: "Revenue, gross margin, NRR, and customer count retain the original demo assumptions."
+    narration: >
+      Revenue reached 16.2 million dollars, up 95 percent.
+      Gross margin, net retention, and customer count all improved alongside that growth.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "PLAN VS ACTUAL"
+    title: "FY25 finished ahead of plan across every board-level metric."
+    subtitle: "Actual performance indexed to plan; plan equals 100."
+    chart:
+      type: bullet
+      data:
+        labels: ["Revenue", "Gross margin", "Ending cash", "New customers"]
+        datasets:
+          - label: "Actual"
+            values: [108, 103, 109, 122]
+        targets: [100, 100, 100, 100]
+      options:
+        format_y: compact
+        max: 130
+        show_legend: false
+    insight: "Adjusted EBITDA was also $0.7M better than plan, ending at a near-breakeven loss of $0.1M."
+    source: "DEMO FY25 operating plan and management reporting"
+    footnote: "Index values are derived from actual versus plan; EBITDA is excluded because a loss ratio is not decision-useful."
+    narration: >
+      Revenue, margin, cash, and customer additions all exceeded plan.
+      The adjusted EBITDA loss was also 700 thousand dollars better than budget.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "MOMENTUM"
+    title: "Q4 reached $4.9M, lifting the exit run-rate to $19.6M."
+    subtitle: "Sequential growth remained above 13 percent after the Q2 step-up."
+    chart:
+      type: combo
+      data:
+        labels: ["Q1", "Q2", "Q3", "Q4"]
+        datasets:
+          - label: "Actual revenue"
+            type: bar
+            values: [3200000, 3800000, 4300000, 4900000]
+            color: primary
+          - label: "Plan revenue"
+            type: bar
+            values: [3000000, 3500000, 4000000, 4500000]
+            color: "#9DA5B2"
+          - label: "QoQ growth"
+            type: line
+            values: [0, 18.7, 13.2, 14.0]
+            color: secondary
+            y_axis: right
+      options:
+        format_y: currency_m
+        format_y_right: percent
+        show_legend: true
+        smooth: true
+    insight: "Revenue increased 53 percent from Q1 to Q4; the Q4 annualized run-rate is 19.6 million dollars."
+    source: "DEMO management reporting · Quarterly actuals and plan"
+    footnote: "QoQ growth and exit run-rate are derived; Q1 growth is intentionally left at zero."
+    narration: >
+      Quarterly revenue accelerated from 3.2 to 4.9 million dollars.
+      Q4 exited at a 19.6 million dollar annualized run-rate.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "OPERATING SIGNALS"
+    title: "Leading indicators strengthened alongside the year-end revenue step-up."
+    subtitle: "Retention quality and processed volume moved together across the year."
+    panels:
+      - type: chart
+        title: "Net revenue retention"
+        chart:
+          type: line
+          data:
+            labels: ["Q1", "Q2", "Q3", "Q4"]
+            datasets:
+              - label: "Actual"
+                values: [124, 128, 132, 135]
+                color: primary
+              - label: "Plan"
+                values: [122, 124, 126, 128]
+                color: "#9DA5B2"
+                dashed: true
+          options:
+            format_y: percent
+            y_min: 115
+            y_max: 140
+            show_legend: true
+      - type: chart
+        title: "Quarter-end annualized payment volume"
+        chart:
+          type: area
+          data:
+            labels: ["Q1", "Q2", "Q3", "Q4"]
+            datasets:
+              - label: "Annualized volume"
+                values: [420000000, 680000000, 1150000000, 1840000000]
+                color: secondary
+          options:
+            format_y: compact
+            show_legend: false
+    source: "DEMO product analytics · FY25 quarterly operating series"
+    footnote: "Quarter-end annualized volume and retention observations are illustrative leading indicators."
+    narration: >
+      Retention increased every quarter and finished seven points above plan.
+      Processed volume accelerated in parallel with the reported revenue step-up.
+
+  - layout: table
+    variant: editorial
+    transition: fade
+    kicker: "PROFIT & LOSS"
+    title: "Gross profit doubled; operating leverage brought EBITDA to breakeven."
+    subtitle: "Revenue grew materially faster than the operating cost base."
+    table:
+      headers: ["$M", "FY24", "FY25", "Change"]
+      rows:
+        - ["Revenue", "8.3", "16.2", "+95%"]
+        - ["Cost of revenue", "(2.7)", "(4.5)", "+67%"]
+        - ["Gross profit", "5.6", "11.7", "+107%"]
+        - ["Gross margin", "68%", "72%", "+4pp"]
+        - ["R&D", "(3.4)", "(4.7)", "+38%"]
+        - ["Sales & marketing", "(3.0)", "(4.1)", "+37%"]
+        - ["G&A", "(2.2)", "(3.0)", "+36%"]
+        - ["Adjusted EBITDA", "(3.0)", "(0.1)", "+$2.9M"]
+      column_types: ["text", "amount", "amount", "amount"]
+      highlight_column: 2
+    insight: "Gross profit grew by 107 percent while operating expenses grew by 37 percent."
+    source: "DEMO management P&L · Unaudited"
+    footnote: "Rounded figures; expense structure is illustrative and reconciles to adjusted EBITDA."
+    narration: >
+      Gross profit more than doubled to 11.7 million dollars.
+      That operating leverage narrowed the adjusted EBITDA loss from 3 million to 100 thousand dollars.
+
+  - layout: dashboard
+    columns: 3
+    transition: fade
+    kicker: "REVENUE QUALITY"
+    title: "Rails fund the engine; software expands revenue quality."
+    subtitle: "The current strength and the next quality milestone are visible in the same mix."
+    panels:
+      - type: chart
+        title: "FY25 revenue mix"
+        span: 2
+        chart:
+          type: doughnut
+          data:
+            labels: ["Transfer fees", "FX spread", "SaaS", "Treasury", "Compliance", "Other"]
+            datasets:
+              - values: [8400000, 3150000, 2400000, 1200000, 940000, 110000]
+                colors: ["primary", "secondary", "#76839A", "#9DA5B2", "accent", "#C2BEB4"]
+          options:
+            format_y: currency_m
+            center_label: "FY25 revenue"
+            show_legend: true
+      - type: metric
+        title: "Software-like mix"
+        value: "21%"
+        delta: "+100% SaaS"
+        subtitle: "SaaS plus compliance; rails remain 71 percent of revenue."
+        icon: "layers"
+    source: "DEMO management reporting · Revenue by product"
+    footnote: "$0.11M other item reconciles disclosed streams to the $16.2M total."
+    narration: >
+      Transfer and FX rails generate 71 percent of revenue today.
+      SaaS and compliance already contribute 21 percent and represent the clearest quality unlock.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "SEGMENT PERFORMANCE"
+    title: "Platform revenue nearly tripled; every segment contributed to growth."
+    subtitle: "FY24 and FY25 revenue by primary customer segment."
+    chart:
+      type: bar
+      data:
+        labels: ["Enterprise", "Platforms", "Fintech", "Marketplaces", "Other"]
+        datasets:
+          - label: "FY24"
+            values: [3100000, 1400000, 2200000, 1000000, 600000]
+            color: "#9DA5B2"
+          - label: "FY25"
+            values: [5200000, 4000000, 3500000, 2100000, 1400000]
+            color: primary
+      options:
+        format_y: currency_m
+        show_legend: true
+        show_values: true
+    insight: "Platforms added 2.6 million dollars and became the largest incremental growth pool."
+    source: "DEMO management reporting · Revenue by customer segment"
+    footnote: "Segment totals reconcile to illustrative FY24 revenue of $8.3M and FY25 revenue of $16.2M."
+    narration: >
+      Every customer segment grew in FY25.
+      Platform revenue nearly tripled and supplied the largest incremental growth pool, while enterprise remained the largest absolute segment.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "GROWTH BRIDGE"
+    title: "New logos supplied 57% of growth; expansion validated retention."
+    subtitle: "The bridge reconciles FY24 revenue to the FY25 outcome."
+    chart:
+      type: waterfall
+      data:
+        labels: ["FY24", "Expansion", "Churn", "New logos", "Price / FX", "FY25"]
+        datasets:
+          - label: "Revenue bridge"
+            values: [8300000, 3200000, -300000, 4500000, 500000, 16200000]
+      options:
+        format_y: currency_m
+        total_indices: [0, 5]
+        show_legend: false
+    insight: "The existing-customer bridge implies 135 percent NRR; new logos contributed 4.5 million dollars."
+    source: "DEMO revenue bridge calibrated to FY25 revenue and NRR"
+    footnote: "($8.3M + $3.2M − $0.3M) / $8.3M = 135% NRR."
+    narration: >
+      Existing customers expanded by a net 2.9 million dollars, consistent with 135 percent NRR.
+      New logos added a further 4.5 million dollars of revenue.
+
+  - layout: table
+    variant: editorial
+    transition: fade
+    kicker: "UNIT ECONOMICS"
+    title: "Enterprise payback fell to 16 months as CAC declined."
+    subtitle: "The improvement came from acquisition efficiency and margin, not ACV inflation."
+    table:
+      headers: ["Enterprise metric", "FY24", "FY25", "Change"]
+      rows:
+        - ["CAC per new logo", "$132K", "$110K", "−17%"]
+        - ["Initial annual contract value", "$116K", "$115K", "Stable"]
+        - ["Gross margin", "68%", "72%", "+4pp"]
+        - ["CAC payback", "20 months", "16 months", "−4 months"]
+        - ["Modeled LTV / CAC", "5.1×", "7.0×", "+1.9×"]
+      column_types: ["text", "amount", "amount", "amount"]
+      highlight_column: 2
+    insight: "Lower CAC and four points of gross-margin expansion reduced payback by four months."
+    source: "DEMO enterprise unit-economics model"
+    footnote: "Payback equals CAC divided by monthly gross profit from the initial contract."
+    narration: >
+      Enterprise CAC declined 17 percent while gross margin increased.
+      As a result, payback improved from 20 to 16 months and modeled LTV to CAC reached seven times.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "COHORT EXPANSION"
+    title: "Every mature cohort is above 125% revenue retention."
+    subtitle: "Revenue index by customer go-live quarter; month zero equals 100."
+    chart:
+      type: heatmap
+      data:
+        x_labels: ["M0", "M3", "M6", "M9", "M12", "M15", "M18", "M21"]
+        y_labels: ["24 Q1", "24 Q2", "24 Q3", "24 Q4", "25 Q1", "25 Q2", "25 Q3", "25 Q4"]
+        values:
+          - [100, 108, 117, 124, 131, 138, 142, 146]
+          - [100, 111, 119, 128, 136, 141, 145, null]
+          - [100, 109, 118, 127, 134, 139, null, null]
+          - [100, 112, 121, 129, 136, null, null, null]
+          - [100, 114, 123, 132, null, null, null, null]
+          - [100, 113, 125, null, null, null, null, null]
+          - [100, 116, null, null, null, null, null, null]
+          - [100, null, null, null, null, null, null, null]
+      options:
+        min: 100
+        max: 150
+        legend_labels: ["150", "100"]
+        show_values: true
+    insight: "Mature cohorts expand after onboarding; the weighted FY25 outcome is consistent with 135 percent NRR."
+    source: "DEMO cohort model calibrated to management NRR"
+    footnote: "Cells show indexed cohort revenue, not logo retention."
+    narration: >
+      Every cohort with at least 12 months of history is above 125 percent revenue retention.
+      The pattern supports the view that usage deepens after onboarding.
+
+  - layout: table
+    variant: editorial
+    transition: fade
+    kicker: "CUSTOMER PROOF"
+    title: "Top-account expansion is broad; SaaS MRR is not concentrated."
+    subtitle: "Platform subscription MRR only; transaction fees are excluded."
+    table:
+      headers: ["Account", "Segment", "MRR", "YoY growth", "Motion"]
+      rows:
+        - ["GlobalTech", "Enterprise", "$12.5K", "+45%", "Expanding"]
+        - ["PayFlow", "Enterprise", "$8.2K", "+120%", "Expanding"]
+        - ["Nordic Finance", "Premium", "$5.8K", "+30%", "Stable"]
+        - ["Latam Transfers", "Premium", "$4.1K", "+85%", "Expanding"]
+        - ["Asia Connect", "Standard", "$2.4K", "+60%", "Upgrading"]
+      column_types: ["text", "tag", "amount", "amount", "tag"]
+      highlight_column: 3
+    insight: "The top five represent 16.5 percent of SaaS MRR; the largest account represents 6.3 percent."
+    source: "DEMO CRM and billing snapshot · December 2025"
+    footnote: "Concentration ratios are derived from $2.4M annual SaaS revenue."
+    narration: >
+      Expansion is broad across the five highlighted accounts, led by PayFlow at 120 percent.
+      The largest account is only 6.3 percent of total SaaS MRR.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "COMMERCIAL ENGINE"
+    title: "One in five qualified accounts converted; efficiency varies by segment."
+    subtitle: "The aggregate funnel is healthy; the segment frontier shows where operating discipline matters."
+    panels:
+      - type: chart
+        title: "Enterprise conversion funnel"
+        chart:
+          type: funnel
+          data:
+            labels: ["Qualified", "Discovery", "Solution fit", "Security review", "Contracted"]
+            datasets:
+              - values: [240, 168, 109, 72, 48]
+                colors: ["#76839A", "secondary", "primary", "#008A70", "accent"]
+          options:
+            show_legend: false
+      - type: chart
+        title: "CAC–payback efficiency frontier"
+        chart:
+          type: scatter
+          data:
+            datasets:
+              - label: "Customer segments"
+                color: primary
+                points:
+                  - { name: "Platforms", x: 82000, y: 12, highlight: true }
+                  - { name: "Fintech", x: 98000, y: 14, highlight: true }
+                  - { name: "Marketplaces", x: 112000, y: 16, highlight: true }
+                  - { name: "Banks", x: 148000, y: 21, highlight: true }
+                  - { name: "Corporates", x: 126000, y: 18, highlight: true }
+          options:
+            x_label: "CAC per logo"
+            y_label: "Payback months"
+            format_x: currency_k
+            format_y: compact
+            x_min: 60000
+            x_max: 170000
+            y_min: 8
+            y_max: 24
+            show_legend: false
+            show_all_labels: true
+    source: "DEMO CRM funnel and segment economics · December 2025"
+    footnote: "Conversion counts and segment economics are illustrative and rounded."
+    narration: >
+      One in five qualified enterprise accounts converted to contracted business.
+      Platforms and fintech define the efficiency frontier, while bank opportunities require tighter pricing and implementation gates.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "CASH FLOW"
+    title: "Near-breakeven operations limited cash use to $2.3M."
+    subtitle: "Working capital and product investment—not operating losses—consumed cash."
+    chart:
+      type: waterfall
+      data:
+        labels: ["Opening cash", "EBITDA", "Working capital", "Product / capex", "FX / other", "Ending cash"]
+        datasets:
+          - label: "Cash bridge"
+            values: [11800000, -100000, -1200000, -1100000, 100000, 9500000]
+      options:
+        format_y: currency_m
+        total_indices: [0, 5]
+        show_legend: false
+    insight: "The 2.3 million dollar cash reduction was fully explained by working capital and capitalized product investment."
+    source: "DEMO statement of cash flows · FY25"
+    footnote: "Rounded management view; ending cash reconciles to the illustrative balance sheet."
+    narration: >
+      Cash declined from 11.8 to 9.5 million dollars.
+      The movement reflects working capital and product investment rather than recurring operating losses.
+
+  - layout: dashboard
+    columns: 3
+    transition: fade
+    kicker: "LIQUIDITY"
+    title: "A debt-free $9.5M cash position preserves execution flexibility."
+    subtitle: "The year-end balance sheet remains liquid and conservatively funded."
+    panels:
+      - type: metric
+        title: "Cash"
+        value: "$9.5M"
+        delta: "2.6× current liabilities"
+        subtitle: "Unrestricted year-end cash."
+        icon: "dollar-sign"
+      - type: metric
+        title: "Debt"
+        value: "$0.0M"
+        delta: "debt-free"
+        subtitle: "No financial debt at year-end."
+        icon: "shield"
+      - type: metric
+        title: "Current ratio"
+        value: "3.3×"
+        delta: "+0.4× YoY"
+        subtitle: "Current assets divided by current liabilities."
+        icon: "activity"
+      - type: table
+        title: "Condensed balance sheet"
+        span: 3
+        table:
+          headers: ["$M", "Assets", "Liabilities & equity"]
+          rows:
+            - ["Cash / payables", "9.5", "1.8"]
+            - ["Receivables / deferred revenue", "1.7", "1.4"]
+            - ["Other current / other liabilities", "1.1", "0.5"]
+            - ["PPE and intangibles / equity", "1.9", "10.5"]
+            - ["Total", "14.2", "14.2"]
+    source: "DEMO year-end balance sheet · Unaudited"
+    footnote: "Current assets of $12.3M divided by current liabilities of $3.7M equals 3.3×."
+    narration: >
+      Acme ended the year with 9.5 million dollars of cash and no debt.
+      A 3.3 times current ratio provides room to execute the FY26 plan.
+
+  - layout: dashboard
+    columns: 3
+    transition: fade
+    kicker: "FINANCE OPERATIONS"
+    title: "The close is faster; three controls must scale before volume does."
+    subtitle: "Automation is high, but exception governance remains the constraint."
+    panels:
+      - type: chart
+        title: "Wallet reconciliation"
+        chart:
+          type: gauge
+          data:
+            value: 99.8
+            label: "Automated"
+          options:
+            format_y: percent
+            min: 0
+            max: 100
+      - type: chart
+        title: "Fee and FX recognition"
+        chart:
+          type: gauge
+          data:
+            value: 97
+            label: "Automated"
+          options:
+            format_y: percent
+            min: 0
+            max: 100
+      - type: chart
+        title: "Deferred revenue"
+        chart:
+          type: gauge
+          data:
+            value: 100
+            label: "Ratable"
+          options:
+            format_y: percent
+            min: 0
+            max: 100
+      - type: table
+        title: "Open control actions"
+        span: 3
+        table:
+          headers: ["Control gap", "Owner", "Due", "Status"]
+          rows:
+            - ["Manual corridor exceptions", "Controller", "Q1", "In progress"]
+            - ["Stablecoin valuation cut-off", "CFO", "Q1", "In review"]
+            - ["Principal-versus-agent memo", "Audit", "Q2", "Planned"]
+    source: "DEMO finance close dashboard · December 2025"
+    footnote: "Automation percentages and remediation dates are illustrative."
+    narration: >
+      Core close processes are between 97 and 100 percent automated.
+      Three control actions must close before transaction volume scales materially.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "QUALITY DIAGNOSTICS"
+    title: "Control maturity broadened; remaining exceptions cluster in monitoring."
+    subtitle: "The operating system improved, but the residual control workload is still concentrated."
+    panels:
+      - type: chart
+        title: "Finance control maturity · 1–5"
+        chart:
+          type: radar
+          data:
+            labels: ["Reconciliation", "Revenue", "Treasury", "Tax", "Entity close", "Forecasting"]
+            datasets:
+              - label: "FY24"
+                values: [3.1, 3.4, 2.8, 2.6, 3.0, 2.9]
+                color: "#9DA5B2"
+              - label: "FY25"
+                values: [4.7, 4.5, 4.1, 3.7, 4.3, 4.0]
+                color: primary
+          options:
+            max: 5
+            show_legend: true
+      - type: chart
+        title: "Open exceptions by domain"
+        chart:
+          type: pie
+          data:
+            labels: ["Monitoring", "Revenue", "Treasury", "Tax", "Entity close"]
+            datasets:
+              - values: [44, 27, 15, 9, 5]
+                colors: ["primary", "secondary", "#76839A", "accent", "#C2BEB4"]
+          options:
+            format_y: percent
+            show_legend: true
+    source: "DEMO finance controls register · December 2025"
+    footnote: "Maturity scores and exception classification are illustrative management assessments."
+    narration: >
+      Finance control maturity improved across every measured domain.
+      Forty-four percent of open exceptions sit in transaction monitoring, which makes that domain the next remediation priority.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "MARKET PRIORITIES"
+    title: "Four corridors define the opportunity; LatAm comes first."
+    subtitle: "Serviceable payment volume by management-priority corridor."
+    chart:
+      type: treemap
+      data:
+        items:
+          - name: "Latin America · $18B"
+            value: 18
+          - name: "Southeast Asia · $14B"
+            value: 14
+          - name: "Europe–Africa · $9B"
+            value: 9
+          - name: "North America · $7B"
+            value: 7
+      options:
+        show_legend: false
+    insight: "The 48 billion dollar serviceable pool is concentrated enough to sequence; current payment volume implies 3.9 percent penetration."
+    source: "DEMO management market model · FY26 planning"
+    footnote: "Serviceable volume is illustrative; $1.85B quarter-end annualized payment volume is a DEMO assumption."
+    narration: >
+      Four corridor groups represent 48 billion dollars of serviceable payment volume.
+      Latin America is both the largest pool and the first execution priority.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "MARKET TAPE"
+    title: "Public-market appetite for stablecoin infrastructure strengthened into year-end."
+    subtitle: "Illustrative infrastructure-basket index; January 2025 open equals 100."
+    chart:
+      type: candlestick
+      data:
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        values:
+          - [100, 104, 97, 106]
+          - [104, 102, 99, 108]
+          - [102, 110, 101, 112]
+          - [110, 108, 105, 114]
+          - [108, 116, 107, 119]
+          - [116, 115, 111, 120]
+          - [115, 122, 113, 124]
+          - [122, 129, 120, 132]
+          - [129, 132, 126, 136]
+          - [132, 138, 130, 141]
+          - [138, 136, 133, 143]
+          - [136, 142, 135, 145]
+        volume: [48, 52, 61, 57, 72, 68, 75, 82, 90, 96, 88, 104]
+      options:
+        data_zoom: false
+    insight: "The illustrative basket closed 42 percent above its January base, with participation increasing into Q4."
+    source: "DEMO market series · Not investment data"
+    footnote: "OHLC order is open, close, low, high; volume is an illustrative relative index."
+    narration: >
+      The illustrative stablecoin infrastructure basket strengthened through the year and closed at 142.
+      The signal is supportive, but it is not a substitute for company execution.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "PUBLIC COMPS"
+    title: "Public markets reward durable growth and gross-profit quality."
+    subtitle: "Bubble size represents gross margin; labels are anonymized demo peers."
+    chart:
+      type: bubble
+      data:
+        datasets:
+          - label: "Public peers"
+            color: primary
+            points:
+              - name: "Legacy Processor"
+                x: 8
+                y: 2.2
+                size: 48
+                highlight: true
+              - name: "Global Payments"
+                x: 12
+                y: 3.1
+                size: 55
+                highlight: true
+              - name: "Fintech Platform"
+                x: 24
+                y: 5.4
+                size: 68
+                highlight: true
+              - name: "Cloud Payments"
+                x: 31
+                y: 7.2
+                size: 75
+                highlight: true
+              - name: "Stablecoin Infra"
+                x: 42
+                y: 8.5
+                size: 71
+                highlight: true
+      options:
+        x_label: "NTM revenue growth (%)"
+        y_label: "EV / NTM revenue (×)"
+        format_x: percent
+        show_legend: false
+        show_all_labels: true
+    insight: "Acme's FY26 plan targets 74 percent growth and 78 percent gross margin; no valuation inference is implied."
+    source: "DEMO public-comps screen · December 2025"
+    footnote: "Peer names, growth, margins, and valuation multiples are illustrative."
+    narration: >
+      The demo peer set shows higher valuation multiples as growth and gross-margin quality improve.
+      Acme's operating plan targets the profile, not a specific valuation outcome.
+
+  - layout: table
+    variant: editorial
+    transition: fade
+    kicker: "FY26 OUTLOOK"
+    title: "Base case reaches $28.2M; downside remains EBITDA-positive."
+    subtitle: "The range is defined by launch timing, payment volume, and enterprise attach."
+    table:
+      headers: ["Metric", "Downside", "Base", "Upside"]
+      rows:
+        - ["Revenue", "$22.5M", "$28.2M", "$32.0M"]
+        - ["Revenue growth", "+39%", "+74%", "+98%"]
+        - ["Gross margin", "74%", "78%", "79%"]
+        - ["Adjusted EBITDA", "$0.5M", "$3.5M", "$6.0M"]
+        - ["Ending cash", "$7.8M", "$11.6M", "$14.9M"]
+        - ["Customers", "140", "200+", "240"]
+      column_types: ["text", "amount", "amount", "amount"]
+      highlight_column: 2
+    insight: "The base case compounds FY25 momentum; the downside protects liquidity and adjusted EBITDA."
+    source: "DEMO FY26 scenario model"
+    footnote: "Base revenue is derived from 74% growth on $16.2M; all other forward assumptions are illustrative."
+    narration: >
+      The base case targets 28.2 million dollars of revenue, 78 percent gross margin, and 3.5 million of adjusted EBITDA.
+      Even the modeled downside remains EBITDA-positive.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "PLAN SENSITIVITY"
+    title: "Launch timing and payment volume create the widest plan variance."
+    subtitle: "Illustrative FY26 adjusted EBITDA impact versus the base case."
+    chart:
+      type: tornado
+      data:
+        labels: ["LatAm launch", "Payment volume", "Take rate", "Hiring timing", "Gross margin", "Enterprise attach"]
+        datasets:
+          - label: "Downside"
+            values: [-1100000, -1000000, -900000, -700000, -600000, -500000]
+          - label: "Upside"
+            values: [400000, 1000000, 900000, 700000, 600000, 500000]
+      options:
+        format_y: currency_m
+        show_legend: true
+    insight: "Operational gates should trigger spend and expansion decisions before annual-budget variance appears."
+    source: "DEMO FY26 sensitivity model"
+    footnote: "Sensitivity ranges are illustrative and not additive."
+    narration: >
+      Launch timing and payment-volume growth are the largest sources of EBITDA variance.
+      That makes operating gates more useful than a static annual budget alone.
+
+  - layout: bullets
+    variant: pillars
+    transition: fade
+    kicker: "STRATEGIC CHOICES"
+    title: "Three bets carry the plan; the rest is enabling work."
+    subtitle: "The strategy is deliberately narrower than the product backlog."
+    items:
+      - title: "Win priority corridors"
+        description: "Launch Brazil and Mexico first; gate Southeast Asia on a repeatable corridor playbook."
+        icon: "globe"
+      - title: "Expand enterprise monetization"
+        description: "Use the white-label API and treasury workflows to increase wallet share and ARPC."
+        icon: "building"
+      - title: "Productize infrastructure"
+        description: "Turn compliance and treasury capabilities into attachable, higher-quality revenue streams."
+        icon: "layers"
+    insight: "No simultaneous launch across every geography, stablecoin, and product line."
+    source: "DEMO FY26 strategy offsite"
+    footnote: "Existing growth levers have been consolidated into three board-level choices."
+    narration: >
+      Three bets carry the plan: priority corridors, enterprise monetization, and productized infrastructure.
+      Everything else should be treated as enabling work or deferred.
+
+  - layout: timeline
+    variant: editorial
+    orientation: horizontal
+    transition: fade
+    kicker: "EXECUTION SEQUENCE"
+    title: "The roadmap gates expansion before layering platform complexity."
+    subtitle: "Each quarter has a deliverable and an explicit exit criterion."
+    items:
+      - title: "Q1 · LatAm live"
+        description: "Brazil and Mexico; exit on 10 design partners plus rail and regulatory readiness."
+        icon: "globe"
+      - title: "Q2 · Platform GA"
+        description: "White-label API and treasury dashboard; exit on five live enterprise customers."
+        icon: "building"
+      - title: "Q3 · Compliance"
+        description: "Embedded KYB/KYC and monitoring; exit on 30 percent attach for new enterprise logos."
+        icon: "shield"
+      - title: "Q4 · Scale"
+        description: "Commercial scale and automation; exit on 200-plus customers and 78 percent margin."
+        icon: "rocket"
+    insight: "Capital and headcount release only when the preceding operating gate is met."
+    source: "DEMO FY26 integrated roadmap"
+    footnote: "Quarterly exit criteria are illustrative management commitments."
+    narration: >
+      Distribution comes first, the enterprise platform second, and compliance third.
+      Each phase releases the next only after measurable operating gates are met.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "CAPITAL ALLOCATION"
+    title: "Each investment pool maps to a measurable operating outcome."
+    subtitle: "The incremental FY26 envelope links reinvestment pools, programs, and board-level proof points."
+    chart:
+      type: sankey
+      data:
+        nodes:
+          - "Opening-cash allocation"
+          - "Gross-profit reinvestment"
+          - "Product platform"
+          - "Corridor launches"
+          - "Enterprise attach"
+          - "Revenue growth"
+          - "Risk & controls"
+          - "Margin expansion"
+          - "Launch readiness"
+        links:
+          - { source: "Opening-cash allocation", target: "Product platform", value: 2.2 }
+          - { source: "Opening-cash allocation", target: "Risk & controls", value: 1.1 }
+          - { source: "Gross-profit reinvestment", target: "Corridor launches", value: 2.6 }
+          - { source: "Gross-profit reinvestment", target: "Product platform", value: 1.4 }
+          - { source: "Product platform", target: "Enterprise attach", value: 3.6 }
+          - { source: "Corridor launches", target: "Revenue growth", value: 2.6 }
+          - { source: "Risk & controls", target: "Launch readiness", value: 1.1 }
+          - { source: "Enterprise attach", target: "Margin expansion", value: 3.6 }
+      options:
+        show_legend: false
+    insight: "Funding releases only when the linked proof point is visible in the operating scorecard."
+    source: "DEMO FY26 capital-allocation model"
+    footnote: "Flow widths represent illustrative incremental allocations, not total gross profit or audited cash-flow classifications."
+    narration: >
+      The capital map links every investment pool to a measurable outcome.
+      Product funding must show enterprise attach and margin expansion, while launch funding must show corridor revenue and readiness.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "ENTERPRISE RISK"
+    title: "Regulatory readiness and delivery capacity are the two active risks."
+    subtitle: "Likelihood and impact are scored from one to five; bubble size indicates exposure."
+    chart:
+      type: bubble
+      data:
+        datasets:
+          - label: "Enterprise risks"
+            color: accent
+            points:
+              - name: "Regulation"
+                x: 3
+                y: 4.9
+                size: 90
+                highlight: true
+              - name: "Delivery capacity"
+                x: 4
+                y: 3
+                size: 80
+                highlight: true
+              - name: "Rail concentration"
+                x: 3
+                y: 4
+                size: 70
+                highlight: true
+              - name: "Counterparty"
+                x: 2
+                y: 4.85
+                size: 60
+                highlight: true
+              - name: "Cyber / AML"
+                x: 2.25
+                y: 4.55
+                size: 65
+                highlight: true
+              - name: "Margin pressure"
+                x: 3
+                y: 3
+                size: 50
+                highlight: true
+      options:
+        x_label: "Likelihood"
+        y_label: "Impact"
+        x_min: 1
+        x_max: 5
+        y_min: 1
+        y_max: 5
+        show_legend: false
+        show_all_labels: true
+    insight: "No new corridor should launch without regulatory clearance and redundant local rails."
+    source: "DEMO enterprise risk register · December 2025"
+    footnote: "Scores and exposure sizes are illustrative; owners review monthly."
+    narration: >
+      Regulatory readiness has the highest exposure, followed by delivery capacity and rail concentration.
+      The proposed guardrail is simple: no launch without clearance and redundancy.
+
+  - layout: title
+    variant: editorial
+    tone: dark
+    transition: fade
+    background:
+      type: solid
+      value: "#0B0F17"
+    kicker: "MARKETS & RISK LAB"
+    label: "10"
+    badge: "ECHARTS FINANCE SHOWCASE"
+    title: "From market tape to macro scenarios—in one visual system."
+    subtitle: "Trading · Portfolio · Risk · Liquidity · Rates · Economics"
+    metrics:
+      - label: "DSL patterns"
+        value: "28"
+      - label: "Live renderer"
+        value: "SVG"
+      - label: "External calls"
+        value: "0"
+    source: "DEMO Gamma Slides visualization catalogue · ECharts 6.1"
+    footnote: "The following market, portfolio, and economic series are synthetic demonstrations—not investment data."
+    narration: >
+      The next section is a deliberate finance and markets laboratory.
+      It demonstrates the visual grammar required for trading, risk, portfolio, liquidity, rates, and macroeconomic storytelling.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "TRADING WORKSTATION"
+    title: "Daily bars, Bollinger, RSI, MACD, and OBV—one synchronized tape."
+    subtitle: "OHLC, MA overlays, volatility bands, volume, flow, momentum, linked crosshairs, and zoom."
+    insight: "Read — the trend remained constructive, but momentum softened during the final five sessions."
+    chart:
+      type: stock
+      data:
+        labels: ["Nov 03", "Nov 04", "Nov 05", "Nov 06", "Nov 07", "Nov 10", "Nov 11", "Nov 12", "Nov 13", "Nov 14", "Nov 17", "Nov 18", "Nov 19", "Nov 20", "Nov 21", "Nov 24", "Nov 25", "Nov 26", "Nov 27", "Nov 28", "Dec 01", "Dec 02", "Dec 03", "Dec 04", "Dec 05", "Dec 08", "Dec 09", "Dec 10", "Dec 11", "Dec 12"]
+        datasets:
+          - label: "OHLC"
+            values:
+              - [100.0, 101.4, 99.2, 102.1]
+              - [101.4, 100.8, 99.8, 102.0]
+              - [100.8, 102.3, 100.2, 103.0]
+              - [102.3, 103.1, 101.6, 104.0]
+              - [103.1, 102.6, 101.9, 103.8]
+              - [102.6, 104.0, 102.2, 104.7]
+              - [104.0, 105.2, 103.4, 105.9]
+              - [105.2, 104.6, 103.9, 105.8]
+              - [104.6, 106.1, 104.1, 106.7]
+              - [106.1, 107.4, 105.7, 108.1]
+              - [107.4, 108.0, 106.8, 108.9]
+              - [108.0, 107.2, 106.5, 108.4]
+              - [107.2, 109.1, 106.9, 109.8]
+              - [109.1, 110.4, 108.7, 111.0]
+              - [110.4, 111.2, 109.8, 112.0]
+              - [111.2, 110.6, 109.9, 111.8]
+              - [110.6, 112.3, 110.1, 113.0]
+              - [112.3, 113.5, 111.8, 114.2]
+              - [113.5, 114.1, 112.9, 114.8]
+              - [114.1, 113.2, 112.5, 114.6]
+              - [113.2, 115.0, 112.8, 115.7]
+              - [115.0, 116.4, 114.5, 117.1]
+              - [116.4, 117.0, 115.7, 117.8]
+              - [117.0, 116.1, 115.4, 117.5]
+              - [116.1, 118.2, 115.8, 118.9]
+              - [118.2, 119.0, 117.4, 119.7]
+              - [119.0, 118.4, 117.8, 119.5]
+              - [118.4, 120.1, 118.0, 120.8]
+              - [120.1, 119.3, 118.6, 120.5]
+              - [119.3, 121.0, 118.9, 121.7]
+        volume: [42, 38, 47, 51, 36, 55, 62, 44, 67, 73, 58, 49, 76, 82, 69, 53, 88, 91, 74, 61, 96, 103, 85, 72, 110, 98, 79, 117, 92, 124]
+      options:
+        moving_averages: [5, 10, 20]
+        show_bollinger: true
+        bollinger_period: 20
+        bollinger_deviation: 2
+        show_obv: true
+        show_macd: true
+        show_rsi: true
+        rsi_period: 14
+        data_zoom: true
+    source: "DEMO synthetic daily OHLCV series · November–December 2025"
+    footnote: "OHLC order is open, close, low, high; moving averages and MACD are derived locally."
+    narration: >
+      This is the core trading workstation view: candlesticks, three moving averages, volume, momentum, linked axes, and interactive zoom.
+      It is generated locally from a single declarative chart specification.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "MARKET MICROSTRUCTURE"
+    title: "The spread is tight; liquidity thins quickly beyond the top five levels."
+    subtitle: "Cumulative depth and side-by-side book imbalance reveal execution risk."
+    panels:
+      - type: chart
+        title: "Cumulative market depth"
+        chart:
+          type: market_depth
+          data:
+            bids: [[99.80, 9], [99.85, 18], [99.90, 31], [99.95, 49], [100.00, 72]]
+            asks: [[100.05, 16], [100.10, 29], [100.15, 45], [100.20, 63], [100.25, 86]]
+          options:
+            x_label: "Price"
+            y_label: "Cumulative size"
+      - type: chart
+        title: "Top-five book imbalance"
+        chart:
+          type: tornado
+          data:
+            labels: ["L5", "L4", "L3", "L2", "L1"]
+            datasets:
+              - label: "Bid"
+                values: [-9, -9, -13, -18, -23]
+              - label: "Ask"
+                values: [23, 18, 16, 13, 16]
+          options:
+            format_y: "compact"
+    source: "DEMO synthetic limit-order book snapshot"
+    footnote: "Depth is cumulative; displayed sizes are illustrative normalized units."
+    narration: >
+      Market depth shows how much size can trade before price moves.
+      The paired book view makes the immediate bid ask imbalance visible without forcing the audience to read a raw ladder.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "DISTRIBUTION RISK"
+    title: "The average hides the tail: loss frequency rises sharply beyond the VaR threshold."
+    subtitle: "A return histogram and cross-asset boxplots expose skew, dispersion, and outliers."
+    panels:
+      - type: chart
+        title: "Daily portfolio P&L distribution"
+        chart:
+          type: histogram
+          data:
+            labels: ["<-4%", "-4%", "-3%", "-2%", "-1%", "0%", "+1%", "+2%", "+3%", "+4%", ">4%"]
+            datasets:
+              - label: "Sessions"
+                values: [3, 7, 15, 34, 62, 88, 70, 41, 20, 9, 4]
+          options:
+            threshold_index: 2
+            threshold_label: "95% historical VaR"
+            y_label: "Sessions"
+      - type: chart
+        title: "Return dispersion by asset"
+        chart:
+          type: boxplot
+          data:
+            labels: ["Equities", "Rates", "Credit", "FX", "Crypto"]
+            label: "Daily return %"
+            boxes:
+              - [-3.2, -0.8, 0.1, 0.9, 3.1]
+              - [-1.8, -0.4, 0.0, 0.5, 1.7]
+              - [-2.1, -0.5, 0.1, 0.6, 2.0]
+              - [-1.5, -0.3, 0.0, 0.4, 1.6]
+              - [-5.8, -1.5, 0.3, 1.9, 6.4]
+            outliers: [[0, -4.1], [1, 2.4], [2, -3.0], [4, -7.2], [4, 8.1]]
+    source: "DEMO synthetic portfolio return distribution · 400 sessions"
+    footnote: "Box order is minimum, first quartile, median, third quartile, maximum."
+    narration: >
+      Distribution views prevent averages from hiding the tail.
+      The histogram locates the loss threshold while the boxplots compare dispersion and outliers across asset classes.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "SEASONALITY & DRAWDOWN"
+    title: "Stress clustered in October; the portfolio recovered without regaining its prior peak."
+    subtitle: "Calendar density and the underwater curve show when and how long pain persisted."
+    panels:
+      - type: chart
+        title: "Daily return calendar · Q4"
+        chart:
+          type: calendar_heatmap
+          data:
+            calendar_values:
+              - { date: "2025-10-01", value: 0.8 }
+              - { date: "2025-10-02", value: -0.4 }
+              - { date: "2025-10-03", value: 0.5 }
+              - { date: "2025-10-06", value: -1.1 }
+              - { date: "2025-10-07", value: -0.7 }
+              - { date: "2025-10-08", value: -1.8 }
+              - { date: "2025-10-09", value: 0.3 }
+              - { date: "2025-10-10", value: -2.2 }
+              - { date: "2025-10-13", value: 1.1 }
+              - { date: "2025-10-14", value: 0.7 }
+              - { date: "2025-10-15", value: -0.5 }
+              - { date: "2025-10-16", value: 0.9 }
+              - { date: "2025-10-17", value: 1.3 }
+              - { date: "2025-10-20", value: 0.4 }
+              - { date: "2025-10-21", value: -0.2 }
+              - { date: "2025-10-22", value: 0.6 }
+              - { date: "2025-11-03", value: 1.0 }
+              - { date: "2025-11-07", value: -0.6 }
+              - { date: "2025-11-14", value: 1.4 }
+              - { date: "2025-11-21", value: 0.8 }
+              - { date: "2025-12-01", value: -0.3 }
+              - { date: "2025-12-05", value: 1.2 }
+              - { date: "2025-12-12", value: 0.9 }
+              - { date: "2025-12-19", value: -0.4 }
+              - { date: "2025-12-29", value: 0.7 }
+          options:
+            range: ["2025-10-01", "2025-12-31"]
+            min: -2.5
+            max: 2.5
+      - type: chart
+        title: "Underwater curve"
+        chart:
+          type: area
+          data:
+            labels: ["Sep", "Oct W1", "Oct W2", "Oct W3", "Oct W4", "Nov W2", "Nov W4", "Dec W2", "Dec W4"]
+            datasets:
+              - label: "Drawdown"
+                color: "#C83D32"
+                values: [0, -2.1, -6.8, -9.4, -7.6, -5.2, -3.8, -2.7, -1.9]
+          options:
+            format_y: "percent"
+            y_min: -10
+            y_max: 0
+    source: "DEMO synthetic daily portfolio returns · Q4 2025"
+    footnote: "Drawdown is measured from the prior high-water mark."
+    narration: >
+      A calendar view identifies stress clusters that disappear in monthly averages.
+      The underwater curve then measures both the depth and duration of the loss episode.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "CROSS-ASSET RISK"
+    title: "Correlation rose in stress while factor exposures remained uneven."
+    subtitle: "The matrix shows co-movement; parallel coordinates reveal scenario-level trade-offs."
+    panels:
+      - type: chart
+        title: "Cross-asset correlation"
+        chart:
+          type: heatmap
+          data:
+            x_labels: ["Equity", "Rates", "Credit", "FX", "Crypto"]
+            y_labels: ["Equity", "Rates", "Credit", "FX", "Crypto"]
+            values:
+              - [1.00, -0.32, 0.68, 0.18, 0.54]
+              - [-0.32, 1.00, -0.21, -0.08, -0.16]
+              - [0.68, -0.21, 1.00, 0.24, 0.42]
+              - [0.18, -0.08, 0.24, 1.00, 0.31]
+              - [0.54, -0.16, 0.42, 0.31, 1.00]
+          options:
+            min: -1
+            max: 1
+            correlation: true
+            show_values: true
+            legend_labels: ["+1", "-1"]
+      - type: chart
+        title: "Scenario factor profile"
+        chart:
+          type: parallel
+          data:
+            dimensions: ["Growth", "Inflation", "Rates", "Credit", "Liquidity"]
+            label: "Macro scenarios"
+            rows:
+              - [4.2, 2.1, 3.4, 1.2, 4.5]
+              - [1.8, 4.7, 4.8, 3.9, 2.0]
+              - [2.6, 3.1, 2.4, 2.8, 3.4]
+              - [0.9, 1.2, 1.0, 4.6, 1.4]
+              - [3.5, 2.7, 4.1, 2.0, 3.8]
+    source: "DEMO synthetic cross-asset risk model · December 2025"
+    footnote: "Parallel-coordinate values are normalized scenario scores from one to five."
+    narration: >
+      Correlation and factor exposure answer different questions.
+      The matrix shows which assets move together, while parallel coordinates show how each macro scenario loads across multiple risk dimensions.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "PORTFOLIO CONSTRUCTION"
+    title: "Diversification is visible in both hierarchy and risk-adjusted opportunity."
+    subtitle: "Allocation drill-down sits beside an efficient-frontier style risk-return map."
+    panels:
+      - type: chart
+        title: "Portfolio allocation hierarchy"
+        chart:
+          type: sunburst
+          data:
+            items:
+              - name: "Public markets"
+                children:
+                  - name: "Equities"
+                    children:
+                      - { name: "US", value: 24 }
+                      - { name: "Europe", value: 12 }
+                      - { name: "Asia", value: 9 }
+                  - name: "Fixed income"
+                    children:
+                      - { name: "Sovereign", value: 16 }
+                      - { name: "Credit", value: 11 }
+              - name: "Alternatives"
+                children:
+                  - { name: "Private credit", value: 10 }
+                  - { name: "Infrastructure", value: 8 }
+              - name: "Liquidity"
+                value: 10
+      - type: chart
+        title: "Risk-return opportunity set"
+        chart:
+          type: bubble
+          data:
+            datasets:
+              - label: "Asset classes"
+                points:
+                  - { name: "Cash", x: 1.2, y: 3.1, size: 5, highlight: true }
+                  - { name: "Sovereign", x: 4.1, y: 4.4, size: 12, highlight: true }
+                  - { name: "Credit", x: 6.8, y: 6.2, size: 14, highlight: true }
+                  - { name: "Equity", x: 13.5, y: 9.8, size: 22, highlight: true }
+                  - { name: "Alternatives", x: 10.2, y: 8.1, size: 18, highlight: true }
+          options:
+            x_label: "Annualized volatility (%)"
+            y_label: "Expected return (%)"
+            x_min: 0
+            x_max: 16
+            y_min: 0
+            y_max: 12
+    source: "DEMO strategic asset-allocation model"
+    footnote: "Bubble size represents illustrative capital allocation, not market capitalization."
+    narration: >
+      Sunburst makes nested allocation immediately legible from portfolio to sleeve to region.
+      The adjacent risk return map shows whether those allocations occupy distinct parts of the opportunity set.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "EXPOSURE TOPOLOGY"
+    title: "Two hubs concentrate counterparty and settlement contagion risk."
+    subtitle: "A network view surfaces dependency paths that tables conceal."
+    insight: "Control — cap settlement-bank exposure and add a second liquidity route before corridor expansion."
+    chart:
+      type: network
+      data:
+        categories: ["Company", "Bank", "Venue", "Provider"]
+        graph_nodes:
+          - { name: "Acme Treasury", value: 34, category: "Company" }
+          - { name: "Settlement Bank A", value: 28, category: "Bank" }
+          - { name: "Settlement Bank B", value: 15, category: "Bank" }
+          - { name: "Exchange X", value: 20, category: "Venue" }
+          - { name: "Exchange Y", value: 11, category: "Venue" }
+          - { name: "Custodian", value: 18, category: "Provider" }
+          - { name: "Liquidity Provider", value: 25, category: "Provider" }
+          - { name: "FX Prime", value: 13, category: "Provider" }
+        graph_links:
+          - { source: "Acme Treasury", target: "Settlement Bank A", value: 18 }
+          - { source: "Acme Treasury", target: "Settlement Bank B", value: 8 }
+          - { source: "Acme Treasury", target: "Custodian", value: 12 }
+          - { source: "Settlement Bank A", target: "Liquidity Provider", value: 15 }
+          - { source: "Settlement Bank B", target: "Liquidity Provider", value: 7 }
+          - { source: "Liquidity Provider", target: "Exchange X", value: 12 }
+          - { source: "Liquidity Provider", target: "Exchange Y", value: 6 }
+          - { source: "Settlement Bank A", target: "FX Prime", value: 9 }
+          - { source: "Custodian", target: "Exchange X", value: 8 }
+    source: "DEMO synthetic counterparty exposure graph"
+    footnote: "Node size and edge width encode normalized gross exposure."
+    narration: >
+      Exposure networks reveal concentration and contagion paths that a ranked table cannot.
+      The two central hubs are settlement bank A and the liquidity provider, which creates a clear control priority.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    kicker: "CAPITAL FLOWS"
+    title: "AI and infrastructure absorbed the largest share of incremental sector flows."
+    subtitle: "A theme river shows how leadership rotates through time—not only where it ends."
+    insight: "Flow regime — leadership broadened in Q4, but defensive sectors never regained the first-half flow share."
+    chart:
+      type: theme_river
+      data:
+        streams:
+          - { date: "2025-01-01", value: 22, name: "AI & software" }
+          - { date: "2025-03-01", value: 28, name: "AI & software" }
+          - { date: "2025-05-01", value: 35, name: "AI & software" }
+          - { date: "2025-07-01", value: 42, name: "AI & software" }
+          - { date: "2025-09-01", value: 47, name: "AI & software" }
+          - { date: "2025-11-01", value: 51, name: "AI & software" }
+          - { date: "2025-01-01", value: 18, name: "Infrastructure" }
+          - { date: "2025-03-01", value: 21, name: "Infrastructure" }
+          - { date: "2025-05-01", value: 24, name: "Infrastructure" }
+          - { date: "2025-07-01", value: 31, name: "Infrastructure" }
+          - { date: "2025-09-01", value: 38, name: "Infrastructure" }
+          - { date: "2025-11-01", value: 44, name: "Infrastructure" }
+          - { date: "2025-01-01", value: 30, name: "Financials" }
+          - { date: "2025-03-01", value: 27, name: "Financials" }
+          - { date: "2025-05-01", value: 25, name: "Financials" }
+          - { date: "2025-07-01", value: 29, name: "Financials" }
+          - { date: "2025-09-01", value: 32, name: "Financials" }
+          - { date: "2025-11-01", value: 36, name: "Financials" }
+          - { date: "2025-01-01", value: 34, name: "Defensives" }
+          - { date: "2025-03-01", value: 31, name: "Defensives" }
+          - { date: "2025-05-01", value: 28, name: "Defensives" }
+          - { date: "2025-07-01", value: 24, name: "Defensives" }
+          - { date: "2025-09-01", value: 22, name: "Defensives" }
+          - { date: "2025-11-01", value: 21, name: "Defensives" }
+    source: "DEMO synthetic sector fund-flow series · 2025"
+    footnote: "Values are normalized net-flow indices and do not represent investable products."
+    narration: >
+      A theme river is useful when the story is rotation rather than a single endpoint.
+      Here, AI and infrastructure leadership grows through the year while defensive flow share contracts.
+
+  - layout: dashboard
+    columns: 2
+    transition: fade
+    kicker: "RATES & MACRO"
+    title: "Disinflation remains the base case; the rates curve reprices more slowly."
+    subtitle: "A forecast fan separates uncertainty from the central path while curves retain term structure."
+    panels:
+      - type: chart
+        title: "Inflation forecast fan"
+        chart:
+          type: fan
+          data:
+            labels: ["Q4 25", "Q1 26", "Q2 26", "Q3 26", "Q4 26", "Q1 27"]
+            lower: [2.8, 2.3, 1.9, 1.6, 1.4, 1.3]
+            base: [3.0, 2.7, 2.4, 2.2, 2.0, 1.9]
+            upper: [3.2, 3.2, 3.0, 2.9, 2.8, 2.7]
+          options:
+            format_y: "percent"
+      - type: chart
+        title: "Sovereign yield curves"
+        chart:
+          type: line
+          data:
+            labels: ["3M", "6M", "1Y", "2Y", "5Y", "10Y", "30Y"]
+            datasets:
+              - label: "Current"
+                values: [4.35, 4.18, 3.92, 3.71, 3.86, 4.04, 4.28]
+              - label: "Six months ago"
+                dashed: true
+                color: "#9DA5B2"
+                values: [4.72, 4.61, 4.38, 4.09, 4.02, 4.16, 4.34]
+          options:
+            format_y: "percent"
+            smooth: false
+            y_min: 3.4
+            y_max: 4.9
+    source: "DEMO synthetic macro forecast and sovereign curve · December 2025"
+    footnote: "Forecast bands communicate uncertainty; curves are illustrative and not executable market levels."
+    narration: >
+      The fan chart prevents a central forecast from masquerading as certainty.
+      The adjacent yield curves show that short rates can reprice faster than the long end even as inflation declines.
+
+  - layout: closing
+    variant: decisions
+    tone: dark
+    transition: fade
+    background:
+      type: solid
+      value: "#0B0F17"
+    kicker: "DECISIONS REQUIRED"
+    title: "Three decisions unlock the first half of FY26."
+    subtitle: "Disciplined scale—not maximum activity—is the mandate."
+    items:
+      - title: "Align on the FY26 base-case scorecard"
+        description: "$28.2M revenue · 200+ customers · 78% gross margin · $3.5M adjusted EBITDA."
+      - title: "Approve the stage-gated execution sequence"
+        description: "LatAm first, enterprise platform second, compliance third."
+      - title: "Confirm operating and risk guardrails"
+        description: "Cash floor, corridor readiness, rail redundancy, and control remediation."
+    source: "DEMO board decision log"
+    footnote: "Next checkpoint: Q1 FY26 board meeting."
+    narration: >
+      We are asking the board to align on the base scorecard, approve the staged sequence, and confirm the guardrails.
+      Those decisions unlock the first half of FY26 while preserving discipline.
