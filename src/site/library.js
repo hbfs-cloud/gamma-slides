@@ -47,11 +47,13 @@ export function buildPresentationLibrary({ inputDir = './presentations', outputD
       .sort()
       .forEach(name => files.push({ file: resolve(sourceDir, name), slug: presentationSlug(basename(name, extname(name))) }));
   }
-  include.forEach(file => {
-    const path = resolve(file);
-    const slug = presentationSlug(basename(file, extname(file)));
-    if (!files.some(entry => entry.slug === slug)) files.push({ file: path, slug });
-  });
+  if (!files.length) {
+    include.forEach(file => {
+      const path = resolve(file);
+      const slug = presentationSlug(basename(file, extname(file)));
+      if (!files.some(entry => entry.slug === slug)) files.push({ file: path, slug });
+    });
+  }
   const entries = files.map(({ file, slug }, index) => {
     const deck = loadDeckFile(file);
     const result = buildStaticSite(deck, resolve(destination, slug));

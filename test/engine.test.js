@@ -85,7 +85,10 @@ slides:
   - layout: title
     title: Décider maintenant
 `);
-    const result = buildPresentationLibrary({ inputDir: sourceDir, outputDir });
+    const fallback = join(tempDir, 'fallback.yaml');
+    writeFileSync(fallback, `slides:\n  - layout: title\n    title: Fallback only\n`);
+    const result = buildPresentationLibrary({ inputDir: sourceDir, outputDir, include: [fallback] });
+    assert.equal(result.entries.length, 1);
     assert.equal(result.entries[0].slug, 'comite-fy26');
     assert.match(readFileSync(join(outputDir, 'index.html'), 'utf-8'), /Comité FY26/);
     assert.match(readFileSync(join(outputDir, 'presentations.json'), 'utf-8'), /"slug": "comite-fy26"/);
