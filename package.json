@@ -19,8 +19,7 @@
   "scripts": {
     "start": "node bin/gamma-slides.js",
     "test": "node --test",
-    "mcp": "node src/mcp/server.js",
-    "postinstall": "echo '\\n  gamma-slides installed! Run: gamma-slides --help\\n'"
+    "mcp": "node src/mcp/server.js"
   },
   "repository": {
     "type": "git",

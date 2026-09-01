@@ -5,7 +5,7 @@ Gamma Slides gives Claude Code and Codex the same MCP tools: schema and flagship
 ## One line, once
 
 ```bash
-npm install --global https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
+npm install --global --loglevel=error https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
 ```
 
 This installs the current GitHub version, detects installed Claude Code and Codex clients, and registers a user-scoped `gamma-slides` MCP server in each. The registered command uses the absolute path of the global installation, so it does not depend on a project clone or download dependencies on every session.
