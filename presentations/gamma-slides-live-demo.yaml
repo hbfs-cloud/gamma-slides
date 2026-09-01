@@ -1,0 +1,166 @@
+version: "1"
+
+meta:
+  title: "From brief to public URL"
+  subtitle: "A six-slide live tour of Gamma Slides"
+  author: "Gamma Slides"
+  company: "Gamma Slides"
+  date: "2026-09-01"
+  language: "en"
+  tags: ["product", "live-demo", "public"]
+  description: "A concise public product tour created for an end-to-end publishing test"
+
+branding:
+  watermark: "PUBLIC DEMO"
+  company_url: "github.com/hbfs-cloud/gamma-slides"
+
+theme: "boardroom"
+
+slides:
+  - layout: title
+    variant: editorial
+    tone: dark
+    transition: fade
+    background:
+      type: solid
+      value: "#05070A"
+    badge: "LIVE PRODUCT TOUR"
+    title: "From brief to public URL—in one continuous workflow."
+    subtitle: "Create · validate · present · publish · manage"
+    metrics:
+      - label: "Setup"
+        value: "1 command"
+      - label: "Native themes"
+        value: "3"
+      - label: "Hosted backend"
+        value: "0"
+    source: "Gamma Slides repository · Public product capabilities"
+    footnote: "This deck is the public artifact of an automated end-to-end test."
+    narration: >
+      Gamma Slides turns a structured brief into a live presentation and a stable public URL.
+      This short tour is itself the output of that complete workflow.
+
+  - layout: timeline
+    variant: editorial
+    orientation: horizontal
+    transition: fade
+    title: "The source stays editable from first prompt to final URL."
+    subtitle: "Every stage keeps a reviewable artifact instead of hiding work behind a black box."
+    items:
+      - title: "Brief"
+        description: "Ground the narrative in supplied facts and an explicit audience."
+        icon: "file-text"
+      - title: "Author"
+        description: "Compose varied layouts, narration, branding, tables, and native charts."
+        icon: "edit"
+      - title: "Validate"
+        description: "Check schema, runtime behavior, overflow, charts, and all three themes."
+        icon: "shield"
+      - title: "Publish"
+        description: "Version the YAML and rebuild a stable GitHub Pages route."
+        icon: "globe"
+    insight: "The deployed HTML is disposable; the versioned YAML remains the source of truth."
+    source: "Gamma Slides CLI and MCP workflow"
+    footnote: "GitHub authentication is required only for managed publishing actions."
+    narration: >
+      The workflow begins with facts, not decoration.
+      The editable YAML remains the source of truth through validation, publication, and later updates.
+
+  - layout: metrics
+    variant: hero
+    transition: fade
+    title: "One body of evidence, published in three complete editions."
+    subtitle: "Theme choice changes typography, composition, surfaces, and charts—not the underlying message."
+    columns: 3
+    metrics:
+      - label: "Analyst Proof"
+        value: "Review"
+        delta: "Paper · serif · cobalt"
+        trend: neutral
+        featured: true
+        icon: "search"
+      - label: "Cutting Room"
+        value: "Present"
+        delta: "Work print · orange · pace"
+        trend: neutral
+        icon: "play"
+      - label: "Signal Room"
+        value: "Decide"
+        delta: "Void · amber · rank"
+        trend: neutral
+        icon: "target"
+    insight: "Use the theme switcher during this presentation; the current slide and data remain stable."
+    source: "Gamma Slides design system · Three Editions Desk"
+    narration: >
+      Analyst Proof supports review, Cutting Room supports live presentation, and Signal Room supports decisions.
+      Each is a complete edition rather than a color filter.
+
+  - layout: chart
+    variant: story
+    transition: fade
+    title: "Live HTML moves. Exports hold the final frame."
+    subtitle: "The runtime focuses the visible ECharts series."
+    chart:
+      type: area
+      data:
+        labels: ["Brief", "Structure", "Evidence", "Design", "QA", "Publish"]
+        datasets:
+          - label: "Readiness"
+            values: [12, 26, 45, 67, 86, 100]
+            color: primary
+      options:
+        format_y: percent
+        y_min: 0
+        y_max: 100
+        smooth: true
+        show_legend: false
+    insight: "Hover or touch the chart to take control; the automated narrative yields to exploration."
+    source: "Illustrative product-tour series · Arbitrary demonstration values"
+    footnote: "The values demonstrate interaction only and do not represent measured performance."
+    narration: >
+      This series is deliberately illustrative.
+      Its purpose is to show the live chart narrative, tooltip, highlight, and responsive SVG renderer.
+
+  - layout: table
+    variant: editorial
+    transition: fade
+    title: "A stable slug makes deployment management predictable."
+    subtitle: "Create and Update share one command; Read and Delete remain explicit."
+    table:
+      headers: ["Intent", "CLI", "Result"]
+      rows:
+        - ["Create", "deploy --slug tour", "New public route"]
+        - ["Update", "deploy --slug tour", "Same route, new source"]
+        - ["Read", "pull tour", "Editable YAML"]
+        - ["Inventory", "sites", "Titles and URLs"]
+        - ["Delete", "delete-site tour --yes", "Route removed after build"]
+      column_types: ["text", "text", "text"]
+      highlight_column: 1
+    insight: "The slug is both the durable identifier and the final URL segment."
+    source: "Gamma Slides managed GitHub Pages commands"
+    footnote: "Deletion requires explicit confirmation and remains recoverable through Git history."
+    narration: >
+      The same slug creates and updates one stable route.
+      Listing, pulling, and deletion make the published library manageable after the first launch.
+
+  - layout: closing
+    variant: decisions
+    tone: dark
+    transition: fade
+    background:
+      type: solid
+      value: "#05070A"
+    title: "You are inside the deployed result."
+    subtitle: "Three things to try before you leave."
+    items:
+      - title: "Switch the theme"
+        description: "Compare review, presentation, and decision editions without losing your place."
+      - title: "Explore the chart"
+        description: "Hover or touch the illustrative series and take control from the live narrative."
+      - title: "Open Presenter Studio"
+        description: "Inspect recording, camera, microphone, terminal, and presentation controls."
+    source: "Gamma Slides public end-to-end demonstration"
+    footnote: "Generated, tested, versioned, and published on 1 September 2026."
+    narration: >
+      This final slide is the proof point.
+      The deck was generated, tested, versioned, published, and is now running as a live public site.
