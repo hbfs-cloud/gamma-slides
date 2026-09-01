@@ -7,7 +7,7 @@ An editorial presentation and local video engine for finance, markets, economics
 With Node.js installed, run this once from any directory:
 
 ```bash
-npm install --global github:hbfs-cloud/gamma-slides && gamma-slides setup
+npm install --global https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
 ```
 
 It installs the current GitHub version and connects its MCP server to every installed client it finds: Claude Code and/or Codex. The registered command uses the stable global installation path, not this clone. Verify it with `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list`.
