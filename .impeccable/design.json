@@ -1,254 +1,116 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T20:53:46Z",
+  "generatedAt": "2026-09-01T08:00:00+02:00",
   "title": "Design System: Gamma Slides",
   "extensions": {
     "colorMeta": {
-      "report-cobalt": {
-        "role": "primary",
-        "displayName": "Report Cobalt",
-        "tonalRamp": ["oklch(15% 0.10 266)", "oklch(27% 0.15 266)", "oklch(39% 0.20 266)", "#2453FF", "oklch(63% 0.18 266)", "oklch(75% 0.13 266)", "oklch(87% 0.07 266)", "oklch(95% 0.025 266)"]
-      },
-      "report-violet": {
-        "role": "secondary",
-        "displayName": "Forecast Violet",
-        "tonalRamp": ["oklch(15% 0.07 291)", "oklch(27% 0.10 291)", "oklch(39% 0.13 291)", "oklch(51% 0.15 291)", "#7568D8", "oklch(75% 0.10 291)", "oklch(87% 0.055 291)", "oklch(95% 0.02 291)"]
-      },
-      "report-amber": {
-        "role": "tertiary",
-        "displayName": "Signal Amber",
-        "tonalRamp": ["oklch(15% 0.05 72)", "oklch(27% 0.08 72)", "oklch(39% 0.11 72)", "#A66A11", "oklch(63% 0.13 72)", "oklch(75% 0.10 72)", "oklch(87% 0.055 72)", "oklch(95% 0.02 72)"]
-      },
-      "report-positive": {
-        "role": "tertiary",
-        "displayName": "Market Positive",
-        "tonalRamp": ["oklch(15% 0.04 170)", "oklch(27% 0.07 170)", "oklch(39% 0.10 170)", "#008A70", "oklch(63% 0.12 170)", "oklch(75% 0.09 170)", "oklch(87% 0.05 170)", "oklch(95% 0.018 170)"]
-      },
-      "report-negative": {
-        "role": "tertiary",
-        "displayName": "Market Negative",
-        "tonalRamp": ["oklch(15% 0.05 28)", "oklch(27% 0.09 28)", "oklch(39% 0.14 28)", "#C83D32", "oklch(63% 0.16 28)", "oklch(75% 0.11 28)", "oklch(87% 0.06 28)", "oklch(95% 0.02 28)"]
-      },
-      "paper": {
-        "role": "neutral",
-        "displayName": "Warm Paper",
-        "tonalRamp": ["oklch(15% 0.008 88)", "oklch(27% 0.010 88)", "oklch(39% 0.012 88)", "oklch(51% 0.014 88)", "oklch(63% 0.016 88)", "oklch(75% 0.018 88)", "oklch(87% 0.020 88)", "#F4F1E9"]
-      },
-      "paper-surface": {
-        "role": "neutral",
-        "displayName": "Paper Surface",
-        "tonalRamp": ["oklch(15% 0.006 88)", "oklch(27% 0.008 88)", "oklch(39% 0.009 88)", "oklch(51% 0.010 88)", "oklch(63% 0.011 88)", "oklch(75% 0.012 88)", "oklch(87% 0.013 88)", "#FBFAF7"]
-      },
-      "paper-recessed": {
-        "role": "neutral",
-        "displayName": "Recessed Paper",
-        "tonalRamp": ["oklch(15% 0.008 88)", "oklch(27% 0.010 88)", "oklch(39% 0.012 88)", "oklch(51% 0.014 88)", "oklch(63% 0.016 88)", "oklch(75% 0.018 88)", "#ECE9E1", "oklch(95% 0.014 88)"]
-      },
-      "report-ink": {
-        "role": "neutral",
-        "displayName": "Editorial Ink",
-        "tonalRamp": ["#0B0F17", "oklch(27% 0.015 258)", "oklch(39% 0.014 258)", "oklch(51% 0.012 258)", "oklch(63% 0.010 258)", "oklch(75% 0.008 258)", "oklch(87% 0.006 258)", "oklch(95% 0.003 258)"]
-      },
-      "report-muted": {
-        "role": "neutral",
-        "displayName": "Report Muted",
-        "tonalRamp": ["oklch(15% 0.010 258)", "oklch(27% 0.012 258)", "oklch(39% 0.014 258)", "#626975", "oklch(63% 0.012 258)", "oklch(75% 0.010 258)", "oklch(87% 0.007 258)", "oklch(95% 0.003 258)"]
-      },
-      "report-hairline": {
-        "role": "neutral",
-        "displayName": "Report Hairline",
-        "tonalRamp": ["oklch(15% 0.006 88)", "oklch(27% 0.008 88)", "oklch(39% 0.010 88)", "oklch(51% 0.012 88)", "oklch(63% 0.014 88)", "oklch(75% 0.016 88)", "#D7D3C9", "oklch(95% 0.008 88)"]
-      },
-      "dark-paper-ink": {
-        "role": "neutral",
-        "displayName": "Warm Reverse Ink",
-        "tonalRamp": ["oklch(15% 0.006 88)", "oklch(27% 0.008 88)", "oklch(39% 0.010 88)", "oklch(51% 0.012 88)", "oklch(63% 0.014 88)", "oklch(75% 0.016 88)", "oklch(87% 0.018 88)", "#F7F4EC"]
-      },
-      "studio-void": {
-        "role": "neutral",
-        "displayName": "Studio Void",
-        "tonalRamp": ["#050912", "oklch(27% 0.025 258)", "oklch(39% 0.024 258)", "oklch(51% 0.020 258)", "oklch(63% 0.016 258)", "oklch(75% 0.012 258)", "oklch(87% 0.008 258)", "oklch(95% 0.004 258)"]
-      },
-      "studio-panel": {
-        "role": "neutral",
-        "displayName": "Studio Panel",
-        "tonalRamp": ["oklch(15% 0.022 258)", "#0A101B", "oklch(39% 0.026 258)", "oklch(51% 0.022 258)", "oklch(63% 0.017 258)", "oklch(75% 0.012 258)", "oklch(87% 0.008 258)", "oklch(95% 0.004 258)"]
-      },
-      "studio-panel-raised": {
-        "role": "neutral",
-        "displayName": "Raised Studio Panel",
-        "tonalRamp": ["oklch(15% 0.023 258)", "#111B2B", "oklch(39% 0.030 258)", "oklch(51% 0.025 258)", "oklch(63% 0.019 258)", "oklch(75% 0.013 258)", "oklch(87% 0.008 258)", "oklch(95% 0.004 258)"]
-      },
-      "studio-line": {
-        "role": "neutral",
-        "displayName": "Studio Line",
-        "tonalRamp": ["oklch(15% 0.024 258)", "oklch(27% 0.035 258)", "#2A3850", "oklch(51% 0.032 258)", "oklch(63% 0.025 258)", "oklch(75% 0.017 258)", "oklch(87% 0.010 258)", "oklch(95% 0.004 258)"]
-      },
-      "studio-ink": {
-        "role": "neutral",
-        "displayName": "Studio Ink",
-        "tonalRamp": ["oklch(15% 0.006 258)", "oklch(27% 0.008 258)", "oklch(39% 0.010 258)", "oklch(51% 0.012 258)", "oklch(63% 0.014 258)", "oklch(75% 0.012 258)", "oklch(87% 0.008 258)", "#F5F7FC"]
-      },
-      "studio-muted": {
-        "role": "neutral",
-        "displayName": "Studio Muted",
-        "tonalRamp": ["oklch(15% 0.010 258)", "oklch(27% 0.015 258)", "oklch(39% 0.020 258)", "oklch(51% 0.024 258)", "oklch(63% 0.026 258)", "#AAB7CA", "oklch(87% 0.014 258)", "oklch(95% 0.006 258)"]
-      },
-      "studio-cobalt": {
-        "role": "primary",
-        "displayName": "Studio Cobalt",
-        "tonalRamp": ["oklch(15% 0.10 266)", "oklch(27% 0.15 266)", "oklch(39% 0.20 266)", "#315DFF", "oklch(63% 0.18 266)", "oklch(75% 0.13 266)", "oklch(87% 0.07 266)", "oklch(95% 0.025 266)"]
-      },
-      "studio-cobalt-soft": {
-        "role": "primary",
-        "displayName": "Focus Cobalt",
-        "tonalRamp": ["oklch(15% 0.08 266)", "oklch(27% 0.12 266)", "oklch(39% 0.15 266)", "oklch(51% 0.17 266)", "oklch(63% 0.16 266)", "#87A2FF", "oklch(87% 0.08 266)", "oklch(95% 0.025 266)"]
-      },
-      "studio-positive": {
-        "role": "tertiary",
-        "displayName": "Ready Green",
-        "tonalRamp": ["oklch(15% 0.04 158)", "oklch(27% 0.07 158)", "oklch(39% 0.10 158)", "oklch(51% 0.13 158)", "#42D69A", "oklch(75% 0.12 158)", "oklch(87% 0.065 158)", "oklch(95% 0.02 158)"]
-      },
-      "studio-warning": {
-        "role": "tertiary",
-        "displayName": "Caution Amber",
-        "tonalRamp": ["oklch(15% 0.04 78)", "oklch(27% 0.07 78)", "oklch(39% 0.10 78)", "oklch(51% 0.13 78)", "#F2BD62", "oklch(75% 0.12 78)", "oklch(87% 0.065 78)", "oklch(95% 0.02 78)"]
-      },
-      "studio-negative": {
-        "role": "tertiary",
-        "displayName": "Recording Red",
-        "tonalRamp": ["oklch(15% 0.05 27)", "oklch(27% 0.09 27)", "oklch(39% 0.13 27)", "oklch(51% 0.17 27)", "#FF746B", "oklch(75% 0.13 27)", "oklch(87% 0.07 27)", "oklch(95% 0.02 27)"]
-      }
+      "proof-cobalt": { "role": "primary", "displayName": "Proof Cobalt", "canonical": "#1748D5", "tonalRamp": ["#081333", "#0D2565", "#123797", "#1748D5", "#4C72DE", "#819BE8", "#B6C5F1", "#E8EDFB"] },
+      "proof-paper": { "role": "neutral", "displayName": "Proof Paper", "canonical": "#F3F0E8", "tonalRamp": ["#24231F", "#46443E", "#68655D", "#8A867C", "#ACA79C", "#CEC8BC", "#E4DFD5", "#F3F0E8"] },
+      "proof-ink": { "role": "neutral", "displayName": "Proof Ink", "canonical": "#111318", "tonalRamp": ["#111318", "#303238", "#505158", "#707278", "#929399", "#B5B6BA", "#D8D9DB", "#F3F3F4"] },
+      "cut-orange": { "role": "primary", "displayName": "Cut Orange", "canonical": "#FF5A1F", "tonalRamp": ["#351006", "#69220C", "#9D3412", "#D04618", "#FF5A1F", "#FF8557", "#FFAF8F", "#FFE6DD"] },
+      "cut-black": { "role": "neutral", "displayName": "Work Print Black", "canonical": "#080808", "tonalRamp": ["#080808", "#252525", "#424242", "#606060", "#7F7F7F", "#A1A1A1", "#C6C6C6", "#F2F2F2"] },
+      "cut-ink": { "role": "neutral", "displayName": "Punched Ivory", "canonical": "#F4F0E7", "tonalRamp": ["#25231F", "#49453F", "#6D675F", "#918980", "#B5ABA0", "#D3C9BE", "#E7E0D6", "#F4F0E7"] },
+      "signal-amber": { "role": "primary", "displayName": "Front Plane Amber", "canonical": "#FFB000", "tonalRamp": ["#332300", "#664600", "#996A00", "#CC8D00", "#FFB000", "#FFC84D", "#FFDD91", "#FFF2D6"] },
+      "signal-blue": { "role": "secondary", "displayName": "Rear Plane Blue", "canonical": "#8BA8FF", "tonalRamp": ["#18213D", "#30417A", "#4962B6", "#6283E5", "#8BA8FF", "#A9BEFF", "#C8D5FF", "#EDF2FF"] },
+      "signal-void": { "role": "neutral", "displayName": "Signal Void", "canonical": "#05070A", "tonalRamp": ["#05070A", "#22262B", "#40454B", "#5F646A", "#81868B", "#A4A8AC", "#C9CCCF", "#F1F2F3"] },
+      "market-positive": { "role": "tertiary", "displayName": "Market Positive", "canonical": "#3FD49A", "tonalRamp": ["#092A1D", "#12543A", "#1B7E58", "#2AAA77", "#3FD49A", "#75E0B6", "#A9ECCE", "#E1F9EF"] },
+      "market-negative": { "role": "tertiary", "displayName": "Market Negative", "canonical": "#FF6F66", "tonalRamp": ["#351412", "#692824", "#9D3D37", "#D0524A", "#FF6F66", "#FF9993", "#FFC0BC", "#FFE9E7"] },
+      "studio-cobalt": { "role": "primary", "displayName": "Studio Cobalt", "canonical": "#315DFF", "tonalRamp": ["#09133A", "#122775", "#1D3CAF", "#2850E8", "#315DFF", "#6F8AFF", "#A7B7FF", "#E7ECFF"] }
     },
     "typographyMeta": {
-      "report-display": { "displayName": "Report Display", "purpose": "Cover and chapter statements only." },
-      "report-headline": { "displayName": "Report Headline", "purpose": "Compact, high-authority slide titles." },
-      "report-body": { "displayName": "Report Body", "purpose": "Narrative and explanatory reading copy." },
-      "report-quote": { "displayName": "Editorial Quote", "purpose": "Genuine quotation only." },
-      "data-label": { "displayName": "Data Label", "purpose": "Sources, provenance, labels, and quantitative wayfinding." },
-      "studio-title": { "displayName": "Studio Title", "purpose": "Setup and major operational moments." },
-      "studio-body": { "displayName": "Studio Body", "purpose": "Operational guidance and recovery copy." },
-      "studio-control": { "displayName": "Studio Control", "purpose": "Compact action and status labels." },
-      "terminal": { "displayName": "Terminal", "purpose": "Commands, paths, and shell output." }
+      "slide-root": { "displayName": "Slide Root", "purpose": "Relative baseline from which presentation theme typography scales." },
+      "proof-display": { "displayName": "Proof Display", "purpose": "Reviewed research covers and chapter statements." },
+      "cut-display": { "displayName": "Cut Display", "purpose": "Compressed narrative headlines in Cutting Room." },
+      "signal-display": { "displayName": "Signal Display", "purpose": "Ranked decision headlines and quantitative foreground copy." },
+      "report-body": { "displayName": "Report Body", "purpose": "Narrative and explanatory reading copy in every theme." },
+      "data-label": { "displayName": "Data Label", "purpose": "Sources, chart context, state, and quantitative wayfinding." },
+      "studio-control": { "displayName": "Studio Control", "purpose": "Compact operational actions and status." }
     },
     "shadows": [
-      { "name": "card-lift", "value": "0 12px 24px rgba(0,0,0,.2)", "purpose": "Studio mode cards only." },
-      { "name": "toolbar-float", "value": "0 18px 48px rgba(0,0,0,.48)", "purpose": "Separates the floating toolbar from the presentation stage." },
-      { "name": "camera-float", "value": "0 20px 60px rgba(0,0,0,.4)", "purpose": "Keeps the movable camera PIP legible above charts." },
-      { "name": "console-float", "value": "0 34px 90px rgba(0,0,0,.68)", "purpose": "Marks the resizable shell as a movable operational surface." },
+      { "name": "switcher-float", "value": "0 10px 28px rgba(0,0,0,.28)", "purpose": "Separates the persistent theme switcher from the slide stage." },
+      { "name": "toolbar-float", "value": "0 18px 48px rgba(0,0,0,.48)", "purpose": "Separates movable presenter controls from the deck." },
       { "name": "dialog-modal", "value": "0 42px 110px rgba(0,0,0,.72)", "purpose": "Reserved for the Presenter Studio setup dialog." }
     ],
     "motion": [
-      { "name": "state-fast", "value": "160ms ease", "purpose": "Hover, focus, active, and color-state changes." },
-      { "name": "surface-enter", "value": "200ms ease", "purpose": "Console and movable operational-surface entrance." },
-      { "name": "camera-enter", "value": "250ms ease", "purpose": "Camera PIP entrance." },
-      { "name": "meter-live", "value": "80ms linear", "purpose": "Transform-only microphone level response." }
+      { "name": "theme-swap", "value": "440ms cubic-bezier(.16,1,.3,1)", "purpose": "One coordinated view transition across typography, surfaces, layout, and charts." },
+      { "name": "proof-rule", "value": "580ms cubic-bezier(.16,1,.3,1)", "purpose": "Registers the active proof rail from top to bottom." },
+      { "name": "film-advance", "value": "700ms cubic-bezier(.16,1,.3,1)", "purpose": "Advances the perforated rail by one frame pitch." },
+      { "name": "signal-drift", "value": "14s linear infinite", "purpose": "Moves only rear dust layers; disabled for reduced motion." }
     ],
     "breakpoints": [
-      { "name": "compact", "value": "900px" },
-      { "name": "mobile", "value": "620px" }
+      { "name": "selector-stack", "value": "900px" },
+      { "name": "selector-compact", "value": "620px" }
     ]
   },
   "components": [
     {
-      "name": "Primary Studio Action",
+      "name": "Theme Selector Option",
       "kind": "button",
-      "refersTo": "studio-action-primary",
-      "description": "The decisive action in setup and preflight flows.",
-      "html": "<button class=\"ds-action-primary\">Continue</button>",
-      "css": ".ds-action-primary{height:38px;padding:0 15px;border:1px solid #4E73FF;border-radius:9px;background:#315DFF;color:#fff;font:800 11px/1 system-ui;box-shadow:0 9px 23px rgba(0,0,0,.24);cursor:pointer;transition:background .16s ease,transform .16s ease}.ds-action-primary:hover{background:#4169FF;transform:translateY(-1px)}.ds-action-primary:focus-visible{outline:2px solid #87A2FF;outline-offset:2px}"
+      "refersTo": "theme-selector-option",
+      "description": "A purpose-led presentation theme with a truthful composition preview.",
+      "html": "<button class=\"ds-theme-option\"><span class=\"ds-theme-preview\"></span><strong>Analyst Proof</strong><small>Review the evidence</small><span>A marked-up research proof for reviewing numbers and assumptions.</span></button>",
+      "css": ".ds-theme-option{width:340px;padding:18px 20px 21px;border:1px solid #2A3850;border-radius:9px;background:#0A101B;color:#F5F7FC;text-align:left;font-family:Archivo,system-ui,sans-serif;cursor:pointer}.ds-theme-preview{display:block;height:150px;margin-bottom:18px;background:#F3F0E8;border:1px solid #2A3850}.ds-theme-option strong,.ds-theme-option small,.ds-theme-option>span:last-child{display:block}.ds-theme-option strong{font-size:27px;letter-spacing:-.025em}.ds-theme-option small{margin-top:8px;color:#1748D5;font:650 10px/1 'Azeret Mono',monospace}.ds-theme-option>span:last-child{margin-top:7px;color:#AAB7CA;font-size:12px;line-height:1.48}.ds-theme-option:hover{background:#111B2B}.ds-theme-option:focus-visible{outline:2px solid #87A2FF;outline-offset:3px}"
     },
     {
-      "name": "Secondary Studio Action",
+      "name": "Theme Switcher",
       "kind": "button",
-      "refersTo": "studio-action-secondary",
-      "description": "A reversible or lower-priority setup action.",
-      "html": "<button class=\"ds-action-secondary\">Back</button>",
-      "css": ".ds-action-secondary{height:38px;padding:0 15px;border:1px solid #3A4D6C;border-radius:9px;background:#1A2740;color:#E7EDF7;font:800 11px/1 system-ui;cursor:pointer;transition:background .16s ease,transform .16s ease}.ds-action-secondary:hover{background:#223451;transform:translateY(-1px)}.ds-action-secondary:focus-visible{outline:2px solid #87A2FF;outline-offset:2px}"
+      "refersTo": "theme-switcher",
+      "description": "Reopens theme choice without resetting the slide.",
+      "html": "<button class=\"ds-theme-switcher\"><i></i><span>Theme</span><strong>Cutting Room</strong></button>",
+      "css": ".ds-theme-switcher{height:40px;display:flex;align-items:center;gap:8px;padding:0 12px;border:1px solid #2A3850;border-radius:9px;background:#0A101B;color:#AAB7CA;font:620 10px/1 'Azeret Mono',monospace}.ds-theme-switcher i{width:7px;height:7px;background:#FF5A1F}.ds-theme-switcher strong{color:#F5F7FC}.ds-theme-switcher:hover{background:#111B2B}.ds-theme-switcher:focus-visible{outline:2px solid #87A2FF;outline-offset:3px}"
     },
     {
-      "name": "Studio Device Field",
-      "kind": "input",
-      "refersTo": "studio-device-field",
-      "description": "High-contrast selector for camera and microphone devices.",
-      "html": "<label class=\"ds-field-label\">Microphone<select class=\"ds-device-field\"><option>Studio USB microphone</option></select></label>",
-      "css": ".ds-field-label{display:grid;gap:7px;color:#AAB7CA;font:800 10px/1 system-ui;text-transform:uppercase;letter-spacing:.07em}.ds-device-field{height:38px;padding:0 10px;border:1px solid #3A4D6C;border-radius:9px;background:#080D16;color:#EAF0F8;font:500 12px/1.2 system-ui}.ds-device-field:focus-visible{outline:2px solid #87A2FF;outline-offset:2px}"
-    },
-    {
-      "name": "Studio Mode Card",
+      "name": "Analyst Proof Metric",
       "kind": "card",
-      "refersTo": "studio-mode-card",
-      "description": "A selectable setup capability with explicit readiness.",
-      "html": "<button class=\"ds-mode-card\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M14.5 4 16 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3l1.5-3z\"/><circle cx=\"12\" cy=\"13\" r=\"4\"/></svg><strong>Camera</strong><span>Add a local facecam preview.</span><small>READY TO CONFIGURE</small></button>",
-      "css": ".ds-mode-card{width:180px;min-height:168px;padding:17px;text-align:left;border:1px solid #31425E;border-radius:14px;background:#111B2B;color:#F5F7FC;box-shadow:0 12px 24px rgba(0,0,0,.2);cursor:pointer;transition:transform .18s ease,border-color .18s ease}.ds-mode-card svg{display:block;width:25px;height:25px;margin-bottom:20px;fill:none;stroke:#9AB1FF;stroke-width:1.8}.ds-mode-card strong,.ds-mode-card span,.ds-mode-card small{display:block}.ds-mode-card span{margin-top:7px;color:#AAB7CA;font:400 11px/1.45 system-ui}.ds-mode-card small{margin-top:11px;color:#42D69A;font:800 9px/1.3 system-ui;letter-spacing:.06em}.ds-mode-card:hover{border-color:#87A2FF;transform:translateY(-3px)}.ds-mode-card:focus-visible{outline:2px solid #87A2FF;outline-offset:2px}"
+      "description": "A flat reviewed measure with cobalt registration and paper rules.",
+      "html": "<article class=\"ds-proof-metric\"><small>REVENUE</small><strong>$16.2M</strong><span>+8% vs plan</span></article>",
+      "css": ".ds-proof-metric{width:280px;padding:20px 0;border-top:1px solid #111318;border-bottom:1px solid #CFC9BD;background:#F3F0E8;color:#111318;font-family:Archivo,sans-serif}.ds-proof-metric small{display:block;color:#1748D5;font:600 10px/1 'Azeret Mono',monospace;letter-spacing:.08em}.ds-proof-metric strong{display:block;margin-top:36px;font:560 46px/.9 'Source Serif 4',serif}.ds-proof-metric span{display:block;margin-top:10px;color:#087D67;font:600 11px/1 'Azeret Mono',monospace}"
     },
     {
-      "name": "Terminal Ready Chip",
-      "kind": "chip",
-      "description": "A compact semantic shell-status indicator.",
-      "html": "<span class=\"ds-terminal-status\"><i></i>Ready · 0.02s</span>",
-      "css": ".ds-terminal-status{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #2D694F;border-radius:999px;background:#102A20;color:#8DE2BC;font:850 8px/1 system-ui;text-transform:uppercase;letter-spacing:.07em}.ds-terminal-status i{width:6px;height:6px;border-radius:50%;background:#42D69A}"
-    },
-    {
-      "name": "Presenter Toolbar",
-      "kind": "nav",
-      "description": "The compact operational rail over the presentation stage.",
-      "html": "<nav class=\"ds-toolbar\" aria-label=\"Presenter Studio\"><button class=\"ds-tool ds-active\"><svg viewBox=\"0 0 24 24\"><path d=\"m4 17 6-6-6-6M12 19h8\"/></svg></button><button class=\"ds-tool\"><svg viewBox=\"0 0 24 24\"><path d=\"M14.5 4 16 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3l1.5-3z\"/></svg></button></nav>",
-      "css": ".ds-toolbar{position:relative;display:inline-flex;gap:4px;padding:5px;border:1px solid #2A3850;border-radius:13px;background:#0A101B;box-shadow:0 18px 48px rgba(0,0,0,.48)}.ds-toolbar:before{content:'';position:absolute;left:12px;right:12px;top:-1px;height:2px;background:#315DFF}.ds-tool{width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:7px;background:transparent;color:#AAB7CA}.ds-tool svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.ds-tool:hover{background:#1A2740;color:#fff}.ds-tool:focus-visible{outline:2px solid #87A2FF;outline-offset:1px}.ds-tool.ds-active{background:#315DFF;color:#fff}"
-    },
-    {
-      "name": "Report Metric Panel",
-      "kind": "card",
-      "refersTo": "report-dashboard-panel",
-      "description": "A flat evidence panel for one financial measure.",
-      "html": "<article class=\"ds-metric-panel\"><small>OUTCOME</small><strong>$16.2M</strong><span>+8% vs plan</span><p>Revenue finished above the operating plan.</p></article>",
-      "css": ".ds-metric-panel{position:relative;width:260px;min-height:180px;padding:18px 16px;border:1px solid #D7D3C9;border-radius:4px;background:rgba(251,250,247,.46);color:#0B0F17;font-family:Instrument Sans,system-ui,sans-serif}.ds-metric-panel:before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:#2453FF}.ds-metric-panel small{display:block;color:#626975;font:600 10px/1 IBM Plex Mono,monospace;letter-spacing:.13em}.ds-metric-panel strong{display:inline-block;margin-top:52px;font-size:42px;line-height:1;letter-spacing:-.055em}.ds-metric-panel span{margin-left:8px;color:#008A70;font:700 11px/1 IBM Plex Mono,monospace}.ds-metric-panel p{color:#626975;font-size:13px;line-height:1.45}"
-    },
-    {
-      "name": "Camera Picture-in-Picture",
+      "name": "Cutting Room Frame",
       "kind": "custom",
-      "description": "A framed, draggable preview that remains distinct over dense data.",
-      "html": "<figure class=\"ds-camera\"><div class=\"ds-camera-field\"></div><figcaption>Camera <small>Drag · resize</small></figcaption></figure>",
-      "css": ".ds-camera{position:relative;width:252px;aspect-ratio:16/10;margin:0;overflow:hidden;border:1px solid rgba(255,255,255,.22);border-radius:13px;background:#070A10;box-shadow:0 20px 60px rgba(0,0,0,.4)}.ds-camera-field{width:100%;height:100%;background:#111B2B}.ds-camera figcaption{position:absolute;left:8px;right:8px;top:7px;display:flex;justify-content:space-between;padding:6px 9px;border-radius:999px;background:rgba(4,7,12,.68);color:#fff;font:700 9px/1 system-ui;letter-spacing:.08em;text-transform:uppercase}.ds-camera small{color:#A9B5C8;font-weight:600;letter-spacing:.04em;text-transform:none}"
+      "description": "A narrative work-print region joined to the continuous film rail.",
+      "html": "<article class=\"ds-cut-frame\"><strong>FY26 IS THE SCALE TEST.</strong><p>Momentum, better economics, three decisions.</p><i></i></article>",
+      "css": ".ds-cut-frame{position:relative;width:360px;min-height:210px;padding:28px 26px 42px;background:#080808;color:#F4F0E7;font-family:Archivo,sans-serif}.ds-cut-frame strong{display:block;font-size:34px;line-height:.96;letter-spacing:-.035em}.ds-cut-frame p{color:#B5ADA0;font-size:13px;line-height:1.45}.ds-cut-frame i{position:absolute;left:0;right:0;bottom:14px;height:6px;background:repeating-linear-gradient(90deg,#FF5A1F 0 13px,transparent 13px 20px)}"
+    },
+    {
+      "name": "Signal Room Line",
+      "kind": "custom",
+      "description": "An unenclosed decision line whose brightness and spacing express rank.",
+      "html": "<div class=\"ds-signal-line\"><strong>Revenue nearly doubled</strong><span>$16.2M</span><i></i></div>",
+      "css": ".ds-signal-line{position:relative;width:380px;padding:20px 0;border-bottom:1px solid #26313D;background:#05070A;color:#F3F6F2;font-family:'Azeret Mono',monospace}.ds-signal-line strong,.ds-signal-line span{display:block}.ds-signal-line strong{font-size:22px;line-height:1.05}.ds-signal-line span{margin-top:24px;color:#FFB000;font-size:34px;font-weight:650}.ds-signal-line i{position:absolute;right:0;top:22px;width:7px;height:7px;background:#FFB000}"
     }
   ],
   "narrative": {
-    "northStar": "The Broadcast Ledger",
-    "overview": "Gamma Slides treats financial presentation as a live editorial broadcast. The deck is the institutional ledger: warm paper, black display type, fine rules, disciplined grids, and dense charts that reward close reading. Presenter Studio is the control room laid over it: near-black and navy equipment surfaces, compact white controls, cobalt activity, and explicit semantic status.\n\nThe two contexts share precision, strong contrast, tabular-number discipline, and restrained ornament, but they do not share a background treatment. The report remains quiet and materially flat so the evidence leads; the studio uses layered dark panels and controlled lift so tools remain discoverable under presentation pressure.",
+    "northStar": "The Three Editions Desk",
+    "overview": "Gamma Slides treats one body of financial evidence as three complete publishing editions. Analyst Proof supports review, Cutting Room supports presentation, and Signal Room supports decision; Presenter Studio remains a separate operational realm. Theme switching replaces typography, composition, surfaces, and chart configurations while preserving truth and slide state.",
     "keyCharacteristics": [
-      "Warm editorial report surfaces paired with a solid dark broadcast-control layer.",
-      "Cobalt as the single connective accent for navigation, active controls, and data emphasis.",
-      "Instrument Sans for decisive display and reading, Source Serif 4 for editorial quotation, and IBM Plex Mono for provenance and technical data.",
-      "Dense information shaped by grids, rules, alignment, and generous outer gutters rather than ornamental chrome.",
-      "Real inline SVG controls, visible focus, permission-safe setup, and semantic status colors."
+      "Three purpose-led themes named for the reading job: review, present, and decide.",
+      "Complete theme compilation from tokens through chart configuration; no post-render recoloring.",
+      "Strong single-accent commitment at slide scale: cobalt, orange, or amber.",
+      "Flat financial evidence shaped by rules, alignment, depth, and pacing instead of ornamental cards.",
+      "Self-hosted Archivo, Azeret Mono, Source Serif 4, and Instrument Sans with offline rendering.",
+      "A persistent accessible theme selector with keyboard focus, reduced-motion fallback, and shareable query values."
     ],
     "rules": [
-      { "name": "The Two Realms Rule", "body": "Reports use warm paper and editorial ink; operational overlays use solid near-black and navy. Do not tint the report into a dashboard or make the studio translucent over the stage.", "section": "colors" },
-      { "name": "The Cobalt Thread Rule", "body": "Cobalt marks navigation, selection, progress, and important data. Keep large reading surfaces neutral so the accent remains diagnostic.", "section": "colors" },
-      { "name": "The Semantic Signal Rule", "body": "Green means ready or positive, amber means pending or caution, and red means error, negative, or recording. Never use these colors as arbitrary decoration.", "section": "colors" },
-      { "name": "The Number Discipline Rule", "body": "Financial canvases use lining tabular numerals; values align, compare, and scan before they decorate.", "section": "typography" },
-      { "name": "The Source Is Structure Rule", "body": "On ordinary report slides, section context belongs in the factual source/footer line. Do not reintroduce repeated pre-heading kickers; cover badges and compact data labels are deliberate exceptions.", "section": "typography" },
-      { "name": "The Stage Integrity Rule", "body": "Persistent tools may frame or split the presentation, but they may not cover decision-critical report content. Docked desktop tools reserve space; mobile tools become bounded overlays.", "section": "layout" },
-      { "name": "The Evidence Stays Flat Rule", "body": "Charts, tables, metrics, and narrative panels rely on alignment, rules, and tonal contrast—not default card shadows.", "section": "elevation" },
-      { "name": "The Operational Lift Rule", "body": "Shadows indicate movable, modal, or temporarily elevated controls. A stronger shadow must correspond to a stronger interaction layer.", "section": "elevation" },
-      { "name": "The Radius Follows Scale Rule", "body": "Small controls receive small corners, contained tools receive medium corners, and only the primary modal receives the largest radius. Do not import the studio's rounded language into report charts or tables.", "section": "shapes" }
+      { "name": "The Complete Theme Rule", "body": "A theme change must update typography, composition, surfaces, and charts. If only color changed, the feature is unfinished.", "section": "colors" },
+      { "name": "The One Dominant Signal Rule", "body": "Each theme spends its defining accent in large, decisive fields or one front-plane series; it does not scatter several competing accents across neutral cards.", "section": "colors" },
+      { "name": "The Name Carries the Choice Rule", "body": "Theme names lead. Purpose text follows the name; never put a decorative eyebrow above it.", "section": "typography" },
+      { "name": "The Purpose Before Taste Rule", "body": "Every theme option states the reading job it serves. Do not fall back to A/B/C labels, vague energy levels, or light/dark as the choice architecture.", "section": "layout" },
+      { "name": "The Stable Evidence Rule", "body": "Theme switching may change how evidence is staged, never its numbers, labels, semantic colors, source, or slide position.", "section": "layout" },
+      { "name": "The Evidence Stays Flat Rule", "body": "Alignment, rule weight, field color, and chart scale carry report hierarchy. A rounded shadow card is not a substitute for composition.", "section": "elevation" }
     ],
     "dos": [
-      "Do preserve the warm-paper report and solid-dark studio as two coordinated but visually distinct realms.",
-      "Do use cobalt for active state, progress, navigation, and selected data, with green/amber/red reserved for real meaning.",
-      "Do use real inline SVG icons for controls and keep focus outlines visible against dark panels.",
-      "Do keep ordinary section context in the source/footer line and preserve factual provenance on every financial slide.",
-      "Do use grids, hairlines, tabular figures, and aligned baselines to make dense financial information scannable.",
-      "Do retain the functional green-to-amber-to-red audio-meter gradient; it is a live threshold scale, not decorative color blending.",
-      "Do keep selective shield and pin emoji when they act as explicit privacy or console wayfinding signals."
+      "Do choose themes by reading purpose: review evidence, tell the story, or decide from signal.",
+      "Do compile every theme from real tokens and regenerate charts when the theme changes.",
+      "Do keep the current slide, source, data values, and semantic finance roles stable across themes.",
+      "Do let one accent own the composition and use neutral fields generously around it."
     ],
     "donts": [
-      "Don't add decorative gradients to studio surfaces or report typography; solid fills and tonal layers are the system.",
-      "Don't turn report charts, tables, or metrics into generic rounded shadow cards.",
-      "Don't repeat decorative kickers above ordinary slide titles; cover badges and factual source context already provide hierarchy.",
-      "Don't use glyph or emoji icons as the default control system. The shield and pin signals are narrow functional exceptions.",
-      "Don't allow a docked console or persisted camera frame to obscure presentation content or action controls.",
-      "Don't request camera, microphone, screen, or recording permission before a clear user action."
+      "Don't expose themes as A/B/C, visual cuts, or cosmetic modes.",
+      "Don't recolor a single compiled deck and call the result a theme.",
+      "Don't put decorative kickers above headings or theme names.",
+      "Don't turn charts, metrics, or narrative regions into generic rounded shadow cards."
     ]
   }
 }

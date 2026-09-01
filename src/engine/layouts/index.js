@@ -31,7 +31,7 @@ const layouts = {
   dashboard: renderDashboard,
 };
 
-export function renderSlide(slide, theme, deck) {
+export function renderSlide(slide, theme, deck, index = 0, total = 1) {
   const renderer = layouts[slide.layout];
   if (!renderer) return `<section><h2>Unknown layout: ${escapeHtml(slide.layout)}</h2></section>`;
 
@@ -48,6 +48,10 @@ export function renderSlide(slide, theme, deck) {
   const layoutClass = `layout-${escapeHtml(slide.layout)}`;
   const variantClass = `variant-${escapeHtml(slide.variant || 'default')}`;
   const toneClass = `tone-${escapeHtml(slide.tone || 'default')}`;
+  const cadenceClass = `cadence-${index % 3}`;
+  const slideNumber = String(index + 1).padStart(2, '0');
+  const slideTotal = String(total).padStart(2, '0');
+  const stageChrome = `<div class="theme-stage" aria-hidden="true"><span>${slideNumber}</span><i></i><b></b></div>`;
 
-  return `<section class="${layoutClass} ${variantClass} ${toneClass}" data-layout="${escapeHtml(slide.layout)}" data-variant="${escapeHtml(slide.variant || 'default')}"${bgAttr}${transAttr}>\n${content}\n${notesHtml}\n</section>`;
+  return `<section class="${layoutClass} ${variantClass} ${toneClass} ${cadenceClass}" data-layout="${escapeHtml(slide.layout)}" data-variant="${escapeHtml(slide.variant || 'default')}" data-slide-number="${slideNumber}" data-slide-total="${slideTotal}"${bgAttr}${transAttr}>\n${stageChrome}\n${content}\n${notesHtml}\n</section>`;
 }

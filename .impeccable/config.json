@@ -1,0 +1,41 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-09-01T05:34:36.237Z",
+        "reason": "Agent: Instrument Sans is the explicit Gamma Slides report and studio typeface documented in DESIGN.md; the test only verifies that committed font system."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "src/engine/components/presenter-studio.js"
+        ],
+        "createdAt": "2026-09-01T08:09:21.059Z",
+        "reason": "Agent: Presenter Studio is self-contained operational chrome with its established tonal ramp, scoped only to this file."
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "src/engine/components/presenter-studio.js"
+        ],
+        "createdAt": "2026-09-01T08:09:21.178Z",
+        "reason": "Agent: Presenter Studio uses an established control and console radius ramp, scoped only to this file."
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/engine/components/presenter-studio.js"
+        ],
+        "createdAt": "2026-09-01T08:09:21.289Z",
+        "reason": "Agent: Presenter Studio uses dense operational micro-type distinct from slide typography, scoped only to this file."
+      }
+    ]
+  }
+}

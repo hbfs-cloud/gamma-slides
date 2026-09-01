@@ -11,7 +11,7 @@ export function renderTable(slide, theme) {
   const remaining = Math.max(0, spec.rows.length - rows.length);
 
   const highlightColumn = Number.isInteger(spec.highlight_column) ? spec.highlight_column : -1;
-  const headers = spec.headers.map((h, index) => `<th scope="col"${index === highlightColumn ? ' class="col-highlight"' : ''}>${escapeHtml(h)}</th>`).join('');
+  const headers = spec.headers.map((h, index) => `<th scope="col" data-column="${index}"${index === highlightColumn ? ' class="col-highlight"' : ''}>${escapeHtml(h)}</th>`).join('');
 
   const tagClass = (value) => {
     const normalized = String(value).toLowerCase();
@@ -35,17 +35,19 @@ export function renderTable(slide, theme) {
     }
   };
 
-  const bodyRows = rows.map(row =>
-    `<tr>${row.map((cell, i) => {
-      const classes = [colTypes[i] === 'amount' ? 'amount' : '', i === highlightColumn ? 'col-highlight' : ''].filter(Boolean).join(' ');
-      return `<td${classes ? ` class="${classes}"` : ''}>${renderCell(cell, i)}</td>`;
+  const bodyRows = rows.map((row, rowIndex) =>
+    `<tr data-row="${rowIndex + 1}">${row.map((cell, i) => {
+      const type = colTypes[i] || 'text';
+      const classes = [`cell-${type}`, type === 'amount' ? 'amount' : '', i === highlightColumn ? 'col-highlight' : ''].filter(Boolean).join(' ');
+      return `<td class="${classes}" data-label="${escapeHtml(spec.headers[i] || '')}" data-column="${i}">${renderCell(cell, i)}</td>`;
     }).join('')}</tr>`
   ).join('');
 
-  const overflow = remaining > 0 ? `<tr><td colspan="${spec.headers.length}" style="text-align: center; color: ${theme.textMuted}; font-style: italic; font-size: 0.85em;">... and ${remaining} more rows</td></tr>` : '';
+  const overflow = remaining > 0 ? `<tr class="table-overflow"><td colspan="${spec.headers.length}">… and ${remaining} more rows</td></tr>` : '';
+  const tableLabel = escapeHtml(slide.title || 'Data table');
 
   if (slide.variant === 'editorial') {
-    return `${renderSlideHeader(slide)}<div class="editorial-table-wrap"><table class="data-table">
+    return `${renderSlideHeader(slide)}<div class="editorial-table-wrap"><table class="data-table" data-columns="${spec.headers.length}" aria-label="${tableLabel}">
       <thead><tr>${headers}</tr></thead><tbody>${bodyRows}${overflow}</tbody>
     </table></div>${renderInsight(slide)}${renderSource(slide)}`;
   }
@@ -54,7 +56,7 @@ export function renderTable(slide, theme) {
     ${slide.title ? `<h2 style="color: ${theme.text};">${escapeHtml(slide.title)}</h2>` : ''}
     ${slide.subtitle ? `<p class="slide-subtitle">${escapeHtml(slide.subtitle)}</p>` : ''}
     <div style="margin-top: 14px; width: 100%;">
-      <table class="data-table">
+      <table class="data-table" data-columns="${spec.headers.length}" aria-label="${tableLabel}">
         <thead><tr>${headers}</tr></thead>
         <tbody>${bodyRows}${overflow}</tbody>
       </table>

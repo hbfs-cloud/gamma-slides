@@ -28,7 +28,7 @@
         "company_url": { "type": "string" }
       }
     },
-    "theme": { "type": "string", "enum": ["boardroom", "corporate", "startup", "dark", "neon", "minimal", "nature"], "default": "corporate" },
+    "theme": { "type": "string", "enum": ["boardroom", "analyst-proof", "cutting-room", "signal-room", "corporate", "startup", "dark", "neon", "minimal", "nature"], "default": "corporate" },
     "style": {
       "type": "object",
       "properties": {

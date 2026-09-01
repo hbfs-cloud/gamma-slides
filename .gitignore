@@ -1,5 +1,7 @@
 node_modules/
 output/
+/site/
+/_site/
 .omc/
 .video-tmp/
 .DS_Store

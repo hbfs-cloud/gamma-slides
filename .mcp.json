@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gamma-slides": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${CLAUDE_PROJECT_DIR:-.}/bin/gamma-slides.js",
+        "mcp"
+      ]
+    }
+  }
+}

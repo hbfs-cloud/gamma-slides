@@ -35,6 +35,10 @@ export async function runVisualQA(opts) {
     page.on('requestfailed', request => failedRequests.push(`${request.url()} · ${request.failure()?.errorText || 'failed'}`));
     await page.setViewport({ width, height, deviceScaleFactor: dpr });
     const presentationUrl = new URL(pathToFileURL(filePath));
+    const presentationTheme = String(opts.theme || '').toLowerCase();
+    if (['analyst-proof', 'cutting-room', 'signal-room'].includes(presentationTheme)) {
+      presentationUrl.searchParams.set('theme', presentationTheme);
+    }
     if (!live) presentationUrl.searchParams.set('gamma-export', '1');
     await page.goto(presentationUrl.href, { waitUntil: 'networkidle0', timeout: 60_000 });
     await page.waitForFunction(() => window.__GAMMA_READY__ === true, { timeout: 30_000 });
@@ -94,7 +98,7 @@ export async function runVisualQA(opts) {
         const source = slide.querySelector(':scope > .slide-source');
         const sourceRect = source && visible(source) ? rect(source) : null;
         const contentRects = [...slide.children]
-          .filter(element => !element.matches('.slide-source,.notes') && visible(element))
+          .filter(element => !element.matches('.slide-source,.notes,.theme-stage') && visible(element))
           .map(element => ({ node: element.className || element.tagName, bounds: rect(element) }));
         const sourceOverlaps = sourceRect
           ? contentRects.filter(item => intersects(sourceRect, item.bounds)).map(item => item.node)
@@ -201,7 +205,7 @@ export async function runVisualQA(opts) {
     consoleWarnings.filter(warning => /chart init error/i.test(warning)).forEach(warning => blockers.push(`Browser warning: ${warning}`));
     failedRequests.forEach(request => warnings.push(`Network: ${request}`));
 
-    const contactHtml = `<!doctype html><style>*{box-sizing:border-box}body{margin:0;padding:20px;background:#090d14;color:#dce2eb;font:12px system-ui}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.cell{background:#141b27;padding:7px}.cell img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.label{padding:7px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style><div class="grid">${slides.map(slide => `<div class="cell"><img src="data:image/png;base64,${readFileSync(slide.screenshot).toString('base64')}"><div class="label">${slide.index}. ${slide.title.replaceAll('&', '&amp;').replaceAll('<', '&lt;')}</div></div>`).join('')}</div>`;
+    const contactHtml = `<!doctype html><style>*{box-sizing:border-box}body{margin:0;padding:20px;background:#050912;color:#F5F7FC;font:12px system-ui}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.cell{background:#0A101B;padding:7px}.cell img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.label{padding:7px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style><div class="grid">${slides.map(slide => `<div class="cell"><img src="data:image/png;base64,${readFileSync(slide.screenshot).toString('base64')}"><div class="label">${slide.index}. ${slide.title.replaceAll('&', '&amp;').replaceAll('<', '&lt;')}</div></div>`).join('')}</div>`;
     const contactPage = await browser.newPage();
     await contactPage.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
     await contactPage.setContent(contactHtml, { waitUntil: 'load' });

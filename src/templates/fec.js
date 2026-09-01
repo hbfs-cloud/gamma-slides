@@ -12,7 +12,7 @@ export function buildFecSlides(data, theme) {
     // Slide 1: Title
     `<section>
       <div class="fipto-badge">FEC Analysis • ${meta.exercice.debut} → ${meta.exercice.fin}</div>
-      <h1 style="background: ${t.gradient}; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 16px 0;">
+      <h1 style="color: ${t.primary}; margin: 16px 0;">
         General Ledger<br>Export File
       </h1>
       <h3 style="color: ${t.textMuted}; font-weight: 400;">${meta.denomination} — SIREN ${meta.siren}</h3>
@@ -185,7 +185,7 @@ export function buildFecSlides(data, theme) {
             const labels = { PUR: 'Purchases', SAL: 'Sales', BNK: 'Bank', MIS: 'Miscellaneous', OPN: 'Opening' };
             const colors = ['#6C5CE7', '#00B894', '#FD79A8', '#74B9FF', '#FFEAA7'];
             return `
-              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: rgba(108,92,231,0.08); border-radius: 10px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: ${t.highlightBg || t.surface}; border-radius: 9px;">
                 <div style="width: 14px; height: 14px; border-radius: 4px; background: ${colors[i]};"></div>
                 <div>
                   <div style="color: ${t.text}; font-weight: 600;">${j}</div>
@@ -210,8 +210,8 @@ export function buildFecSlides(data, theme) {
             { label: 'Document numbering', status: true, detail: 'Continuous sequences per journal' },
             { label: 'ISO 8601 date format', status: true, detail: 'YYYY-MM-DD compliant' },
           ].map(c => `
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 14px; background: rgba(0,184,148,0.08); border: 1px solid rgba(0,184,148,0.2); border-radius: 10px;">
-              <span style="font-size: 1.2em;">✅</span>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 14px; background: ${t.highlightBg || t.surface}; border: 1px solid ${t.cardBorder || t.positive}; border-radius: 9px;">
+              <span>OK</span>
               <div>
                 <div style="color: ${t.text}; font-weight: 600; font-size: 0.85em;">${c.label}</div>
                 <div style="color: ${t.textMuted}; font-size: 0.7em;">${c.detail}</div>
@@ -222,7 +222,7 @@ export function buildFecSlides(data, theme) {
         <div>
           <div class="highlight-box">
             <h3 style="color: ${t.secondary}; margin-top: 0;">Compliance Score</h3>
-            <div style="font-size: 3.5em; font-weight: 900; background: ${t.gradient}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100%</div>
+            <div style="font-size: 3.5em; font-weight: 900; color: ${t.primary};">100%</div>
             <p style="color: ${t.textMuted}; font-size: 0.75em;">The FEC file is fully compliant with French tax authority requirements. Ready for export.</p>
           </div>
           <div class="highlight-box" style="margin-top: 12px;">
@@ -263,7 +263,7 @@ export function buildFecSlides(data, theme) {
     // Slide 10: Closing
     `<section>
       <div class="fipto-badge">FEC Analysis Complete</div>
-      <h1 style="background: ${t.gradient}; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 24px 0;">
+      <h1 style="color: ${t.primary}; margin: 24px 0;">
         Thank You
       </h1>
       <div class="grid-3" style="margin-top: 24px; max-width: 700px; margin-left: auto; margin-right: auto;">

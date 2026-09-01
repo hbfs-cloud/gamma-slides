@@ -110,6 +110,13 @@ function boardroomFonts() {
       family: 'Source Serif 4',
       packageName: '@fontsource-variable/source-serif-4',
       fileStem: 'source-serif-4',
+      suffix: 'standard-normal',
+      weight: '200 900',
+    }),
+    pairedVariableFaces({
+      family: 'Source Serif 4',
+      packageName: '@fontsource-variable/source-serif-4',
+      fileStem: 'source-serif-4',
       suffix: 'standard-italic',
       weight: '200 900',
       style: 'italic',
@@ -124,6 +131,28 @@ function boardroomFonts() {
     })),
   ].join('\n');
   fontBundles.set('boardroom', css);
+  return css;
+}
+
+function presentationThemeFonts() {
+  if (fontBundles.has('presentation-themes')) return fontBundles.get('presentation-themes');
+  const css = [
+    pairedVariableFaces({
+      family: 'Archivo',
+      packageName: '@fontsource-variable/archivo',
+      fileStem: 'archivo',
+      suffix: 'wght-normal',
+      weight: '100 900',
+    }),
+    pairedVariableFaces({
+      family: 'Azeret Mono',
+      packageName: '@fontsource-variable/azeret-mono',
+      fileStem: 'azeret-mono',
+      suffix: 'wght-normal',
+      weight: '100 900',
+    }),
+  ].join('\n');
+  fontBundles.set('presentation-themes', css);
   return css;
 }
 
@@ -155,6 +184,7 @@ export function embeddedFontCSS(theme = {}) {
     .join(' ');
   const bundles = [];
   if (/Instrument Sans|Source Serif 4|IBM Plex Mono/u.test(names)) bundles.push(boardroomFonts());
+  if (/Archivo|Azeret Mono/u.test(names)) bundles.push(presentationThemeFonts());
   if (/\bInter\b|JetBrains Mono/u.test(names)) bundles.push(standardFonts());
   return bundles.join('\n');
 }

@@ -5,8 +5,24 @@ import { neon } from './neon.js';
 import { minimal } from './minimal.js';
 import { nature } from './nature.js';
 import { boardroom } from './boardroom.js';
+import { analystProof } from './analyst-proof.js';
+import { cuttingRoom } from './cutting-room.js';
+import { signalRoom } from './signal-room.js';
 
-const themeRegistry = { boardroom, corporate, startup, dark, neon, minimal, nature };
+const themeRegistry = {
+  boardroom,
+  'analyst-proof': analystProof,
+  'cutting-room': cuttingRoom,
+  'signal-room': signalRoom,
+  corporate,
+  startup,
+  dark,
+  neon,
+  minimal,
+  nature,
+};
+
+const boardroomThemeNames = ['analyst-proof', 'cutting-room', 'signal-room'];
 
 function sanitizeColor(value, field) {
   const color = String(value).trim();
@@ -47,6 +63,12 @@ export function getTheme(name, overrides = {}) {
   }
 
   return merged;
+}
+
+export function getThemeFamily(name, overrides = {}) {
+  const active = getTheme(name, overrides);
+  if (name !== 'boardroom' && active.themeFamily !== 'boardroom') return [active];
+  return boardroomThemeNames.map(themeName => getTheme(themeName, overrides));
 }
 
 export function listThemes() {

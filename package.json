@@ -50,6 +50,8 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@fontsource-variable/archivo": "^5.2.8",
+    "@fontsource-variable/azeret-mono": "^5.2.8",
     "@fontsource-variable/instrument-sans": "5.2.8",
     "@fontsource-variable/inter": "5.2.8",
     "@fontsource-variable/jetbrains-mono": "5.2.8",

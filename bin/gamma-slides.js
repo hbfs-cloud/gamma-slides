@@ -10,6 +10,7 @@ import { listThemes } from '../src/themes/index.js';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { execFileSync } from 'child_process';
+import { buildStaticSite } from '../src/site/build.js';
 
 const program = new Command();
 
@@ -36,6 +37,25 @@ program
       writeFileSync(outPath, html, 'utf-8');
       console.log(chalk.green('✓') + ` Generated: ${chalk.bold(outPath)}`);
       console.log(chalk.dim(`  ${deck.slides.length} slides • theme: ${deck.theme} • ${deck.meta?.title || ''}`));
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('site')
+  .description('Build a static presentation site ready for GitHub Pages')
+  .requiredOption('-f, --file <path>', 'Deck YAML/JSON file')
+  .option('-o, --output <dir>', 'Static site directory', './site')
+  .option('--theme <name>', 'Override theme')
+  .action(async (opts) => {
+    try {
+      const deck = loadDeckFile(opts.file);
+      if (opts.theme) deck.theme = opts.theme;
+      const result = buildStaticSite(deck, opts.output);
+      console.log(chalk.green('✓') + ` Site ready: ${chalk.bold(result.siteDir)}`);
+      console.log(chalk.dim(`  ${result.slides} slides • theme: ${result.theme} • entry: ${result.indexPath}`));
     } catch (err) {
       console.error(chalk.red('✗') + ` ${err.message}`);
       process.exit(1);
@@ -109,6 +129,7 @@ program
   .description('Export to PDF')
   .requiredOption('-f, --file <path>', 'Source HTML file')
   .option('-o, --output <path>', 'Output PDF path')
+  .option('--theme <name>', 'Presentation theme to export')
   .action(async (opts) => {
     try {
       const { exportPDF } = await import('../src/export/pdf.js');
@@ -160,6 +181,7 @@ program
   .option('--width <px>', 'Viewport width', '1280')
   .option('--height <px>', 'Viewport height', '720')
   .option('--dpr <ratio>', 'Device pixel ratio', '1')
+  .option('--theme <name>', 'Presentation theme: analyst-proof, cutting-room, or signal-room')
   .option('--live', 'Audit the interactive presentation instead of export mode')
   .action(async opts => {
     try {
@@ -170,6 +192,7 @@ program
         width: Number(opts.width),
         height: Number(opts.height),
         dpr: Number(opts.dpr),
+        theme: opts.theme,
         live: Boolean(opts.live),
       });
       console.log(`${report.passed ? chalk.green('✓') : chalk.red('✗')} Visual QA: ${report.slideCount} slides · ${report.blockers.length} blockers · ${report.warnings.length} warnings`);

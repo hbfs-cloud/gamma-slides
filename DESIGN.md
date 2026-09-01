@@ -1,89 +1,88 @@
 ---
 name: Gamma Slides
-description: An institutional finance broadcast system pairing warm editorial reports with a focused dark control room.
+description: Three native financial publishing themes inside one presentation runtime, backed by a focused presenter control room.
 colors:
-  report-cobalt: "#2453FF"
-  report-violet: "#7568D8"
-  report-amber: "#A66A11"
-  report-positive: "#008A70"
-  report-negative: "#C83D32"
-  paper: "#F4F1E9"
-  paper-surface: "#FBFAF7"
-  paper-recessed: "#ECE9E1"
-  report-ink: "#0B0F17"
-  report-muted: "#626975"
-  report-hairline: "#D7D3C9"
-  dark-paper-ink: "#F7F4EC"
+  proof-cobalt: "#1748D5"
+  proof-violet: "#5E46A8"
+  proof-paper: "#F3F0E8"
+  proof-surface: "#FBF9F3"
+  proof-ink: "#111318"
+  proof-muted: "#62646B"
+  proof-hairline: "#CFC9BD"
+  cut-orange: "#FF5A1F"
+  cut-gold: "#FFD166"
+  cut-black: "#080808"
+  cut-surface: "#111111"
+  cut-ink: "#F4F0E7"
+  cut-muted: "#B5ADA0"
+  cut-hairline: "#3A3732"
+  signal-amber: "#FFB000"
+  signal-blue: "#8BA8FF"
+  signal-void: "#05070A"
+  signal-panel: "#0A0E13"
+  signal-ink: "#F3F6F2"
+  signal-muted: "#A3ADB8"
+  signal-line: "#26313D"
+  market-positive: "#3FD49A"
+  market-negative: "#FF6F66"
   studio-void: "#050912"
   studio-panel: "#0A101B"
-  studio-panel-raised: "#111B2B"
+  studio-raised: "#111B2B"
   studio-line: "#2A3850"
   studio-ink: "#F5F7FC"
   studio-muted: "#AAB7CA"
   studio-cobalt: "#315DFF"
-  studio-cobalt-soft: "#87A2FF"
-  studio-positive: "#42D69A"
-  studio-warning: "#F2BD62"
-  studio-negative: "#FF746B"
+  studio-focus: "#87A2FF"
 typography:
-  report-display:
-    fontFamily: "Instrument Sans, system-ui, sans-serif"
-    fontSize: "4.2em"
-    fontWeight: 620
-    lineHeight: 0.96
-    letterSpacing: "-0.062em"
-  report-headline:
-    fontFamily: "Instrument Sans, system-ui, sans-serif"
-    fontSize: "2.15em"
-    fontWeight: 650
-    lineHeight: 1.08
-    letterSpacing: "-0.045em"
-  report-body:
-    fontFamily: "Instrument Sans, system-ui, sans-serif"
-    fontSize: "0.92em"
-    fontWeight: 450
+  slide-root:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 440
     lineHeight: 1.45
-  report-quote:
+  proof-display:
     fontFamily: "Source Serif 4, Georgia, serif"
-    fontSize: "2.25em"
-    fontWeight: 500
-    lineHeight: 1.22
-    letterSpacing: "-0.02em"
+    fontSize: "4.2em"
+    fontWeight: 560
+    lineHeight: 0.96
+    letterSpacing: "-0.025em"
+  cut-display:
+    fontFamily: "Archivo, sans-serif"
+    fontSize: "3.05em"
+    fontWeight: 790
+    lineHeight: 0.96
+    letterSpacing: "-0.035em"
+  signal-display:
+    fontFamily: "Azeret Mono, monospace"
+    fontSize: "3.65em"
+    fontWeight: 560
+    lineHeight: 0.96
+    letterSpacing: "-0.03em"
+  report-body:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "0.92em"
+    fontWeight: 440
+    lineHeight: 1.45
   data-label:
-    fontFamily: "IBM Plex Mono, monospace"
+    fontFamily: "Azeret Mono, monospace"
     fontSize: "0.66em"
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "0.13em"
+    letterSpacing: "0.08em"
   studio-title:
     fontFamily: "Instrument Sans, system-ui, sans-serif"
     fontSize: "25px"
     fontWeight: 700
     lineHeight: 1.15
-    letterSpacing: "-0.025em"
-  studio-body:
-    fontFamily: "Instrument Sans, system-ui, sans-serif"
-    fontSize: "12px"
-    fontWeight: 400
-    lineHeight: 1.45
   studio-control:
-    fontFamily: "system-ui, sans-serif"
+    fontFamily: "Instrument Sans, system-ui, sans-serif"
     fontSize: "11px"
     fontWeight: 800
     lineHeight: 1
-  terminal:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "13px"
-    fontWeight: 400
-    lineHeight: 1.55
 rounded:
-  progress: "2px"
-  report-soft: "4px"
-  control: "7px"
-  field: "9px"
-  notice: "10px"
+  slide-soft: "4px"
+  control: "9px"
+  selector: "9px"
   toolbar: "13px"
-  card: "14px"
   panel: "16px"
   dialog: "20px"
   pill: "999px"
@@ -97,204 +96,183 @@ spacing:
   report-column: "56px"
   report-gutter: "72px"
 components:
+  theme-selector-option:
+    backgroundColor: "{colors.studio-panel}"
+    textColor: "{colors.studio-ink}"
+    typography: "{typography.report-body}"
+    rounded: "{rounded.selector}"
+    padding: "18px 20px 21px"
+  theme-switcher:
+    backgroundColor: "{colors.studio-panel}"
+    textColor: "{colors.studio-ink}"
+    typography: "{typography.data-label}"
+    rounded: "{rounded.control}"
+    padding: "0 12px"
+    height: "40px"
   studio-action-primary:
     backgroundColor: "{colors.studio-cobalt}"
     textColor: "{colors.studio-ink}"
     typography: "{typography.studio-control}"
-    rounded: "{rounded.field}"
+    rounded: "{rounded.control}"
     padding: "0 15px"
     height: "38px"
-  studio-action-secondary:
-    backgroundColor: "#1A2740"
-    textColor: "#E7EDF7"
-    typography: "{typography.studio-control}"
-    rounded: "{rounded.field}"
-    padding: "0 15px"
-    height: "38px"
-  studio-mode-card:
-    backgroundColor: "{colors.studio-panel-raised}"
-    textColor: "{colors.studio-ink}"
-    rounded: "{rounded.card}"
-    padding: "17px"
-  studio-device-field:
-    backgroundColor: "#080D16"
-    textColor: "#EAF0F8"
-    rounded: "{rounded.field}"
-    padding: "0 10px"
-    height: "38px"
-  report-dashboard-panel:
-    backgroundColor: "rgba(251,250,247,.46)"
-    textColor: "{colors.report-ink}"
-    rounded: "{rounded.report-soft}"
-    padding: "14px 16px"
-  report-dark-chapter:
-    backgroundColor: "{colors.report-ink}"
-    textColor: "{colors.dark-paper-ink}"
 ---
 
 # Design System: Gamma Slides
 
 ## Overview
 
-**Creative North Star: "The Broadcast Ledger"**
+**Creative North Star: "The Three Editions Desk"**
 
-Gamma Slides treats financial presentation as a live editorial broadcast. The deck is the institutional ledger: warm paper, black display type, fine rules, disciplined grids, and dense charts that reward close reading. Presenter Studio is the control room laid over it: near-black and navy equipment surfaces, compact white controls, cobalt activity, and explicit semantic status.
+Gamma Slides treats a financial deck as one body of evidence that can be published in three complete editions. Analyst Proof is for review: marked paper, serif authority, cobalt corrections, and measured grids. Cutting Room is for presentation: a black work print, signal orange, condensed pacing, and a film rail that makes sequence visible. Signal Room is for decision: an emissive void, amber hierarchy, monospaced headlines, and layered data with almost no enclosure.
 
-The two contexts share precision, strong contrast, tabular-number discipline, and restrained ornament, but they do not share a background treatment. The report remains quiet and materially flat so the evidence leads; the studio uses layered dark panels and controlled lift so tools remain discoverable under presentation pressure.
+These are native themes, not visual modes. Changing theme replaces the active typography, composition rules, surface system, and ECharts configurations while preserving the slide, data, and navigation state. Presenter Studio remains a fourth, operational realm: compact navy equipment surfaces that frame every theme without adopting any one theme's voice.
 
 **Key Characteristics:**
 
-- Warm editorial report surfaces paired with a solid dark broadcast-control layer.
-- Cobalt as the single connective accent for navigation, active controls, and data emphasis.
-- Instrument Sans for decisive display and reading, Source Serif 4 for editorial quotation, and IBM Plex Mono for provenance and technical data.
-- Dense information shaped by grids, rules, alignment, and generous outer gutters rather than ornamental chrome.
-- Real inline SVG controls, visible focus, permission-safe setup, and semantic status colors.
+- Three purpose-led themes named for the reading job: review, present, and decide.
+- Complete theme compilation from tokens through chart configuration; no post-render recoloring.
+- Strong single-accent commitment at slide scale: cobalt, orange, or amber.
+- Flat financial evidence shaped by rules, alignment, depth, and pacing instead of ornamental cards.
+- Self-hosted Archivo, Azeret Mono, Source Serif 4, and Instrument Sans with offline rendering.
+- A persistent accessible theme selector with keyboard focus, reduced-motion fallback, and shareable query values.
 
 ## Colors
 
-The palette deliberately separates a warm institutional report from a cool operational studio while cobalt connects both worlds.
+Each presentation theme owns a full palette. Semantic finance colors keep their meaning, but the dominant accent and neutral field change together.
 
 ### Primary
 
-- **Report Cobalt:** The report's navigation, current-state, selected-data, numeric-index, and chart-emphasis color.
-- **Studio Cobalt:** The control room's active-button, prompt, stepper, splitter, and top-rule color; its softer companion is reserved for focus outlines and secondary icon emphasis.
+- **Proof Cobalt:** Corrections, current data, review marks, and the defining vertical proof rail in Analyst Proof.
+- **Cut Orange:** A committed narrative field, film perforation rail, chart emphasis, and active story markers in Cutting Room.
+- **Signal Amber:** Front-plane rank, live decision emphasis, and selected chart series in Signal Room.
+- **Studio Cobalt:** Active operational controls, progress, and focus-adjacent state in Presenter Studio.
 
 ### Secondary
 
-- **Forecast Violet:** Forecast series and analytical comparison data in the report.
+- **Proof Violet:** Forecast and scenario comparison on the light proof.
+- **Cut Gold:** Secondary series and caution within the work-print palette.
+- **Signal Blue:** Forecasts and rear-plane analytical series against the signal void.
 
 ### Tertiary
 
-- **Signal Amber:** Warnings, watch states, and report-side tertiary data. It never substitutes for neutral decoration.
-- **Positive Green / Negative Red:** Directional finance data in the report and readiness, caution, error, and recording states in the studio.
+- **Market Positive / Market Negative:** Directional financial truth. Green remains positive or ready; red remains negative, error, or recording.
 
 ### Neutral
 
-- **Warm Paper:** The default report canvas, with a near-white paper surface and a recessed paper neutral for quiet layering.
-- **Editorial Ink:** Near-black text, rules, and full-bleed chapter dividers; dark chapters reverse into a warm off-white rather than cold pure white.
-- **Report Muted / Hairline:** Secondary copy and thin institutional separators.
-- **Studio Void / Panel / Raised Panel:** A three-level near-black and navy surface stack for the console, dock, wizard, and modal cards.
-- **Studio Ink / Muted / Line:** High-contrast control text, supporting copy, and structural borders.
+- **Proof Paper / Surface / Ink:** A warm, low-glare reading canvas with near-black evidence and quiet rules.
+- **Cut Black / Surface / Ink:** True dark work-print stock with warm ivory copy and charcoal separation.
+- **Signal Void / Panel / Ink:** An emissive black field with cool white copy and restrained blue-gray structure.
+- **Studio Void / Panel / Raised:** The operational stack used by the selector, toolbar, wizard, camera, and console.
 
 ### Named Rules
 
-**The Two Realms Rule.** Reports use warm paper and editorial ink; operational overlays use solid near-black and navy. Do not tint the report into a dashboard or make the studio translucent over the stage.
+**The Complete Theme Rule.** A theme change must update typography, composition, surfaces, and charts. If only color changed, the feature is unfinished.
 
-**The Cobalt Thread Rule.** Cobalt marks navigation, selection, progress, and important data. Keep large reading surfaces neutral so the accent remains diagnostic.
+**The One Dominant Signal Rule.** Each theme spends its defining accent in large, decisive fields or one front-plane series; it does not scatter several competing accents across neutral cards.
 
-**The Semantic Signal Rule.** Green means ready or positive, amber means pending or caution, and red means error, negative, or recording. Never use these colors as arbitrary decoration.
+**The Semantic Signal Rule.** Green, amber, and red communicate finance or system state. Do not use them as arbitrary decoration.
 
 ## Typography
 
-**Display Font:** Instrument Sans (with system-ui fallback)  
-**Body Font:** Instrument Sans (with system-ui fallback)  
-**Editorial Quote Font:** Source Serif 4 (with Georgia fallback)  
-**Label/Mono Font:** IBM Plex Mono (with monospace fallback)
+- **Proof Display Font:** Source Serif 4 (with Georgia fallback)
+- **Cut Display Font:** Archivo (with sans-serif fallback)
+- **Signal Display Font:** Azeret Mono (with monospace fallback)
+- **Body Font:** Archivo (with system-ui fallback)
+- **Studio Font:** Instrument Sans (with system-ui fallback)
 
-**Character:** Instrument Sans supplies compact, high-authority headlines and highly legible body copy. Source Serif 4 appears selectively for long-form quotation, while IBM Plex Mono makes labels, sources, table headers, console content, and numeric context feel auditable.
+**Character:** The theme family changes editorial register without changing information discipline. Source Serif 4 reads like reviewed research, Archivo compresses narrative headlines without theatrical display tricks, and Azeret Mono makes rank and measurement visible. Archivo carries ordinary report copy; Instrument Sans remains confined to the operational studio.
 
 ### Hierarchy
 
-- **Report Display:** Tight, heavy, and oversized for cover and chapter statements; use short lines and negative tracking.
-- **Report Headline:** Compact slide titles with a maximum observed width around 930px, leaving charts and evidence room to breathe.
-- **Report Body:** Restrained mid-weight copy with a 1.45 line-height; secondary explanatory copy is muted, never faint.
-- **Editorial Quote:** Italic serif reserved for genuine quotation, not ordinary headings or decorative pull text.
-- **Data Label:** Monospaced, usually uppercase, tightly sized, and letterspaced for provenance, labels, source lines, and quantitative wayfinding.
-- **Studio Title:** A 25px compact title for setup and major operational moments.
-- **Studio Body / Control:** Supporting copy sits at 11–12px; actionable control labels are bold, concise, and high contrast.
-- **Terminal:** Monospaced at 13px with a generous 1.55 line-height for command and output scanning.
+- **Display:** Theme-specific cover and chapter statements; short lines, high contrast, and a hard ceiling of three lines at the presentation viewport.
+- **Headline:** Slide titles around 1.75–2.15em depending on column width; use tighter sizes in story-chart sidebars rather than accepting seven-line stacks.
+- **Title:** Theme and dialog names at 25–27px with compact negative tracking.
+- **Body:** Mid-weight Archivo with 1.45–1.5 line-height and 65–75ch maximum measure for continuous copy.
+- **Label:** Azeret Mono for sources, data context, theme purpose, and technical status; sentence case for explanatory labels and uppercase only where the data convention requires it.
 
 ### Named Rules
 
-**The Number Discipline Rule.** Financial canvases use lining tabular numerals; values align, compare, and scan before they decorate.
+**The Name Carries the Choice Rule.** Theme names lead. Purpose text follows the name; never put a decorative eyebrow above it.
 
-**The Source Is Structure Rule.** On ordinary report slides, section context belongs in the factual source/footer line. Do not reintroduce repeated pre-heading kickers; cover badges and compact data labels are deliberate exceptions.
+**The Number Discipline Rule.** Financial canvases use lining tabular numerals. Values align and compare before they decorate.
 
 ## Layout
 
-Report slides use a fixed presentation canvas with 72px horizontal gutters, 44px top padding, and 72px bottom clearance for the source and progress systems. Layouts repeatedly split into asymmetric editorial columns—such as 3:8, 4:7, 5:7, or 8:3—with 42–80px inter-column gaps. Dense dashboards use equal 2-, 3-, or 4-column grids with 12px gaps; hairlines, shared baselines, and aligned numeric edges carry hierarchy.
+Presentation slides use a 1280×720 canvas with 72px horizontal gutters, 44px top padding, and 72px bottom clearance. The shared editorial layouts use asymmetric 3:8, 4:7, 5:7, and 8:3 structures with 42–80px gaps. Dashboards use two to four columns with 12px gaps, but each theme changes how those regions join: proof uses hairlines, cutting uses a continuous film rail and narrative partitions, and signal uses brightness and depth with minimal enclosure.
 
-Presenter Studio is fixed to the viewport and layered above the report. The toolbar stays at the upper right; progress remains along the bottom; the camera PIP is draggable, resizable, persisted, and bounded. The desktop console may float or dock on the right. Docking allocates stage width and progress space through the same dock variable, preserving a true split with zero overlap.
+The selector is a full-viewport decision surface. At desktop it is a three-column comparison table with one honest composition preview per theme. Below 900px the options stack; below 620px the previews disappear so the names, purposes, and descriptions remain immediately reachable without horizontal scrolling.
 
-The setup wizard is a three-row shell—header, independently scrolling body, and persistent action footer. Its five-column mode grid becomes two columns below 900px and one column below 620px. On narrow screens the console becomes an inset full-height panel, the dock no longer reduces stage width, camera width drops to 190px, and wizard actions remain reachable.
+Presenter Studio remains fixed above the deck. Docked tools reserve stage width on desktop and become bounded overlays on narrow screens. Theme changes preserve the current slide and re-layout the stage in place.
 
-**The Stage Integrity Rule.** Persistent tools may frame or split the presentation, but they may not cover decision-critical report content. Docked desktop tools reserve space; mobile tools become bounded overlays.
+**The Purpose Before Taste Rule.** Every theme option states the reading job it serves. Do not fall back to A/B/C labels, vague energy levels, or “light/dark” as the choice architecture.
+
+**The Stable Evidence Rule.** Theme switching may change how evidence is staged, never its numbers, labels, semantic colors, source, or slide position.
 
 ## Elevation & Depth
 
-The report is flat by default. It creates depth through warm tonal changes, black and hairline rules, column separation, and occasional data-driven tint; report cards do not rise on hover. Presenter Studio uses a small shadow hierarchy to separate tools from the stage: modest lift for interactive cards, deeper ambient shadows for floating toolbars and camera, and the strongest shadow only for the setup dialog and large console. Blur belongs to modal veils and small floating operational chrome, never to core studio panel fills.
+Slides are flat by default. Analyst Proof uses paper tone, thin rules, and registration marks. Cutting Room uses field contrast, rails, and sequence. Signal Room maps rank to brightness and foreground stillness while rear dust layers drift. Shadows do not appear on report charts, tables, or metrics.
 
-### Named Rules
+Operational chrome uses controlled lift: the selector is a protected full-screen surface, while the compact switcher, toolbar, camera, console, and setup dialog use progressively stronger ambient shadows. Blur is reserved for true modal veils and small floating chrome.
 
-**The Evidence Stays Flat Rule.** Charts, tables, metrics, and narrative panels rely on alignment, rules, and tonal contrast—not default card shadows.
+**The Evidence Stays Flat Rule.** Alignment, rule weight, field color, and chart scale carry report hierarchy. A rounded shadow card is not a substitute for composition.
 
-**The Operational Lift Rule.** Shadows indicate movable, modal, or temporarily elevated controls. A stronger shadow must correspond to a stronger interaction layer.
+**The Operational Lift Rule.** Shadow strength corresponds to interaction layer and movability; theme content itself remains materially flat.
 
 ## Shapes
 
-The report is rectilinear: transparent charts, square tables, straight rules, and only a restrained 4px softening on reusable content cards. Circular marks are reserved for plotted points, status dots, and the subtle metric-panel signal rings.
+The themes are rectilinear. Charts, tables, proof rails, film perforations, and signal baselines use straight edges and 1px rules. A restrained 4px softening is allowed on reusable report panels, but layout regions do not become a card grid.
 
-Studio controls use a compact radius ladder: 7–10px for buttons and fields, 13–16px for toolbars, camera, cards, and console panels, 20px for the wizard dialog, and full pills for transient or semantic badges. A 1px cool navy stroke is usually present; selected and focused states strengthen the stroke with cobalt rather than changing silhouette.
-
-**The Radius Follows Scale Rule.** Small controls receive small corners, contained tools receive medium corners, and only the primary modal receives the largest radius. Do not import the studio's rounded language into report charts or tables.
+Operational controls use 9px corners, 13–16px for floating tool surfaces, 20px for the setup dialog, and pills only for compact semantic status. Theme previews are framed compositions, not icon tiles.
 
 ## Components
 
-### Buttons
+### Theme Selector
 
-- **Shape:** Compact operational controls use a 7–9px radius; icon buttons are 29–34px square and text actions are at least 38px high.
-- **Primary:** Solid studio cobalt, white text, bold control type, and 15px horizontal padding.
-- **Hover / Focus:** Hover brightens the cobalt and rises by 1px; keyboard focus uses a 2px soft-cobalt outline with visible offset.
-- **Secondary / Ghost:** Secondary controls use a raised navy fill and line border; ghost actions remain transparent with muted text. Disabled controls lose emphasis and movement.
+- **Structure:** One radiogroup with three named options, each containing an honest miniature composition, name, purpose, and description.
+- **State:** The selected option uses its theme accent on the top rule and a visible focus outline; hover changes the shared studio panel tone without moving content.
+- **Behavior:** Arrow keys move between themes, Enter applies, Escape closes only after a choice exists, and reduced-motion users receive an immediate swap.
+- **Persistence:** The query parameter wins, then local storage, then the requested deck theme.
 
-### Chips
+### Theme Switcher
 
-- **Style:** Quick terminal actions are compact navy chips with a cool line border and inline SVG icon where needed.
-- **State:** Readiness is a green outlined pill with a leading status dot; busy changes the same component to amber and pulses only the dot.
+- **Shape:** Compact 40px operational control with a 9px radius and a live accent square.
+- **Copy:** “Theme” plus the full current theme name; never a letter or internal slug.
+- **Behavior:** Reopens the selector without resetting the current slide.
 
-### Cards / Containers
+### Financial Charts
 
-- **Report Panels:** Thin hairline border, near-white translucent paper fill, 14px by 16px padding, and no resting shadow. Metric panels add a 2px cobalt top rule and a very light data tint.
-- **Studio Mode Cards:** Raised navy, 14px corners, one-pixel blue-gray border, 17px padding, real SVG icon, and a compact capability label. Selection deepens the cobalt-toned surface and border.
-- **Wizard / Console:** Solid navy or near-black fills with explicit borders and strong shadows appropriate to modal or floating behavior.
+- **Theme compilation:** Every theme receives its own ECharts configuration set, including surface, text, axes, grid lines, series palette, tooltip, and labels.
+- **Switching:** Existing chart instances are disposed and recreated from cloned configuration objects so serialized format metadata remains intact.
+- **Truth:** Positive, negative, warning, and forecast roles stay semantically stable across themes.
 
-### Inputs / Fields
+### Report Panels
 
-- **Style:** Device selects and terminal inputs use near-black fields, high-contrast ink, and compact geometry. Selects are 38px high with a 9px radius and visible border; the terminal input remains borderless inside its structured prompt row.
-- **Focus:** Use the soft-cobalt focus outline already established for controls; do not rely on a color shift alone.
-- **Error / Disabled:** Error copy turns semantic red; muted cards and disabled fields retain legibility while clearly losing affordance.
+- **Analyst Proof:** Transparent or near-paper panels separated by hairlines; serif display and cobalt review marks.
+- **Cutting Room:** Black work-print regions joined by the orange film rail; uppercase narrative display is reserved for headlines.
+- **Signal Room:** Open baselines with almost no boxes; amber marks the front plane and muted layers recede.
 
-### Navigation
+### Presenter Studio
 
-- **Style:** The upper-right Presenter Studio toolbar is a 13px-radius solid panel with a thin cobalt top rule. Controls use consistent inline SVG line icons; the active control becomes a cobalt square.
-- **Progress:** The bottom HUD combines a truncated uppercase title, segmented slide rail, and monospaced count. The current segment is cobalt and thicker; completed segments become stronger neutral lines.
-- **Responsive:** Labels compress before controls disappear. Core setup, media, recording, and keyboard focus behavior remain available at narrow widths.
-
-### Presenter Setup Wizard
-
-The setup wizard is permission-safe by construction: mode selection precedes browser permission requests, media and screen access occur only after explicit action, and every preflight state has ready, warning, or error feedback. The modal traps focus, restores prior focus on close, hides the stage from assistive technology while open, and keeps its footer actions persistent while the body scrolls.
-
-### Camera PIP and Console Dock
-
-The camera is a mirrored 16:10 PIP with a draggable label, bounded resize, persisted position, and a visible frame that also carries into recordings. The console is a dense monospaced work surface that can float, resize, minimize, or dock; the dock splitter uses cobalt as the sole resize cue and never overlaps the resized desktop stage.
+- **Controls:** Solid navy fills, real inline SVG icons, compact Instrument Sans labels, visible focus, and explicit ready/warning/error states.
+- **Boundary:** Studio chrome may frame any theme but must not inherit its display type or alter its chart palette.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** preserve the warm-paper report and solid-dark studio as two coordinated but visually distinct realms.
-- **Do** use cobalt for active state, progress, navigation, and selected data, with green/amber/red reserved for real meaning.
-- **Do** use real inline SVG icons for controls and keep focus outlines visible against dark panels.
-- **Do** keep ordinary section context in the source/footer line and preserve factual provenance on every financial slide.
-- **Do** use grids, hairlines, tabular figures, and aligned baselines to make dense financial information scannable.
-- **Do** retain the functional green-to-amber-to-red audio-meter gradient; it is a live threshold scale, not decorative color blending.
-- **Do** keep selective shield and pin emoji when they act as explicit privacy or console wayfinding signals.
+- **Do** choose themes by reading purpose: review evidence, tell the story, or decide from signal.
+- **Do** compile every theme from real tokens and regenerate charts when the theme changes.
+- **Do** keep the current slide, source, data values, and semantic finance roles stable across themes.
+- **Do** let one accent own the composition and use neutral fields generously around it.
+- **Do** keep focus, keyboard navigation, reduced motion, and export selection working for every theme.
+- **Do** use Source Serif 4, Archivo, and Azeret Mono for their assigned editorial jobs; keep Instrument Sans in Presenter Studio.
 
 ### Don't:
 
-- **Don't** add decorative gradients to studio surfaces or report typography; solid fills and tonal layers are the system.
-- **Don't** turn report charts, tables, or metrics into generic rounded shadow cards.
-- **Don't** repeat decorative kickers above ordinary slide titles; cover badges and factual source context already provide hierarchy.
-- **Don't** use glyph or emoji icons as the default control system. The shield and pin signals are narrow functional exceptions.
-- **Don't** allow a docked console or persisted camera frame to obscure presentation content or action controls.
-- **Don't** request camera, microphone, screen, or recording permission before a clear user action.
+- **Don't** expose themes as A/B/C, “visual cuts,” or cosmetic modes.
+- **Don't** recolor a single compiled deck and call the result a theme.
+- **Don't** put decorative kickers above headings or theme names; factual context belongs in the margin, source line, or after the name.
+- **Don't** turn charts, metrics, or narrative regions into generic rounded shadow cards.
+- **Don't** use gradients, glass, glow, or emoji as substitutes for authored financial structure.
+- **Don't** allow a theme switcher, console, or camera frame to cover decision-critical slide content.

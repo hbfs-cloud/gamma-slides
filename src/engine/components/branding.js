@@ -5,39 +5,47 @@ import { escapeHtml, safeUrl } from '../html.js';
 export function renderFooter(deck, theme) {
   const branding = deck.branding || {};
   const meta = deck.meta || {};
+  const company = meta.company || 'Gamma Slides';
+  const deckTitle = meta.title || 'Untitled Presentation';
+  const watermark = branding.watermark || company;
 
-  const logoHtml = branding.logo ? renderLogo(branding.logo) : renderTextLogo(meta.company || 'gamma-slides', theme);
-  const titleHtml = escapeHtml(meta.title || '');
+  const logoHtml = branding.logo ? renderLogo(branding.logo, company) : renderTextLogo(company);
+  const titleHtml = escapeHtml(deckTitle);
   const urlHtml = escapeHtml(branding.company_url || '');
+  const watermarkHtml = escapeHtml(watermark);
 
   return `
-    <div class="footer-bar">
-      <div>${logoHtml}</div>
-      <div>${titleHtml}</div>
-      <div>${urlHtml}</div>
-    </div>
+    <footer class="footer-bar brand-rail" aria-label="Presentation identity">
+      <div class="brand-lockup">${logoHtml}</div>
+      <div class="brand-deck-title" title="${titleHtml}">${titleHtml}</div>
+      <div class="brand-publication">
+        <span class="brand-classification">${watermarkHtml}</span>
+        ${urlHtml ? `<span class="brand-url">${urlHtml}</span>` : ''}
+      </div>
+    </footer>
   `;
 }
 
 export function renderWatermark(deck) {
-  const watermark = deck.branding?.watermark;
-  if (!watermark) return '';
-  return `<div class="watermark">${escapeHtml(watermark)}</div>`;
+  const watermark = deck.branding?.watermark || deck.meta?.company || 'Gamma Slides';
+  return `<div class="watermark brand-watermark" aria-hidden="true"><span>${escapeHtml(watermark)}</span></div>`;
 }
 
-function renderLogo(logoPath) {
+function renderLogo(logoPath, company) {
+  const alt = `${escapeHtml(company)} logo`;
   if (logoPath.startsWith('http')) {
-    return `<img src="${safeUrl(logoPath)}" alt="Logo" style="height: 24px; object-fit: contain;">`;
+    return `<img class="brand-logo-image" src="${safeUrl(logoPath)}" alt="${alt}">`;
   }
   const absPath = resolve(logoPath);
   if (existsSync(absPath) && absPath.endsWith('.svg')) {
     const svg = readFileSync(absPath).toString('base64');
-    return `<img src="data:image/svg+xml;base64,${svg}" alt="Logo" style="height: 24px; object-fit: contain;">`;
+    return `<img class="brand-logo-image" src="data:image/svg+xml;base64,${svg}" alt="${alt}">`;
   }
-  return `<img src="${safeUrl(logoPath)}" alt="Logo" style="height: 24px; object-fit: contain;">`;
+  return `<img class="brand-logo-image" src="${safeUrl(logoPath)}" alt="${alt}">`;
 }
 
-function renderTextLogo(text, theme) {
+function renderTextLogo(text) {
   const safeText = escapeHtml(text);
-  return `<span class="footer-wordmark" style="color:${theme.primary};font-family:'${theme.fontHeading}',sans-serif;font-weight:700;letter-spacing:-.02em">${safeText}</span>`;
+  const initial = escapeHtml(Array.from(text.trim())[0]?.toUpperCase() || 'G');
+  return `<span class="brand-monogram" aria-hidden="true">${initial}</span><span class="footer-wordmark">${safeText}</span>`;
 }

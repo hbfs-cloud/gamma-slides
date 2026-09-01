@@ -1,0 +1,6 @@
+[mcp_servers.gamma-slides]
+command = "node"
+args = ["bin/gamma-slides.js", "mcp"]
+cwd = "."
+startup_timeout_sec = 20
+tool_timeout_sec = 120

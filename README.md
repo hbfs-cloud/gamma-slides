@@ -13,6 +13,10 @@ node bin/gamma-slides.js generate \
 node bin/gamma-slides.js preview \
   -f src/schema/examples/corporate-demo.yaml \
   --terminal
+
+node bin/gamma-slides.js site \
+  -f src/schema/examples/corporate-demo.yaml \
+  -o site
 ```
 
 The 38-slide flagship exercises the complete **Gamma Finance Catalog v1**: 28 curated native ECharts families and finance-specific compositions across corporate reporting, markets, trading, portfolio, risk, liquidity, rates, and economics. Its 37 chart instances include a multi-pane stock workstation, market depth, return histogram, boxplot, calendar heatmap, parallel coordinates, sunburst allocation, exposure network, theme river, and forecast fan. This is a bounded product catalogue—not a claim that every ECharts module is exposed.
@@ -21,17 +25,24 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 ## Presenter Studio
 
-Interactive decks open with a three-step, permission-safe setup wizard: choose present-only, camera, microphone, recording, or terminal; select devices, preview the camera, monitor microphone level, and select the shared screen; then review readiness before a 3–2–1 recording countdown. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
+Interactive decks open with a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, recording, or terminal; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
 
 | Shortcut | Action |
 | --- | --- |
 | `T` | Open the embedded presentation terminal |
 | `C` | Toggle the camera picture-in-picture |
-| `R` | Start or stop screen, camera, and audio recording |
+| `R` | Open recording setup or focus the active recording controls |
+| `P` | Pause or resume the active recording |
 | `S` | Open speaker notes |
 | `F` | Toggle fullscreen |
 
 The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. It is intentionally disabled in a static `file://` export. Start preview with `--terminal` to enable it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
+
+## Claude, Codex, and free web publishing
+
+The repository includes project-scoped MCP configuration for Claude Code and Codex. Agents can read the deck schema and flagship example, use a guided presentation prompt, validate a YAML/JSON deck, generate its interactive HTML, and build a static site. See [the LLM quickstart](docs/LLM_QUICKSTART.md).
+
+`gamma-slides site` writes a self-contained `index.html` ready for static hosting. The included GitHub Actions workflow builds the flagship and deploys it to GitHub Pages on each relevant push to `main`; enable **Settings → Pages → Source: GitHub Actions** once for the repository.
 
 ## Quality assurance and exports
 

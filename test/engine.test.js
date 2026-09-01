@@ -11,6 +11,7 @@ import { getTheme } from '../src/themes/index.js';
 import { renderPublishingHTML, renderYouTubeStudioHTML } from '../src/youtube/studio.js';
 import { uploadToYouTube, uploadVideoResumable } from '../src/youtube/upload.js';
 import { injectLiveReload } from '../src/preview.js';
+import { buildStaticSite } from '../src/site/build.js';
 
 test('preview runtime is injected at the real closing body, not inside bundled source strings', () => {
   const html = '<!doctype html><html><head></head><body><script>const markup="<body></body>";</script><main>Deck</main></body></html>';
@@ -43,6 +44,51 @@ slides:
   assert.match(html, /<!DOCTYPE html>/);
   assert.match(html, /Strong foundations/);
   assert.match(html, /prefers-reduced-motion/);
+  assert.match(html, /class="footer-bar brand-rail"/);
+  assert.match(html, /class="brand-deck-title" title="Quarterly update">Quarterly update/);
+  assert.match(html, /class="brand-monogram"[^>]*>G</);
+  assert.match(html, /class="watermark brand-watermark"[^>]*><span>Gamma Slides<\/span>/);
+});
+
+test('static sites use index.html and bypass Jekyll processing', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'gamma-site-'));
+  try {
+    const deck = loadDeck(`
+meta:
+  title: Published decision deck
+slides:
+  - layout: title
+    title: Ready for the web
+`);
+    const result = buildStaticSite(deck, tempDir);
+    assert.equal(result.indexPath, join(tempDir, 'index.html'));
+    assert.match(readFileSync(result.indexPath, 'utf-8'), /Ready for the web/);
+    assert.equal(readFileSync(join(tempDir, '.nojekyll'), 'utf-8'), '');
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('the persistent brand rail carries supplied identity on every deck', () => {
+  const deck = loadDeck(`
+meta:
+  title: FY26 Operating Plan
+  company: Northstar Labs
+branding:
+  watermark: Internal review
+  company_url: northstar.example
+slides:
+  - layout: title
+    title: Direction
+`);
+  const html = renderDeck(deck);
+
+  assert.match(html, /class="brand-monogram"[^>]*>N</);
+  assert.match(html, /class="footer-wordmark">Northstar Labs/);
+  assert.match(html, /class="brand-deck-title" title="FY26 Operating Plan">FY26 Operating Plan/);
+  assert.match(html, /class="brand-classification">Internal review/);
+  assert.match(html, /class="brand-url">northstar\.example/);
+  assert.match(html, /class="watermark brand-watermark"[^>]*><span>Internal review<\/span>/);
 });
 
 test('Presenter Studio ships a permission-safe startup wizard and recording controls', () => {
@@ -60,13 +106,18 @@ slides:
   assert.match(html, /data-testid="studio-camera-drag"/);
   assert.match(html, /data-testid="studio-mode-record"/);
   assert.match(html, /data-testid="studio-mode-terminal"/);
+  assert.match(html, /data-studio-theme-grid/);
+  assert.match(html, /Step '\+state\.step\+' of 4/);
   assert.match(html, /data-testid="studio-terminal-drag"/);
   assert.match(html, /data-testid="studio-terminal-splitter"/);
   assert.match(html, /data-testid','studio-terminal-restore/);
   assert.match(html, /gamma-terminal-frame-v2/);
   assert.match(html, /gamma-terminal-history-v1/);
   assert.match(html, /gamma-terminal-docked/);
-  assert.match(html, /terminalTool\.disabled=true/);
+  assert.doesNotMatch(html, /terminalTool\.disabled=true/);
+  assert.match(html, /Slide commands ready/);
+  assert.match(html, /else if\(mode==='terminal'\)state\.options\.terminal/);
+  assert.match(html, /System commands require the localhost bridge/);
   assert.match(html, /else await runShellCommand/);
   assert.match(html, /data-testid="studio-request-media"/);
   assert.match(html, /aria-label="Microphone device"/);
@@ -76,7 +127,22 @@ slides:
   assert.match(html, /data-testid="studio-request-screen"/);
   assert.match(html, /data-testid="studio-summary"/);
   assert.match(html, /data-testid="studio-pause"/);
+  assert.match(html, /startChartNarrative/);
+  assert.match(html, /if \(gammaExportMode \|\| chartNarrativeTimers/);
   assert.match(html, /data-testid="studio-stop"/);
+  assert.match(html, /setAttribute\('data-testid','studio-recording-review'\)/);
+  assert.match(html, /data-testid="studio-review-rewind"/);
+  assert.match(html, /\[5,30\]\.forEach\(seconds/);
+  assert.match(html, /Math\.max\(0,reviewVideo\.currentTime-/);
+  assert.match(html, /showSaveFilePicker/);
+  assert.match(html, /Your browser controls the destination; check Downloads/);
+  assert.match(html, /state\.recorder\.onpause=\(\)=>syncPauseUI\(true\)/);
+  assert.match(html, /state\.phase='ready';await startRecording\(\)/);
+  assert.match(html, /state\.step=Math\.min\(4,state\.step\+1\)/);
+  assert.match(html, /if\(selectStudioTheme\(themeId\)\)\{state\.step=2;renderWizard\(\)\}/);
+  assert.match(html, /state\.presentationTheme=themeId;renderStudioThemes\(\);if\(typeof commitPresentationTheme/);
+  assert.doesNotMatch(html, /if\(state\.step===2&&!state\.options\.camera/);
+  assert.doesNotMatch(html, /if\(\['recording','paused'\]\.includes\(state\.phase\)\)stopRecording\(\)/);
   assert.match(html, /data-studio-action','skip/);
   assert.match(html, /data-gamma-studio-ready/);
   assert.match(html, /params\.has\('gamma-qa'\)/);
@@ -107,9 +173,9 @@ slides:
   assert.match(html, /data-gamma-runtime="reveal\.js@5\.1\.0"/u);
   assert.match(html, /data-gamma-runtime="echarts@6\.1\.0"/u);
   assert.match(html, /data-gamma-runtime="reveal-notes@5\.1\.0"/u);
-  assert.match(html, /font-family: 'Instrument Sans'/u);
-  assert.match(html, /font-family: 'Source Serif 4'/u);
-  assert.match(html, /font-family: 'IBM Plex Mono'/u);
+  assert.match(html, /Instrument Sans/u);
+  assert.match(html, /Source Serif 4/u);
+  assert.match(html, /IBM Plex Mono/u);
   assert.match(html, /src: url\(data:font\/woff2;base64,/u);
 });
 
@@ -218,7 +284,7 @@ slides:
   const html = renderDeck(deck);
   assert.doesNotMatch(html, /theme\/black\.css/);
   assert.match(html, /data-background-color="#0B0F17"/);
-  assert.match(html, /\.slide-background \{ background-color: #F4F1E9; \}/);
+  assert.match(html, /\.slide-background \{ background-color: #F3F0E8; \}/);
 });
 
 test('editorial covers keep the KPI strip in its own grid row', () => {
@@ -230,9 +296,32 @@ slides:
     metrics: [{ label: Revenue, value: $16.2M }]
 `);
   const html = renderDeck(deck);
+  const initialThemeCSS = html.match(/<style id="gamma-theme-runtime">([\s\S]*?)<\/style>/)?.[1] || '';
   assert.match(html, /\.cover-index \{ grid-row:1 \/ 3;/);
   assert.match(html, /\.cover-strip \{ grid-column:2; grid-row:2;/);
-  assert.doesNotMatch(html, /\.cover-strip \{ position:absolute/);
+  assert.doesNotMatch(initialThemeCSS, /\.cover-strip \{ position:absolute/);
+});
+
+test('boardroom decks let viewers choose and switch between three native themes', () => {
+  const deck = loadDeck(`theme: boardroom
+slides:
+  - layout: title
+    variant: editorial
+    title: Three presentation themes
+`);
+  const html = renderDeck(deck);
+
+  assert.match(html, /data-presentation-theme="analyst-proof"/);
+  assert.match(html, /data-presentation-theme="cutting-room"/);
+  assert.match(html, /data-presentation-theme="signal-room"/);
+  assert.match(html, /Analyst Proof/);
+  assert.match(html, /Cutting Room/);
+  assert.match(html, /Signal Room/);
+  assert.match(html, /const chartConfigSets/);
+  assert.match(html, /function setChartTheme/);
+  assert.match(html, /document\.startViewTransition/);
+  assert.match(html, /prefers-reduced-motion: reduce/);
+  assert.match(html, /data-theme-open/);
 });
 
 test('invalid decks report all useful validation errors', () => {

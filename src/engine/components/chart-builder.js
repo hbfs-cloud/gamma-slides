@@ -17,7 +17,108 @@ export function buildChartHTML(chartSpec) {
 }
 
 export function getRegisteredCharts(theme) {
-  return chartRegistry.map(({ id, chartSpec }) => ({ id, config: buildEChartsConfig(chartSpec, theme) }));
+  return chartRegistry.map(({ id, chartSpec }) => ({ id, config: applyPresentationChartGrammar(buildEChartsConfig(chartSpec, theme), theme) }));
+}
+
+function applyPresentationChartGrammar(config, theme) {
+  const presentationTheme = theme.presentationTheme;
+  if (!presentationTheme || !config) return config;
+
+  config.textStyle = {
+    ...(config.textStyle || {}),
+    fontFamily: presentationTheme === 'analyst-proof' ? 'Archivo' : 'Azeret Mono',
+  };
+  config.animationDuration = 760;
+  config.animationDurationUpdate = 360;
+  config.animationEasing = 'cubicOut';
+  config.animationEasingUpdate = 'cubicOut';
+  config.stateAnimation = { duration: 240, easing: 'cubicOut' };
+  config.tooltip = config.tooltip ? {
+    ...config.tooltip,
+    confine: true,
+    transitionDuration: .14,
+    order: 'valueDesc',
+    extraCssText: 'box-shadow:0 14px 34px rgba(0,0,0,.28);border-radius:4px;',
+  } : config.tooltip;
+  config.axisPointer = config.axisPointer || {
+    link: [{ xAxisIndex: 'all' }],
+    label: { show: true, backgroundColor: theme.surface, color: theme.text, borderColor: theme.hairline, borderWidth: 1 },
+    lineStyle: { color: theme.primary, width: 1, opacity: .62 },
+    crossStyle: { color: theme.primary, width: 1, opacity: .62 },
+  };
+
+  const axes = [config.xAxis, config.yAxis]
+    .flatMap(axis => Array.isArray(axis) ? axis : axis ? [axis] : []);
+  const series = Array.isArray(config.series) ? config.series : [];
+  series.forEach(item => {
+    item.universalTransition = true;
+    item.emphasis = { ...(item.emphasis || {}), focus: ['graph', 'sankey'].includes(item.type) ? 'adjacency' : 'series' };
+    item.blur = {
+      ...(item.blur || {}),
+      itemStyle: { ...(item.blur?.itemStyle || {}), opacity: .2 },
+      lineStyle: { ...(item.blur?.lineStyle || {}), opacity: .16 },
+      areaStyle: { ...(item.blur?.areaStyle || {}), opacity: .08 },
+    };
+  });
+
+  const loneLine = series.length === 1 && series[0]?.type === 'line' ? series[0] : null;
+  if (loneLine) {
+    loneLine.endLabel = {
+      ...(loneLine.endLabel || {}), show: true, formatter: '{a}', color: theme.text,
+      fontSize: 10, fontWeight: 650, distance: 8,
+    };
+    loneLine.labelLayout = { ...(loneLine.labelLayout || {}), moveOverlap: 'shiftY' };
+  }
+
+  if (presentationTheme === 'analyst-proof') {
+    axes.forEach(axis => {
+      if (axis.axisLine?.lineStyle) axis.axisLine.lineStyle.width = 1;
+      if (axis.splitLine?.lineStyle) axis.splitLine.lineStyle.type = 'dashed';
+    });
+    series.forEach(item => {
+      if (item.type === 'bar' && item.itemStyle) item.itemStyle.borderRadius = 0;
+      if (item.type === 'line') {
+        item.symbol = item.symbol === 'none' ? 'none' : 'emptyCircle';
+        item.symbolSize = item.symbol === 'none' ? item.symbolSize : 6;
+      }
+    });
+  }
+
+  if (presentationTheme === 'cutting-room') {
+    axes.forEach(axis => {
+      if (axis.splitLine) axis.splitLine.show = false;
+      if (axis.axisLine?.lineStyle) axis.axisLine.lineStyle.width = 1;
+    });
+    series.forEach(item => {
+      if (item.type === 'bar') {
+        if (item.itemStyle) item.itemStyle.borderRadius = 0;
+        if (item.barWidth) item.barWidth = typeof item.barWidth === 'string' ? '46%' : item.barWidth;
+        if (item.barMaxWidth) item.barMaxWidth = Math.max(item.barMaxWidth, 42);
+      }
+      if (item.type === 'line') {
+        item.smooth = false;
+        item.symbol = 'none';
+        item.lineStyle = { ...(item.lineStyle || {}), width: 3 };
+      }
+    });
+  }
+
+  if (presentationTheme === 'signal-room') {
+    axes.forEach(axis => {
+      if (axis.axisLine?.lineStyle) axis.axisLine.lineStyle.opacity = .42;
+      if (axis.splitLine?.lineStyle) axis.splitLine.lineStyle.opacity = .34;
+    });
+    series.forEach((item, index) => {
+      if (item.type === 'bar' && item.itemStyle) item.itemStyle.borderRadius = 0;
+      if (item.type === 'line') {
+        item.symbol = index === 0 ? 'circle' : 'none';
+        item.symbolSize = index === 0 ? 6 : item.symbolSize;
+        item.lineStyle = { ...(item.lineStyle || {}), width: index === 0 ? 3.4 : 1.7, opacity: index === 0 ? 1 : .68 };
+      }
+    });
+  }
+
+  return config;
 }
 
 function compactNumber(value) {

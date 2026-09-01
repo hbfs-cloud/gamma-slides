@@ -23,7 +23,7 @@ export function baseCSS(t) {
       background: radial-gradient(circle, rgba(${rgb(t.primary)}, 0.12), transparent 68%);
       filter: blur(4px);
     }
-    .reveal .slides section > * { position: relative; z-index: 1; }
+    .reveal .slides section > :not(.theme-stage) { position: relative; z-index: 1; }
     .reveal .slides section > h2 {
       position: relative; display: inline-block; width: fit-content;
       margin-left: auto; margin-right: auto;
@@ -52,7 +52,7 @@ export function baseCSS(t) {
     .title-meta i { width: 4px; height: 4px; border-radius: 50%; background: ${t.primary}; opacity: 0.8; }
     .empty-state {
       display: grid; place-items: center; min-height: 220px; width: 100%;
-      border: 1px dashed rgba(${rgb(t.textMuted)}, 0.3); border-radius: 14px;
+      border: 1px dashed rgba(${rgb(t.textMuted)}, 0.3); border-radius: 16px;
       color: ${t.textMuted}; font-size: 0.9em;
     }
 
@@ -72,7 +72,7 @@ export function baseCSS(t) {
     .metric-card {
       background: ${t.cardBg || t.surface};
       border: 1px solid ${t.cardBorder || `rgba(${rgb(t.primary)}, 0.15)`};
-      border-radius: 18px; padding: 24px 28px 26px;
+      border-radius: 16px; padding: 24px 28px 26px;
       text-align: left; position: relative; overflow: hidden;
       backdrop-filter: blur(8px);
     }
@@ -89,13 +89,10 @@ export function baseCSS(t) {
       border-color: rgba(${rgb(t.primary)}, 0.55);
       box-shadow: 0 14px 42px rgba(${rgb(t.primary)}, 0.13);
     }
-    .metric-card.metric-featured .value {
-      background: ${t.gradient}; background-clip: text; -webkit-background-clip: text;
-      color: transparent; -webkit-text-fill-color: transparent;
-    }
+    .metric-card.metric-featured .value { color:${t.primary}; }
     .metric-card .metric-icon {
       width: 34px; height: 34px; display: grid; place-items: center;
-      margin-bottom: 14px; border-radius: 10px; opacity: 1;
+      margin-bottom: 14px; border-radius: 9px; opacity: 1;
       background: rgba(${rgb(t.primary)}, 0.12); border: 1px solid rgba(${rgb(t.primary)}, 0.18);
     }
     .metric-card .label {
@@ -117,7 +114,7 @@ export function baseCSS(t) {
     /* ── Data Tables ── */
     .data-table {
       width: 100%; border-collapse: separate; border-spacing: 0;
-      font-size: 1.0em; border-radius: 10px; overflow: hidden;
+      font-size: 1.0em; border-radius: 9px; overflow: hidden;
       border: 1px solid ${t.tableBorder || `rgba(${rgb(t.primary)}, 0.15)`};
       font-family: '${t.fontBody || 'General Sans'}', system-ui, sans-serif;
     }
@@ -152,7 +149,7 @@ export function baseCSS(t) {
 
     /* ── Tags ── */
     .tag {
-      display: inline-block; padding: 3px 10px; border-radius: 5px;
+      display: inline-block; padding: 3px 10px; border-radius: 4px;
       font-size: 0.78em; font-weight: 600; letter-spacing: 0.02em;
       font-family: '${t.fontBody || 'General Sans'}', system-ui, sans-serif;
     }
@@ -166,7 +163,7 @@ export function baseCSS(t) {
     .timeline { position: relative; padding-left: 28px; text-align: left; margin: 22px auto 0; max-width: 760px; width: 100%; }
     .timeline-vertical::before {
       content: ''; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 2px;
-      background: ${t.gradient}; border-radius: 2px;
+      background: ${t.gradient}; border-radius: 4px;
     }
     .timeline-item { position: relative; margin-bottom: 18px; }
     .timeline-vertical .timeline-item::before {
@@ -189,7 +186,7 @@ export function baseCSS(t) {
       background: ${t.gradient}; opacity: 0.75;
     }
     .timeline-horizontal .timeline-item {
-      margin: 0; padding: 20px 18px; min-height: 150px; border-radius: 14px;
+      margin: 0; padding: 20px 18px; min-height: 150px; border-radius: 16px;
       background: ${t.cardBg || t.surface}; border: 1px solid ${t.cardBorder || `rgba(${rgb(t.primary)}, 0.15)`};
     }
     .timeline-horizontal .timeline-item::before {
@@ -203,7 +200,7 @@ export function baseCSS(t) {
     /* ── Highlight / Callout ── */
     .highlight-box {
       background: ${t.highlightBg || `linear-gradient(135deg, rgba(${rgb(t.primary)}, 0.1), rgba(${rgb(t.secondary)}, 0.06))`};
-      border-left: 3px solid ${t.primary}; border-radius: 0 10px 10px 0;
+      border-top: 1px solid ${t.primary}; border-radius: 0;
       padding: 16px 22px; text-align: left; margin: 10px 0;
       font-size: 1.05em; line-height: 1.5; color: ${t.textMuted};
     }
@@ -212,7 +209,7 @@ export function baseCSS(t) {
     /* ── Chart Container ── */
     .chart-container {
       background: ${isLight ? 'transparent' : `rgba(${rgb(t.surface || t.background)}, 0.5)`};
-      border-radius: 12px; padding: 4px;
+      border-radius: 13px; padding: 4px;
       border: 1px solid ${isLight ? 'transparent' : `rgba(${rgb(t.primary)}, 0.08)`};
       width: 100%; height: 100%; min-height: 200px;
     }
@@ -220,23 +217,48 @@ export function baseCSS(t) {
     /* ── Footer ── */
     .footer-bar {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
-      padding: 6px 32px; display: flex; justify-content: space-between; align-items: center;
+      min-height: 34px; padding: 0 32px; display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(0, 1.75fr) minmax(180px, 1fr);
+      gap: 24px; align-items: center;
       background: ${t.footerBg || t.background}; backdrop-filter: blur(14px);
       border-top: 1px solid rgba(${rgb(t.primary)}, 0.08);
       font-size: 0.5em; color: ${t.textMuted};
       font-family: '${t.fontBody || 'General Sans'}', system-ui, sans-serif;
       pointer-events: none;
     }
+    .brand-lockup, .brand-publication { display:flex; align-items:center; min-width:0; }
+    .brand-lockup { gap:8px; color:${t.text}; }
+    .brand-logo-image { display:block; width:auto; max-width:132px; height:20px; object-fit:contain; }
+    .brand-monogram {
+      display:inline-grid; place-items:center; width:18px; height:18px; flex:0 0 18px;
+      border:1px solid ${t.primary}; color:${t.primary};
+      font-family:'${t.fontMono || t.fontBody}',monospace; font-size:1em; font-weight:750; line-height:1;
+    }
+    .footer-wordmark {
+      overflow:hidden; color:${t.text}; font-weight:700; letter-spacing:-.01em;
+      text-overflow:ellipsis; white-space:nowrap;
+    }
+    .brand-deck-title {
+      overflow:hidden; color:${t.textMuted}; font-weight:520; letter-spacing:.01em;
+      text-align:center; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .brand-publication { justify-content:flex-end; gap:10px; overflow:hidden; text-align:right; }
+    .brand-classification {
+      color:${t.primary}; font-family:'${t.fontMono || t.fontBody}',monospace; font-weight:650;
+      letter-spacing:.08em; text-transform:uppercase; white-space:nowrap;
+    }
+    .brand-url { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
     /* ── Watermark ── */
     .watermark {
-      position: fixed; top: 15px; left: 24px;
-      font-size: 0.5em; font-weight: 700;
-      color: rgba(${rgb(t.textMuted)}, 0.18);
-      text-transform: uppercase; letter-spacing: 0.2em; z-index: 50;
-      font-family: '${t.fontBody || 'General Sans'}', system-ui, sans-serif;
+      position:fixed; top:16px; left:50%; right:auto; z-index:50; transform:translateX(-50%);
+      display:flex; align-items:center; gap:8px;
+      color:${t.textMuted}; opacity:.34;
+      font-family:'${t.fontMono || t.fontBody}',monospace; font-size:.44em; font-weight:650;
+      letter-spacing:.16em; line-height:1; text-transform:uppercase;
       pointer-events: none;
     }
+    .watermark::before { content:''; width:18px; height:1px; background:${t.primary}; }
 
     /* ── Comparison ── */
     .comparison-col {
@@ -281,13 +303,13 @@ export function baseCSS(t) {
     .bullet-item {
       display: flex; align-items: flex-start; gap: 12px;
       margin-bottom: 0; padding: 14px 16px;
-      background: ${t.cardBg || t.surface}; border-radius: 10px;
+      background: ${t.cardBg || t.surface}; border-radius: 9px;
       text-align: left;
-      border: 1px solid ${isLight ? t.cardBorder || '#E5E7EB' : 'rgba(255,255,255,0.04)'};
+      border: 1px solid ${isLight ? t.cardBorder || `rgba(${rgb(t.textMuted)}, 0.22)` : 'rgba(255,255,255,0.04)'};
     }
     .bullet-item .bullet-text { color: ${t.text}; font-size: 1.1em; line-height: 1.4; }
     .bullet-icon {
-      width: 30px; height: 30px; border-radius: 8px;
+      width: 30px; height: 30px; border-radius: 9px;
       background: rgba(${rgb(t.primary)}, 0.12);
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
@@ -305,7 +327,7 @@ export function baseCSS(t) {
     }
     .agenda-item {
       display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: start;
-      padding: 18px; text-align: left; border-radius: 15px;
+      padding: 18px; text-align: left; border-radius: 16px;
       background: ${t.cardBg || t.surface};
       border: 1px solid ${t.cardBorder || `rgba(${rgb(t.primary)}, 0.15)`};
     }

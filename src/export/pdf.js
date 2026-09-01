@@ -36,6 +36,7 @@ export async function exportPDF(opts) {
     const fileUrl = new URL(pathToFileURL(filePath));
     fileUrl.searchParams.set('print-pdf', '1');
     fileUrl.searchParams.set('gamma-export', '1');
+    if (opts.theme) fileUrl.searchParams.set('theme', String(opts.theme).toLowerCase());
     await page.goto(fileUrl.href, { waitUntil: 'networkidle0', timeout: 60000 });
 
     // Wait for Reveal.js to initialize
