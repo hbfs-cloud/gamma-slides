@@ -1,6 +1,7 @@
 import { spawnSync } from 'child_process';
+import { resolve } from 'path';
 
-const MCP_RUNNER = ['npx', '-y', 'github:hbfs-cloud/gamma-slides', 'mcp'];
+const MCP_RUNNER = [process.execPath, resolve(process.argv[1]), 'mcp'];
 
 function available(command) {
   const result = spawnSync(command, ['--version'], { encoding: 'utf-8' });

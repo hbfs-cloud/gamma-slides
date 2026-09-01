@@ -7,10 +7,10 @@ An editorial presentation and local video engine for finance, markets, economics
 With Node.js installed, run this once from any directory:
 
 ```bash
-npx -y github:hbfs-cloud/gamma-slides setup
+npm install --global github:hbfs-cloud/gamma-slides && gamma-slides setup
 ```
 
-It connects the same Gamma Slides MCP server to every installed client it finds: Claude Code and/or Codex. There is no local path to maintain; both clients start the current GitHub version through `npx`. Verify it with `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list`.
+It installs the current GitHub version and connects its MCP server to every installed client it finds: Claude Code and/or Codex. The registered command uses the stable global installation path, not this clone. Verify it with `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list`.
 
 Then ask the agent in plain language:
 
@@ -26,24 +26,22 @@ These are the five commands to remember:
 
 ```bash
 # Create a public presentation, or update it later with the same slug
-npx -y github:hbfs-cloud/gamma-slides deploy -f deck.yaml --slug fy26-plan
+gamma-slides deploy -f deck.yaml --slug fy26-plan
 
 # List every managed presentation and URL
-npx -y github:hbfs-cloud/gamma-slides sites
+gamma-slides sites
 
 # Download the editable source
-npx -y github:hbfs-cloud/gamma-slides pull fy26-plan -o deck.yaml
+gamma-slides pull fy26-plan -o deck.yaml
 
 # Open it
-npx -y github:hbfs-cloud/gamma-slides open-site fy26-plan
+gamma-slides open-site fy26-plan
 
 # Delete it after explicit confirmation
-npx -y github:hbfs-cloud/gamma-slides delete-site fy26-plan --yes
+gamma-slides delete-site fy26-plan --yes
 ```
 
 `deploy` is both Create and Update: the slug is the stable ID and URL. `pull` is Read. `delete-site` removes the source and the next Pages build removes the public route. For a fork or another Pages repository, append `--repo owner/repository`; configure that default for both agents with `setup --repo owner/repository`.
-
-If you prefer a short local command, install once with `npm install -g github:hbfs-cloud/gamma-slides`, then replace the long `npx ...` prefix above with `gamma-slides`.
 
 See [the complete Claude/Codex and CRUD guide](docs/LLM_QUICKSTART.md).
 

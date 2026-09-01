@@ -5,13 +5,13 @@ Gamma Slides gives Claude Code and Codex the same MCP tools: schema and flagship
 ## One line, once
 
 ```bash
-npx -y github:hbfs-cloud/gamma-slides setup
+npm install --global github:hbfs-cloud/gamma-slides && gamma-slides setup
 ```
 
-This detects installed Claude Code and Codex clients and registers a user-scoped `gamma-slides` MCP server in each. The registered command is itself portable:
+This installs the current GitHub version, detects installed Claude Code and Codex clients, and registers a user-scoped `gamma-slides` MCP server in each. The registered command uses the absolute path of the global installation, so it does not depend on a project clone or download dependencies on every session.
 
 ```text
-npx -y github:hbfs-cloud/gamma-slides mcp
+/absolute/global/node /absolute/global/gamma-slides/bin/gamma-slides.js mcp
 ```
 
 The setup therefore has no clone-specific absolute path. Run `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list` to check it.
@@ -19,8 +19,8 @@ The setup therefore has no clone-specific absolute path. Run `/mcp`, `claude mcp
 To connect only one client or use your own fork as the deployment library:
 
 ```bash
-npx -y github:hbfs-cloud/gamma-slides setup --client claude
-npx -y github:hbfs-cloud/gamma-slides setup --client codex --repo your-user/gamma-slides
+gamma-slides setup --client claude
+gamma-slides setup --client codex --repo your-user/gamma-slides
 ```
 
 The committed `.mcp.json` and `.codex/config.toml` remain useful when working inside this repository, but they are no longer the primary installation path.
@@ -49,17 +49,17 @@ gh auth login
 Create and Update use the same command and slug:
 
 ```bash
-npx -y github:hbfs-cloud/gamma-slides deploy -f deck.yaml --slug fy26-plan
-npx -y github:hbfs-cloud/gamma-slides deploy -f revised-deck.yaml --slug fy26-plan
+gamma-slides deploy -f deck.yaml --slug fy26-plan
+gamma-slides deploy -f revised-deck.yaml --slug fy26-plan
 ```
 
 Read, list, open, and delete:
 
 ```bash
-npx -y github:hbfs-cloud/gamma-slides sites
-npx -y github:hbfs-cloud/gamma-slides pull fy26-plan -o deck.yaml
-npx -y github:hbfs-cloud/gamma-slides open-site fy26-plan
-npx -y github:hbfs-cloud/gamma-slides delete-site fy26-plan --yes
+gamma-slides sites
+gamma-slides pull fy26-plan -o deck.yaml
+gamma-slides open-site fy26-plan
+gamma-slides delete-site fy26-plan --yes
 ```
 
 Each source lives under `presentations/<slug>.yaml` in GitHub. Every create, update, or delete triggers `.github/workflows/pages.yml`, which rebuilds the public library and the stable route `https://OWNER.github.io/REPOSITORY/<slug>/`.
