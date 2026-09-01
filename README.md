@@ -68,18 +68,18 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 ## Presenter Studio
 
-Interactive decks open with a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, recording, or terminal; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
+Interactive decks open with a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, or recording; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. When a localhost preview is explicitly started with `--terminal`, the wizard and toolbar also expose the local terminal. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
 
 | Shortcut | Action |
 | --- | --- |
-| `T` | Open the embedded presentation terminal |
+| `T` | Open the local terminal when preview was started with `--terminal` |
 | `C` | Toggle the camera picture-in-picture |
 | `R` | Open recording setup or focus the active recording controls |
 | `P` | Pause or resume the active recording |
 | `S` | Open speaker notes |
 | `F` | Toggle fullscreen |
 
-The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. It is intentionally disabled in a static `file://` export. Start preview with `--terminal` to enable it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
+The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. The terminal is not shown in static files or public deployments because they have no local shell bridge. Start a localhost preview with `--terminal` to expose it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
 
 ## Quality assurance and exports
 

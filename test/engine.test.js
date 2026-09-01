@@ -150,9 +150,13 @@ slides:
   assert.match(html, /gamma-terminal-frame-v2/);
   assert.match(html, /gamma-terminal-history-v1/);
   assert.match(html, /gamma-terminal-docked/);
-  assert.doesNotMatch(html, /terminalTool\.disabled=true/);
-  assert.match(html, /Slide commands ready/);
-  assert.match(html, /else if\(mode==='terminal'\)state\.options\.terminal/);
+  assert.match(html, /if\(bridge\.enabled\)toolbarTools\.unshift/);
+  assert.match(html, /else\{terminalMode\.remove\(\);terminal\.hidden=true/);
+  assert.match(html, /if\(!bridge\.enabled\)return;const visible/);
+  assert.match(html, /else if\(mode==='terminal'&&bridge\.enabled\)state\.options\.terminal/);
+  assert.match(html, /event\.key\.toLowerCase\(\)==='t'&&bridge\.enabled/);
+  assert.match(html, /classList\.add\('gamma-studio-modal-open'\)/);
+  assert.match(html, /themeChooser\?\.classList\.remove\('is-visible'\)/);
   assert.match(html, /System commands require the localhost bridge/);
   assert.match(html, /else await runShellCommand/);
   assert.match(html, /data-testid="studio-request-media"/);
