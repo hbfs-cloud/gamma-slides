@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import yaml from 'js-yaml';
 import { validateDeck } from '../schema/validate.js';
 import { defaults, resolveVoice } from './defaults.js';
+import { compileDiagram } from '../engine/archify.js';
 
 export function loadDeck(pathOrString) {
   const candidate = String(pathOrString);
@@ -36,6 +37,7 @@ export function parseDeck(raw) {
   }
 
   // Apply defaults (deep merge)
+  for (const slide of deck.slides) if (slide.layout === 'diagram') compileDiagram(slide.diagram);
   const hasExplicitVoice = Boolean(deck.narration?.voice);
   deck = applyDefaults(deck);
 

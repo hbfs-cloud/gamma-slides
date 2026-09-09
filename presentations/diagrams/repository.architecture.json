@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Du dépôt au navigateur",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "viewBox": [
+      1100,
+      500
+    ],
+    "views": [
+      {
+        "id": "authoring",
+        "label": "Décrire et vérifier",
+        "focus": [
+          "agent",
+          "mcp",
+          "loader"
+        ],
+        "note": "Le LLM produit le contenu. Le schéma contrôle sa structure."
+      },
+      {
+        "id": "rendering",
+        "label": "Composer le document",
+        "focus": [
+          "loader",
+          "renderer",
+          "html"
+        ],
+        "note": "Le moteur assemble les slides, polices et bibliothèques embarquées."
+      },
+      {
+        "id": "presenting",
+        "label": "Présenter et enregistrer",
+        "focus": [
+          "html",
+          "browser",
+          "studio"
+        ],
+        "note": "Reveal orchestre les slides ; le Studio capture le média local."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "agent",
+      "type": "external",
+      "label": "Agent LLM",
+      "sublabel": "Contenu et analyse",
+      "pos": [
+        40,
+        90
+      ],
+      "size": [
+        160,
+        72
+      ]
+    },
+    {
+      "id": "mcp",
+      "type": "backend",
+      "label": "Serveur MCP",
+      "sublabel": "Outils de génération",
+      "pos": [
+        300,
+        90
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "loader",
+      "type": "security",
+      "label": "Chargement",
+      "sublabel": "YAML / JSON + schéma",
+      "pos": [
+        590,
+        90
+      ],
+      "size": [
+        190,
+        72
+      ]
+    },
+    {
+      "id": "renderer",
+      "type": "backend",
+      "label": "Moteur de slides",
+      "sublabel": "Layouts et graphiques",
+      "pos": [
+        590,
+        330
+      ],
+      "size": [
+        190,
+        72
+      ]
+    },
+    {
+      "id": "html",
+      "type": "database",
+      "label": "HTML autonome",
+      "sublabel": "Polices et runtime inclus",
+      "pos": [
+        300,
+        330
+      ],
+      "size": [
+        190,
+        72
+      ]
+    },
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "Navigateur",
+      "sublabel": "Reveal · SVG · GPU",
+      "pos": [
+        40,
+        330
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "studio",
+      "type": "frontend",
+      "label": "Presenter Studio",
+      "sublabel": "Caméra, micro, capture",
+      "pos": [
+        870,
+        330
+      ],
+      "size": [
+        190,
+        72
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "agent-mcp",
+      "from": "agent",
+      "to": "mcp",
+      "label": "MCP",
+      "variant": "emphasis"
+    },
+    {
+      "id": "mcp-loader",
+      "from": "mcp",
+      "to": "loader",
+      "label": "deck",
+      "variant": "emphasis"
+    },
+    {
+      "id": "loader-renderer",
+      "from": "loader",
+      "to": "renderer",
+      "label": "valider",
+      "variant": "emphasis",
+      "labelAt": [
+        685,
+        246
+      ]
+    },
+    {
+      "id": "renderer-html",
+      "from": "renderer",
+      "to": "html",
+      "label": "compiler",
+      "variant": "emphasis"
+    },
+    {
+      "id": "html-browser",
+      "from": "html",
+      "to": "browser",
+      "label": "ouvrir",
+      "variant": "emphasis"
+    },
+    {
+      "id": "renderer-studio",
+      "from": "renderer",
+      "to": "studio",
+      "label": "embarquer"
+    }
+  ]
+}

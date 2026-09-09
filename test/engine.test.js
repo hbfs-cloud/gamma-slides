@@ -152,9 +152,9 @@ slides:
   assert.match(html, /gamma-terminal-docked/);
   assert.match(html, /if\(bridge\.enabled\)toolbarTools\.unshift/);
   assert.match(html, /else\{terminalMode\.remove\(\);terminal\.hidden=true/);
-  assert.match(html, /if\(!bridge\.enabled\)return;const visible/);
+  assert.match(html, /gamma:terminal-request/);
   assert.match(html, /else if\(mode==='terminal'&&bridge\.enabled\)state\.options\.terminal/);
-  assert.match(html, /event\.key\.toLowerCase\(\)==='t'&&bridge\.enabled/);
+  assert.match(html, /event\.key\.toLowerCase\(\)==='t'/);
   assert.match(html, /classList\.add\('gamma-studio-modal-open'\)/);
   assert.match(html, /themeChooser\?\.classList\.remove\('is-visible'\)/);
   assert.match(html, /System commands require the localhost bridge/);

@@ -14,8 +14,10 @@ import { renderAgenda } from './agenda.js';
 import { renderDashboard } from './dashboard.js';
 import { escapeHtml, safeUrl } from '../html.js';
 import { experienceCompositionHTML } from '../components/experience-compositions.js';
+import { renderDiagram } from '../components/archify-slide.js';
 
 const layouts = {
+  diagram: renderDiagram,
   title: renderTitle,
   closing: renderClosing,
   metrics: renderMetrics,

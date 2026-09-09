@@ -8,11 +8,11 @@ web
 
 ## Users
 
-The primary user is a finance and economic content creator preparing data-dense presentations for recorded video, executive review, and YouTube publishing. The working session combines analysis, narration, camera, microphone, slides, and occasional local shell commands.
+The primary users include technical architects, sales engineers and engineering decision makers presenting Git repositories, alongside the finance and economic content creator preparing data-dense presentations for recorded video, executive review, and YouTube publishing. The working session combines analysis, narration, camera, microphone, slides, and occasional local shell commands.
 
 ## Product Purpose
 
-Gamma Slides turns declarative financial reporting into presentation-ready interactive decks and high-quality local video. Success means that complex economic, accounting, market, and trading information is legible, credible, visually memorable, and practical to present without assembling several separate tools.
+Gamma Slides turns declarative technical reviews and financial reporting into presentation-ready interactive decks and high-quality local video. Success means that complex economic, accounting, market, and trading information is legible, credible, visually memorable, and practical to present without assembling several separate tools.
 
 ## Positioning
 
@@ -54,3 +54,7 @@ The product name is Gamma Slides. The experience must feel top-tier, professiona
 ## Accessibility & Inclusion
 
 Keyboard operation, visible focus, high contrast, reduced-motion support, semantic labels, and permission-safe recovery states are required throughout Presenter Studio.
+
+## Repository presentation workflow
+
+A local or remote Git repository can become a complete technical review through the repo-presentation skill or `repo-present` CLI. The LLM authors architecture, workflows, personas, dated statistics, target users, peer comparisons, strengths, limits, security, enterprise requirements, production readiness and observability from pinned evidence. Archify supplies five native animated SVG diagram types. Unknowns remain explicit. The CLI builds and verifies the HTML before exposing a loopback server or publishing to a dedicated GitHub Pages destination. Browser receipts and hashes are proof of executed checks, not aesthetic scores or production certifications.

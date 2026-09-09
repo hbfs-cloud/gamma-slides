@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Les données deviennent un document autonome",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "main",
+        "label": "Parcours principal",
+        "focus": [
+          "yaml",
+          "deck",
+          "html",
+          "screen"
+        ],
+        "note": "Les données deviennent un document autonome"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "label": "Entrées"
+    },
+    {
+      "label": "Modèle validé"
+    },
+    {
+      "label": "Document"
+    },
+    {
+      "label": "Sorties"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "yaml",
+      "type": "external",
+      "label": "YAML / JSON",
+      "stage": 0,
+      "row": 0,
+      "height": 64
+    },
+    {
+      "id": "assets",
+      "type": "database",
+      "label": "Polices + JS",
+      "stage": 0,
+      "row": 1,
+      "height": 64
+    },
+    {
+      "id": "deck",
+      "type": "backend",
+      "label": "Deck chargé",
+      "stage": 1,
+      "row": 0,
+      "height": 64
+    },
+    {
+      "id": "html",
+      "type": "backend",
+      "label": "HTML embarqué",
+      "stage": 2,
+      "row": 0,
+      "height": 64
+    },
+    {
+      "id": "screen",
+      "type": "frontend",
+      "label": "Présentation",
+      "stage": 3,
+      "row": 0,
+      "height": 64
+    },
+    {
+      "id": "frames",
+      "type": "database",
+      "label": "Images / vidéo",
+      "stage": 3,
+      "row": 1,
+      "height": 64
+    }
+  ],
+  "flows": [
+    {
+      "from": "yaml",
+      "to": "deck",
+      "label": "parsing + AJV"
+    },
+    {
+      "from": "deck",
+      "to": "html",
+      "label": "composition"
+    },
+    {
+      "from": "assets",
+      "to": "html",
+      "label": "runtime",
+      "route": "bottom-channel"
+    },
+    {
+      "from": "html",
+      "to": "screen",
+      "label": "navigateur",
+      "route": "straight"
+    },
+    {
+      "from": "html",
+      "to": "frames",
+      "label": "capture"
+    }
+  ]
+}

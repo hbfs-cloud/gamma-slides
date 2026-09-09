@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Un appel MCP, un artefact HTML",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "main",
+        "label": "Parcours principal",
+        "focus": [
+          "agent",
+          "mcp",
+          "loader",
+          "renderer",
+          "disk"
+        ],
+        "note": "Un appel MCP, un artefact HTML"
+      }
+    ],
+    "column_fit": "spread",
+    "viewBox": [
+      1000,
+      600
+    ]
+  },
+  "participants": [
+    {
+      "id": "agent",
+      "type": "external",
+      "label": "Agent LLM"
+    },
+    {
+      "id": "mcp",
+      "type": "backend",
+      "label": "MCP"
+    },
+    {
+      "id": "loader",
+      "type": "security",
+      "label": "Loader"
+    },
+    {
+      "id": "renderer",
+      "type": "backend",
+      "label": "Renderer"
+    },
+    {
+      "id": "disk",
+      "type": "database",
+      "label": "Fichier"
+    }
+  ],
+  "messages": [
+    {
+      "id": "message-0",
+      "from": "agent",
+      "to": "mcp",
+      "label": "gamma_generate_deck",
+      "y": 160,
+      "variant": "emphasis"
+    },
+    {
+      "id": "message-1",
+      "from": "mcp",
+      "to": "loader",
+      "label": "loadDeck(spec)",
+      "y": 192,
+      "variant": "emphasis"
+    },
+    {
+      "id": "message-2",
+      "from": "loader",
+      "to": "mcp",
+      "label": "deck validé",
+      "y": 224,
+      "variant": "return"
+    },
+    {
+      "id": "message-3",
+      "from": "mcp",
+      "to": "renderer",
+      "label": "renderDeck(deck)",
+      "y": 256,
+      "variant": "emphasis"
+    },
+    {
+      "id": "message-4",
+      "from": "renderer",
+      "to": "mcp",
+      "label": "document HTML",
+      "y": 288,
+      "variant": "return"
+    },
+    {
+      "id": "message-5",
+      "from": "mcp",
+      "to": "disk",
+      "label": "writeFileSync",
+      "y": 320,
+      "variant": "emphasis"
+    },
+    {
+      "id": "message-6",
+      "from": "mcp",
+      "to": "agent",
+      "label": "chemin de sortie",
+      "y": 352,
+      "variant": "return"
+    }
+  ]
+}

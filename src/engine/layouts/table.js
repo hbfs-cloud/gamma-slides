@@ -54,7 +54,7 @@ export function renderTable(slide, theme, deck) {
   }
 
   return `
-    ${slide.title ? `<h2 style="color: ${theme.text};">${escapeHtml(slide.title)}</h2>` : ''}
+    ${slide.title ? `<h2 style="color: var(--gamma-text, ${theme.text});">${escapeHtml(slide.title)}</h2>` : ''}
     ${slide.subtitle ? `<p class="slide-subtitle">${escapeHtml(slide.subtitle)}</p>` : ''}
     <div style="margin-top: 14px; width: 100%;">
       <table class="data-table" data-columns="${spec.headers.length}" aria-label="${tableLabel}">

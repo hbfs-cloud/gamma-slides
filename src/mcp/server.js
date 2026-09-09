@@ -1,3 +1,5 @@
+import { inspectRepository, repositoryReviewGuide } from '../repository/inspect.js';
+import { archifyRoot, diagramTypes } from '../engine/archify.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -66,6 +68,30 @@ server.registerPrompt('create_presentation', {
       text: `Create a premium ${slide_count}-slide Gamma Slides presentation in ${language}.\n\nTopic and facts:\n${topic}\n\nAudience: ${audience}\nObjective: ${objective}\n\nBuild a clear narrative arc, select the theme whose purpose matches the audience, vary layouts intentionally, use native ECharts for quantitative claims, keep copy concise, and include discreet branding plus useful narration. Do not invent facts. Read the schema and flagship resource as needed, validate the complete YAML, fix every validation error, then build the static site. Return the generated index.html path and a short narrative summary.`,
     },
   }],
+}));
+
+server.registerResource('repository-guide', 'gamma://guides/repository', {
+  title: 'Source-backed repository presentations', mimeType: 'text/plain',
+}, async uri => ({ contents: [{ uri: uri.href, mimeType: 'text/plain', text: repositoryReviewGuide }] }));
+
+server.registerTool('gamma_inspect_repository', {
+  description: 'Read a pinned GitHub or local Git snapshot without executing repository code. Return dated metadata, a bounded source sample, provenance and limitations.',
+  inputSchema: { repository: z.string().optional(), ref: z.string().optional(), local_path: z.string().optional(), max_files: z.number().int().min(1).max(24).optional() },
+  annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+}, async ({ repository, ref, local_path, max_files }) => {
+  try { return { content: [{ type:'text', text:JSON.stringify(await inspectRepository({repository,ref,localPath:local_path,maxFiles:max_files}),null,2) }] }; }
+  catch(error) { return {isError:true,content:[{type:'text',text:error.message}]}; }
+});
+
+server.tool('gamma_archify_schema', 'Get the real Archify common and typed schemas for native diagram slides.', {
+  type: z.enum(diagramTypes),
+}, async ({type}) => ({ content: [{type:'text',text:JSON.stringify({common:JSON.parse(readFileSync(resolve(archifyRoot,'schemas/common.schema.json'),'utf8')),diagram:JSON.parse(readFileSync(resolve(archifyRoot,`schemas/${type}.schema.json`),'utf8'))})}] }));
+
+server.registerPrompt('create_repository_presentation', {
+  title: 'Present a GitHub repository to a technical decision committee',
+  argsSchema: { repository:z.string(), audience:z.string().optional(), objective:z.string().optional(), language:z.string().optional(), peers:z.string().optional() },
+}, ({repository,audience='Engineering leadership and enterprise buyers',objective='Assess adoption and the validation work needed',language='fr',peers=''}) => ({
+  messages:[{role:'user',content:{type:'text',text:`Prepare a complete 18–24 slide presentation in ${language} about ${repository}. Audience: ${audience}. Decision: ${objective}. Suggested peers: ${peers || 'select relevant primary sources'}. Start with gamma_inspect_repository; read additional source when the bounded sample cannot support a claim. Retrieve gamma://schema/deck and gamma_archify_schema for each diagram type. ${repositoryReviewGuide} Validate using gamma_validate_deck, generate with gamma_generate_deck, then test the resulting file in a browser at desktop and mobile sizes. Return the HTML and its editable source, distinguishing checks actually run from recommendations.`}}],
 }));
 
 // Tool: Generate HTML deck

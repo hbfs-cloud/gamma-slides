@@ -1,3 +1,5 @@
+import { actionOrbitCSS, actionOrbitJS } from './components/action-orbit.js';
+import { presenterMotionJS } from './components/presenter-motion.js';
 import { cinematicCSS } from './components/cinematic-comparison.js';
 import { cinematicJS } from './components/cinematic-runtime.js';
 import { getCinematicThree } from './runtime-assets.js';
@@ -18,6 +20,7 @@ import { experienceCSS, experienceHTML, experienceJS, adaptExperienceChart } fro
 import { threeExplorationCSS, threeExplorationJS } from './components/three-exploration.js';
 import { revenueSculptureCSS, revenueSculptureJS } from './components/revenue-sculpture.js';
 import { experienceCompositionsCSS } from './components/experience-compositions.js';
+import { archifySlideCSS, archifySlideJS } from './components/archify-slide.js';
 
 function hexToRgb(hex) {
   if (!hex || !hex.startsWith('#')) return '128, 128, 128';
@@ -154,7 +157,9 @@ export function renderDeck(deck) {
     ${presenterStudioCSS(defaultTheme)}
   </style>
   <style id="gamma-theme-runtime">${themeCssSets[defaultTheme.id || deck.theme]}</style>
+  <style>${actionOrbitCSS()}</style>
   ${deck.meta?.experience ? `<style data-gamma-experience>${experienceCSS()}${experienceCompositionsCSS()}</style>` : ''}
+  ${slidesHtml.includes('class="archify-slide"') ? `<style data-gamma-archify>${archifySlideCSS()}</style>` : ''}
 </head>
 <body class="theme-${escapeHtml(deck.theme)} aesthetic-${escapeHtml(defaultTheme.aesthetic || 'standard')}${slidesHtml.includes('cinema-stage') ? ' gamma-cinema-deck' : ''}${deck.meta?.presentation === 'direct' ? ' gamma-direct-deck' : ''}${deck.meta?.experience ? ' gamma-experience' : ''}" data-presentation-theme="${escapeHtml(defaultTheme.id || deck.theme)}">
   ${directionContract}
@@ -206,7 +211,10 @@ ${slidesHtml}
       initCharts(gammaExportMode ? document : Reveal.getCurrentSlide());
       if (!gammaExportMode && !Reveal.getCurrentSlide()?.querySelector('.cinema-stage')) initPresenterStudio();
       ${deck.meta?.experience ? experienceJS(deck) : ''}
+      ${actionOrbitJS()}
+      ${deck.meta?.motion === 'presenter' ? presenterMotionJS() : ''}
       ${slidesHtml.includes('revenue-sculpture') ? 'initRevenueSculptures();' : ''}
+      ${slidesHtml.includes('class="archify-slide"') ? archifySlideJS() : ''}
       await waitForGammaAssets();
       window.__GAMMA_READY__ = true;
     });

@@ -1,5 +1,8 @@
 #!/usr/bin/env node
+import { publishRepositoryPresentation } from '../src/repository/publish.js';
+import { presentRepository, serveRepositoryPresentation } from '../src/repository/present.js';
 
+import { inspectRepository } from '../src/repository/inspect.js';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { loadDeckFile } from '../src/loader/index.js';
@@ -28,6 +31,44 @@ program
   .name('gamma-slides')
   .description(chalk.hex('#2563EB')('gamma-slides') + ' — Professional presentation & video generator')
   .version('2.0.0');
+
+program.command('repo-present')
+  .description('Inspect → author with Codex → build → browser proof → serve a complete repository presentation')
+  .option('--repo <owner/repo>', 'Remote GitHub repository')
+  .option('--local <path>', 'Local committed Git repository')
+  .option('--ref <revision>', 'Revision to analyze')
+  .option('--deck <path>', 'Use a source-backed authored deck instead of invoking Codex')
+  .option('--language <code>', 'Presentation language', 'fr')
+  .option('--audience <text>', 'Audience and decision context')
+  .option('-o, --output <directory>', 'Presentation, evidence and QA directory', './output/repository-presentation')
+  .option('--port <number>', 'Local server port', '4173')
+  .option('--publish <owner/repo>', 'Publish tested HTML to a dedicated GitHub Pages repository (requires gh auth)')
+  .option('--slug <name>', 'GitHub Pages subdirectory', 'repository-review')
+  .option('--terminal', 'Enable the local shell in the presentation menu')
+  .option('--build-only', 'Generate and verify without starting the local server')
+  .action(async opts => {
+    try {
+      const result=await presentRepository(opts);
+      console.log(`Verified: ${result.indexPath}\nProof: ${result.proof}`);
+      if(opts.publish){const published=await publishRepositoryPresentation({siteDir:result.siteDir,repo:opts.publish,slug:opts.slug});console.log(`Live HTML verified: ${published.url}`);}
+      else if(!opts.buildOnly){const live=await serveRepositoryPresentation(result.siteDir,{port:Number(opts.port),terminal:Boolean(opts.terminal)});console.log(`Presentation: ${live.url}\nProof: ${live.url}proof.json\nStop with Ctrl+C`);}
+    } catch(error) {console.error(error.message);process.exitCode=1;}
+  });
+
+program.command('repo-brief')
+  .description('Collect a pinned, source-backed repository dossier for LLM presentation authoring')
+  .option('--repo <owner/repo>', 'GitHub repository or HTTPS URL')
+  .option('--local <path>', 'Read committed files from a local checkout')
+  .option('--ref <revision>', 'Branch, tag or commit (default: HEAD/default branch)')
+  .option('--max-files <count>', 'Evidence sample size, 1–24', '16')
+  .option('-o, --output <path>', 'Dossier JSON', './output/repository-brief.json')
+  .action(async opts => {
+    try {
+      const brief=await inspectRepository({repository:opts.repo,localPath:opts.local,ref:opts.ref,maxFiles:Number(opts.maxFiles)});
+      const path=resolve(opts.output);mkdirSync(dirname(path),{recursive:true});writeFileSync(path,JSON.stringify(brief,null,2)+'\n');
+      console.log(`Repository dossier: ${path}\nRevision: ${brief.revision} · ${brief.evidence.length} sampled files`);
+    } catch(error) { console.error(error.message); process.exitCode=1; }
+  });
 
 program
   .command('generate')
@@ -250,9 +291,12 @@ program
   .command('serve')
   .alias('s')
   .description('Preview a presentation in browser')
+  .option('--terminal', 'Enable the local shell when serving a verified directory')
+  .option('-d, --directory <path>', 'Serve a verified repository site on loopback')
   .option('-f, --file <path>', 'HTML file to serve', './output/presentation.html')
   .option('-p, --port <port>', 'Port', '3000')
   .action(async (opts) => {
+    if(opts.directory){try{const live=await serveRepositoryPresentation(opts.directory,{port:Number(opts.port),terminal:Boolean(opts.terminal)});console.log(live.url);}catch(error){console.error(error.message);process.exitCode=1;}return;}
     const { servePresentation } = await import('../src/server.js');
     await servePresentation(opts);
   });

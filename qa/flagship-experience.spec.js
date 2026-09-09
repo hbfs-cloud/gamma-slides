@@ -1,3 +1,4 @@
+import { orbitAction, orbitBranch } from './orbit-helpers.js';
 import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -156,7 +157,7 @@ for (const [device, viewport] of [['desktop', { width: 1440, height: 900 }], ['m
 
   test(`light appearance keeps opening, KPI, and decisions readable on ${device}`, async ({ page }) => {
     await open(page);
-    await page.locator('[data-experience-theme]').click();
+    await orbitBranch(page,'theme');
     await expect(page.locator('#gamma-theme-chooser')).toBeVisible();
     await page.locator('[data-presentation-theme="analyst-proof"]').click();
     await expect(page.locator('#gamma-theme-chooser')).not.toBeVisible();
@@ -181,7 +182,7 @@ for (const [device, viewport] of [['desktop', { width: 1440, height: 900 }], ['m
     await destination.click();
     await expect(page.locator('section.present')).toHaveAttribute('data-slide-number', String(index + 1).padStart(2, '0'));
     await expect(page.locator('#experience-index')).not.toBeVisible();
-    await page.locator('[data-experience-studio]').click();
+    await orbitBranch(page,'studio');
     await expect(page.locator('#gamma-studio-wizard')).toBeVisible();
     // This is an explicit Studio visit after verifying a clean startup.
     await page.locator('[data-testid="studio-skip"]').click();

@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Enregistrer puis décider de sauvegarder",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "main",
+        "label": "Parcours principal",
+        "focus": [
+          "ready",
+          "recording",
+          "finalizing",
+          "review"
+        ],
+        "note": "Enregistrer puis décider de sauvegarder"
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Session"
+    },
+    {
+      "id": "events",
+      "label": "Interruption"
+    }
+  ],
+  "states": [
+    {
+      "id": "ready",
+      "type": "start",
+      "label": "Prêt",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "recording",
+      "type": "active",
+      "label": "Enregistrement",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "paused",
+      "type": "waiting",
+      "label": "Pause",
+      "lane": "events",
+      "col": 0
+    },
+    {
+      "id": "finalizing",
+      "type": "active",
+      "label": "Finalisation",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "review",
+      "type": "success",
+      "label": "Revue locale",
+      "lane": "main",
+      "col": 3
+    }
+  ],
+  "transitions": [
+    {
+      "from": "recording",
+      "to": "paused",
+      "label": "pause",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "route": "drop",
+      "via": [
+        [
+          248,
+          250
+        ],
+        [
+          310,
+          250
+        ],
+        [
+          310,
+          307
+        ]
+      ]
+    },
+    {
+      "from": "paused",
+      "to": "recording",
+      "label": "reprendre",
+      "fromSide": "top",
+      "toSide": "right",
+      "via": [
+        [
+          402,
+          218
+        ],
+        [
+          320,
+          218
+        ],
+        [
+          320,
+          157
+        ]
+      ],
+      "labelAt": [
+        360,
+        205
+      ]
+    },
+    {
+      "from": "paused",
+      "to": "finalizing",
+      "label": "terminer",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [
+        [
+          485,
+          307
+        ],
+        [
+          485,
+          230
+        ],
+        [
+          402,
+          230
+        ]
+      ],
+      "labelAt": [
+        490,
+        250
+      ]
+    }
+  ]
+}

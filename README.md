@@ -1,5 +1,8 @@
 # Gamma Slides
 
+Présenter un dépôt Git : `$repo-presentation` dans le LLM, ou `gamma-slides repo-present --repo owner/repo` / `--local /repo`. Le parcours livre un deck technique complet, des diagrammes Archify animés, un serveur local et une preuve des contrôles desktop/mobile. Publication des octets vérifiés avec `--publish owner/pages-repo`. [Guide et commandes](docs/repository-presentations.md).
+
+
 An editorial presentation and local video engine for finance, markets, economics, and board reporting. Decks are authored in YAML or JSON, rendered as self-contained interactive HTML, exported as vector-friendly PDF, and recorded or narrated into high-quality local video masters.
 
 ## One-line setup for Claude and Codex
@@ -69,7 +72,7 @@ node bin/gamma-slides.js generate -f presentations/flagship.yaml -o output/flags
 npx playwright test qa/flagship-*.spec.js
 ```
 
-`meta.experience: true` adds persistent chapter navigation and full-size mobile reading, with scrollable slides and tables that expose every column as labeled values. `meta.chapters` accepts one-based `start`, `label`, and optional `detail`. The flagship opens directly; Appearance and Studio remain available in the top bar. GPU resources stop off-slide, data dialogs retain exact values, and print/export uses SVG. Browser evidence is written to `output/flagship-review/`.
+`meta.experience: true` adds persistent chapter navigation and full-size mobile reading, with scrollable slides and tables that expose every column as labeled values. `meta.chapters` accepts one-based `start`, `label`, and optional `detail`. The flagship opens directly; Appearance, Studio, Terminal, fullscreen, and slide settings remain available through the round M menu (mouse hover, tap, or keyboard). GPU resources stop off-slide, data dialogs retain exact values, and print/export uses SVG. Browser evidence is written to `output/flagship-review/`.
 
 Experience slides can use a content-led `composition`: `brief`, `scorecard`, `ledger`, `evidence`, `feature`, `register`, `sequence`, `roadmap`, `chapter`, or `decisions`. The flagship applies these to twenty slides. Scorecards and decision summaries keep every principal signal visible on the first phone screen; controls share a compact band; roadmap rows separate deliverables from release criteria. `table.emphasis_rows` names one-based evidence rows. On phones, the continuation control has its own space below the content.
 
@@ -79,18 +82,18 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 ## Presenter Studio
 
-Interactive decks open with a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, or recording; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. When a localhost preview is explicitly started with `--terminal`, the wizard and toolbar also expose the local terminal. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
+M → Studio opens a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, or recording; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. When a localhost preview is explicitly started with `--terminal`, M → Terminal enables shell commands in the console. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
 
 | Shortcut | Action |
 | --- | --- |
-| `T` | Open the local terminal when preview was started with `--terminal` |
+| `T` | Open the Studio Console after Studio is initialized; shell commands require `--terminal` |
 | `C` | Toggle the camera picture-in-picture |
 | `R` | Open recording setup or focus the active recording controls |
 | `P` | Pause or resume the active recording |
 | `S` | Open speaker notes |
 | `F` | Toggle fullscreen |
 
-The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. The terminal is not shown in static files or public deployments because they have no local shell bridge. Start a localhost preview with `--terminal` to expose it; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. The bridge is bound to localhost and protected by a per-session token.
+The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. M → Terminal is available in static files and public deployments for presentation commands. Start a localhost preview with `--terminal` to enable shell commands; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. For repository reviews, enable the same local shell with `repo-present --terminal` or `serve --directory output/revue/site --terminal`. That server binds to `127.0.0.1`, validates Host/Origin and a per-session token, and discovers the bridge without changing the verified HTML. Static files and Pages never provide a remote shell.
 
 ## Quality assurance and exports
 
@@ -173,7 +176,7 @@ All example company, market, financial, and forecast data in the flagship deck i
 
 ## Cinematic revenue comparison
 
-`presentations/cinematic-revenue.yaml` is the complete immersive demonstration: an authored opening, two proportional revenue volumes, a segment-by-segment reveal, a profit-quality scene, and a decision close. The leading contribution owns the second state. On phones, the opening and close use their own composition, while every 3D scene remains annotated and interactive. Theme and recording tools sit behind **Outils**; the presentation opens directly.
+`presentations/cinematic-revenue.yaml` is the complete immersive demonstration: an authored opening, two proportional revenue volumes, a segment-by-segment reveal, a profit-quality scene, and a decision close. The leading contribution owns the second state. On phones, the opening and close use their own composition, while every 3D scene remains annotated and interactive. Theme and recording tools open through the shared **M** menu; the presentation opens directly.
 
 ```bash
 node bin/gamma-slides.js generate -f presentations/cinematic-revenue.yaml -o output/cinematic-revenue.html

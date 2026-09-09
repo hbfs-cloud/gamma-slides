@@ -1,5 +1,12 @@
 // Subset of Lucide icons as inline SVG
 const icons = {
+  'palette': '<circle cx="12" cy="12" r="9"/><path d="M12 3v18"/>',
+  'settings': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 14h6"/>',
+  'sliders': '<path d="M4 7h9m4 0h3M4 17h3m4 0h9M13 4v6M7 14v6"/>',
+  'scan': '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',
+  'expand': '<path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m12 1v5h-5m5 0-6-6"/>',
+  'close': '<path d="m6 6 12 12M6 18 18 6"/>',
+  'play': '<path d="m8 4 12 8-12 8Z"/>',
   'rotate-left': '<path d="M3 10a9 9 0 1 1 2.6 8.4M3 4v6h6"/>',
   'rotate-right': '<path d="M21 10a9 9 0 1 0-2.6 8.4M21 4v6h-6"/>',
   'plus': '<path d="M12 5v14M5 12h14"/>',

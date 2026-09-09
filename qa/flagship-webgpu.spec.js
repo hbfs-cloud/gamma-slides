@@ -1,3 +1,4 @@
+import { orbitAction, orbitBranch } from './orbit-helpers.js';
 import { test, expect } from '@playwright/test';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -118,7 +119,7 @@ async function verifyDepth(page, device) {
   await page.waitForTimeout(100);
   const initialReadability = await depthReadability(root);
   await page.screenshot({ path: resolve(output, `${device}-3d-21.png`) });
-  if (device === 'mobile') await scene.locator('[data-depth-action="right"]').tap();
+  if (device === 'mobile') await (await orbitAction(page,scene.locator('[data-depth-action="right"]'))).tap();
   else {
     const box = await scene.locator('canvas').boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
@@ -133,7 +134,7 @@ async function verifyDepth(page, device) {
   writeFileSync(resolve(output, `${device}-3d-manifest.json`), JSON.stringify({ initial: initialReadability, turned: turnedReadability }, null, 2));
   expect(initialReadability.overlaps, 'Initial 3D point labels must clear other labels, ticks, axes, and spheres').toEqual([]);
   expect(turnedReadability.overlaps, 'Rotated 3D point labels must clear other labels, ticks, axes, and spheres').toEqual([]);
-  await scene.locator('[data-depth-action="reset"]').click();
+  await (await orbitAction(page,scene.locator('[data-depth-action="reset"]'))).click();
   await page.waitForTimeout(100);
   const draws = await root.evaluate(el => el._threeExploration.draws);
   await page.waitForTimeout(400);
@@ -147,7 +148,7 @@ async function verifyDepth(page, device) {
     }));
   });
   expect(overlaps, '3D point labels must remain distinguishable').toEqual([]);
-  await root.locator('.d3-depth-toggle').click();
+  await (await orbitAction(page,root.locator('.d3-depth-toggle'))).click();
   await expect(root).toHaveAttribute('data-d3-view', '2d');
   await expect(root).toHaveAttribute('data-d3-renderer', /pixijs-(webgpu|webgl)/);
   await expect(scene).not.toBeVisible();
@@ -165,7 +166,7 @@ test('four business scenes render their data with Pixi GPU and D3 geometry', asy
   const report = [];
   for (const index of gpuSlides) {
     const root = await visit(page, index);
-    if (await root.getAttribute('data-d3-view') === '3d') await root.locator('.d3-depth-toggle').click();
+    if (await root.getAttribute('data-d3-view') === '3d') await (await orbitAction(page,root.locator('.d3-depth-toggle'))).click();
     await expect(root).toHaveAttribute('data-d3-renderer', /pixijs-(webgpu|webgl)/);
     const proof = await evidence(root);
     report.push({ slide: index + 1, ...proof });
@@ -186,7 +187,7 @@ test('four business scenes render their data with Pixi GPU and D3 geometry', asy
     await expect(page.locator('section.present')).toHaveAttribute('data-slide-number', String(index + 1).padStart(2, '0'));
     await page.keyboard.press('Escape');
     await expect(readout).toHaveText(hint);
-    await root.locator('[data-d3-action="values"]').click();
+    await (await orbitAction(page,root.locator('[data-d3-action="values"]'))).click();
     await expect(root.locator('.d3-webgpu-data')).toBeVisible();
     await verifySourceValues(root, index);
     await page.keyboard.press('Escape');
@@ -219,11 +220,11 @@ test('unavailable GPU leaves complete readable SVG and data fallbacks', async ({
   await open(page);
   for (const index of gpuSlides) {
     const root = await visit(page, index);
-    if (await root.getAttribute('data-d3-view') === '3d') await root.locator('.d3-depth-toggle').click();
+    if (await root.getAttribute('data-d3-view') === '3d') await (await orbitAction(page,root.locator('.d3-depth-toggle'))).click();
     await expect(root).toHaveAttribute('data-d3-renderer', 'svg');
     await expect(root.locator('.d3-webgpu-plot svg').first()).toBeVisible();
     expect(await root.locator('.d3-webgpu-plot svg path,.d3-webgpu-plot svg rect,.d3-webgpu-plot svg circle').count()).toBeGreaterThan(3);
-    await root.locator('[data-d3-action="values"]').click();
+    await (await orbitAction(page,root.locator('[data-d3-action="values"]'))).click();
     await expect(root.locator('.d3-webgpu-data')).toBeVisible();
     await verifySourceValues(root, index);
     await page.keyboard.press('Escape');
@@ -249,7 +250,7 @@ test('losing the actual GPU device restores the data view', async ({ page }) => 
   });
   await expect(root).toHaveAttribute('data-d3-renderer', 'svg');
   await expect(root.locator('.d3-webgpu-plot svg')).toBeVisible();
-  await root.locator('[data-d3-action="values"]').click();
+  await (await orbitAction(page,root.locator('[data-d3-action="values"]'))).click();
   await verifySourceValues(root, gpuSlides[0]);
 });
 

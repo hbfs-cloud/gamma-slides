@@ -94,7 +94,8 @@ export function experienceCompositionsCSS() { return `
   body.gamma-experience section[data-composition="chapter"] .experience-cover p,body.gamma-experience section[data-composition="chapter"] > .slide-source { color:var(--gamma-bg); }
   body.gamma-experience .reveal .slides section[data-composition="chapter"] > .slide-source { color:var(--gamma-bg); }
   body.gamma-experience section[data-composition="chapter"] .experience-cover-metrics { display:none; }
-  body.gamma-experience .experience-chapter-map > a { display:grid; grid-template-columns:1fr 24px; text-decoration:none; padding:22px 0; border-top:1px solid currentColor; color:var(--gamma-bg); }
+  body.gamma-experience .experience-chapter-map > a { display:grid; grid-template-columns:1fr 24px; text-decoration:none; padding:22px 0; border-top:1px solid currentColor; color:var(--gamma-text); }
+  body.gamma-experience section[data-composition="chapter"] .experience-chapter-map > a { color:var(--gamma-bg); }
   body.gamma-experience .experience-chapter-map b { color:inherit; font-size:2.75rem; }
   body.gamma-experience .experience-chapter-map span { grid-column:1; color:inherit; }
   .experience-chapter-map svg { width:24px; height:24px; grid-column:2; grid-row:1 / 3; align-self:center; stroke:currentColor; fill:none; stroke-width:1.5; transition:transform .25s ease; }

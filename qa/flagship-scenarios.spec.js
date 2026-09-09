@@ -1,3 +1,4 @@
+import { orbitAction, orbitBranch } from './orbit-helpers.js';
 import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -63,10 +64,10 @@ for (const device of ['desktop', 'mobile']) {
       await page.waitForTimeout(1000);
       const parallel = slide.locator('[data-chart-type="parallel"]');
       const chart = parallel.locator('[id^="chart_"]');
-      const buttons = parallel.getByRole('button');
+      const buttons = parallel.locator('[data-chart-legend]');
       await expect(buttons).toHaveText(names);
       for (const name of names) {
-        const button = parallel.getByRole('button', { name, exact: true });
+        const button = await orbitAction(page,parallel.locator('[data-chart-legend]').filter({hasText:name}));
         await expect(button).toHaveAttribute('aria-pressed', 'true');
         expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44);
       }
@@ -97,7 +98,7 @@ for (const device of ['desktop', 'mobile']) {
       }
       const captures = await capture(page, device);
 
-      const first = parallel.getByRole('button', { name: names[0], exact: true });
+      const first = await orbitAction(page,parallel.locator('[data-chart-legend]').filter({hasText:names[0]}));
       if (device === 'mobile') await first.tap();
       else await first.click();
       await expect(first).toHaveAttribute('aria-pressed', 'false');
@@ -113,7 +114,7 @@ for (const device of ['desktop', 'mobile']) {
       await expect(slide).toHaveAttribute('data-slide-number', '33');
       await expect.poll(async () => (await state(chart)).active).toEqual(names);
       for (const name of names.slice(1)) {
-        const button = parallel.getByRole('button', { name, exact: true });
+        const button = await orbitAction(page,parallel.locator('[data-chart-legend]').filter({hasText:name}));
         if (device === 'mobile') await button.tap();
         else await button.click();
       }
@@ -128,10 +129,10 @@ for (const device of ['desktop', 'mobile']) {
 
       await page.setViewportSize(device === 'desktop' ? { width: 390, height: 844 } : { width: 1440, height: 900 });
       await expect.poll(async () => (await state(chart)).active).toEqual([names[0]]);
-      await page.locator('[data-experience-theme]').click();
+      await orbitBranch(page,'theme');
       await page.locator('[data-presentation-theme="analyst-proof"]').click();
       await expect.poll(async () => (await state(chart)).active).toEqual([names[0]]);
-      for (const name of names) await expect(parallel.getByRole('button', { name, exact: true })).toHaveAttribute('aria-pressed', String(name === names[0]));
+      for (const name of names) await expect(parallel.locator('[data-chart-legend]').filter({hasText:name})).toHaveAttribute('aria-pressed', String(name === names[0]));
       expect((await state(chart)).series.map(series => series.data[0])).toEqual(profile.data.rows);
       expect(errors).toEqual([]);
       writeFileSync(resolve(output, `${device}-report.json`), JSON.stringify({ before, hidden, isolated, axes, captures, errors }, null, 2));

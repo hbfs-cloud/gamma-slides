@@ -1,3 +1,4 @@
+import { orbitAction, orbitBranch } from './orbit-helpers.js';
 import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -72,7 +73,7 @@ test('revenue SVG export bypasses GPU, and native print disposes then resumes th
   }
   const root = await open(page);
   await expect(root).toHaveAttribute('data-revenue-state', 'ready');
-  await root.locator('[data-revenue-segment="1"]').click();
+  await (await orbitAction(page,root.locator('[data-revenue-segment="1"]'))).click();
   const liveReadout = await root.locator('figcaption').innerText();
   await page.emulateMedia({ media:'print' });
   await expect(root.locator('canvas')).toHaveCount(0);
@@ -99,7 +100,7 @@ test('revenue GPU geometry keeps its common amount scale and sharp pixels at des
 test('revenue segment Space activation keeps the presentation on slide one', async ({ page }) => {
   const root = await open(page);
   const platforms = root.locator('[data-revenue-segment="1"]');
-  await platforms.focus(); await page.keyboard.press('Space');
+  await (await orbitAction(page,platforms)).focus(); await page.keyboard.press('Space');
   expect(await page.evaluate(() => Reveal.getIndices().h)).toBe(0);
   await expect(platforms).toHaveAttribute('aria-pressed', 'true');
   await expect(root.locator('figcaption')).toContainText('Platforms: $2.6M added');
@@ -118,7 +119,7 @@ test.describe('revenue touch rendering', () => {
     const root = await open(page);
     const proof = await gpuProof(root);
     const platforms = root.locator('[data-revenue-segment="1"]');
-    await platforms.tap();
+    await (await orbitAction(page,platforms)).tap();
     await expect(platforms).toHaveAttribute('aria-pressed', 'true');
     await expect(root.locator('figcaption')).toContainText('Platforms: $2.6M added');
     await expect.poll(() => root.evaluate(el => el._revenueSculpture.frame)).toBe(0);

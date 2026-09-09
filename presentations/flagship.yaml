@@ -4,6 +4,7 @@ meta:
   title: "FY2025 Board Review & FY2026 Operating Plan"
   presentation: direct
   experience: true
+  motion: presenter
   chapters:
     - { start: 1, label: "The readout", detail: "The year in three signals" }
     - { start: 4, label: "Performance", detail: "Growth, margin, and customer economics" }

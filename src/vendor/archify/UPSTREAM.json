@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/tt-a1i/archify",
+  "revision": "10722002bb8777ecb639d93c49586fae4adf3ae4",
+  "version": "2.17.0-dev.1",
+  "license": "MIT",
+  "vendored": "2026-09-09",
+  "modifiedFiles": [],
+  "scope": "Renderer, validators, viewer, CLI, schemas and authoring references. Upstream tests and generated examples omitted."
+}

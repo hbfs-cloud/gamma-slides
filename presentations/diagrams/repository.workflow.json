@@ -1,0 +1,101 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Générer, contrôler, présenter",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "main",
+        "label": "Parcours principal",
+        "focus": [
+          "author",
+          "schema",
+          "render",
+          "inspect",
+          "present"
+        ],
+        "note": "Générer, contrôler, présenter"
+      }
+    ],
+    "viewBox": [
+      1100,
+      500
+    ]
+  },
+  "lanes": [
+    {
+      "id": "authoring",
+      "label": "Auteur et moteur"
+    },
+    {
+      "id": "review",
+      "label": "Validation humaine"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "author",
+      "lane": "authoring",
+      "col": 0,
+      "type": "external",
+      "label": "Décrire le deck",
+      "width": 160
+    },
+    {
+      "id": "schema",
+      "lane": "authoring",
+      "col": 1,
+      "type": "security",
+      "label": "Valider le schéma",
+      "width": 160
+    },
+    {
+      "id": "render",
+      "lane": "authoring",
+      "col": 2,
+      "type": "backend",
+      "label": "Générer le HTML",
+      "width": 160
+    },
+    {
+      "id": "inspect",
+      "lane": "review",
+      "col": 2,
+      "type": "frontend",
+      "label": "Examiner le rendu",
+      "width": 160
+    },
+    {
+      "id": "present",
+      "lane": "review",
+      "col": 3,
+      "type": "frontend",
+      "label": "Présenter",
+      "width": 160
+    }
+  ],
+  "edges": [
+    {
+      "from": "author",
+      "to": "schema",
+      "label": "YAML"
+    },
+    {
+      "from": "schema",
+      "to": "render",
+      "label": "valide"
+    },
+    {
+      "from": "render",
+      "to": "inspect",
+      "label": "HTML"
+    },
+    {
+      "from": "inspect",
+      "to": "present",
+      "label": "accepté"
+    }
+  ]
+}

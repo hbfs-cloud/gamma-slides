@@ -11,6 +11,8 @@
       "properties": {
         "title": { "type": "string" },
         "presentation": { "type": "string", "enum": ["direct", "studio"] },
+        "motion": { "type": "string", "enum": ["presenter", "none"] },
+        "repository_review": { "type": "object", "required": ["repository", "revision", "collected_at"], "properties": { "repository": { "type": ["string", "null"] }, "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" }, "collected_at": { "type": "string", "format": "date-time" } }, "additionalProperties": false },
         "experience": { "type": "boolean", "description": "Responsive editorial deck with persistent chapter navigation." },
         "chapters": {
           "type": "array",
@@ -107,13 +109,15 @@
     }
   },
   "definitions": {
+    "diagramSpec": {"type":"object","required":["type","spec"],"additionalProperties":false,"properties":{"type":{"enum":["architecture","workflow","sequence","dataflow","lifecycle"]},"spec":{"type":"object","required":["schema_version","diagram_type","meta"],"description":"Typed Archify JSON IR. Validated by the pinned Archify renderer with all showcase checks during deck loading."}}},
     "slide": {
+      "allOf": [{"if":{"properties":{"layout":{"const":"diagram"}},"required":["layout"]},"then":{"required":["diagram"]}}],
       "type": "object",
       "required": ["layout"],
       "properties": {
         "layout": {
           "type": "string",
-          "enum": ["title", "closing", "agenda", "dashboard", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank"]
+          "enum": ["title", "closing", "agenda", "dashboard", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank", "diagram"]
         },
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -152,7 +156,8 @@
         "author": { "type": "string" },
         "role": { "type": "string" },
         "contact": { "type": "object" },
-        "html": { "type": "string" }
+        "html": { "type": "string" },
+        "diagram": { "$ref": "#/definitions/diagramSpec" }
       }
     },
     "background": {

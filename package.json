@@ -1,7 +1,7 @@
 {
   "name": "gamma-slides",
   "version": "2.0.0",
-  "description": "Professional presentation & video generator — declarative YAML/JSON decks, narrated videos, LLM-pilotable via MCP",
+  "description": "Professional presentation & video generator \u2014 declarative YAML/JSON decks, narrated videos, LLM-pilotable via MCP",
   "type": "module",
   "bin": {
     "gamma-slides": "./bin/gamma-slides.js"
@@ -14,11 +14,13 @@
     "docker-entrypoint.sh",
     "Dockerfile",
     "docker-compose.yml",
-    "README.md"
+    "README.md",
+    ".agents/skills/repo-presentation/",
+    "docs/repository-presentations.md"
   ],
   "scripts": {
     "start": "node bin/gamma-slides.js",
-    "test": "node --test",
+    "test": "node --test test/*.test.js",
     "test:browser": "playwright test",
     "mcp": "node src/mcp/server.js"
   },

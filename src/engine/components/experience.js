@@ -1,3 +1,4 @@
+import { getIcon } from './icons.js';
 import { escapeHtml } from '../html.js';
 import { renderSource } from './slide-header.js';
 import { revenueSculptureHTML } from './revenue-sculpture.js';
@@ -6,18 +7,20 @@ const arrow = direction => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d=
 
 export function experienceTitleHTML(slide, deck) {
   const first = deck.slides[0] === slide;
-  const illustration = first ? revenueSculptureHTML(deck) : `<div class="experience-chapter-map"><a href="#/28"><b>Price</b><span>Tape · volume · momentum</span>${arrow('right')}</a><a href="#/29"><b>Exposure</b><span>Liquidity · concentration · tails</span>${arrow('right')}</a><a href="#/35"><b>Outlook</b><span>Capital flows · rates · scenarios</span>${arrow('right')}</a></div>`;
+  const fr = deck.meta?.language?.startsWith('fr');
+  const chapterMap = `<div class="experience-chapter-map">${(deck.meta?.chapters || []).filter(chapter=>chapter.start>1).slice(0,3).map(chapter=>`<a href="#/${chapter.start-1}"><b>${escapeHtml(chapter.label)}</b><span>${fr?'Explorer le chapitre':'Explore chapter'} ${String(chapter.start).padStart(2,'0')}</span>${arrow('right')}</a>`).join('')}</div>`;
+  const illustration = first ? (revenueSculptureHTML(deck) || chapterMap) : deck.meta?.tags?.includes('repository') ? chapterMap : `<div class="experience-chapter-map"><a href="#/28"><b>Price</b><span>Tape · volume · momentum</span>${arrow('right')}</a><a href="#/29"><b>Exposure</b><span>Liquidity · concentration · tails</span>${arrow('right')}</a><a href="#/35"><b>Outlook</b><span>Capital flows · rates · scenarios</span>${arrow('right')}</a></div>`;
   const metrics = (slide.metrics || []).map(m => `<div><strong>${escapeHtml(m.value)}</strong><span>${escapeHtml(m.label)}</span></div>`).join('');
-  return `<div class="experience-cover"><div class="experience-cover-copy"><h1>${escapeHtml(slide.title)}</h1><p>${escapeHtml(slide.subtitle || '')}</p>${first ? '<a class="experience-start" href="#/1">Explore the review ' + arrow('right') + '</a>' : '<p class="experience-chapter-note">A separate market laboratory.<br>Every series in this chapter is illustrative.</p>'}</div>${illustration}</div><div class="experience-cover-metrics">${metrics}</div>${renderSource(slide, { context: false })}`;
+  return `<div class="experience-cover"><div class="experience-cover-copy"><h1>${escapeHtml(slide.title)}</h1><p>${escapeHtml(slide.subtitle || '')}</p>${first ? '<a class="experience-start" href="#/1">' + (fr ? 'Explorer la présentation ' : 'Explore the review ') + arrow('right') + '</a>' : `<p class="experience-chapter-note">${escapeHtml(slide.footnote || '')}</p>`}</div>${illustration}</div><div class="experience-cover-metrics">${metrics}</div>${renderSource(slide, { context: false })}`;
 }
 
 export function experienceHTML(deck) {
   const chapters = deck.meta?.chapters || [{ start: 1, label: 'Presentation' }];
   const options = chapters.map(chapter => `<button type="button" data-experience-jump="${chapter.start - 1}"><span>${String(chapter.start).padStart(2, '0')}</span>${escapeHtml(chapter.label)}</button>`).join('');
-  return `<header class="experience-masthead"><a href="#/" aria-label="First slide"><b>${escapeHtml(deck.meta?.company || 'Gamma Slides')}</b><span>${escapeHtml(deck.meta?.subtitle || '')}</span></a><div class="experience-tools"><button type="button" data-experience-theme>Appearance</button><button type="button" data-experience-studio>Studio</button></div></header>
+  return `<header class="experience-masthead"><a href="#/" aria-label="First slide"><b>${escapeHtml(deck.meta?.company || 'Gamma Slides')}</b><span>${escapeHtml(deck.meta?.subtitle || '')}</span></a><div class="experience-tools"><button type="button" data-experience-terminal aria-label="Ouvrir le terminal" title="Terminal">${getIcon('terminal','currentColor',20)}</button><button type="button" data-experience-theme>Appearance</button><button type="button" data-experience-studio>Studio</button></div></header>
     <nav class="experience-nav" aria-label="Presentation"><button type="button" data-experience-prev aria-label="Previous slide">${arrow('left')}</button><button type="button" data-experience-index aria-expanded="false" aria-controls="experience-index"><span data-experience-chapter></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9h12M6 15h12"/></svg></button><span data-experience-count aria-live="polite"></span><button type="button" data-experience-next aria-label="Next slide">${arrow('right')}</button><div class="experience-progress" aria-hidden="true"><i></i></div></nav>
     <button class="experience-more" data-experience-scroll type="button" hidden>More below <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-6-6 6 6 6-6"/></svg></button>
-    <div class="experience-index" id="experience-index" hidden><div><h2>Explore the review</h2><button type="button" data-experience-close aria-label="Close chapter index">Close</button></div>${options}<small>Illustrative data · Arrow keys navigate · Esc closes this index</small></div>`;
+    <div class="experience-index" id="experience-index" hidden><div><h2>Explore the review</h2><button type="button" data-experience-close aria-label="Close chapter index">Close</button></div>${options}<small>${escapeHtml(deck.meta?.tags?.includes('repository') ? 'Sources liées à une révision' : 'Illustrative data')} · Arrow keys navigate · Esc closes this index</small></div>`;
 }
 
 export function experienceCSS() { return `
@@ -237,6 +240,7 @@ function initExperience(chapters) {
   index.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') { close(); indexButton.focus(); } });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !index.hidden) { close(); indexButton.focus(); } });
   document.querySelector('[data-experience-theme]').addEventListener('click', () => { if (typeof openThemeChooser === 'function') openThemeChooser(); });
+  document.querySelector('[data-experience-terminal]').addEventListener('click',()=>{initPresenterStudio();window.dispatchEvent(new Event('gamma:terminal-request'));});
   document.querySelector('[data-experience-studio]').addEventListener('click', () => { initPresenterStudio(); document.querySelector('[data-testid="studio-setup"]')?.click(); });
   Reveal.on('slidechanged', ({ currentSlide }) => { currentSlide.scrollTop = 0; close(); update(); requestAnimationFrame(updateScroll); });
   update();
