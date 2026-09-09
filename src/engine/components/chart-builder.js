@@ -41,7 +41,7 @@ function scenarioNames(rows) {
 }
 
 export function getRegisteredCharts(theme) {
-  return chartRegistry.map(({ id, chartSpec }) => ({ id, config: applyPresentationChartGrammar(buildEChartsConfig(chartSpec, theme), theme) }));
+  return chartRegistry.map(({ id, chartSpec }) => ({ id, config: chartSpec.type==='echarts'?buildEChartsConfig(chartSpec,theme):applyPresentationChartGrammar(buildEChartsConfig(chartSpec, theme), theme) }));
 }
 
 function applyPresentationChartGrammar(config, theme) {
@@ -296,6 +296,7 @@ function safeTreemapItem(item) {
 }
 
 export function buildEChartsConfig(chartSpec, theme) {
+  if(chartSpec.type==='echarts')return {backgroundColor:'transparent',color:[theme.primary,theme.secondary,theme.positive,theme.negative],textStyle:{color:theme.text,fontFamily:'Archivo'},...structuredClone(chartSpec.options?.echarts||{})};
   const resolveColor = (c) => {
     if (!c) return theme.primary;
     if (c === 'primary') return theme.primary;

@@ -1,5 +1,6 @@
+import {embedDeckAssets} from './assets.js';
 import { existsSync, readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
 import yaml from 'js-yaml';
 import { validateDeck } from '../schema/validate.js';
 import { defaults, resolveVoice } from './defaults.js';
@@ -12,11 +13,11 @@ export function loadDeck(pathOrString) {
     ? readFileSync(resolvedPath, 'utf-8')
     : candidate;
 
-  return parseDeck(raw);
+  return !candidate.includes('\n')&&existsSync(resolvedPath)?embedDeckAssets(parseDeck(raw),dirname(resolvedPath)):parseDeck(raw);
 }
 
 export function loadDeckFile(filePath) {
-  return parseDeck(readFileSync(resolve(filePath), 'utf-8'));
+  return embedDeckAssets(parseDeck(readFileSync(resolve(filePath), 'utf-8')),dirname(resolve(filePath)));
 }
 
 export function parseDeck(raw) {

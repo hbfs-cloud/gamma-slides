@@ -87,7 +87,8 @@ function archifyFrameBridge() {
   const api = window.Archify;
   const svg = document.querySelector('.diagram-container > svg');
   if (!api || !svg) return;
-  const send = () => { mobileCamera(api.guidedViews?.beat()?.nodeId || (typeof api.focus?.active?.()==='string'?api.focus.active():null));parent.postMessage({ channel, event:'state', playing:api.guidedViews?.isPlaying(), view:api.guidedViews?.active(), beat:api.guidedViews?.beat(), node:api.focus?.active?.(), scale:api.view?.state?.().scale }, '*'); };
+  const send = () => { mobileCamera(api.guidedViews?.beat()?.nodeId || (typeof api.focus?.active?.()==='string'?api.focus.active():null));parent.postMessage({ channel, event:'state', playing:api.guidedViews?.isPlaying(), view:api.guidedViews?.active(), beat:api.guidedViews?.beat(), node:api.focus?.active?.(), scale:api.view?.state?.().scale,camera:api.view?.state?.(),svg:window.__gammaBroadcast?svg.outerHTML:undefined }, '*'); };
+  setInterval(()=>{if(window.__gammaBroadcast)send();},100);
   const overview=svg.getAttribute('viewBox');let cameraNode=null;
   window.addEventListener('resize',()=>{cameraNode=null;if(innerWidth>720)svg.setAttribute('viewBox',overview);send();});
   function mobileCamera(id) {
@@ -102,6 +103,8 @@ function archifyFrameBridge() {
   window.addEventListener('message', event => {
     if (event.source !== parent || event.data?.channel !== channel) return;
     const { action, value } = event.data;
+    if(action==='broadcast'){window.__gammaBroadcast=Boolean(value);send();return;}
+    if(action==='snapshot'){api.guidedViews?.pause();api.motionGovernor?.pause();const copy=new DOMParser().parseFromString(value,'image/svg+xml').documentElement;for(const attr of copy.attributes)svg.setAttribute(attr.name,attr.value);svg.innerHTML=copy.innerHTML;return;}
     if (action === 'theme') {
       if(root.dataset.theme!==(value.mode||'dark'))api.theme?.toggle();
       for (const key of ['bg','text','text-muted']) if (typeof value?.[key] === 'string' && CSS.supports('color',value[key])) root.style.setProperty('--'+key,value[key]);
@@ -141,7 +144,7 @@ function initArchifySlides(bridgeSource) {
     frame.srcdoc=state.root.querySelector('.archify-document').content.textContent.replace('</head>',`<style>${css}</style></head>`).replace('</body>',`<script>(${bridgeSource})()<\/script></body>`);
     state.frame=frame;state.root.querySelector('.archify-canvas').append(frame);
   };
-  const sync=()=>states.forEach(state=>{if(!exported&&!printing.matches&&!document.hidden&&state.section===Reveal.getCurrentSlide())mount(state);else destroy(state);});
+  const sync=()=>states.forEach(state=>{if(!exported&&!printing.matches&&(!document.hidden||new URLSearchParams(location.search).has('gamma-clean'))&&state.section===Reveal.getCurrentSlide())mount(state);else destroy(state);});
   const dialog=document.createElement('dialog');dialog.className='archify-fullscreen';dialog.setAttribute('aria-label','Archify');
   const heading=document.createElement('h2');dialog.append(heading);document.body.append(dialog);let expanded=null,placeholder=null,returnFocus=null;
   const closeExpanded=()=>{

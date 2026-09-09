@@ -143,6 +143,16 @@ typography:
     fontWeight: 600
     lineHeight: 1
     letterSpacing: "0.08em"
+  studio-live-control:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
+    lineHeight: 1.4
+  studio-visual-display:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "64px"
+    fontWeight: 600
+    lineHeight: 1.05
   studio-title:
     fontFamily: "Instrument Sans, system-ui, sans-serif"
     fontSize: "25px"
@@ -407,9 +417,9 @@ The shared M hub is a 56px circle; its five branches are 48px circles on a 288px
 
 - **Purpose:** One recurring entry point across the 21-slide repository review and 38-slide flagship. Five labeled SVG branches expose Explorer, Full screen, Terminal, Appearance, and Studio (localized in French). Explorer is disabled when the current slide has no settings.
 - **Interaction:** Mouse hover opens the radial menu on desktop; click or tap toggles it. Tab reaches M, Enter/Space activates, and arrows move among available branches. Explorer opens a native button/select panel; arrows and Home/End move among its buttons. Escape closes the menu and returns focus to M. Outside presses and slide changes dismiss it. Existing slide swipe, direct 3D dragging, and plot keyboard controls stay direct.
-- **Placement:** Desktop hub: right 28px, bottom 80px. At 900px and below: right 20px, bottom 116px, above the continuation/navigation rails. The 340px Explorer panel uses a viewport-bounded width and scrolling height, right 28px (16px on phones), bottom 152px, and 20px padding.
+- **Placement:** Desktop hub: right 28px, bottom 80px. At 900px and below: right 16px, bottom 116px, above the continuation/navigation rails. On opening, M moves to the center of a 288px circle; the five actions share one radius and 72° spacing. The diameter and bottom clearance shrink on short viewports so the complete menu stays visible. The 340px Explorer panel uses a viewport-bounded width and scrolling height, right 28px (16px on phones), bottom 152px, and 20px padding.
 - **Style:** The resting hub reverses theme text/background; expanded state uses the primary accent. The radial field and panel use the theme background and muted border. Archivo carries 14px control labels, 12px branch labels, 20px hub/panel titles, and 16px selects. Focus is a 2px primary outline with a 4px offset. Titles explicitly use `--gamma-text` across all three themes.
-- **Motion and evidence:** Canopy/branch transforms take 220/240ms with `cubic-bezier(.16,1,.3,1)` and 140ms opacity; reduced motion uses 100ms opacity only. Controls are mirrored from their original handlers; static legends, axis keys, values, and readouts remain on the slide. The menu hides for theme/setup dialogs, recording review/countdown, print, and export.
+- **Motion and evidence:** Canopy/branch transforms take 220/240ms with `cubic-bezier(.16,1,.3,1)` and 140ms opacity; reduced motion removes the transforms’ transitions. Controls are mirrored from their original handlers; static legends, axis keys, values, and readouts remain on the slide. The menu hides for theme/setup dialogs, recording review/countdown, print, and export.
 
 ### Theme Selector
 
@@ -529,3 +539,11 @@ This is an explicit exception to flat chart surfaces: Three.js provides bounded 
 - **Don't** turn charts, metrics, or narrative regions into generic rounded shadow cards.
 - **Don't** use gradients, glass, glow, or emoji as substitutes for authored financial structure.
 - **Don't** allow a theme switcher, console, or camera frame to cover decision-critical slide content.
+
+### Presenter Studio · live and clean output (September 2026)
+
+The operator uses the round M menu. Studio is a compact, non-modal equipment panel; it advances through one primary action (open audience window, select source, record). Composition and demonstration settings use disclosure. Recording transport stays visible outside the panel and follows Archify into fullscreen. Camera handles are 44px targets with keyboard alternatives.
+
+The audience window is a separate rendering surface: no studio, menu, navigation hints, camera handles, notices or recording controls. Terminal and browser content enter it only through an exclusive explicit broadcast selection. Canvas and SVG output mirror the operator's rendered data. Video dimensions stay constant during a take; source aspect is the default.
+
+Live controls use Archivo 14px/1.4, source selects 16px, status/help 12px/1.5 and panel headings 24px/1.2. Reuse the documented studio palette, 9px control radius and 16px panel radius. These operational steps extend the earlier compact toolbar typography to readable live and touch controls. Visual-story slides use a responsive 32–64px heading, 16px icon labels, 12px attribution, and a two-column image/copy composition that stacks on mobile.

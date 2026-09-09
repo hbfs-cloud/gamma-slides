@@ -75,7 +75,7 @@ function initCinematicComparisons() {
     if(gammaExportMode||printing||contextLost||!T){fallback(root);return;}
     try{
       if(!renderer){
-        renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});
+        renderer=new T.WebGLRenderer({preserveDrawingBuffer:true,alpha:true,antialias:true,powerPreference:'low-power'});
         renderer.setClearColor(0,0);renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
         renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;
         renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;stop();if(active)fallback(active.root);});

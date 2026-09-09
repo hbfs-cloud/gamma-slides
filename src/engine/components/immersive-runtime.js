@@ -49,7 +49,7 @@ function initImmersiveCharts() {
   function initGPU() {
     if (gl || failed) return Boolean(gl);
     try {
-      gl = canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'low-power' });
+      gl = canvas.getContext('webgl', { preserveDrawingBuffer:true, alpha: true, antialias: true, powerPreference: 'low-power' });
       if (!gl) throw new Error('WebGL unavailable');
       const shader = (type, source) => {
         const result = gl.createShader(type); gl.shaderSource(result, source); gl.compileShader(result);

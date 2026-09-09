@@ -183,9 +183,8 @@ for (const [device, viewport] of [['desktop', { width: 1440, height: 900 }], ['m
     await expect(page.locator('section.present')).toHaveAttribute('data-slide-number', String(index + 1).padStart(2, '0'));
     await expect(page.locator('#experience-index')).not.toBeVisible();
     await orbitBranch(page,'studio');
-    await expect(page.locator('#gamma-studio-wizard')).toBeVisible();
-    // This is an explicit Studio visit after verifying a clean startup.
-    await page.locator('[data-testid="studio-skip"]').click();
+    await expect(page.locator('.gamma-live-panel')).toBeVisible();
+    await page.locator('[data-live=close]').click();
     await expect(page.locator('#gamma-studio-wizard')).not.toBeVisible();
     await expect(page.locator('section.present')).toHaveAttribute('data-slide-number', String(index + 1).padStart(2, '0'));
   });

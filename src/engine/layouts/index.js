@@ -1,3 +1,5 @@
+import {renderVisual} from './visual.js';
+import {renderMedia,renderBrowser} from './media.js';
 import { renderTitle } from './title.js';
 import { renderClosing } from './closing.js';
 import { renderMetrics } from './metrics.js';
@@ -17,6 +19,9 @@ import { experienceCompositionHTML } from '../components/experience-compositions
 import { renderDiagram } from '../components/archify-slide.js';
 
 const layouts = {
+  visual:renderVisual,
+  media:renderMedia,
+  browser:renderBrowser,
   diagram: renderDiagram,
   title: renderTitle,
   closing: renderClosing,

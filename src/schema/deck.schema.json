@@ -111,13 +111,13 @@
   "definitions": {
     "diagramSpec": {"type":"object","required":["type","spec"],"additionalProperties":false,"properties":{"type":{"enum":["architecture","workflow","sequence","dataflow","lifecycle"]},"spec":{"type":"object","required":["schema_version","diagram_type","meta"],"description":"Typed Archify JSON IR. Validated by the pinned Archify renderer with all showcase checks during deck loading."}}},
     "slide": {
-      "allOf": [{"if":{"properties":{"layout":{"const":"diagram"}},"required":["layout"]},"then":{"required":["diagram"]}}],
+      "allOf": [{"if":{"properties":{"layout":{"const":"diagram"}},"required":["layout"]},"then":{"required":["diagram"]}},{"if":{"properties":{"layout":{"const":"browser"}},"required":["layout"]},"then":{"required":["browser"]}},{"if":{"properties":{"layout":{"const":"media"}},"required":["layout"]},"then":{"required":["media"]}},{"if":{"properties":{"layout":{"const":"visual"}},"required":["layout"]},"then":{"required":["visual"]}}],
       "type": "object",
       "required": ["layout"],
       "properties": {
         "layout": {
           "type": "string",
-          "enum": ["title", "closing", "agenda", "dashboard", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank", "diagram"]
+          "enum": ["title", "closing", "agenda", "dashboard", "metrics", "chart", "split", "table", "timeline", "bullets", "image", "comparison", "quote", "blank", "diagram", "browser", "media", "visual"]
         },
         "title": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -157,7 +157,10 @@
         "role": { "type": "string" },
         "contact": { "type": "object" },
         "html": { "type": "string" },
-        "diagram": { "$ref": "#/definitions/diagramSpec" }
+        "diagram": { "$ref": "#/definitions/diagramSpec" },
+        "browser": {"type":"object","required":["url"],"properties":{"url":{"type":"string","pattern":"^https?://"},"label":{"type":"string"}}},
+        "media": {"type":"object","required":["kind","src"],"properties":{"kind":{"enum":["video","audio"]},"src":{"type":"string","minLength":1},"poster":{"type":"string"},"caption":{"type":"string"},"alt":{"type":"string"},"captions":{"type":"string"},"language":{"type":"string"}}},
+        "visual": {"type":"object","required":["src","alt"],"properties":{"src":{"type":"string"},"alt":{"type":"string"},"caption":{"type":"string"},"icons":{"type":"array","maxItems":4,"items":{"type":"object","required":["name","label"],"properties":{"name":{"type":"string"},"label":{"type":"string"}}}}}}
       }
     },
     "background": {
@@ -270,10 +273,11 @@
       "additionalProperties": false
     },
     "chartSpec": {
+      "allOf": [{"if":{"properties":{"type":{"const":"echarts"}},"required":["type"]},"then":{"required":["options"],"properties":{"options":{"required":["echarts"],"type":"object"}}}}],
       "type": "object",
       "required": ["type", "data"],
       "properties": {
-        "type": { "type": "string", "enum": ["bar", "line", "area", "combo", "doughnut", "pie", "radar", "waterfall", "heatmap", "scatter", "bubble", "candlestick", "treemap", "gauge", "sankey", "funnel", "bullet", "tornado", "stock", "market_depth", "boxplot", "histogram", "calendar_heatmap", "parallel", "sunburst", "network", "theme_river", "fan"] },
+        "type": { "type": "string", "enum": ["bar", "line", "area", "combo", "doughnut", "pie", "radar", "waterfall", "heatmap", "scatter", "bubble", "candlestick", "treemap", "gauge", "sankey", "funnel", "bullet", "tornado", "stock", "market_depth", "boxplot", "histogram", "calendar_heatmap", "parallel", "sunburst", "network", "theme_river", "fan", "echarts"] },
         "data": {
           "type": "object",
           "properties": {
@@ -335,6 +339,7 @@
         "options": {
           "type": "object",
           "properties": {
+            "echarts": {"type":"object","description":"Native ECharts JSON option. No executable functions. External extensions and map assets must be supplied separately."},
             "format_y": { "type": "string" },
             "format_y_right": { "type": "string" },
             "show_legend": { "type": "boolean" },

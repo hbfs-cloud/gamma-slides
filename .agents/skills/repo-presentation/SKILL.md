@@ -16,6 +16,18 @@ Transformer la demande en un artefact consultable, pas en un plan. Utiliser le C
 
 Pour un shell local demandé, ajouter `--terminal` à `repo-present` ou à `serve --directory output/revue/site`. M → Terminal ouvre la console ; le bridge loopback valide Host/Origin et un jeton obtenu par handshake, sans modifier le HTML vérifié. Sans ce drapeau, dans un fichier ou sur Pages, seules les commandes de présentation restent disponibles dans la console.
 
+## Préparer un enregistrement et ses médias
+
+Pour une démonstration vidéo, lire `docs/presenter-studio.md` et l'exemple `presentations/studio-demo.yaml`. Ajouter `--browser` pour le navigateur local isolé, et `--terminal` si un shell est demandé. Pour un HTML généré directement : `gamma-slides generate -f deck.yaml -o output/deck.html`, puis `gamma-slides serve -f output/deck.html --browser --terminal`. Les bridges complets restent locaux ; sur Pages, le navigateur utilise une iframe que le site peut refuser.
+
+Utiliser M → Studio et sa **Sortie propre** séparée. Sélectionner précisément l'onglet SORTIE VIDÉO ; sa vérification demande un navigateur compatible avec Capture Handle, par exemple Chrome en fenêtre normale. Ne pas passer en capture brute pour contourner silencieusement un refus : elle filme les commandes. Ouvrir terminal ou navigateur ne les diffuse pas ; choisir explicitement un seul contenu dans « À diffuser dans la vidéo », puis revenir aux slides. Le navigateur isolé transmet une image interactive sans audio de sa session.
+
+Pour l'illustration et le slogan, `layout: visual` accepte `visual.src`, `alt`, `caption` et jusqu'à quatre icônes `name`/`label` du catalogue `src/engine/components/icons.js`. Pour un clip ou du son, utiliser `layout: media` avec `media.kind: video|audio` et `src`. Les images/SVG/GIF, fichiers vidéo et audio locaux sont résolus depuis le YAML et intégrés au HTML, au maximum 50 Mo chacun ; les URL distantes restent dépendantes du réseau. Le LLM doit créer ou obtenir les assets : le CLI n'appelle pas un générateur d'images. Fournir provenance, texte alternatif et sous-titres servis séparément si nécessaires. Pour une démonstration web, `layout: browser` prend une URL HTTP(S).
+
+Utiliser les types de graphiques du schéma, ou `chart.type: echarts`, `data: {}` et `options.echarts` pour une option ECharts JSON native. Ne pas promettre de fonctions JavaScript, d'extensions ou de cartes externes non intégrées. Conserver les schémas Archify pour les architectures et workflows. Faire varier les compositions selon le propos ; ne pas remplacer l'analyse du dépôt par un catalogue d'effets.
+
+Valider la fenêtre opérateur **et** la sortie filmée : absence de menus, caméra et micro indépendants, pause/reprise, diffusion volontaire des démonstrations et lecture de la prise sauvegardée. Choisir et vérifier un format vidéo cible ; un seul enregistrement ne garantit pas un cadrage optimal sur tous les médias. Distinguer rendu mobile et capture mobile, souvent indisponible sans enregistreur système. Consulter les preuves `output/studio-review/` lorsqu'elles ont été produites ; annoncer précisément les appareils et sources réellement testés, sans transformer une émulation en essai matériel.
+
 ## CLI autonome
 
 `gamma-slides repo-present --repo owner/repo` (ou `--local /repo`) appelle `codex exec` avec la session Codex configurée, puis construit, contrôle et sert le résultat. Le mode `--deck` utilise le travail du LLM courant et évite un second appel d’agent. Une génération LLM invalide ou une QA échouée arrête le parcours avec les artefacts de diagnostic ; elle ne publie rien.

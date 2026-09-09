@@ -137,8 +137,8 @@ export function experienceCSS() { return `
   @media(max-width:900px) {
     body.gamma-experience { --experience-display:3.25rem; --experience-title:2rem; }
     body.gamma-experience .reveal { top:52px; height:calc(100% - 152px); }
-    body.gamma-experience .reveal .slides { transform:none!important; zoom:1!important; inset:0!important; width:100%!important; height:100%!important; }
-    body.gamma-experience .reveal .slides > section { inset:0!important; transform:none; width:100%!important; height:100%!important; padding:28px 24px 32px!important; overflow:auto; overscroll-behavior:contain; justify-content:flex-start!important; }
+    body.gamma-experience .reveal:not(.overview) .slides { transform:none!important; zoom:1!important; inset:0!important; width:100%!important; height:100%!important; }
+    body.gamma-experience .reveal:not(.overview) .slides > section { inset:0!important; transform:none; width:100%!important; height:100%!important; padding:28px 24px 32px!important; overflow:auto; overscroll-behavior:contain; justify-content:flex-start!important; }
     body.gamma-experience .reveal .slides section > * { flex-shrink:0; }
     body.gamma-experience .slide-header { margin-bottom:24px; }
     body.gamma-experience .reveal .slides section h2,body.gamma-experience .reveal .slides section .slide-header h2 { font-size:var(--experience-title); }

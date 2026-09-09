@@ -82,12 +82,16 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 ## Presenter Studio
 
-M → Studio opens a four-step, permission-safe setup wizard: choose one of three presentation themes; select present-only, camera, microphone, or recording; preview devices and the shared screen; then review readiness before a 3–2–1 recording countdown. When a localhost preview is explicitly started with `--terminal`, M → Terminal enables shell commands in the console. The facecam PiP is draggable, resizable, persisted across sessions, and composed at the same position in the local master. No browser permission is requested before an explicit click.
+M → Studio opens the live controls for camera, microphone, recording and demonstrations. Its separate **video output** keeps operator menus out of a clean recording; terminal and browser content enter that output only when explicitly selected for broadcast. The camera can be moved and resized, microphone and camera controls are independent, and recording supports pause, resume and review before saving. Clean capture checks the selected output tab's identity; use normal Chrome, since private browsing can prevent that verification.
+
+The [Presenter Studio guide](docs/presenter-studio.md) covers the 47-slide demo, local `--browser --terminal` launch, LLM-authored SVG/images/GIF/audio/video, native JSON ECharts, recording and responsive limits. Mobile slide rendering does not imply mobile screen-capture support; each recording has one chosen output aspect ratio.
 
 | Shortcut | Action |
 | --- | --- |
+| `M` | Open or close the round interaction menu |
 | `T` | Open the Studio Console after Studio is initialized; shell commands require `--terminal` |
 | `C` | Toggle the camera picture-in-picture |
+| `U` | Toggle the microphone independently of the camera |
 | `R` | Open recording setup or focus the active recording controls |
 | `P` | Pause or resume the active recording |
 | `S` | Open speaker notes |

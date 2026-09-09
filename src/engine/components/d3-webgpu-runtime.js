@@ -160,6 +160,8 @@ export function initGPUCharts(buildScene, writeSVG) {
     if (!state.app || !state.active || document.hidden) return;
     try {
       const app = state.app, scene = state.scene, colors = palette(state.root);
+      // Opaque theme backing preserves antialiasing in canvas.captureStream video.
+      app.renderer.background.alpha = 1; app.renderer.background.color = colors.bg;
       const related = new Set([state.selected]);
       if (state.model.type === 'network' && state.selected >= 0) scene.shapes.forEach(shape => { if (shape.source === state.selected || shape.target === state.selected) { related.add(shape.source); related.add(shape.target); } });
       const alpha = shape => state.selected < 0 || (shape.key === undefined && shape.source === undefined) || related.has(shape.key) || shape.source === state.selected || shape.target === state.selected ? 1 : 0.22;
@@ -231,7 +233,7 @@ export function initGPUCharts(buildScene, writeSVG) {
     state.pending = (async () => {
       const app = new PIXI.Application();
       try {
-        await app.init({ canvas: state.root.querySelector('canvas'), width: state.scene.width, height: state.scene.height, resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true, autoStart: false, sharedTicker: false, preference: 'webgpu', antialias: true, backgroundAlpha: 0 });
+        await app.init({ canvas: state.root.querySelector('canvas'), width: state.scene.width, height: state.scene.height, resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true, autoStart: false, sharedTicker: false, preference: 'webgpu', preserveDrawingBuffer: true, antialias: true, backgroundAlpha: 1, backgroundColor: palette(state.root).bg });
         app.stop();
         if (generation !== state.generation || !state.active) { app.destroy({ removeView: false }, { children: true }); return; }
         state.app = app; state.root._pixiApp = app;

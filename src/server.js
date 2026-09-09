@@ -1,3 +1,5 @@
+import {browserHandler} from './repository/browser.js';
+import {terminalHandler} from './repository/terminal.js';
 import express from 'express';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
@@ -16,16 +18,18 @@ export async function servePresentation(opts) {
   const app = express();
   const port = parseInt(opts.port, 10);
 
+  const web=browserHandler({enabled:Boolean(opts.browser)}),shell=terminalHandler({enabled:Boolean(opts.terminal)});
+  app.use(async(req,res,next)=>{if(!await web(req,res,req.path)&&!await shell(req,res,req.path))next();});
   // Serve the output directory statically
-  app.use(express.static(resolve(filePath, '..')));
+  app.use(express.static(resolve(filePath, '..'), {index:false}));
 
   // Serve the HTML file at root
   app.get('/', (req, res) => {
     res.sendFile(filePath);
   });
 
-  app.listen(port, () => {
-    const url = `http://localhost:${port}`;
+  const server=app.listen(port, '127.0.0.1', () => {
+    const url = `http://127.0.0.1:${port}`;
     console.log('');
     console.log(chalk.hex('#2563EB').bold('  gamma-slides') + chalk.dim(' — Presentation preview'));
     console.log('');
@@ -38,6 +42,8 @@ export async function servePresentation(opts) {
     console.log(chalk.dim('  Ctrl+C pour arrêter'));
     console.log('');
 
-    open(url);
+    if(opts.open!==false)open(url);
   });
+  server.on('close',()=>web.close());
+  return server;
 }

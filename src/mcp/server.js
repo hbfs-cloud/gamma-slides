@@ -1,3 +1,5 @@
+import {embedDeckAssets} from '../loader/assets.js';
+import {getIconNames} from '../engine/components/icons.js';
 import { inspectRepository, repositoryReviewGuide } from '../repository/inspect.js';
 import { archifyRoot, diagramTypes } from '../engine/archify.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -25,7 +27,7 @@ const server = new McpServer({
   name: 'gamma-slides',
   version: '2.0.0',
 }, {
-  instructions: 'Create presentation sites in this order: inspect gamma://schema/deck and gamma://examples/flagship when needed, choose one of the three presentation themes, draft a coherent narrative, validate with gamma_validate_deck, then call gamma_generate_deck, gamma_build_site, or gamma_deploy_site. Prefer real sourced data, concise slide copy, varied layouts, native ECharts, persistent brand identity, and speaker narration. Never invent financial facts. Deployments are CRUD-managed by stable slug: list or read first, deploy the same slug to update, and delete only after explicit user confirmation.',
+  instructions: 'Create presentation sites in this order: inspect gamma://schema/deck and gamma://examples/flagship when needed, choose one of the three presentation themes, draft a coherent narrative, validate with gamma_validate_deck, then call gamma_generate_deck, gamma_build_site, or gamma_deploy_site. Prefer real sourced data, concise slide copy, varied layouts, native ECharts, persistent brand identity, and speaker narration. For recording and media authoring, read gamma://studio/guide and gamma://studio/icons; use the visual, media, browser and diagram layouts and native echarts options. Never invent financial facts. Deployments are CRUD-managed by stable slug: list or read first, deploy the same slug to update, and delete only after explicit user confirmation.',
 });
 const managedPagesRepo = process.env.GAMMA_SLIDES_REPO || DEFAULT_PAGES_REPO;
 
@@ -48,6 +50,9 @@ server.registerResource('flagship-example', 'gamma://examples/flagship', {
     text: readFileSync(new URL('../schema/examples/corporate-demo.yaml', import.meta.url), 'utf-8'),
   }],
 }));
+
+server.registerResource('studio-guide','gamma://studio/guide',{title:'Studio vidéo et médias LLM',mimeType:'text/markdown'},async uri=>({contents:[{uri:uri.href,mimeType:'text/markdown',text:readFileSync(new URL('../../docs/presenter-studio.md',import.meta.url),'utf8')}]}));
+server.registerResource('studio-icons','gamma://studio/icons',{title:'Icônes disponibles',mimeType:'application/json'},async uri=>({contents:[{uri:uri.href,mimeType:'application/json',text:JSON.stringify(getIconNames())}]}));
 
 server.registerPrompt('create_presentation', {
   title: 'Create a premium Gamma Slides presentation',
@@ -97,10 +102,11 @@ server.registerPrompt('create_repository_presentation', {
 // Tool: Generate HTML deck
 server.tool('gamma_generate_deck', 'Generate an HTML presentation from a YAML/JSON deck spec', {
   deck: z.string().describe('Deck specification as YAML or JSON string'),
+  assets_dir: z.string().optional().describe('Base directory for local image, SVG, GIF, audio and video assets, embedded in HTML'),
   output_dir: z.string().optional().describe('Output directory (default: ./output/)'),
   theme: z.string().optional().describe('Override theme'),
-}, async ({ deck: deckStr, output_dir, theme }) => {
-  const d = loadDeck(deckStr);
+}, async ({ deck: deckStr, output_dir, theme, assets_dir }) => {
+  const d = embedDeckAssets(loadDeck(deckStr),resolve(assets_dir||process.cwd()));
   if (theme) d.theme = theme;
   const html = renderDeck(d);
   const outDir = resolve(output_dir || './output');

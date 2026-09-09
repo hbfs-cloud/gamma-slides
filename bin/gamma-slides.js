@@ -44,6 +44,7 @@ program.command('repo-present')
   .option('--port <number>', 'Local server port', '4173')
   .option('--publish <owner/repo>', 'Publish tested HTML to a dedicated GitHub Pages repository (requires gh auth)')
   .option('--slug <name>', 'GitHub Pages subdirectory', 'repository-review')
+  .option('--browser', 'Enable the isolated local browser inside slides')
   .option('--terminal', 'Enable the local shell in the presentation menu')
   .option('--build-only', 'Generate and verify without starting the local server')
   .action(async opts => {
@@ -51,7 +52,7 @@ program.command('repo-present')
       const result=await presentRepository(opts);
       console.log(`Verified: ${result.indexPath}\nProof: ${result.proof}`);
       if(opts.publish){const published=await publishRepositoryPresentation({siteDir:result.siteDir,repo:opts.publish,slug:opts.slug});console.log(`Live HTML verified: ${published.url}`);}
-      else if(!opts.buildOnly){const live=await serveRepositoryPresentation(result.siteDir,{port:Number(opts.port),terminal:Boolean(opts.terminal)});console.log(`Presentation: ${live.url}\nProof: ${live.url}proof.json\nStop with Ctrl+C`);}
+      else if(!opts.buildOnly){const live=await serveRepositoryPresentation(result.siteDir,{port:Number(opts.port),terminal:Boolean(opts.terminal),browser:Boolean(opts.browser)});console.log(`Presentation: ${live.url}\nProof: ${live.url}proof.json\nStop with Ctrl+C`);}
     } catch(error) {console.error(error.message);process.exitCode=1;}
   });
 
@@ -275,6 +276,7 @@ program
   .option('-p, --port <port>', 'Port', '3000')
   .option('--host <host>', 'Host', '127.0.0.1')
   .option('--theme <name>', 'Override theme')
+  .option('--browser', 'Enable the isolated local browser inside slides')
   .option('--terminal', 'Enable the localhost shell bridge for the embedded terminal')
   .option('--no-open', 'Do not open the browser')
   .action(async (opts) => {
@@ -291,12 +293,14 @@ program
   .command('serve')
   .alias('s')
   .description('Preview a presentation in browser')
+  .option('--no-open', 'Do not open a browser tab')
+  .option('--browser', 'Enable the isolated local browser inside slides')
   .option('--terminal', 'Enable the local shell when serving a verified directory')
   .option('-d, --directory <path>', 'Serve a verified repository site on loopback')
   .option('-f, --file <path>', 'HTML file to serve', './output/presentation.html')
   .option('-p, --port <port>', 'Port', '3000')
   .action(async (opts) => {
-    if(opts.directory){try{const live=await serveRepositoryPresentation(opts.directory,{port:Number(opts.port),terminal:Boolean(opts.terminal)});console.log(live.url);}catch(error){console.error(error.message);process.exitCode=1;}return;}
+    if(opts.directory){try{const live=await serveRepositoryPresentation(opts.directory,{port:Number(opts.port),terminal:Boolean(opts.terminal),browser:Boolean(opts.browser)});console.log(live.url);}catch(error){console.error(error.message);process.exitCode=1;}return;}
     const { servePresentation } = await import('../src/server.js');
     await servePresentation(opts);
   });

@@ -176,7 +176,7 @@ slides:
   assert.match(html, /Math\.max\(0,reviewVideo\.currentTime-/);
   assert.match(html, /showSaveFilePicker/);
   assert.match(html, /Your browser controls the destination; check Downloads/);
-  assert.match(html, /state\.recorder\.onpause=\(\)=>syncPauseUI\(true\)/);
+  assert.match(html, /state\.recorder\.onpause=\(\)=>\{syncPauseUI\(true\)/);
   assert.match(html, /state\.phase='ready';await startRecording\(\)/);
   assert.match(html, /state\.step=Math\.min\(4,state\.step\+1\)/);
   assert.match(html, /if\(selectStudioTheme\(themeId\)\)\{state\.step=2;renderWizard\(\)\}/);

@@ -1,3 +1,4 @@
+import {browserHandler} from './repository/browser.js';
 import express from 'express';
 import { existsSync, watch } from 'fs';
 import { dirname, resolve } from 'path';
@@ -51,7 +52,7 @@ export async function previewDeck(opts) {
   const host = opts.host || '127.0.0.1';
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`Invalid port: ${opts.port}`);
   const isLoopback = ['127.0.0.1', 'localhost', '::1'].includes(host);
-  if (opts.terminal && !isLoopback) throw new Error('The shell terminal can only be enabled on localhost');
+  if ((opts.terminal || opts.browser) && !isLoopback) throw new Error('The shell terminal can only be enabled on localhost');
 
   let pageHtml = '';
   let buildError = null;
@@ -76,6 +77,8 @@ export async function previewDeck(opts) {
   rebuild();
 
   const app = express();
+  const web=browserHandler({enabled:Boolean(opts.browser)});
+  app.use(async(req,res,next)=>{if(!await web(req,res,req.path))next();});
   app.use(express.json({ limit: '4kb' }));
   app.get('/__gamma/events', (req, res) => {
     res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
@@ -135,6 +138,7 @@ export async function previewDeck(opts) {
   const close = () => {
     clearTimeout(debounceTimer);
     watcher.close();
+    web.close();
     for (const client of clients) client.end();
     server.close();
   };

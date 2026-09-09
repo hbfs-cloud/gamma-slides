@@ -16,7 +16,8 @@
     "docker-compose.yml",
     "README.md",
     ".agents/skills/repo-presentation/",
-    "docs/repository-presentations.md"
+    "docs/repository-presentations.md",
+    "docs/presenter-studio.md"
   ],
   "scripts": {
     "start": "node bin/gamma-slides.js",

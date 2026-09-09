@@ -151,7 +151,7 @@ function initThreeExploration() {
       state.scene = new T.Scene(); state.scene.background = new T.Color(color('bg'));
       state.fitBounds = [];
       state.camera = new T.OrthographicCamera(-5, 5, 3, -3, 0.1, 50);
-      state.renderer = new T.WebGLRenderer({ antialias: true, alpha: false });
+      state.renderer = new T.WebGLRenderer({preserveDrawingBuffer:true, antialias: true, alpha: false });
       state.renderer.setClearColor(color('bg'));
       state.renderer.outputColorSpace = T.SRGBColorSpace; state.renderer.toneMapping = T.ACESFilmicToneMapping;
       state.renderer.toneMappingExposure = 1.15;

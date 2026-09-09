@@ -162,7 +162,7 @@ function initRevenueSculptures() {
       state.scene = new T.Scene();
       state.camera = new T.OrthographicCamera(-4.3, 4.3, 2.6, -2.6, 0.1, 40);
       state.camera.position.set(0, 2.4, 12); state.camera.lookAt(0, 0, 0);
-      state.renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
+      state.renderer = new T.WebGLRenderer({preserveDrawingBuffer:true, antialias: true, alpha: true });
       state.renderer.setClearColor(color('bg'), 0);
       state.renderer.outputColorSpace = T.SRGBColorSpace; state.renderer.toneMapping = T.ACESFilmicToneMapping; state.renderer.toneMappingExposure = 1.2;
       const ambient = new T.HemisphereLight(color('text'), color('bg'), 2.8); state.scene.add(ambient);

@@ -1,3 +1,7 @@
+import {visualCSS} from './layouts/visual.js';
+import {studioOutputCSS,studioOutputJS} from './components/studio-output.js';
+import {studioBrowserCSS,studioBrowserJS} from './components/studio-browser.js';
+import {studioLiveCSS,studioLiveJS} from './components/studio-live.js';
 import { actionOrbitCSS, actionOrbitJS } from './components/action-orbit.js';
 import { presenterMotionJS } from './components/presenter-motion.js';
 import { cinematicCSS } from './components/cinematic-comparison.js';
@@ -157,7 +161,7 @@ export function renderDeck(deck) {
     ${presenterStudioCSS(defaultTheme)}
   </style>
   <style id="gamma-theme-runtime">${themeCssSets[defaultTheme.id || deck.theme]}</style>
-  <style>${actionOrbitCSS()}</style>
+  <style>${actionOrbitCSS()}${studioLiveCSS()}${studioBrowserCSS()}${studioOutputCSS()}${visualCSS()}</style>
   ${deck.meta?.experience ? `<style data-gamma-experience>${experienceCSS()}${experienceCompositionsCSS()}</style>` : ''}
   ${slidesHtml.includes('class="archify-slide"') ? `<style data-gamma-archify>${archifySlideCSS()}</style>` : ''}
 </head>
@@ -211,15 +215,35 @@ ${slidesHtml}
       initCharts(gammaExportMode ? document : Reveal.getCurrentSlide());
       if (!gammaExportMode && !Reveal.getCurrentSlide()?.querySelector('.cinema-stage')) initPresenterStudio();
       ${deck.meta?.experience ? experienceJS(deck) : ''}
+      const gammaOverviewKey = event => !event.defaultPrevented && !event.target.closest('button,a,input,textarea,select,summary,[contenteditable],[role=slider],.gamma-orbit,.gamma-terminal,.gamma-browser,.gamma-live-panel,.gamma-camera,dialog');
+      Reveal.addKeyBinding({keyCode:38,key:'↑',description:'Slide carousel'}, event => {
+        if (gammaOverviewKey(event)) Reveal.toggleOverview();
+      });
+      Reveal.addKeyBinding({keyCode:40,key:'↓',description:'Return to slide'}, event => {
+        if (gammaOverviewKey(event)) { if (Reveal.isOverview()) Reveal.toggleOverview(false); else Reveal.down(); }
+      });
+      Reveal.addKeyBinding({keyCode:13,key:'Enter',description:'Select slide'}, event => {
+        if (gammaOverviewKey(event) && Reveal.isOverview()) Reveal.toggleOverview(false);
+      });
       ${actionOrbitJS()}
+      ${studioLiveJS()}
+${studioBrowserJS()}
+${studioOutputJS()}
       ${deck.meta?.motion === 'presenter' ? presenterMotionJS() : ''}
       ${slidesHtml.includes('revenue-sculpture') ? 'initRevenueSculptures();' : ''}
       ${slidesHtml.includes('class="archify-slide"') ? archifySlideJS() : ''}
       await waitForGammaAssets();
       window.__GAMMA_READY__ = true;
     });
+    function renderCarouselCharts() {
+      if (!Reveal.isOverview()) return;
+      const slides = Reveal.getHorizontalSlides(), index = Reveal.getIndices().h;
+      slides.slice(Math.max(0, index - 3), index + 4).forEach(slide => { initCharts(slide); resizeChartsWithin(slide); });
+    }
+    Reveal.on('overviewshown', () => requestAnimationFrame(renderCarouselCharts));
     Reveal.on('slidechanged', event => {
       stopAllChartNarratives();
+      if (Reveal.isOverview()) requestAnimationFrame(renderCarouselCharts);
       requestAnimationFrame(() => requestAnimationFrame(() => {
         initCharts(event.currentSlide);
         resizeChartsWithin(event.currentSlide);
