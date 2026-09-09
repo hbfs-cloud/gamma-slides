@@ -1,45 +1,385 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T08:00:00+02:00",
+  "generatedAt": "2026-09-09T05:05:37.165Z",
   "title": "Design System: Gamma Slides",
   "extensions": {
     "colorMeta": {
-      "proof-cobalt": { "role": "primary", "displayName": "Proof Cobalt", "canonical": "#1748D5", "tonalRamp": ["#081333", "#0D2565", "#123797", "#1748D5", "#4C72DE", "#819BE8", "#B6C5F1", "#E8EDFB"] },
-      "proof-paper": { "role": "neutral", "displayName": "Proof Paper", "canonical": "#F3F0E8", "tonalRamp": ["#24231F", "#46443E", "#68655D", "#8A867C", "#ACA79C", "#CEC8BC", "#E4DFD5", "#F3F0E8"] },
-      "proof-ink": { "role": "neutral", "displayName": "Proof Ink", "canonical": "#111318", "tonalRamp": ["#111318", "#303238", "#505158", "#707278", "#929399", "#B5B6BA", "#D8D9DB", "#F3F3F4"] },
-      "cut-orange": { "role": "primary", "displayName": "Cut Orange", "canonical": "#FF5A1F", "tonalRamp": ["#351006", "#69220C", "#9D3412", "#D04618", "#FF5A1F", "#FF8557", "#FFAF8F", "#FFE6DD"] },
-      "cut-black": { "role": "neutral", "displayName": "Work Print Black", "canonical": "#080808", "tonalRamp": ["#080808", "#252525", "#424242", "#606060", "#7F7F7F", "#A1A1A1", "#C6C6C6", "#F2F2F2"] },
-      "cut-ink": { "role": "neutral", "displayName": "Punched Ivory", "canonical": "#F4F0E7", "tonalRamp": ["#25231F", "#49453F", "#6D675F", "#918980", "#B5ABA0", "#D3C9BE", "#E7E0D6", "#F4F0E7"] },
-      "signal-amber": { "role": "primary", "displayName": "Front Plane Amber", "canonical": "#FFB000", "tonalRamp": ["#332300", "#664600", "#996A00", "#CC8D00", "#FFB000", "#FFC84D", "#FFDD91", "#FFF2D6"] },
-      "signal-blue": { "role": "secondary", "displayName": "Rear Plane Blue", "canonical": "#8BA8FF", "tonalRamp": ["#18213D", "#30417A", "#4962B6", "#6283E5", "#8BA8FF", "#A9BEFF", "#C8D5FF", "#EDF2FF"] },
-      "signal-void": { "role": "neutral", "displayName": "Signal Void", "canonical": "#05070A", "tonalRamp": ["#05070A", "#22262B", "#40454B", "#5F646A", "#81868B", "#A4A8AC", "#C9CCCF", "#F1F2F3"] },
-      "market-positive": { "role": "tertiary", "displayName": "Market Positive", "canonical": "#3FD49A", "tonalRamp": ["#092A1D", "#12543A", "#1B7E58", "#2AAA77", "#3FD49A", "#75E0B6", "#A9ECCE", "#E1F9EF"] },
-      "market-negative": { "role": "tertiary", "displayName": "Market Negative", "canonical": "#FF6F66", "tonalRamp": ["#351412", "#692824", "#9D3D37", "#D0524A", "#FF6F66", "#FF9993", "#FFC0BC", "#FFE9E7"] },
-      "studio-cobalt": { "role": "primary", "displayName": "Studio Cobalt", "canonical": "#315DFF", "tonalRamp": ["#09133A", "#122775", "#1D3CAF", "#2850E8", "#315DFF", "#6F8AFF", "#A7B7FF", "#E7ECFF"] }
+      "proof-cobalt": {
+        "role": "primary",
+        "displayName": "Proof Cobalt",
+        "canonical": "#1748D5",
+        "tonalRamp": [
+          "#081333",
+          "#0D2565",
+          "#123797",
+          "#1748D5",
+          "#4C72DE",
+          "#819BE8",
+          "#B6C5F1",
+          "#E8EDFB"
+        ]
+      },
+      "proof-paper": {
+        "role": "neutral",
+        "displayName": "Proof Paper",
+        "canonical": "#F3F0E8",
+        "tonalRamp": [
+          "#24231F",
+          "#46443E",
+          "#68655D",
+          "#8A867C",
+          "#ACA79C",
+          "#CEC8BC",
+          "#E4DFD5",
+          "#F3F0E8"
+        ]
+      },
+      "proof-ink": {
+        "role": "neutral",
+        "displayName": "Proof Ink",
+        "canonical": "#111318",
+        "tonalRamp": [
+          "#111318",
+          "#303238",
+          "#505158",
+          "#707278",
+          "#929399",
+          "#B5B6BA",
+          "#D8D9DB",
+          "#F3F3F4"
+        ]
+      },
+      "cut-orange": {
+        "role": "primary",
+        "displayName": "Cut Orange",
+        "canonical": "#FF5A1F",
+        "tonalRamp": [
+          "#351006",
+          "#69220C",
+          "#9D3412",
+          "#D04618",
+          "#FF5A1F",
+          "#FF8557",
+          "#FFAF8F",
+          "#FFE6DD"
+        ]
+      },
+      "cut-black": {
+        "role": "neutral",
+        "displayName": "Work Print Black",
+        "canonical": "#080808",
+        "tonalRamp": [
+          "#080808",
+          "#252525",
+          "#424242",
+          "#606060",
+          "#7F7F7F",
+          "#A1A1A1",
+          "#C6C6C6",
+          "#F2F2F2"
+        ]
+      },
+      "cut-ink": {
+        "role": "neutral",
+        "displayName": "Punched Ivory",
+        "canonical": "#F4F0E7",
+        "tonalRamp": [
+          "#25231F",
+          "#49453F",
+          "#6D675F",
+          "#918980",
+          "#B5ABA0",
+          "#D3C9BE",
+          "#E7E0D6",
+          "#F4F0E7"
+        ]
+      },
+      "signal-amber": {
+        "role": "primary",
+        "displayName": "Front Plane Amber",
+        "canonical": "#FFB000",
+        "tonalRamp": [
+          "#332300",
+          "#664600",
+          "#996A00",
+          "#CC8D00",
+          "#FFB000",
+          "#FFC84D",
+          "#FFDD91",
+          "#FFF2D6"
+        ]
+      },
+      "signal-blue": {
+        "role": "secondary",
+        "displayName": "Rear Plane Blue",
+        "canonical": "#8BA8FF",
+        "tonalRamp": [
+          "#18213D",
+          "#30417A",
+          "#4962B6",
+          "#6283E5",
+          "#8BA8FF",
+          "#A9BEFF",
+          "#C8D5FF",
+          "#EDF2FF"
+        ]
+      },
+      "signal-void": {
+        "role": "neutral",
+        "displayName": "Signal Void",
+        "canonical": "#05070A",
+        "tonalRamp": [
+          "#05070A",
+          "#22262B",
+          "#40454B",
+          "#5F646A",
+          "#81868B",
+          "#A4A8AC",
+          "#C9CCCF",
+          "#F1F2F3"
+        ]
+      },
+      "market-positive": {
+        "role": "tertiary",
+        "displayName": "Market Positive",
+        "canonical": "#3FD49A",
+        "tonalRamp": [
+          "#092A1D",
+          "#12543A",
+          "#1B7E58",
+          "#2AAA77",
+          "#3FD49A",
+          "#75E0B6",
+          "#A9ECCE",
+          "#E1F9EF"
+        ]
+      },
+      "market-negative": {
+        "role": "tertiary",
+        "displayName": "Market Negative",
+        "canonical": "#FF6F66",
+        "tonalRamp": [
+          "#351412",
+          "#692824",
+          "#9D3D37",
+          "#D0524A",
+          "#FF6F66",
+          "#FF9993",
+          "#FFC0BC",
+          "#FFE9E7"
+        ]
+      },
+      "studio-cobalt": {
+        "role": "primary",
+        "displayName": "Studio Cobalt",
+        "canonical": "#315DFF",
+        "tonalRamp": [
+          "#09133A",
+          "#122775",
+          "#1D3CAF",
+          "#2850E8",
+          "#315DFF",
+          "#6F8AFF",
+          "#A7B7FF",
+          "#E7ECFF"
+        ]
+      },
+      "proof-positive": {
+        "role": "tertiary",
+        "displayName": "Proof Positive",
+        "canonical": "#06745F"
+      }
     },
     "typographyMeta": {
-      "slide-root": { "displayName": "Slide Root", "purpose": "Relative baseline from which presentation theme typography scales." },
-      "proof-display": { "displayName": "Proof Display", "purpose": "Reviewed research covers and chapter statements." },
-      "cut-display": { "displayName": "Cut Display", "purpose": "Compressed narrative headlines in Cutting Room." },
-      "signal-display": { "displayName": "Signal Display", "purpose": "Ranked decision headlines and quantitative foreground copy." },
-      "report-body": { "displayName": "Report Body", "purpose": "Narrative and explanatory reading copy in every theme." },
-      "data-label": { "displayName": "Data Label", "purpose": "Sources, chart context, state, and quantitative wayfinding." },
-      "studio-control": { "displayName": "Studio Control", "purpose": "Compact operational actions and status." }
+      "slide-root": {
+        "displayName": "Slide Root",
+        "purpose": "Relative baseline from which presentation theme typography scales."
+      },
+      "proof-display": {
+        "displayName": "Proof Display",
+        "purpose": "Reviewed research covers and chapter statements outside body.gamma-experience."
+      },
+      "cut-display": {
+        "displayName": "Cut Display",
+        "purpose": "Compressed narrative headlines in Cutting Room outside body.gamma-experience."
+      },
+      "signal-display": {
+        "displayName": "Signal Display",
+        "purpose": "Base Signal Room decision headlines outside body.gamma-experience. Ordinary flagship headings use the experience Archivo roles."
+      },
+      "report-body": {
+        "displayName": "Report Body",
+        "purpose": "Narrative and explanatory reading copy in every theme."
+      },
+      "data-label": {
+        "displayName": "Data Label",
+        "purpose": "Sources, chart context, state, and quantitative wayfinding."
+      },
+      "studio-control": {
+        "displayName": "Studio Control",
+        "purpose": "Compact operational actions and status."
+      },
+      "experience-display": {
+        "displayName": "Flagship Display",
+        "purpose": "Archivo opening-cover statement in body.gamma-experience; editorial compositions use the explicit Source Serif 4 roles across Appearance choices."
+      },
+      "experience-title": {
+        "displayName": "Flagship Slide Heading",
+        "purpose": "Archivo ordinary slide and D3/Pixi.js scene headings; the brief and scorecard have explicit serif overrides."
+      },
+      "experience-mobile-display": {
+        "displayName": "Flagship Phone Display",
+        "purpose": "Unscaled Archivo opening-cover statement at viewport widths of 900px and below; editorial compositions retain their own serif sizes."
+      },
+      "experience-mobile-title": {
+        "displayName": "Flagship Phone Heading",
+        "purpose": "Unscaled ordinary Archivo slide headings at viewport widths of 900px and below; editorial compositions retain their explicit serif roles."
+      },
+      "experience-standfirst": {
+        "displayName": "Flagship Standfirst",
+        "purpose": "Cover explanation on desktop; adapts to the ordinary body size on phones."
+      },
+      "experience-section": {
+        "displayName": "Flagship Section Heading",
+        "purpose": "Strategy headings inside the flagship reading layer."
+      },
+      "experience-mobile-metric": {
+        "displayName": "Flagship Phone Supporting Metric",
+        "purpose": "Secondary financial values in stacked metric rows; distinct from primary measures."
+      },
+      "experience-figure-value": {
+        "displayName": "Flagship Revenue Total",
+        "purpose": "HTML period totals above the opening source-scaled revenue ribbons; mobile totals adapt to 24px."
+      },
+      "experience-caption": {
+        "displayName": "Flagship Caption",
+        "purpose": "Figure captions and compact panel titles in Archivo."
+      },
+      "studio-title": {
+        "displayName": "Studio Title",
+        "purpose": "Instrument Sans dialog names in the operational studio."
+      },
+      "spatial-label": {
+        "displayName": "Spatial Label",
+        "purpose": "Labels in the separate immersive variant; not the flagship heading scale."
+      },
+      "spatial-mobile-value": {
+        "displayName": "Spatial Mobile Value",
+        "purpose": "Mobile numeric inspector in the separate immersive variant."
+      },
+      "spatial-caption": {
+        "displayName": "Spatial Caption",
+        "purpose": "Secondary status captions in the separate immersive variant."
+      },
+      "experience-brief-display": {
+        "displayName": "Flagship Brief Statement",
+        "purpose": "Source Serif 4 heading on slide 2; adapts to 2.75rem on phones."
+      },
+      "experience-editorial-title": {
+        "displayName": "Flagship Editorial Statement",
+        "purpose": "Source Serif 4 statements in the scorecard and decision compositions, slides 3 and 38; adapt to 2rem on phones."
+      },
+      "experience-sequence-title": {
+        "displayName": "Flagship Sequence Title",
+        "purpose": "Source Serif 4 names of the three ordered bets on slide 24; adapt to 2rem on phones."
+      },
+      "experience-editorial-number": {
+        "displayName": "Flagship Editorial Number",
+        "purpose": "Source Serif 4 sequence order numbers and roadmap quarter markers on slides 24–25; adapt to 2rem on phones."
+      },
+      "experience-chapter-display": {
+        "displayName": "Flagship Market Chapter Statement",
+        "purpose": "Source Serif 4 chapter statement on slide 28, with 2.75rem phone sizing; its three link names retain the separate observed serif role."
+      }
     },
     "shadows": [
-      { "name": "switcher-float", "value": "0 10px 28px rgba(0,0,0,.28)", "purpose": "Separates the persistent theme switcher from the slide stage." },
-      { "name": "toolbar-float", "value": "0 18px 48px rgba(0,0,0,.48)", "purpose": "Separates movable presenter controls from the deck." },
-      { "name": "dialog-modal", "value": "0 42px 110px rgba(0,0,0,.72)", "purpose": "Reserved for the Presenter Studio setup dialog." }
+      {
+        "name": "switcher-float",
+        "value": "0 10px 28px rgba(0,0,0,.28)",
+        "purpose": "Separates the persistent theme switcher from the slide stage."
+      },
+      {
+        "name": "toolbar-float",
+        "value": "0 18px 48px rgba(0,0,0,.48)",
+        "purpose": "Separates movable presenter controls from the deck."
+      },
+      {
+        "name": "dialog-modal",
+        "value": "0 42px 110px rgba(0,0,0,.72)",
+        "purpose": "Reserved for the Presenter Studio setup dialog."
+      },
+      {
+        "name": "experience-index",
+        "value": "0 18px 50px color-mix(in srgb,var(--gamma-text) 12%,transparent)",
+        "purpose": "Separates the anchored chapter index from the flagship reading stage."
+      }
     ],
     "motion": [
-      { "name": "theme-swap", "value": "440ms cubic-bezier(.16,1,.3,1)", "purpose": "One coordinated view transition across typography, surfaces, layout, and charts." },
-      { "name": "proof-rule", "value": "580ms cubic-bezier(.16,1,.3,1)", "purpose": "Registers the active proof rail from top to bottom." },
-      { "name": "film-advance", "value": "700ms cubic-bezier(.16,1,.3,1)", "purpose": "Advances the perforated rail by one frame pitch." },
-      { "name": "signal-drift", "value": "14s linear infinite", "purpose": "Moves only rear dust layers; disabled for reduced motion." }
+      {
+        "name": "theme-swap",
+        "value": "440ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "One coordinated view transition across typography, surfaces, layout, and charts."
+      },
+      {
+        "name": "proof-rule",
+        "value": "580ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Registers the active proof rail from top to bottom."
+      },
+      {
+        "name": "film-advance",
+        "value": "700ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Advances the perforated rail by one frame pitch."
+      },
+      {
+        "name": "signal-drift",
+        "value": "14s linear infinite",
+        "purpose": "Moves only rear dust layers; disabled for reduced motion."
+      },
+      {
+        "name": "experience-progress",
+        "value": "350ms ease",
+        "purpose": "Scales the persistent chapter progress rule from the left; the rule retains its full layout width."
+      },
+      {
+        "name": "d3-chart-entrance",
+        "value": "600ms; 1 - (1 - t)^4",
+        "purpose": "Finite Pixi.js mark entrance; reduced motion draws the final state immediately and frames stop at rest."
+      },
+      {
+        "name": "revenue-sculpture-light-pass",
+        "value": "850ms; 1 - (1 - t)^4",
+        "purpose": "One finite directional-light pass over complete source-scaled ribbon geometry. Reduced motion keeps a still Three.js scene; rendering stops at rest."
+      }
     ],
     "breakpoints": [
-      { "name": "selector-stack", "value": "900px" },
-      { "name": "selector-compact", "value": "620px" }
+      {
+        "name": "selector-stack",
+        "value": "900px"
+      },
+      {
+        "name": "selector-compact",
+        "value": "620px"
+      },
+      {
+        "name": "experience-full-width",
+        "value": "900px",
+        "purpose": "All flagship slides stop stage scaling and become full-width vertically scrolling content; layouts and tables stack."
+      },
+      {
+        "name": "gpu-plot-compact",
+        "value": "600px plot width",
+        "purpose": "D3/Pixi.js scene layout compacts below 600px plot width. Three.js comparables use the separate 900px viewport breakpoint and retain adjacent full company names."
+      },
+      {
+        "name": "comparables-compact",
+        "value": "900px",
+        "purpose": "Three.js comparables use compact geometry, a local value readout below the toolbar, complete adjacent company names, and a minimum 430px plot field."
+      },
+      {
+        "name": "revenue-key-stack",
+        "value": "360px",
+        "purpose": "Opening revenue segment buttons change from three columns to two."
+      }
     ]
   },
   "components": [
@@ -64,7 +404,7 @@
       "kind": "card",
       "description": "A flat reviewed measure with cobalt registration and paper rules.",
       "html": "<article class=\"ds-proof-metric\"><small>REVENUE</small><strong>$16.2M</strong><span>+8% vs plan</span></article>",
-      "css": ".ds-proof-metric{width:280px;padding:20px 0;border-top:1px solid #111318;border-bottom:1px solid #CFC9BD;background:#F3F0E8;color:#111318;font-family:Archivo,sans-serif}.ds-proof-metric small{display:block;color:#1748D5;font:600 10px/1 'Azeret Mono',monospace;letter-spacing:.08em}.ds-proof-metric strong{display:block;margin-top:36px;font:560 46px/.9 'Source Serif 4',serif}.ds-proof-metric span{display:block;margin-top:10px;color:#087D67;font:600 11px/1 'Azeret Mono',monospace}"
+      "css": ".ds-proof-metric{width:280px;padding:20px 0;border-top:1px solid #111318;border-bottom:1px solid #CFC9BD;background:#F3F0E8;color:#111318;font-family:Archivo,sans-serif}.ds-proof-metric small{display:block;color:#1748D5;font:600 10px/1 'Azeret Mono',monospace;letter-spacing:.08em}.ds-proof-metric strong{display:block;margin-top:36px;font:560 46px/.9 'Source Serif 4',serif}.ds-proof-metric span{display:block;margin-top:10px;color:#06745F;font:600 11px/1 'Azeret Mono',monospace}"
     },
     {
       "name": "Cutting Room Frame",
@@ -76,41 +416,162 @@
     {
       "name": "Signal Room Line",
       "kind": "custom",
-      "description": "An unenclosed decision line whose brightness and spacing express rank.",
+      "description": "Base Signal Room decision line outside body.gamma-experience; the flagship uses the separate Archivo heading pattern.",
       "html": "<div class=\"ds-signal-line\"><strong>Revenue nearly doubled</strong><span>$16.2M</span><i></i></div>",
       "css": ".ds-signal-line{position:relative;width:380px;padding:20px 0;border-bottom:1px solid #26313D;background:#05070A;color:#F3F6F2;font-family:'Azeret Mono',monospace}.ds-signal-line strong,.ds-signal-line span{display:block}.ds-signal-line strong{font-size:22px;line-height:1.05}.ds-signal-line span{margin-top:24px;color:#FFB000;font-size:34px;font-weight:650}.ds-signal-line i{position:absolute;right:0;top:22px;width:7px;height:7px;background:#FFB000}"
+    },
+    {
+      "name": "Flagship Heading",
+      "kind": "custom",
+      "description": "Ordinary Archivo slide heading and explanatory copy, independent of the selected palette. Brief, scorecard, sequence, roadmap markers, chapter, and decisions use their documented Source Serif 4 roles.",
+      "html": "<header class=\"ds-experience-heading\"><h2>The market repriced infrastructure.</h2><p>Illustrative infrastructure-basket index; January 2025 open equals 100.</p></header>",
+      "css": ".ds-experience-heading{padding:0;color:var(--gamma-text,#F3F6F2);background:var(--gamma-bg,#05070A)}.ds-experience-heading h2{margin:0;font:550 2.75rem/1.04 Archivo,system-ui,sans-serif;letter-spacing:-.035em;max-width:1040px;text-transform:none;text-wrap:balance}.ds-experience-heading p{margin:12px 0 0;font:450 1rem/1.5 Archivo,system-ui,sans-serif;color:var(--gamma-muted,#A3ADB8);max-width:78ch}@media(max-width:900px){.ds-experience-heading h2{font-size:2rem}}"
+    },
+    {
+      "name": "Flagship Navigation",
+      "kind": "nav",
+      "description": "Structure: Fixed masthead with Appearance and Studio; fixed bottom navigation with previous/next, current chapter, slide count, and progress. The chapter index is an anchored, scrollable surface with six named destinations.\nState: Previous and next disable at the deck boundaries. The index exposes expanded state, supports Escape, and returns focus to its trigger. Controls keep a 44px minimum target; visible focus uses the active theme’s primary color.\nPhone reading: The reserved 44px “More below” rail reveals additional content inside the current slide above the separate 56px navigation. Tables keep their original data and column relationships as open labeled rows, including the P&L’s “Amounts in $M” caption.",
+      "html": "<div class=\"ds-experience-reading-rail\"><button type=\"button\" class=\"ds-experience-more\">More below<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 5v14m-6-6 6 6 6-6\"/></svg></button><nav class=\"ds-experience-nav\" aria-label=\"Presentation\"><button aria-label=\"Previous slide\" disabled><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M19 12H5m6-6-6 6 6 6\"/></svg></button><button class=\"ds-experience-chapter\" aria-expanded=\"false\">The readout<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 9h12M6 15h12\"/></svg></button><span>01 / 38</span><button aria-label=\"Next slide\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></nav></div>",
+      "css": ".ds-experience-nav{height:56px;display:flex;align-items:center;gap:18px;border-top:1px solid color-mix(in srgb,var(--gamma-text,#F3F6F2) 19%,var(--gamma-bg,#05070A));background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2)}.ds-experience-nav button{min-width:44px;min-height:44px;border:0;background:transparent;color:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:20px;font:500 12px/1.2 Archivo,system-ui,sans-serif}.ds-experience-nav button:disabled{color:var(--gamma-muted,#A3ADB8);cursor:default;opacity:.5}.ds-experience-nav button:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:3px}.ds-experience-nav svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.5;fill:none}.ds-experience-nav>span{margin-left:auto;font:500 12px/1 \"Azeret Mono\",monospace}@media(max-width:900px){.ds-experience-nav{gap:8px}.ds-experience-nav button{gap:8px}.ds-experience-chapter{max-width:190px;text-align:left}}.ds-experience-reading-rail{background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2)}.ds-experience-more{display:flex;align-items:center;justify-content:flex-end;gap:10px;width:100%;min-height:44px;padding:8px 0;border:0;border-top:1px solid color-mix(in srgb,var(--gamma-text,#F3F6F2) 19%,var(--gamma-bg,#05070A));background:var(--gamma-bg,#05070A);color:inherit;font:500 12px/1.3 Archivo,system-ui,sans-serif;cursor:pointer}.ds-experience-more svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5}.ds-experience-more:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:3px}"
+    },
+    {
+      "name": "Flagship Phone Table Row",
+      "kind": "custom",
+      "description": "A source table reformatted as open labeled phone rows. Original column headers remain in the DOM; values retain their column labels. Monetary unit headers produce a visible caption, including Amounts in $M on the P&L.",
+      "html": "<table class=\"ds-experience-table\"><tbody><tr><td>GlobalTech</td><td data-label=\"Segment\">Enterprise</td><td data-label=\"MRR\">$12.5K</td><td data-label=\"YoY growth\" class=\"ds-experience-highlight\">+45%</td><td data-label=\"Motion\">Expanding</td></tr></tbody></table>",
+      "css": ".ds-experience-table{display:block;width:100%;margin:0;background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2)}.ds-experience-table tbody{display:block}.ds-experience-table tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px;border-top:1px solid color-mix(in srgb,var(--gamma-text,#F3F6F2) 19%,var(--gamma-bg,#05070A));padding:18px 0}.ds-experience-table td{display:block;border:0;padding:0;min-width:0;text-align:left;white-space:normal;font:500 1rem/1.4 Archivo,system-ui,sans-serif;background:transparent}.ds-experience-table td:first-child{grid-column:1/-1;font-weight:550}.ds-experience-table td:not(:first-child)::before{content:attr(data-label);display:block;font:450 12px/1.4 Archivo,system-ui,sans-serif;color:var(--gamma-muted,#A3ADB8);margin-bottom:5px}.ds-experience-table .ds-experience-highlight{color:var(--gamma-primary,#FFB000)}"
+    },
+    {
+      "name": "Flagship GPU Actions",
+      "kind": "button",
+      "description": "Scope: Four authored d3-webgpu scenes: customer-segment revenue (slide 9), public comparables (21), readiness risks (27), and the network (35). D3 computes the scales and layout; Pixi.js draws actual chart marks and labels through WebGPU when available, or WebGL. Other flagship charts use ECharts with SVG.\nReading and selection: Wide chart fields sit between an Archivo heading and a caption/action rail. Pointer, touch, or arrow-key selection reveals a live readout; selecting a network node emphasizes its connections. Text remains fully opaque when other marks dim.\nExact values: “View data” opens a native dialog with original source numbers, named columns, and, for networks, a separate connections table. Rounded plot labels are not the only source of values.\nLifecycle: A finite 600ms entrance settles into an idle scene. Reduced motion renders the final state immediately. Pixi tickers do not run continuously; leaving the slide or hiding the document disposes the active renderer. GPU loss falls back to the matching SVG scene. Pixel ratio is capped at 2.\nExport: The same deterministic scene description produces the SVG fallback used for export and print. Backend labels describe the actual renderer, not a simulated capability.",
+      "html": "<nav class=\"ds-gpu-actions\" aria-label=\"Explore data\"><button aria-pressed=\"true\">Compare in 2D</button><button>View data<svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><path d=\"M4 4h12v12H4zM4 8h12M4 12h12M9 4v12\"/></svg></button></nav>",
+      "css": ".ds-gpu-actions{display:flex;gap:18px;background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2)}.ds-gpu-actions button{color:inherit;background:transparent;border:0;border-bottom:1px solid var(--gamma-primary,#FFB000);padding:10px 0;min-height:44px;font:550 12px/1.4 Archivo,sans-serif;white-space:nowrap;cursor:pointer}.ds-gpu-actions button svg{width:18px;height:18px;margin-left:12px;fill:none;stroke:currentColor;stroke-width:1.25;vertical-align:middle}.ds-gpu-actions button:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:5px}.ds-gpu-actions button[aria-pressed=\"true\"]{color:var(--gamma-primary,#FFB000)}"
+    },
+    {
+      "name": "Flagship Three.js Inspector",
+      "kind": "custom",
+      "description": "Entry and meaning: Slide 21 opens in a true Three.js WebGL scene by default. Revenue growth maps to X, valuation multiple to Y, and gross margin to Z using the same five observations as the 2D bubbles. Equal-size spheres leave all three measurements to position. The source dimensions remain visible in the X/Y/Z key; the flat subtitle and readout are hidden while the 3D controls provide local context.\nFraming: The desktop geometry spans X from −6.5 to 6.5, Y from −1.45 to 1.65, and Z from −2 to 2, with a base orthographic view height of 5. The camera expands its view when a rotation needs more room, using actual sphere radii and axis bounds; Reset restores the authored wide frame. Phones use a compact X span from −2.5 to 2.5, a more elevated viewpoint, and a plot field at least 430px high. These are scene coordinates and framing values, not financial axis units.\nControls and values: Drag, arrow keys, 44px rotate controls, and Reset change the view. Tapping a point has a 44px proximity target. The native “Inspect a company” selector offers all five complete names and drives the same selection; a local live readout displays growth, EV/revenue, and margin with units. Escape on the plot clears selection. “Compare in 2D” and “Explore in 3D” keep the view reversible, and “View data” retains the exact-source dialog.\nLabels: Complete company names sit adjacent to their projected points on desktop and phones, with leaders and collision-aware placement against spheres and other labels. Axis names sit in their separate key; overlapping tick captions may be omitted at steep views while the measured grid remains. There is no numbered name rail. Selected company identity is also available in the native selector and accessible readout.\nLifecycle: There is no entrance animation or continuous orbit, including under reduced motion. Three.js renders on entry, resize, selection, or direct view changes and releases resources on slide exit, document hiding, print, or page exit. The preferred view and selected company survive in-session navigation and theme rebuilds. Backing resolution multiplies capped device pixel ratio (2) by the actual CSS stage scale so desktop fitting remains sharp. Missing Three.js/D3, GPU failure, or context loss returns to 2D and disables 3D entry; print and export use the deterministic SVG chart.",
+      "html": "<div class=\"ds-depth-inspector\"><div class=\"ds-depth-toolbar\"><select class=\"ds-depth-select\" aria-label=\"Inspect a company\"><option value=\"-1\">Inspect a company</option><option>Legacy Processor</option><option>Global Payments</option><option>Fintech Platform</option><option>Cloud Payments</option><option>Stablecoin Infra</option></select><nav class=\"ds-depth-controls\" aria-label=\"3D view\"><button type=\"button\" aria-label=\"Rotate left\"><svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><path d=\"M12 4l-6 6 6 6\"/></svg></button><button type=\"button\">Reset</button><button type=\"button\" aria-label=\"Rotate right\"><svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><path d=\"M8 4l6 6-6 6\"/></svg></button></nav></div><p class=\"ds-depth-selection\" aria-live=\"polite\">Select a company to read its three values.</p><ul class=\"ds-depth-axis-key\"><li>X · NTM revenue growth (%)</li><li>Y · EV / NTM revenue (×)</li><li>Z · Gross margin (%)</li></ul></div>",
+      "css": ".ds-depth-inspector{color:var(--gamma-text,#F3F6F2);background:var(--gamma-bg,#05070A);font:550 12px/1.4 Archivo,sans-serif}.ds-depth-toolbar{display:flex;justify-content:space-between;gap:16px}.ds-depth-select{max-width:220px;min-width:0;min-height:44px;color:inherit;background:var(--gamma-bg,#05070A);border:0;border-bottom:1px solid var(--gamma-muted,#A3ADB8);border-radius:0;font:inherit;cursor:pointer}.ds-depth-controls{display:flex;gap:8px;flex-shrink:0}.ds-depth-controls button{min-width:44px;min-height:44px;padding:8px;border:0;border-bottom:1px solid var(--gamma-primary,#FFB000);background:var(--gamma-bg,#05070A);color:inherit;font:inherit;cursor:pointer}.ds-depth-controls svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.25}.ds-depth-selection{display:flex;align-items:center;min-height:44px;margin:0;font-variant-numeric:tabular-nums}.ds-depth-axis-key{display:flex;gap:24px;margin:0;padding:0;list-style:none;color:var(--gamma-secondary,#8BA8FF);font:450 11px/1.5 Archivo,sans-serif}.ds-depth-inspector :is(button,select):focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:4px}@media(max-width:900px){.ds-depth-toolbar{gap:12px}.ds-depth-select{flex:1;width:0}.ds-depth-selection{min-height:40px}.ds-depth-axis-key{display:block;font-size:10px}}"
+    },
+    {
+      "name": "Flagship Opening Revenue Segment",
+      "kind": "button",
+      "description": "Source and geometry: Slide 1 derives FY24 ($8.3M) and FY25 ($16.2M) from the same five customer-segment series as slide 9: Enterprise, Platforms, Fintech, Marketplaces, and Other. Five closed curved Three.js meshes share one revenue-to-height conversion at both endpoints. Their equal inter-segment gaps are spacing, not revenue. The orthographic view preserves proportional endpoint measurements.\nAppearance: Physical materials use the current theme’s secondary, primary, accent, muted, and text colors. Hemisphere and directional lights reveal the surfaces. One 850ms light pass introduces the scene; the complete financial geometry is present on its first frame. Reduced motion omits that pass and keeps a still 3D view.\nInteraction and access: Pointer or touch selects a ribbon. Five native segment buttons expose complete names, both period values, and aria-pressed state; arrows, Home, and End move focus, Enter/Space activate, and Escape clears selection. A live caption reports added revenue and the revenue multiple. Canvas content is hidden from assistive technology; the labeled SVG and HTML controls carry the evidence.\nLifecycle and fallback: Rendering stops at rest. Slide exit, a hidden document, print, and page exit release geometry, materials, renderer, and context; returning rebuilds the active scene, retaining selection. Theme changes rebuild its materials. GPU failure or loss leaves the deterministic SVG and working segment controls. Print and export keep SVG. Backing pixels use the actual CSS bounding box and device pixel ratio capped at 2, accounting for the fitted desktop stage.",
+      "html": "<div class=\"ds-revenue-key\" role=\"group\" aria-label=\"Select a customer segment\"><button type=\"button\" class=\"ds-revenue-segment\" aria-pressed=\"true\" aria-label=\"Platforms: FY24 $1.4M, FY25 $4.0M\"><span><i aria-hidden=\"true\"></i>Platforms</span><small>$1.4M <span aria-hidden=\"true\">→</span> $4.0M</small></button><p class=\"ds-revenue-readout\" aria-live=\"polite\">Platforms: $2.6M added · 2.9× revenue</p></div>",
+      "css": ".ds-revenue-key{background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2)}.ds-revenue-segment{display:flex;flex-direction:column;align-items:start;gap:5px;min-height:48px;min-width:0;margin:0;padding:6px 0;border:0;border-bottom:1px solid transparent;background:transparent;color:inherit;font:500 12px/1.4 Archivo,system-ui,sans-serif;text-align:left;cursor:pointer}.ds-revenue-segment>span{display:flex;align-items:center;gap:7px;white-space:nowrap}.ds-revenue-segment i{width:7px;height:7px;background:var(--gamma-primary,#FFB000)}.ds-revenue-segment small{color:var(--gamma-muted,#A3ADB8);font:450 12px/1.4 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}.ds-revenue-segment:is(:hover,[aria-pressed=\"true\"]){border-color:var(--gamma-primary,#FFB000)}.ds-revenue-segment:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:4px}.ds-revenue-readout{margin:12px 0 0;color:var(--gamma-muted,#A3ADB8);font:450 12px/1.4 Archivo,system-ui,sans-serif}"
+    },
+    {
+      "name": "Flagship Scenario Legend",
+      "kind": "button",
+      "description": "Theme compilation: Every theme receives its own ECharts configuration set, including surface, text, axes, grid lines, series palette, tooltip, and labels.\nFlagship label adaptation: On phones, the waterfalls on slides 10 and 15 use six numbered axis markers with an HTML key below the chart listing all six complete names and their exact amounts. Desktop waterfall labels retain their existing treatment. The nine-node capital Sankey becomes vertical, with authored short names directly inside its 44px nodes. The native “Full flow labels” disclosure below retains all nine original names. Node text chooses the more contrasting theme text or background color. Treemap cells also use explicit theme contrast and retain authored names and amounts. Endpoint annotations are disabled in the flagship, where named panel titles and legends carry series identity.\nScenario identity: Slide 33’s parallel coordinates expose the five unnamed source rows as stable Scenario A–E trajectories, each using a resolved theme series color. A native HTML button legend provides 44px targets, visible focus, and aria-pressed state; its outlined inactive swatch makes state visible without color alone. Enter and Space toggle trajectories without advancing the deck. All five axes retain source-derived bounds of 0–5 when a trajectory is hidden. Selection persists when charts rebuild for Appearance changes or responsive layout.\nSwitching: Existing chart instances are disposed and recreated from cloned configuration objects so serialized format metadata remains intact.\nTruth: Positive, negative, warning, and forecast roles stay semantically stable across themes.",
+      "html": "<div class=\"ds-scenario-legend\" role=\"group\" aria-label=\"Compare scenario trajectories\"><button type=\"button\" class=\"ds-scenario-0\" aria-pressed=\"true\"><i aria-hidden=\"true\"></i>Scenario A</button><button type=\"button\" class=\"ds-scenario-1\" aria-pressed=\"false\"><i aria-hidden=\"true\"></i>Scenario B</button><button type=\"button\" class=\"ds-scenario-2\" aria-pressed=\"true\"><i aria-hidden=\"true\"></i>Scenario C</button><button type=\"button\" class=\"ds-scenario-3\" aria-pressed=\"true\"><i aria-hidden=\"true\"></i>Scenario D</button><button type=\"button\" class=\"ds-scenario-4\" aria-pressed=\"true\"><i aria-hidden=\"true\"></i>Scenario E</button></div>",
+      "css": ".ds-scenario-legend{display:flex;flex-wrap:wrap;gap:0 14px;margin-bottom:8px;background:var(--gamma-bg,#05070A)}.ds-scenario-legend button{display:flex;align-items:center;gap:8px;min-height:44px;padding:0;border:0;background:transparent;color:var(--gamma-text,#F3F6F2);font:500 12px/1.4 Archivo,system-ui,sans-serif;cursor:pointer}.ds-scenario-legend i{width:16px;height:4px;background:var(--ds-scenario-color);border:1px solid var(--ds-scenario-color);box-sizing:border-box}.ds-scenario-0{--ds-scenario-color:var(--gamma-primary,#FFB000)}.ds-scenario-1{--ds-scenario-color:var(--gamma-secondary,#8BA8FF)}.ds-scenario-2{--ds-scenario-color:var(--gamma-accent,#C7B8FF)}.ds-scenario-3{--ds-scenario-color:var(--gamma-positive,#3FD49A)}.ds-scenario-4{--ds-scenario-color:var(--gamma-muted,#A3ADB8)}.ds-scenario-legend [aria-pressed=\"false\"]{color:var(--gamma-muted,#A3ADB8)}.ds-scenario-legend [aria-pressed=\"false\"] i{background:transparent;border-color:var(--gamma-muted,#A3ADB8)}.ds-scenario-legend button:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:4px}"
     }
   ],
   "narrative": {
     "northStar": "The Three Editions Desk",
-    "overview": "Gamma Slides treats one body of financial evidence as three complete publishing editions. Analyst Proof supports review, Cutting Room supports presentation, and Signal Room supports decision; Presenter Studio remains a separate operational realm. Theme switching replaces typography, composition, surfaces, and chart configurations while preserving truth and slide state.",
+    "overview": "Gamma Slides treats a financial deck as one body of evidence that can be published in three complete editions. Analyst Proof is for review: marked paper, serif authority, cobalt corrections, and measured grids. Cutting Room is for presentation: a black work print, signal orange, condensed pacing, and a film rail that makes sequence visible. Signal Room is for decision: an emissive void, amber hierarchy, and layered data with almost no enclosure. Its base theme uses monospaced headlines; the flagship experience explicitly replaces ordinary headings with Archivo.\n\nThe base themes replace typography, composition rules, surfaces, and ECharts configurations while preserving the slide, data, and navigation state. The flagship experience deliberately retains its Archivo and Source Serif 4 role assignments and responsive compositions across Appearance choices. Presenter Studio remains a fourth, operational realm: compact navy equipment surfaces that frame every theme without adopting any one theme's voice.\n\nThe current flagship is the complete 38-slide deck in `presentations/flagship.yaml`, rendered as `output/flagship-demo.html`. Its experience layer expands Signal Room into a continuous board review with six chapters, 20 authored composition assignments, full-width phone reading, four D3/Pixi.js chart scenes, a Three.js opening revenue sculpture, and comparables that open in Three.js with a reversible 2D view. Archivo carries ordinary headings and financial copy; Source Serif 4 gives the brief, scorecard, sequence, roadmap, market chapter, and decisions their editorial roles. This scope is separate from the earlier five-slide cinematic demonstration.",
     "keyCharacteristics": [
       "Three purpose-led themes named for the reading job: review, present, and decide.",
       "Complete theme compilation from tokens through chart configuration; no post-render recoloring.",
       "Strong single-accent commitment at slide scale: cobalt, orange, or amber.",
       "Flat financial evidence shaped by rules, alignment, depth, and pacing instead of ornamental cards.",
       "Self-hosted Archivo, Azeret Mono, Source Serif 4, and Instrument Sans with offline rendering.",
-      "A persistent accessible theme selector with keyboard focus, reduced-motion fallback, and shareable query values."
+      "A persistent accessible theme selector with keyboard focus, reduced-motion fallback, and shareable query values.",
+      "A flagship reading layer with Archivo evidence and Source Serif 4 editorial roles, persistent chapter navigation, and phone layouts that retain the complete evidence.",
+      "Source-scaled opening revenue ribbons, four D3/Pixi.js scenes, and default Three.js comparables with direct names, exact-value access, and deterministic SVG exports."
     ],
     "rules": [
-      { "name": "The Complete Theme Rule", "body": "A theme change must update typography, composition, surfaces, and charts. If only color changed, the feature is unfinished.", "section": "colors" },
-      { "name": "The One Dominant Signal Rule", "body": "Each theme spends its defining accent in large, decisive fields or one front-plane series; it does not scatter several competing accents across neutral cards.", "section": "colors" },
-      { "name": "The Name Carries the Choice Rule", "body": "Theme names lead. Purpose text follows the name; never put a decorative eyebrow above it.", "section": "typography" },
-      { "name": "The Purpose Before Taste Rule", "body": "Every theme option states the reading job it serves. Do not fall back to A/B/C labels, vague energy levels, or light/dark as the choice architecture.", "section": "layout" },
-      { "name": "The Stable Evidence Rule", "body": "Theme switching may change how evidence is staged, never its numbers, labels, semantic colors, source, or slide position.", "section": "layout" },
-      { "name": "The Evidence Stays Flat Rule", "body": "Alignment, rule weight, field color, and chart scale carry report hierarchy. A rounded shadow card is not a substitute for composition.", "section": "elevation" }
+      {
+        "name": "The Complete Theme Rule",
+        "body": "Base themes define typography, composition, surfaces, and charts together. The flagship experience is an explicit shared reading layer above those themes: it keeps the published Archivo and Source Serif 4 roles and authored responsive compositions while the palette and chart theme change.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Dominant Signal Rule",
+        "body": "Each theme spends its defining accent in large, decisive fields or one front-plane series; it does not scatter several competing accents across neutral cards.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Signal Rule",
+        "body": "Green, amber, and red communicate finance or system state. Do not use them as arbitrary decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flagship Heading Rule",
+        "body": "Ordinary flagship headings use Archivo across Appearance choices. Preserve the implemented Source Serif 4 roles in brief, scorecard, sequence, roadmap quarter markers, chapter, and decisions compositions; keep the older base theme display roles for surfaces outside the experience layer.",
+        "section": "typography"
+      },
+      {
+        "name": "The Name Carries the Choice Rule",
+        "body": "Theme names lead. Purpose text follows the name; never put a decorative eyebrow above it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Number Discipline Rule",
+        "body": "Financial canvases use lining tabular numerals. Values align and compare before they decorate.",
+        "section": "typography"
+      },
+      {
+        "name": "The Authored Composition Rule",
+        "body": "The 20 assignments in `presentations/flagship.yaml` are brief (2), scorecard (3), evidence (4, 19, 23, 36), ledger (7, 11, 13, 22), feature (8, 18, 31, 34), register (16, 17), sequence (24), roadmap (25), chapter (28), and decisions (38). These compositions stage the authored evidence without altering its data or the ordinary layouts of other decks.",
+        "section": "layout"
+      },
+      {
+        "name": "The Purpose Before Taste Rule",
+        "body": "Every theme option states the reading job it serves. Do not fall back to A/B/C labels, vague energy levels, or “light/dark” as the choice architecture.",
+        "section": "layout"
+      },
+      {
+        "name": "The Stable Evidence Rule",
+        "body": "Theme switching may change how evidence is staged, never its numbers, labels, semantic colors, source, or slide position.",
+        "section": "layout"
+      },
+      {
+        "name": "The Evidence Stays Flat Rule",
+        "body": "Alignment, rule weight, field color, and chart scale carry report hierarchy. A rounded shadow card is not a substitute for composition.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Spatial Evidence Exception",
+        "body": "The separate `immersive` variant’s user-selected chart slides may map categories, values, and series to an orthographic data volume, or map three explicitly supplied numeric variables to a point cloud. Depth encodes data. The scene uses the same resolved series colors as the SVG view, keeps an exact-value inspector and table, and falls back to SVG for export, unavailable GPU, reduced motion, or unsupported data. GPU rendering is demand-driven, with one shared context and a two-megapixel backing-store budget.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Measured Depth Rule",
+        "body": "Opening ribbon endpoint thickness measures source revenue on one shared scale; its depth is material only. Comparables use growth on X, valuation multiple on Y, and source gross margin on Z, with equal-size spheres and adjacent full names. Keep these two meanings of depth explicit.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Operational Lift Rule",
+        "body": "Shadow strength corresponds to interaction layer and movability; theme content itself remains materially flat.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Historical Verdict Boundary",
+        "body": "Historical independent visual verdict for that five-slide demo: 6.5/10, presentable, with moderate immersive impact and still-stylized materials. This is not a flagship rating. The current flagship’s technical evidence is recorded in `docs/flagship-qa.md`; its captures are in `output/flagship-review/desktop-*.png`, `mobile-*.png`, `desktop-3d-21.png`, and `mobile-3d-21.png`. Those checks and artifacts establish their stated technical coverage, not an aesthetic guarantee or a new quality score.",
+        "section": "components"
+      }
     ],
     "dos": [
       "Do choose themes by reading purpose: review evidence, tell the story, or decide from signal.",
       "Do compile every theme from real tokens and regenerate charts when the theme changes.",
       "Do keep the current slide, source, data values, and semantic finance roles stable across themes.",
-      "Do let one accent own the composition and use neutral fields generously around it."
+      "Do let one accent own the composition and use neutral fields generously around it.",
+      "Do keep focus, keyboard navigation, reduced motion, and export selection working for every theme.",
+      "Do use Source Serif 4, Archivo, and Azeret Mono for their assigned editorial jobs; preserve the flagship’s explicit serif compositions and ordinary Archivo headings, and keep Instrument Sans in Presenter Studio.",
+      "Do preserve complete labels, exact values, source notes, and full-size reading on phones.",
+      "Do describe GPU support by its actual scope and backend; retain deterministic SVG exports."
     ],
     "donts": [
-      "Don't expose themes as A/B/C, visual cuts, or cosmetic modes.",
+      "Don't expose themes as A/B/C, “visual cuts,” or cosmetic modes.",
       "Don't recolor a single compiled deck and call the result a theme.",
-      "Don't put decorative kickers above headings or theme names.",
-      "Don't turn charts, metrics, or narrative regions into generic rounded shadow cards."
+      "Don't put decorative kickers above headings or theme names; factual context belongs in the margin, source line, or after the name.",
+      "Don't turn charts, metrics, or narrative regions into generic rounded shadow cards.",
+      "Don't use gradients, glass, glow, or emoji as substitutes for authored financial structure.",
+      "Don't allow a theme switcher, console, or camera frame to cover decision-critical slide content."
     ]
   }
 }

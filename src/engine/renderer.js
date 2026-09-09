@@ -1,3 +1,6 @@
+import { cinematicCSS } from './components/cinematic-comparison.js';
+import { cinematicJS } from './components/cinematic-runtime.js';
+import { getCinematicThree } from './runtime-assets.js';
 import { getTheme, getThemeFamily } from '../themes/index.js';
 import { baseCSS } from '../themes/base.css.js';
 import { animationCSS, autoAnimateJS } from './components/animations.js';
@@ -8,6 +11,13 @@ import { escapeHtml, safeUrl } from './html.js';
 import { presenterStudioCSS, presenterStudioJS } from './components/presenter-studio.js';
 import { themePickerCSS, themePickerHTML, themePickerJS } from './components/theme-picker.js';
 import { deckRuntimeAssets, embeddedFontCSS } from './runtime-assets.js';
+import { immersiveCSS } from './components/immersive-data.js';
+import { immersiveJS } from './components/immersive-runtime.js';
+import { d3WebGPUCSS, d3WebGPUJS } from './components/d3-webgpu.js';
+import { experienceCSS, experienceHTML, experienceJS, adaptExperienceChart } from './components/experience.js';
+import { threeExplorationCSS, threeExplorationJS } from './components/three-exploration.js';
+import { revenueSculptureCSS, revenueSculptureJS } from './components/revenue-sculpture.js';
+import { experienceCompositionsCSS } from './components/experience-compositions.js';
 
 function hexToRgb(hex) {
   if (!hex || !hex.startsWith('#')) return '128, 128, 128';
@@ -91,6 +101,8 @@ export function renderDeck(deck) {
   <style data-gamma-runtime="reveal.js@5.1.0">${deckRuntimeAssets.revealCss}</style>
   <style data-gamma-fonts="embedded">${fontCSS}</style>
   <script data-gamma-runtime="echarts@6.1.0">${deckRuntimeAssets.echartsJs}<\/script>
+  ${slidesHtml.includes('d3-webgpu-stage') ? `<script data-gamma-runtime="d3@7.9.0">${deckRuntimeAssets.d3Js}<\/script>` : ''}
+  ${slidesHtml.includes('d3-webgpu-stage') ? `<script data-gamma-runtime="pixi.js@8.14.0">${deckRuntimeAssets.pixiJs}<\/script>` : ''}
   <style>
     * { box-sizing: border-box; }
     body { margin:0; background:var(--gamma-bg); }
@@ -133,12 +145,18 @@ export function renderDeck(deck) {
       animation:none !important; transition:none !important;
     }
     ${animationCSS()}
+    ${immersiveCSS()}
+    ${cinematicCSS()}
+    ${slidesHtml.includes('d3-webgpu-stage') ? d3WebGPUCSS() : ''}
+    ${slidesHtml.includes('d3-depth-toggle') ? threeExplorationCSS() : ''}
+    ${slidesHtml.includes('revenue-sculpture') ? revenueSculptureCSS() : ''}
     ${themesEnabled ? themePickerCSS() : ''}
     ${presenterStudioCSS(defaultTheme)}
   </style>
   <style id="gamma-theme-runtime">${themeCssSets[defaultTheme.id || deck.theme]}</style>
+  ${deck.meta?.experience ? `<style data-gamma-experience>${experienceCSS()}${experienceCompositionsCSS()}</style>` : ''}
 </head>
-<body class="theme-${escapeHtml(deck.theme)} aesthetic-${escapeHtml(defaultTheme.aesthetic || 'standard')}" data-presentation-theme="${escapeHtml(defaultTheme.id || deck.theme)}">
+<body class="theme-${escapeHtml(deck.theme)} aesthetic-${escapeHtml(defaultTheme.aesthetic || 'standard')}${slidesHtml.includes('cinema-stage') ? ' gamma-cinema-deck' : ''}${deck.meta?.presentation === 'direct' ? ' gamma-direct-deck' : ''}${deck.meta?.experience ? ' gamma-experience' : ''}" data-presentation-theme="${escapeHtml(defaultTheme.id || deck.theme)}">
   ${directionContract}
   <div class="reveal">
     <div class="slides">
@@ -147,22 +165,31 @@ ${slidesHtml}
     ${footer}
     ${watermark}
   </div>
+  ${deck.meta?.experience ? experienceHTML(deck) : ''}
   ${themesEnabled ? themePickerHTML(themeFamily) : ''}
   <script data-gamma-runtime="reveal.js@5.1.0">${deckRuntimeAssets.revealJs}<\/script>
   <script data-gamma-runtime="reveal-notes@5.1.0">${deckRuntimeAssets.revealNotesJs}<\/script>
+  ${(slidesHtml.includes('cinema-stage') || slidesHtml.includes('d3-depth-toggle') || slidesHtml.includes('revenue-sculpture')) ? `<script data-gamma-runtime="three@0.185.1">window.GammaThree={};(function(exports){${getCinematicThree()}})(window.GammaThree);<\/script>` : ''}
   <script>
     window.__GAMMA_READY__ = false;
-    const gammaExportMode = new URLSearchParams(window.location.search).has('gamma-export');
+    const gammaExportMode = new URLSearchParams(window.location.search).has('gamma-export') || new URLSearchParams(window.location.search).has('print-pdf');
     if (gammaExportMode) document.documentElement.classList.add('gamma-export');
     const gammaThemeCssSets = ${serializeForScript(themeCssSets)};
     ${themesEnabled ? themePickerJS(themeFamily, defaultTheme.id) : ''}
     ${autoAnimateJS()}
+    ${immersiveJS()}
+    ${cinematicJS()}
+    ${slidesHtml.includes('d3-webgpu-stage') ? d3WebGPUJS() : ''}
+    ${slidesHtml.includes('d3-depth-toggle') ? threeExplorationJS() : ''}
+    ${slidesHtml.includes('revenue-sculpture') ? revenueSculptureJS() : ''}
+    ${deck.meta?.experience ? adaptExperienceChart.toString() : ''}
     Reveal.initialize({
       hash: true, slideNumber: false,
-      transition: gammaExportMode ? 'none' : 'slide', transitionSpeed: 'fast', backgroundTransition: gammaExportMode ? 'none' : 'fade',
-      center: !gammaExportMode, width: 1280, height: 720, margin: gammaExportMode ? 0 : 0.02,
+      transition: gammaExportMode ? 'none' : '${deck.meta?.experience ? 'fade' : 'slide'}', transitionSpeed: 'fast', backgroundTransition: gammaExportMode ? 'none' : 'fade',
+      center: ${deck.meta?.experience ? 'false' : '!gammaExportMode'}, width: 1280, height: 720, margin: gammaExportMode ? 0 : 0.02,
       controls: false, controlsTutorial: false, progress: false,
       history: true, keyboard: true, overview: true, touch: true,
+      scrollActivationWidth: ${(deck.meta?.experience || slidesHtml.includes('class="immersive-chart"') || slidesHtml.includes('cinema-stage')) ? 0 : 435},
       autoAnimateEasing: 'cubic-bezier(0.22, 1, 0.36, 1)', autoAnimateDuration: 0.5,
       autoAnimate: !gammaExportMode,
       pdfPageHeightOffset: gammaExportMode ? 0 : -1,
@@ -170,10 +197,16 @@ ${slidesHtml}
     });
     ${presenterStudioJS()}
     Reveal.on('ready', async () => {
-      applyAnimations();
+      ${deck.meta?.experience ? '' : 'applyAnimations();'}
       ${themesEnabled ? 'initThemePicker();' : ''}
+      initImmersiveCharts();
+      initCinematicComparisons();
+      ${slidesHtml.includes('d3-webgpu-stage') ? 'initD3WebGPU();' : ''}
+      ${slidesHtml.includes('d3-depth-toggle') ? 'initThreeExploration();' : ''}
       initCharts(gammaExportMode ? document : Reveal.getCurrentSlide());
-      if (!gammaExportMode) initPresenterStudio();
+      if (!gammaExportMode && !Reveal.getCurrentSlide()?.querySelector('.cinema-stage')) initPresenterStudio();
+      ${deck.meta?.experience ? experienceJS(deck) : ''}
+      ${slidesHtml.includes('revenue-sculpture') ? 'initRevenueSculptures();' : ''}
       await waitForGammaAssets();
       window.__GAMMA_READY__ = true;
     });
@@ -187,13 +220,26 @@ ${slidesHtml}
       setTimeout(() => resizeChartsWithin(event.currentSlide), 420);
     });
     const chartInstances = {};
+    const chartSelections = {};
+    document.addEventListener('keydown', event => {
+      if (event.target.closest?.('[data-chart-legend]')) event.stopPropagation();
+    }, true);
+    document.addEventListener('click', event => {
+      const button = event.target.closest('[data-chart-legend]');
+      if (!button) return;
+      chartInstances[button.dataset.chartTarget]?.dispatchAction({ type:'legendToggleSelect', name:button.dataset.chartLegend });
+    });
     const chartNarrativeTimers = {};
     const chartConfigSets = ${serializeForScript(chartSets)};
     let activeChartTheme = ${JSON.stringify(defaultTheme.id || deck.theme)};
     const chartResizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(entries => {
       entries.forEach(entry => {
         const chart = chartInstances[entry.target.id];
-        if (chart && entry.contentRect.width > 8 && entry.contentRect.height > 8) chart.resize();
+        if (chart && entry.contentRect.width > 8 && entry.contentRect.height > 8) {
+          if (${Boolean(deck.meta?.experience)} && chart.__gammaCompact !== matchMedia('(max-width:900px)').matches) {
+            chartResizeObserver.unobserve(entry.target); chart.dispose(); delete chartInstances[entry.target.id]; initCharts(Reveal.getCurrentSlide());
+          } else chart.resize();
+        }
       });
     });
     async function waitForGammaAssets() {
@@ -232,6 +278,8 @@ ${slidesHtml}
       Object.keys(chartNarrativeTimers).forEach(stopChartNarrative);
     }
     function startChartNarrative(id, chart, config, element) {
+      ${deck.meta?.experience ? 'return; // Let the reader explore without automatic tooltip cycling.' : ''}
+      if (element.closest('.immersive-chart')) return;
       if (gammaExportMode || chartNarrativeTimers[id] || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const series = Array.isArray(config.series) ? config.series : [];
       const tour = [];
@@ -286,12 +334,17 @@ ${slidesHtml}
       for (const {id, config: rawConfig} of chartConfigSets[activeChartTheme] || []) {
         const el = document.getElementById(id);
         if (!el || chartInstances[id] || (scope !== document && !scope?.contains(el))) continue;
+        if(el.closest('.cinema-stage')?.dataset.cinemaRenderer==='webgl')continue;
+        const immersive = el.closest('.immersive-chart');
+        if (immersive && immersive.dataset.immersiveView !== 'flat') continue;
         if (el.clientWidth < 8 || el.clientHeight < 8) {
           requestAnimationFrame(() => initCharts(scope));
           continue;
         }
         try {
           const config = JSON.parse(JSON.stringify(rawConfig));
+          ${deck.meta?.experience ? `const palette = getComputedStyle(document.body);
+          adaptExperienceChart(config, el.closest('[data-chart-type]')?.dataset.chartType, el.clientWidth, matchMedia('(max-width:900px)').matches, { text:palette.getPropertyValue('--gamma-text').trim(), bg:palette.getPropertyValue('--gamma-bg').trim() });` : ''}
           const formatValue = (value, format = 'compact') => {
             const number = Number(value);
             if (format === 'currency_m') {
@@ -326,6 +379,7 @@ ${slidesHtml}
             if (axis.type === 'value' && axis.axisLabel && formatX) axis.axisLabel.formatter = value => formatValue(value, formatX);
           });
           const chart = echarts.init(el, null, { renderer: 'svg' });
+          chart.__gammaCompact = matchMedia('(max-width:900px)').matches;
           // Restore function-based animationDelay from serialized config
           if (config.series) {
             config.series.forEach(s => {
@@ -340,10 +394,19 @@ ${slidesHtml}
               if (isWaterfall && s.label?.show) s.label.formatter = params => formatValue(params.data?.raw ?? params.value, formatLeft);
             });
           }
+          if (chartSelections[id] && config.legend) config.legend.selected = chartSelections[id];
           chart.setOption(config);
           chartInstances[id] = chart;
+          const legendButtons = [...document.querySelectorAll('[data-chart-target="' + id + '"][data-chart-legend]')];
+          const syncLegend = selected => legendButtons.forEach(button => {
+            const series = config.series?.find(item => item.name === button.dataset.chartLegend);
+            if (series?.itemStyle?.color) button.style.setProperty('--scenario-color', series.itemStyle.color);
+            button.setAttribute('aria-pressed', String(selected?.[button.dataset.chartLegend] !== false));
+          });
+          syncLegend(chartSelections[id]);
+          chart.on('legendselectchanged', event => { chartSelections[id] = { ...event.selected }; syncLegend(event.selected); });
           chartResizeObserver?.observe(el);
-          startChartNarrative(id, chart, config, el);
+          if (!immersive) startChartNarrative(id, chart, config, el);
         } catch(e) { console.warn('Chart init error:', id, e); }
       }
     }

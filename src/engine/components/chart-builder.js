@@ -1,3 +1,5 @@
+import { escapeHtml } from '../html.js';
+
 let chartCounter = 0;
 let chartRegistry = [];
 
@@ -9,11 +11,33 @@ export function resetChartCounter() {
 export function buildChartHTML(chartSpec) {
   const id = `chart_${chartCounter++}`;
   chartRegistry.push({ id, chartSpec });
+  if (chartSpec.type === 'parallel') {
+    const dimensions = safeTextValues(chartSpec.data?.dimensions);
+    const names = scenarioNames(safeNumericRows(chartSpec.data?.rows, dimensions.length || 1));
+    const legend = names.map(name => `<button type="button" data-chart-target="${id}" data-chart-legend="${escapeHtml(name)}" aria-pressed="true"><i aria-hidden="true"></i>${escapeHtml(name)}</button>`).join('');
+    return {
+      html: `<style>
+        .chart-container[data-chart-type="parallel"] { display:flex; flex-direction:column; height:100%; }
+        .chart-scenario-legend { display:flex; flex-wrap:wrap; gap:0 14px; flex:none; margin-bottom:8px; }
+        .chart-scenario-legend button { display:flex; align-items:center; gap:8px; min-height:44px; padding:0; border:0; background:transparent; color:var(--gamma-text); font:500 12px/1.4 Archivo,system-ui,sans-serif; cursor:pointer; }
+        .chart-scenario-legend i { width:16px; height:4px; background:var(--scenario-color,var(--gamma-text)); border:1px solid var(--scenario-color,var(--gamma-text)); box-sizing:border-box; }
+        .chart-scenario-legend [aria-pressed="false"] { color:var(--gamma-muted); }
+        .chart-scenario-legend [aria-pressed="false"] i { background:transparent; border-color:var(--gamma-muted); }
+        .chart-scenario-legend button:focus-visible { outline:2px solid var(--gamma-primary); outline-offset:4px; }
+      </style><div class="chart-container" data-chart-type="parallel"><div class="chart-scenario-legend" role="group" aria-label="Compare scenario trajectories">${legend}</div><div id="${id}" style="width:100%; flex:1; min-height:0;"></div></div>`,
+      id,
+      config: chartSpec,
+    };
+  }
   return {
-    html: `<div class="chart-container"><div id="${id}" style="width: 100%; height: 100%; min-height: 280px;"></div></div>`,
+    html: `<div class="chart-container" data-chart-type="${escapeHtml(chartSpec.type || '')}"><div id="${id}" style="width: 100%; height: 100%; min-height: 280px;"></div></div>`,
     id,
     config: chartSpec,
   };
+}
+
+function scenarioNames(rows) {
+  return rows.map((_, index) => `Scenario ${index < 26 ? String.fromCharCode(65 + index) : index + 1}`);
 }
 
 export function getRegisteredCharts(theme) {
@@ -277,6 +301,8 @@ export function buildEChartsConfig(chartSpec, theme) {
     if (c === 'primary') return theme.primary;
     if (c === 'secondary') return theme.secondary;
     if (c === 'accent') return theme.accent;
+    if (c === 'positive') return theme.positive;
+    if (c === 'negative') return theme.negative;
     if (typeof c === 'string' && /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)) return c;
     return theme.primary;
   };
@@ -484,11 +510,11 @@ export function buildEChartsConfig(chartSpec, theme) {
     return {
       ...baseOpts,
       tooltip: { position: 'top', backgroundColor: theme.surface, borderColor: theme.hairline || theme.primary + '30', textStyle: { color: theme.text } },
-      grid: { left: 82, right: 20, top: 18, bottom: 54 },
-      xAxis: { type: 'category', data: xLabels, splitArea: { show: true }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontSize: 10 } },
-      yAxis: { type: 'category', data: yLabels, splitArea: { show: true }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontSize: 10 } },
+      grid: { left: opts.correlation ? 58 : 82, right: 12, top: 18, bottom: 64 },
+      xAxis: { type: 'category', data: xLabels, splitArea: { show: false }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontFamily: 'Archivo', fontSize: 12, interval: 0, margin: 12 } },
+      yAxis: { type: 'category', data: yLabels, splitArea: { show: false }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontFamily: 'Archivo', fontSize: 12, interval: 0, margin: 10 } },
       visualMap: { min, max, calculable: false, orient: 'horizontal', left: 'center', bottom: 4, itemWidth: 12, itemHeight: 120, text: opts.legend_labels || [String(max), String(min)], textGap: 8, textStyle: { color: theme.textMuted, fontSize: 9 }, inRange: { color: opts.correlation ? [theme.negative, theme.surfaceLight, theme.positive] : [theme.surfaceLight, theme.primary] } },
-      series: [{ type: 'heatmap', data: values, label: { show: opts.show_values !== false, color: theme.text, fontSize: 9 }, itemStyle: { borderColor: theme.background, borderWidth: 2 }, emphasis: { itemStyle: { borderColor: theme.text, borderWidth: 1 } } }],
+      series: [{ type: 'heatmap', data: values, label: { show: opts.show_values !== false, color: theme.text, fontSize: 11, textBorderColor: theme.background, textBorderWidth: 3 }, itemStyle: { borderColor: theme.background, borderWidth: 2 }, emphasis: { itemStyle: { borderColor: theme.text, borderWidth: 1 } } }],
     };
   }
 
@@ -565,16 +591,17 @@ export function buildEChartsConfig(chartSpec, theme) {
       axisPointer: { link: [{ xAxisIndex: 'all' }] },
       legend: { top: 0, right: 8, data: ['OHLC', ...periods.map(period => `MA${period}`), ...(showBollinger ? ['Bollinger'] : []), ...(showObv ? ['OBV'] : [])], textStyle: { color: theme.textMuted, fontSize: 9 }, itemWidth: 14, itemHeight: 8 },
       grid: grids,
+      graphic: grids.slice(1).map((grid, index) => ({ type: 'text', left: 0, top: grid.top, silent: true, style: { text: index === 0 ? (showObv ? 'VOL\nOBV' : 'VOL') : index + 1 === macdAxisIndex ? 'MACD' : 'RSI', fill: theme.textMuted, fontSize: 10, fontFamily: 'Archivo', lineHeight: 14 } })),
       xAxis: panelIndices.map(index => ({
         type: 'category', data: labels, gridIndex: index, boundaryGap: true,
         axisLine: { lineStyle: { color: theme.textMuted + '45' } }, axisTick: { show: false },
-        axisLabel: { show: index === panelIndices.at(-1), color: theme.textMuted, fontSize: 8, hideOverlap: true },
+        axisLabel: { show: index === panelIndices.at(-1), color: theme.textMuted, fontSize: 10, hideOverlap: true },
         min: 'dataMin', max: 'dataMax',
       })),
       yAxis: [...panelIndices.map((index) => ({
         scale: index !== rsiAxisIndex, min: index === rsiAxisIndex ? 0 : undefined, max: index === rsiAxisIndex ? 100 : undefined,
         interval: index === rsiAxisIndex ? 50 : undefined, gridIndex: index, axisLine: { show: false }, axisTick: { show: false },
-        axisLabel: { show: index === 0 || index === rsiAxisIndex, color: theme.textMuted, fontSize: index === rsiAxisIndex ? 7 : 9 },
+        axisLabel: { show: index === 0 || index === rsiAxisIndex, color: theme.textMuted, fontSize: 10 },
         splitLine: { show: index === 0 || index === rsiAxisIndex, lineStyle: { color: theme.textMuted + '16' } },
       })), ...(showObv ? [{ gridIndex: 1, position: 'right', scale: true, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { show: false }, splitLine: { show: false } }] : [])],
       dataZoom: [
@@ -616,7 +643,7 @@ export function buildEChartsConfig(chartSpec, theme) {
       tooltip: { trigger: 'axis', axisPointer: { type: 'cross' }, backgroundColor: theme.surface, borderColor: theme.hairline || theme.primary + '30', textStyle: { color: theme.text } },
       legend: { top: 4, right: 8, data: ['Bid depth', 'Ask depth'], textStyle: { color: theme.textMuted, fontSize: 10 } },
       grid: { left: 62, right: 28, top: 46, bottom: 44 },
-      xAxis: { type: 'value', name: opts.x_label || 'Price', nameLocation: 'middle', nameGap: 28, axisLine: { lineStyle: { color: theme.textMuted + '45' } }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontSize: 10 }, splitLine: { lineStyle: { color: theme.textMuted + '14' } } },
+      xAxis: { type: 'value', scale: true, min: 'dataMin', max: 'dataMax', splitNumber: 4, name: opts.x_label || 'Price', nameLocation: 'middle', nameGap: 28, axisLine: { lineStyle: { color: theme.textMuted + '45' } }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontSize: 10, hideOverlap: true }, splitLine: { lineStyle: { color: theme.textMuted + '14' } } },
       yAxis: { type: 'value', name: opts.y_label || 'Cumulative size', nameTextStyle: { color: theme.textMuted, fontSize: 9 }, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.textMuted, fontSize: 10 }, splitLine: { lineStyle: { color: theme.textMuted + '14' } } },
       series: [
         { name: 'Bid depth', type: 'line', step: 'end', showSymbol: false, data: bids, lineStyle: { width: 2, color: theme.positive }, itemStyle: { color: theme.positive }, areaStyle: { color: theme.positive + '28' } },
@@ -678,12 +705,23 @@ export function buildEChartsConfig(chartSpec, theme) {
   if (type === 'parallel') {
     const dimensions = safeTextValues(data.dimensions);
     const rows = safeNumericRows(data.rows, dimensions.length || 1);
+    // The input contains unlabeled rows: stable neutral identifiers make each
+    // trajectory traceable without assigning an invented economic narrative.
+    const names = scenarioNames(rows);
+    const scenarioColors = [theme.primary, theme.secondary, theme.accent, theme.positive, theme.textMuted];
     return {
       ...baseOpts,
+      legend: { show: false, data: names, selectedMode: 'multiple' },
       tooltip: { trigger: 'item', backgroundColor: theme.surface, borderColor: theme.hairline || theme.primary + '30', textStyle: { color: theme.text } },
-      parallelAxis: dimensions.map((dimension, index) => ({ dim: index, name: dimension, nameTextStyle: { color: theme.text, fontSize: 10 }, axisLabel: { color: theme.textMuted, fontSize: 8 }, axisLine: { lineStyle: { color: theme.textMuted + '45' } }, splitLine: { lineStyle: { color: theme.textMuted + '16' } } })),
-      parallel: { left: 58, right: 38, top: 42, bottom: 38, parallelAxisDefault: { type: 'value', nameLocation: 'end', nameGap: 12 } },
-      series: [{ name: safeText(data.label, 'Scenarios'), type: 'parallel', lineStyle: { width: 2, opacity: .55, color: theme.primary }, emphasis: { lineStyle: { width: 4, opacity: 1 } }, data: rows }],
+      parallelAxis: dimensions.map((dimension, index) => {
+        // Legend selection changes visibility, never the coordinate system.
+        const column = rows.map(row => row[index]);
+        const min = Math.floor(Math.min(0, ...column));
+        const max = Math.ceil(Math.max(0, ...column));
+        return { dim: index, name: dimension, min, max: max === min ? max + 1 : max, nameTextStyle: { color: theme.text, fontFamily: 'Archivo', fontSize: 12 }, axisLabel: { color: theme.textMuted, fontFamily: 'Archivo', fontSize: 10 }, axisLine: { lineStyle: { color: theme.textMuted + '45' } }, splitLine: { lineStyle: { color: theme.textMuted + '16' } } };
+      }),
+      parallel: { left: 28, right: 32, top: 36, bottom: 24, parallelAxisDefault: { type: 'value', nameLocation: 'end', nameGap: 14 } },
+      series: rows.map((row, index) => ({ name: names[index], type: 'parallel', color: scenarioColors[index % scenarioColors.length], lineStyle: { width: 2.5, opacity: .9, color: scenarioColors[index % scenarioColors.length] }, itemStyle: { color: scenarioColors[index % scenarioColors.length] }, emphasis: { lineStyle: { width: 4, opacity: 1 } }, data: [row] })),
     };
   }
 
@@ -784,16 +822,25 @@ export function buildEChartsConfig(chartSpec, theme) {
   }
 
   if (type === 'treemap') {
-    const items = (Array.isArray(data.items) ? data.items : []).map(safeTreemapItem).filter(Boolean);
+    const luminance = hex => {
+      const normalized = hex.length === 4 ? '#' + [...hex.slice(1)].map(c => c + c).join('') : hex;
+      return [1, 3, 5].map(start => parseInt(normalized.slice(start, start + 2), 16) / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
+    };
+    const paint = (item, index) => {
+      const color = palette[index % palette.length], light = luminance(color);
+      const contrast = text => (Math.max(light, luminance(text)) + .05) / (Math.min(light, luminance(text)) + .05);
+      return { ...item, itemStyle: { color }, label: { color: contrast(theme.text) >= contrast(theme.background) ? theme.text : theme.background, formatter: item.name.replace(' · ', '\n') }, ...(item.children ? { children: item.children.map(paint) } : {}) };
+    };
+    const items = (Array.isArray(data.items) ? data.items : []).map(safeTreemapItem).filter(Boolean).map(paint);
     return {
       ...baseOpts,
       tooltip: { trigger: 'item', backgroundColor: theme.surface, borderColor: theme.hairline || theme.primary + '30', textStyle: { color: theme.text } },
       series: [{
-        type: 'treemap', roam: false, nodeClick: false, breadcrumb: { show: false },
-        label: { show: true, formatter: '{b}', color: theme.text, fontSize: 11, fontWeight: 600 },
+        type: 'treemap', left: 0, right: 0, top: 0, bottom: 0, roam: false, nodeClick: false, breadcrumb: { show: false },
+        label: { show: true, formatter: '{b}', color: theme.text, fontSize: 12, fontWeight: 600, lineHeight: 18, overflow: 'break' },
         upperLabel: { show: true, height: 24, color: theme.text, fontSize: 10, fontWeight: 600 },
         itemStyle: { borderColor: theme.background, borderWidth: 3, gapWidth: 2 },
-        levels: [{ itemStyle: { borderWidth: 0, gapWidth: 3 } }, { colorSaturation: [.25,.55], itemStyle: { borderWidth: 2, gapWidth: 2 } }],
+        levels: [{ itemStyle: { borderWidth: 0, gapWidth: 3 } }, { itemStyle: { borderWidth: 2, gapWidth: 2 } }],
         data: items, color: palette,
       }],
     };
@@ -832,6 +879,7 @@ export function buildEChartsConfig(chartSpec, theme) {
     }).filter(Boolean);
     return {
       ...baseOpts,
+      __gammaNodeLabels: opts.node_labels || {},
       tooltip: { trigger: 'item', backgroundColor: theme.surface, borderColor: theme.hairline || theme.primary + '30', textStyle: { color: theme.text } },
       series: [{
         type: 'sankey', left: 12, right: 132, top: 12, bottom: 12, nodeWidth: 10, nodeGap: 16, draggable: false,
@@ -888,8 +936,8 @@ export function buildEChartsConfig(chartSpec, theme) {
       xAxis: { type: 'value', axisLabel: { color: theme.textMuted, fontSize: 9 }, splitLine: { lineStyle: { color: theme.textMuted + '18' } } },
       yAxis: { type: 'category', data: labels, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: theme.text, fontSize: 10 } },
       series: [
-        { name: safeText(datasets[0]?.label, 'Downside'), type: 'bar', stack: 'total', data: downside, itemStyle: { color: theme.negative }, label: { show: true, position: 'left', color: theme.negative, fontSize: 10 } },
-        { name: safeText(datasets[1]?.label, 'Upside'), type: 'bar', stack: 'total', data: upside, itemStyle: { color: theme.positive }, label: { show: true, position: 'right', color: theme.positive, fontSize: 10 } },
+        { name: safeText(datasets[0]?.label, 'Downside'), type: 'bar', stack: 'total', data: downside, itemStyle: { color: resolveColor(datasets[0]?.color || theme.negative) }, label: { show: true, position: 'left', color: resolveColor(datasets[0]?.color || theme.negative), fontSize: 10 } },
+        { name: safeText(datasets[1]?.label, 'Upside'), type: 'bar', stack: 'total', data: upside, itemStyle: { color: resolveColor(datasets[1]?.color || theme.positive) }, label: { show: true, position: 'right', color: resolveColor(datasets[1]?.color || theme.positive), fontSize: 10 } },
       ],
     };
   }

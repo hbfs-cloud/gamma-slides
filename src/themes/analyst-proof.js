@@ -10,7 +10,7 @@ export const analystProof = {
   primary: '#1748D5',
   secondary: '#5E46A8',
   accent: '#A05A14',
-  positive: '#087D67',
+  positive: '#06745F',
   negative: '#B7352D',
   warning: '#A05A14',
   forecast: '#5E46A8',

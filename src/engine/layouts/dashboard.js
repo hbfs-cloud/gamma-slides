@@ -16,8 +16,8 @@ function renderPanel(panel, theme) {
   if (panel.type === 'table') {
     const spec = panel.table || panel;
     const headers = (spec.headers || []).map(header => `<th>${escapeHtml(header)}</th>`).join('');
-    const rows = (spec.rows || []).filter(Array.isArray).map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('');
-    return `${heading}<table class="data-table dashboard-table"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+    const rows = (spec.rows || []).filter(Array.isArray).map(row => `<tr>${row.map((cell, index) => `<td data-label="${escapeHtml((spec.headers || [])[index] || '')}">${escapeHtml(cell)}</td>`).join('')}</tr>`).join('');
+    return `${heading}<table class="data-table dashboard-table" data-columns="${(spec.headers || []).length}"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
   }
   if (panel.type === 'bullets') {
     const items = (panel.items || []).map(item => `<li>${escapeHtml(typeof item === 'string' ? item : item.text || item.title || '')}</li>`).join('');

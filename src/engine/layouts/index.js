@@ -13,6 +13,7 @@ import { renderBlank } from './blank.js';
 import { renderAgenda } from './agenda.js';
 import { renderDashboard } from './dashboard.js';
 import { escapeHtml, safeUrl } from '../html.js';
+import { experienceCompositionHTML } from '../components/experience-compositions.js';
 
 const layouts = {
   title: renderTitle,
@@ -35,7 +36,7 @@ export function renderSlide(slide, theme, deck, index = 0, total = 1) {
   const renderer = layouts[slide.layout];
   if (!renderer) return `<section><h2>Unknown layout: ${escapeHtml(slide.layout)}</h2></section>`;
 
-  const content = renderer(slide, theme, deck);
+  const content = (deck.meta?.experience ? experienceCompositionHTML(slide) : null) ?? renderer(slide, theme, deck);
   const background = slide.background;
   const bgAttr = background?.type === 'image'
     ? ` data-background-image="${safeUrl(background.value)}"`
@@ -53,5 +54,6 @@ export function renderSlide(slide, theme, deck, index = 0, total = 1) {
   const slideTotal = String(total).padStart(2, '0');
   const stageChrome = `<div class="theme-stage" aria-hidden="true"><span>${slideNumber}</span><i></i><b></b></div>`;
 
-  return `<section class="${layoutClass} ${variantClass} ${toneClass} ${cadenceClass}" data-layout="${escapeHtml(slide.layout)}" data-variant="${escapeHtml(slide.variant || 'default')}" data-slide-number="${slideNumber}" data-slide-total="${slideTotal}"${bgAttr}${transAttr}>\n${stageChrome}\n${content}\n${notesHtml}\n</section>`;
+  const composition = deck.meta?.experience && slide.composition ? ` data-composition="${escapeHtml(slide.composition)}"` : '';
+  return `<section class="${layoutClass} ${variantClass} ${toneClass} ${cadenceClass}" data-layout="${escapeHtml(slide.layout)}" data-variant="${escapeHtml(slide.variant || 'default')}" data-slide-number="${slideNumber}" data-slide-total="${slideTotal}"${composition}${bgAttr}${transAttr}>\n${stageChrome}\n${content}\n${notesHtml}\n</section>`;
 }

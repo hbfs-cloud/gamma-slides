@@ -10,6 +10,19 @@
       "type": "object",
       "properties": {
         "title": { "type": "string" },
+        "presentation": { "type": "string", "enum": ["direct", "studio"] },
+        "experience": { "type": "boolean", "description": "Responsive editorial deck with persistent chapter navigation." },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["start", "label"],
+            "properties": {
+              "start": { "type": "integer", "minimum": 1 },
+              "label": { "type": "string" },
+              "detail": { "type": "string" }
+            }
+          }
+        },
         "subtitle": { "type": "string" },
         "author": { "type": "string" },
         "company": { "type": "string" },
@@ -110,7 +123,8 @@
         "narration": { "type": "string" },
         "notes": { "type": "string" },
         "show_meta": { "type": "boolean" },
-        "variant": { "type": "string" },
+        "variant": { "type": "string", "description": "Layout variant. Chart slides support immersive for 3D bar-series comparison or XYZ scatter exploration, with a standard chart fallback. Cinematic compares two additive, nonnegative bar series across up to five categories as proportional volumes that open into their segments." },
+        "composition": {"type": "string", "enum": ["brief", "scorecard", "evidence", "ledger", "feature", "register", "sequence", "roadmap", "chapter", "decisions"], "description": "Content-led composition for experience presentations."},
         "tone": { "type": "string", "enum": ["default", "dark", "light", "accent"] },
         "kicker": { "type": "string" },
         "label": { "type": "string" },
@@ -320,12 +334,17 @@
             "format_y_right": { "type": "string" },
             "show_legend": { "type": "boolean" },
             "show_values": { "type": "boolean" },
+            "node_labels": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Short readable Sankey node labels for compact views; keys match complete source node names." },
             "center_label": { "type": "string" },
             "stacked": { "type": "boolean" },
             "total_indices": { "type": "array", "items": { "type": "integer" } },
             "horizontal": { "type": "boolean" },
             "x_label": { "type": "string" },
             "y_label": { "type": "string" },
+            "z_label": { "type": "string" },
+            "size_label": { "type": "string" },
+            "depth_label": { "type": "string", "description": "Third-axis label enabling Three.js exploration of GPU bubble charts; depth uses the supplied size value." },
+            "format_z": { "type": "string" },
             "format_x": { "type": "string" },
             "min": { "type": "number" },
             "max": { "type": "number" },
@@ -364,6 +383,7 @@
       "type": "object",
       "required": ["headers", "rows"],
       "properties": {
+        "emphasis_rows": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "One-based rows to emphasize without changing data."},
         "headers": { "type": "array", "items": { "type": "string" } },
         "rows": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
         "column_types": { "type": "array", "items": { "type": "string" } },

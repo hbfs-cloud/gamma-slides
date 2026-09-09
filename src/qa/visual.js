@@ -54,8 +54,8 @@ export async function runVisualQA(opts) {
         };
       });
       const skip = await page.$('[data-studio-action="skip"], [data-action="skip"], .gamma-studio-skip, [data-gamma-skip]');
-      if (skip) await skip.click();
-      else await page.keyboard.press('Escape');
+      if (skip && await skip.isVisible()) await skip.click();
+      else if (studio?.visible) await page.keyboard.press('Escape');
     }
 
     const slideCount = await page.evaluate(() => Reveal.getTotalSlides());
@@ -75,8 +75,14 @@ export async function runVisualQA(opts) {
         const current = Reveal.getCurrentSlide();
         return Reveal.getIndices(current).h === slideIndex && Number.parseFloat(getComputedStyle(current).opacity) > 0.99;
       }, { timeout: 5_000 }, index);
-      if (live && await page.$('section.present [id^="chart_"]')) {
+      if (live && await page.$('section.present [id^="chart_"],section.present .d3-webgpu-stage')) {
         await page.evaluate(() => new Promise(resolveSettle => setTimeout(resolveSettle, 900)));
+      }
+      if (live && await page.$('section.present .d3-webgpu-stage')) {
+        await page.waitForFunction(() => {
+          const root = document.querySelector('section.present .d3-webgpu-stage');
+          return root?.dataset.d3View === '3d' ? Boolean(root._threeExploration?.renderer) : ['ready', 'fallback'].includes(root?.dataset.d3State);
+        }, { timeout: 10_000 });
       }
 
       const audit = await page.evaluate(({ viewportWidth, viewportHeight }) => {
@@ -97,7 +103,13 @@ export async function runVisualQA(opts) {
         const slideRect = rect(slide);
         const source = slide.querySelector(':scope > .slide-source');
         const sourceRect = source && visible(source) ? rect(source) : null;
-        const contentRects = [...slide.children]
+        // A cinematic canvas spans the slide intentionally. Audit its readable regions,
+        // rather than treating the backdrop's bounding box as occupied text.
+        const contentRects = [...slide.children].flatMap(element => element.matches('.cinema-stage')
+          ? [...element.querySelectorAll('.cinema-heading,.cinema-amount,.cinema-takeaway,.cinema-feature,.cinema-actions,.cinema-segment-labels > div,.cinema-fallback')]
+          : element.matches('.d3-webgpu-stage')
+            ? [...element.querySelectorAll('.d3-webgpu-heading,.d3-webgpu-plot,.d3-webgpu-caption')]
+          : [element])
           .filter(element => !element.matches('.slide-source,.notes,.theme-stage') && visible(element))
           .map(element => ({ node: element.className || element.tagName, bounds: rect(element) }));
         const sourceOverlaps = sourceRect
@@ -120,7 +132,7 @@ export async function runVisualQA(opts) {
           if (!visible(element) || element.closest('.notes')) return false;
           const bounds = element.getBoundingClientRect();
           return bounds.left < -1 || bounds.right > viewportWidth + 1 || bounds.top < -1 || bounds.bottom > viewportHeight + 1;
-        }).slice(0, 20).map(element => element.className || element.tagName);
+        }).slice(0, 20).map(element => element.className?.baseVal || element.className || element.tagName);
 
         const internalOverflow = [...slide.querySelectorAll('*')].filter(element => {
           if (!visible(element) || element.closest('.notes') || element.tagName === 'CANVAS') return false;
@@ -135,8 +147,44 @@ export async function runVisualQA(opts) {
         const headingStyle = heading ? getComputedStyle(heading) : null;
         const revealScale = slide.offsetWidth ? slide.getBoundingClientRect().width / slide.offsetWidth : 1;
         const headingLines = heading && headingStyle ? Math.round(heading.getBoundingClientRect().height / (Number.parseFloat(headingStyle.lineHeight) * revealScale)) : 0;
-        const canvases = [...slide.querySelectorAll('canvas')].map(canvas => ({ css: [canvas.clientWidth, canvas.clientHeight], backing: [canvas.width, canvas.height] }));
-        const charts = [...slide.querySelectorAll('[id^="chart_"]')].map(chart => {
+        const canvases = [...slide.querySelectorAll('canvas')].filter(visible).map(canvas => {
+          const bounds = canvas.getBoundingClientRect();
+          return { css: [bounds.width, bounds.height], backing: [canvas.width, canvas.height] };
+        });
+        const charts = [...slide.querySelectorAll('[id^="chart_"],.d3-webgpu-stage,.revenue-sculpture')].map(chart => {
+          if (chart.matches('.revenue-sculpture')) {
+            const state = chart._revenueSculpture, plot = chart.querySelector('.revenue-sculpture-plot'), svg = chart.querySelector('.revenue-sculpture-fallback'), bounds = plot.getBoundingClientRect();
+            const gl = state?.renderer?.getContext();
+            return { id: 'revenue-sculpture', size: [Math.round(bounds.width), Math.round(bounds.height)], renderer: gl && !gl.isContextLost() ? 'webgl' : svg && visible(svg) ? 'svg' : 'missing', shapeCount: state?.meshes?.length || svg?.querySelectorAll('path').length || 0, accessible: Boolean(chart.querySelector('[data-revenue-segment]')?.getAttribute('aria-label')) };
+          }
+          if (chart.matches('.d3-webgpu-stage')) {
+            if (chart.dataset.d3View === '3d') {
+              const state = chart._threeExploration, canvas = state?.renderer?.domElement, bounds = canvas?.getBoundingClientRect(), gl = state?.renderer?.getContext();
+              return { id: 'three-comparables', size: bounds ? [Math.round(bounds.width), Math.round(bounds.height)] : [0, 0], renderer: gl && !gl.isContextLost() ? 'webgl' : 'missing', shapeCount: state?.points?.length || 0, accessible: Boolean(chart.querySelector('table') && chart.querySelector('[data-d3-action="values"]')) };
+            }
+            const app = chart._pixiApp, plot = chart.querySelector('.d3-webgpu-plot'), svg = chart.querySelector('.d3-webgpu-fallback');
+            const bounds = plot.getBoundingClientRect();
+            const device = app?.renderer?.gpu?.device, gl = app?.renderer?.gl;
+            const shapeCount = app?.stage?.children?.length || svg?.querySelectorAll('path,rect,circle,line').length || 0;
+            return { id: plot.getAttribute('aria-labelledby'), size: [Math.round(bounds.width), Math.round(bounds.height)], renderer: device ? 'webgpu' : gl && !gl.isContextLost() ? 'webgl' : svg && visible(svg) ? 'svg' : 'missing', shapeCount, accessible: Boolean(plot.getAttribute('aria-labelledby') && chart.querySelector('table') && chart.querySelector('[data-d3-action="values"]')) };
+          }
+          const cinema=chart.closest('.cinema-stage');
+          if(cinema?.dataset.cinemaRenderer==='webgl'){
+            const canvas=cinema.querySelector('canvas'),bounds=canvas?.getBoundingClientRect();
+            return {id:chart.id,size:bounds?[Math.round(bounds.width),Math.round(bounds.height)]:[0,0],renderer:canvas&&Number(cinema.dataset.cinemaFrames)>0?'webgl':'missing',shapeCount:0,accessible:Boolean(cinema.querySelector('table')&&cinema.querySelector('[data-cinema-action="values"]'))};
+          }
+          const immersive = chart.closest('.immersive-chart');
+          if (immersive?.dataset.immersiveView === 'spatial') {
+            const canvas = immersive.querySelector('.spatial-viewport canvas');
+            const bounds = canvas?.getBoundingClientRect();
+            return {
+              id: chart.id,
+              size: bounds ? [Math.round(bounds.width), Math.round(bounds.height)] : [0, 0],
+              renderer: canvas && Number(immersive.dataset.spatialFrames) > 0 ? 'webgl' : 'missing',
+              shapeCount: 0,
+              accessible: Boolean(immersive.querySelector('.spatial-selection') && immersive.querySelector('table')),
+            };
+          }
           const bounds = chart.getBoundingClientRect();
           const svg = chart.querySelector('svg');
           const canvas = chart.querySelector('canvas');
@@ -155,6 +203,7 @@ export async function runVisualQA(opts) {
           title: heading?.textContent?.trim() || `Slide ${Reveal.getIndices(slide).h + 1}`,
           layout: slide.dataset.layout,
           variant: slide.dataset.variant,
+          composition: slide.dataset.composition,
           slideRect,
           sourceRect,
           sourceOverlaps,
@@ -188,7 +237,7 @@ export async function runVisualQA(opts) {
       if (slide.clipped.length) blockers.push(`Slide ${slide.index}: content outside viewport (${slide.clipped.join(', ')})`);
       if (slide.internalOverflow.length) blockers.push(`Slide ${slide.index}: clipped internal overflow`);
       if (slide.badTokens.length) blockers.push(`Slide ${slide.index}: invalid data token ${slide.badTokens.join(', ')}`);
-      const headlineLimit = slide.variant === 'story' ? 6 : ['title', 'closing'].includes(slide.layout) ? 3 : 2;
+      const headlineLimit = slide.composition === 'ledger' ? 4 : slide.composition === 'brief' ? 3 : slide.variant === 'story' ? 6 : ['title', 'closing'].includes(slide.layout) ? 3 : 2;
       if (slide.headingLines > headlineLimit) warnings.push(`Slide ${slide.index}: headline uses ${slide.headingLines} lines (limit ${headlineLimit})`);
       for (const canvas of slide.canvases) {
         if (canvas.backing[0] + 1 < canvas.css[0] * dpr || canvas.backing[1] + 1 < canvas.css[1] * dpr) {

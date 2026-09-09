@@ -1,5 +1,9 @@
 // Subset of Lucide icons as inline SVG
 const icons = {
+  'rotate-left': '<path d="M3 10a9 9 0 1 1 2.6 8.4M3 4v6h6"/>',
+  'rotate-right': '<path d="M21 10a9 9 0 1 0-2.6 8.4M21 4v6h-6"/>',
+  'plus': '<path d="M12 5v14M5 12h14"/>',
+  'minus': '<path d="M5 12h14"/>',
   'trending-up': '<path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
   'trending-down': '<path d="M22 17l-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/>',
   'target': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',

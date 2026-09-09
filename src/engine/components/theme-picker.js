@@ -193,7 +193,8 @@ export function themePickerJS(themes, defaultThemeId) {
       try{saved=(localStorage.getItem('gamma-presentation-theme')||'').toLowerCase()}catch(_){ }
       if(!gammaThemeMeta[gammaThemeQuery]&&gammaThemeMeta[saved])gammaPresentationTheme=saved;
       commitPresentationTheme(gammaPresentationTheme,{persist:false});
-      if(gammaThemeAutomation||gammaThemeMeta[gammaThemeQuery]){
+      if(gammaThemeAutomation||gammaThemeMeta[gammaThemeQuery]||document.body.classList.contains('gamma-cinema-deck')||document.body.classList.contains('gamma-direct-deck')||Reveal.getCurrentSlide()?.querySelector('.cinema-stage')){
+        gammaThemePicked=true;
         chooser.hidden=true;chooser.classList.remove('is-visible');
       }else{
         const close=chooser.querySelector('[data-theme-close]');if(close)close.hidden=true;

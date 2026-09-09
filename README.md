@@ -62,7 +62,18 @@ node bin/gamma-slides.js site \
   -o site
 ```
 
-The 38-slide flagship exercises the complete **Gamma Finance Catalog v1**: 28 curated native ECharts families and finance-specific compositions across corporate reporting, markets, trading, portfolio, risk, liquidity, rates, and economics. Its 37 chart instances include a multi-pane stock workstation, market depth, return histogram, boxplot, calendar heatmap, parallel coordinates, sunburst allocation, exposure network, theme river, and forecast fan. This is a bounded product catalogue—not a claim that every ECharts module is exposed.
+The 38-slide flagship covers the **Gamma Finance Catalog v1** across reporting, markets, trading, portfolio, risk, liquidity, rates, and economics. Its 37 charts include a multi-pane stock workstation, market depth, return histogram, boxplot, calendar heatmap, parallel coordinates, allocation, exposure network, theme river, and forecast fan. The opening uses five real Three.js revenue ribbons with one common amount scale. Four chart slides use D3 scales/layout with Pixi.js rendering the actual data, axes, and labels through WebGPU (WebGL fallback). Public peers open in Three.js: growth, valuation multiple, and gross margin occupy three measured axes, with selectable companies and an immediate 2D comparison.
+
+```bash
+node bin/gamma-slides.js generate -f presentations/flagship.yaml -o output/flagship-demo.html
+npx playwright test qa/flagship-*.spec.js
+```
+
+`meta.experience: true` adds persistent chapter navigation and full-size mobile reading, with scrollable slides and tables that expose every column as labeled values. `meta.chapters` accepts one-based `start`, `label`, and optional `detail`. The flagship opens directly; Appearance and Studio remain available in the top bar. GPU resources stop off-slide, data dialogs retain exact values, and print/export uses SVG. Browser evidence is written to `output/flagship-review/`.
+
+Experience slides can use a content-led `composition`: `brief`, `scorecard`, `ledger`, `evidence`, `feature`, `register`, `sequence`, `roadmap`, `chapter`, or `decisions`. The flagship applies these to twenty slides. Scorecards and decision summaries keep every principal signal visible on the first phone screen; controls share a compact band; roadmap rows separate deliverables from release criteria. `table.emphasis_rows` names one-based evidence rows. On phones, the continuation control has its own space below the content.
+
+Financial tables retain their currency unit when rows stack on phones. Sankey charts support `chart.options.node_labels` for readable labels inside mobile nodes, with full source names available below the figure. Parallel-coordinate scenarios have native keyboard and touch selection; their axes stay fixed when a scenario is isolated. The 3D comparables keep company names beside their points and selected values beside the controls.
 
 Reveal, ECharts, and the presentation fonts are embedded from pinned npm packages. A generated deck does not need a CDN, Google Fonts, or a network connection to present, export, or record.
 
@@ -95,7 +106,43 @@ node bin/gamma-slides.js video \
   -o output/q4-2025-revenue-report.mp4
 ```
 
-Live and export modes both render ECharts as SVG. Charts initialize only when their slide becomes visible, avoiding a deck-wide hidden Canvas allocation. Visual QA can exercise the real interactive runtime with `--live`; it verifies the startup wizard, renderer presence, non-empty SVG geometry, console chart warnings, invalid data tokens, overflow, clipping, and source/footer collisions on every slide. Export QA remains available without `--live`.
+Ordinary charts and exports render ECharts as SVG. Immersive chart slides use a shared WebGL canvas for interactive data exploration, with SVG and exact-value table alternatives. Charts initialize when their slide becomes visible. Visual QA can exercise the real interactive runtime with `--live`; it recognizes WebGL frames as well as SVG geometry and checks chart warnings, invalid data tokens, overflow, clipping, and source/footer collisions. Export QA remains available without `--live`.
+
+### Immersive data presentations
+
+```bash
+node bin/gamma-slides.js generate -f presentations/immersive-data.yaml -o output/immersive-data.html
+npm run test:browser
+```
+
+Set `variant: immersive` on a `layout: chart` slide. Bar charts map category, value, and series to three axes. Scatter charts require a numeric `z` on every point and support `chart.options.z_label` and `format_z`, alongside the existing X/Y options. The example reuses the flagship's illustrative segment revenue and public-peer data; peer gross margin becomes the third spatial axis.
+
+```yaml
+layout: chart
+variant: immersive
+title: Growth, valuation, and margin
+chart:
+  type: scatter
+  data:
+    datasets:
+      - label: Illustrative peers
+        points:
+          - {name: Peer A, x: 8, y: 2.2, z: 48}
+          - {name: Peer B, x: 31, y: 7.2, z: 75}
+  options:
+    x_label: Revenue growth
+    y_label: Revenue multiple
+    z_label: Gross margin
+    format_x: percent
+    format_z: percent
+source: Illustrative data
+```
+
+Drag to orbit, use arrow keys while the plot is focused, or move between **Overview**, **Profile**, and **Top** with short camera transitions. Fine camera controls sit in a disclosure. The observation selector and point/column selection update the value inspector; related columns are emphasized together and linked across series. A comparison rail shows the selected category's first-to-last-series change, named endpoints, and values. **3D view**, **2D view**, and **Values** are reversible. The flat scatter view projects X/Y; Z stays available in the inspector and table. Theme switching retains the same resolved series and observation colors as the SVG chart.
+
+Supported inputs are at most six series, twelve bar categories, or 500 scatter points. Stacked/horizontal bars, secondary Y axes, missing bar values, missing XYZ coordinates, and other chart types retain the standard SVG view. Reduced motion starts in 2D. Missing or lost WebGL also falls back to 2D, and exports use SVG. This variant uses native WebGL and remains self-contained, without a CDN. One shared WebGL context renders on demand, with a two-megapixel canvas budget; there is no perpetual orbit loop.
+
+Playwright uses an installed Chrome/Chromium when available, or its managed Chromium (`npx playwright install chromium`). `PUPPETEER_EXECUTABLE_PATH` can select a local executable. Browser captures and JSON results are written to `output/immersive-qa/`; the review record is in `docs/immersive-qa.md`.
 
 The video renderer works slide by slide: each PNG and narration file is deleted immediately after its compressed segment is produced. The temporary workspace is removed on success or failure.
 
@@ -122,3 +169,16 @@ The offline renderer produces H.264 at CRF 18 with AAC audio, creates slides and
 - `edge-tts` for narration
 
 All example company, market, financial, and forecast data in the flagship deck is explicitly illustrative (`DEMO`).
+
+
+## Cinematic revenue comparison
+
+`presentations/cinematic-revenue.yaml` is the complete immersive demonstration: an authored opening, two proportional revenue volumes, a segment-by-segment reveal, a profit-quality scene, and a decision close. The leading contribution owns the second state. On phones, the opening and close use their own composition, while every 3D scene remains annotated and interactive. Theme and recording tools sit behind **Outils**; the presentation opens directly.
+
+```bash
+node bin/gamma-slides.js generate -f presentations/cinematic-revenue.yaml -o output/cinematic-revenue.html
+```
+
+Use `layout: chart`, `variant: cinematic` with two additive, nonnegative bar series and one to five categories. Percentages, ratios, unsupported chart options and incomplete data keep the SVG chart with its provenance. The series must represent additive quantities; the engine cannot infer accounting semantics from labels.
+
+Three.js is embedded only when a supported cinematic scene is present. Lighting, beveled geometry and shadows render locally; the 1.1-second decomposition stops at rest. Reduced motion switches states immediately. A shared WebGL2 canvas is capped at two megapixels; each scene has a bounded environment and shadow map. Missing/lost GPU and print/PDF exports retain SVG and the source table. Review and validation: `docs/cinematic-qa.md`.

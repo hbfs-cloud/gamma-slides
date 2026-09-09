@@ -527,7 +527,13 @@ test('chart object data is whitelisted before it reaches ECharts', () => {
 
   assert.deepEqual(sankey.series[0].data.map(node => node.name), ['Source', 'Use']);
   assert.deepEqual(sankey.series[0].links, [{ source: 'Source', target: 'Use', value: 10 }]);
-  assert.deepEqual(treemap.series[0].data, [{ name: 'Group', children: [{ name: 'Leaf', value: 10 }] }]);
+  const sourceFields = node => ({ name: node.name, ...(node.value === undefined ? {} : { value: node.value }), ...(node.children ? { children: node.children.map(sourceFields) } : {}) });
+  assert.deepEqual(treemap.series[0].data.map(sourceFields), [{ name: 'Group', children: [{ name: 'Leaf', value: 10 }] }]);
+  for (const node of [treemap.series[0].data[0], ...treemap.series[0].data[0].children]) {
+    assert.deepEqual(Object.keys(node).sort(), ['name', node.children ? 'children' : 'value', 'itemStyle', 'label'].sort());
+    assert.equal(node.label.formatter, node.name);
+    assert.equal(node.itemStyle.color, theme.primary);
+  }
   assert.deepEqual(bar.series[0].data, [null]);
   assert.doesNotMatch(JSON.stringify({ sankey, treemap, bar }), /window\.pwned|onerror/);
 });

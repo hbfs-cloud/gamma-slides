@@ -1,0 +1,112 @@
+version: '1'
+meta:
+  title: Immersive Finance · Gamma Slides
+  language: en
+  company: Gamma Slides
+  description: Interactive 3D exploration of illustrative financial data from the flagship.
+branding:
+  watermark: ILLUSTRATIVE DATA
+theme: signal-room
+slides:
+  - layout: chart
+    transition: fade
+    variant: immersive
+    title: Revenue, across segments and years.
+    subtitle: FY24 and FY25 revenue by primary customer segment.
+    chart: &ref_0
+      type: bar
+      data:
+        labels:
+          - Enterprise
+          - Platforms
+          - Fintech
+          - Marketplaces
+          - Other
+        datasets:
+          - label: FY24
+            values:
+              - 3100000
+              - 1400000
+              - 2200000
+              - 1000000
+              - 600000
+            color: '#9DA5B2'
+          - label: FY25
+            values:
+              - 5200000
+              - 4000000
+              - 3500000
+              - 2100000
+              - 1400000
+            color: primary
+      options:
+        format_y: currency_m
+        show_legend: true
+        show_values: true
+        x_label: Customer segment
+        y_label: Revenue
+        z_label: Year
+    insight: Platforms added 2.6 million dollars and became the largest incremental growth pool.
+    source: DEMO management reporting · Revenue by customer segment
+    footnote: Segment totals reconcile to illustrative FY24 revenue of $8.3M and FY25 revenue of $16.2M.
+    narration: >
+      Every customer segment grew in FY25. Platform revenue nearly tripled and supplied the largest
+      incremental growth pool, while enterprise remained the largest absolute segment.
+  - layout: chart
+    transition: fade
+    variant: immersive
+    title: Growth, valuation, and margin. Together.
+    subtitle: Explore three dimensions of the illustrative peer set.
+    chart:
+      type: scatter
+      data:
+        datasets:
+          - label: Public peers
+            color: primary
+            points:
+              - name: Legacy Processor
+                x: 8
+                'y': 2.2
+                highlight: true
+                z: 48
+              - name: Global Payments
+                x: 12
+                'y': 3.1
+                highlight: true
+                z: 55
+              - name: Fintech Platform
+                x: 24
+                'y': 5.4
+                highlight: true
+                z: 68
+              - name: Cloud Payments
+                x: 31
+                'y': 7.2
+                highlight: true
+                z: 75
+              - name: Stablecoin Infra
+                x: 42
+                'y': 8.5
+                highlight: true
+                z: 71
+      options:
+        x_label: NTM revenue growth (%)
+        y_label: EV / NTM revenue (×)
+        format_x: percent
+        show_legend: false
+        show_all_labels: true
+        z_label: Gross margin
+        format_z: percent
+    insight: >-
+      Acme's FY26 plan targets 74 percent growth and 78 percent gross margin; no valuation inference is
+      implied.
+    source: DEMO public-comps screen · December 2025
+    footnote: Peer names, growth, margins, and valuation multiples are illustrative.
+    narration: >
+      The demo peer set shows higher valuation multiples as growth and gross-margin quality improve. Acme's
+      operating plan targets the profile, not a specific valuation outcome.
+  - layout: chart
+    title: Return to the evidence.
+    subtitle: The same segment data in a conventional comparison.
+    chart: *ref_0
+    source: DEMO management reporting · Revenue by customer segment

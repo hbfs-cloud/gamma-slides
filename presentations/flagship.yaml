@@ -2,6 +2,15 @@ version: "1"
 
 meta:
   title: "FY2025 Board Review & FY2026 Operating Plan"
+  presentation: direct
+  experience: true
+  chapters:
+    - { start: 1, label: "The readout", detail: "The year in three signals" }
+    - { start: 4, label: "Performance", detail: "Growth, margin, and customer economics" }
+    - { start: 15, label: "Liquidity & controls", detail: "Cash, resilience, and readiness" }
+    - { start: 19, label: "The operating plan", detail: "Expansion, investment, and execution" }
+    - { start: 28, label: "Market perspectives", detail: "Price, risk, networks, and scenarios" }
+    - { start: 38, label: "The decisions", detail: "Three commitments for the board" }
   subtitle: "Performance, economics, liquidity, markets, and decisions"
   author: "Sarah Chen"
   company: "Acme Corp"
@@ -14,7 +23,7 @@ branding:
   watermark: "CONFIDENTIAL · DEMO"
   company_url: "acme.com"
 
-theme: "boardroom"
+theme: "signal-room"
 
 narration:
   voice: "en-US-AndrewNeural"
@@ -41,7 +50,7 @@ slides:
     kicker: "CONFIDENTIAL · BOARD MATERIAL"
     label: "25"
     badge: "FY2025 REVIEW"
-    title: "FY25 strengthened the model. FY26 is the scale test."
+    title: "A stronger model. A bigger test."
     subtitle: "Performance review · Operating plan · December 2025"
     metrics:
       - label: "Revenue"
@@ -57,10 +66,11 @@ slides:
       The board question for FY26 is how to scale that momentum with discipline.
 
   - layout: dashboard
+    composition: brief
     columns: 4
     transition: fade
     kicker: "EXECUTIVE READOUT"
-    title: "We enter FY26 with momentum, better economics—and three decisions."
+    title: "Momentum. Quality. Discipline."
     subtitle: "The outcome is strong; mix, working capital, and execution capacity remain the watchpoints."
     panels:
       - type: metric
@@ -94,10 +104,11 @@ slides:
       We need alignment on the FY26 ambition, execution sequence, and risk limits.
 
   - layout: metrics
+    composition: scorecard
     variant: hero
     transition: fade
     kicker: "FY25 SCORECARD"
-    title: "Revenue nearly doubled while margin and retention expanded."
+    title: "Growth with better economics."
     subtitle: "Scale did not come at the expense of economic quality."
     columns: 4
     metrics:
@@ -130,10 +141,11 @@ slides:
       Gross margin, net retention, and customer count all improved alongside that growth.
 
   - layout: chart
+    composition: evidence
     variant: story
     transition: fade
     kicker: "PLAN VS ACTUAL"
-    title: "FY25 finished ahead of plan across every board-level metric."
+    title: "Ahead of plan. Across the board."
     subtitle: "Actual performance indexed to plan; plan equals 100."
     chart:
       type: bullet
@@ -158,7 +170,7 @@ slides:
     variant: story
     transition: fade
     kicker: "MOMENTUM"
-    title: "Q4 reached $4.9M, lifting the exit run-rate to $19.6M."
+    title: "A $19.6M exit run-rate."
     subtitle: "Sequential growth remained above 13 percent after the Q2 step-up."
     chart:
       type: combo
@@ -194,7 +206,7 @@ slides:
     columns: 2
     transition: fade
     kicker: "OPERATING SIGNALS"
-    title: "Leading indicators strengthened alongside the year-end revenue step-up."
+    title: "The leading signals agree."
     subtitle: "Retention quality and processed volume moved together across the year."
     panels:
       - type: chart
@@ -236,12 +248,14 @@ slides:
       Processed volume accelerated in parallel with the reported revenue step-up.
 
   - layout: table
+    composition: ledger
     variant: editorial
     transition: fade
     kicker: "PROFIT & LOSS"
-    title: "Gross profit doubled; operating leverage brought EBITDA to breakeven."
+    title: "Gross profit doubled. Breakeven is close."
     subtitle: "Revenue grew materially faster than the operating cost base."
     table:
+      emphasis_rows: [3, 8]
       headers: ["$M", "FY24", "FY25", "Change"]
       rows:
         - ["Revenue", "8.3", "16.2", "+95%"]
@@ -262,10 +276,11 @@ slides:
       That operating leverage narrowed the adjusted EBITDA loss from 3 million to 100 thousand dollars.
 
   - layout: dashboard
+    composition: feature
     columns: 3
     transition: fade
     kicker: "REVENUE QUALITY"
-    title: "Rails fund the engine; software expands revenue quality."
+    title: "Rails fund scale. Software adds quality."
     subtitle: "The current strength and the next quality milestone are visible in the same mix."
     panels:
       - type: chart
@@ -295,10 +310,10 @@ slides:
       SaaS and compliance already contribute 21 percent and represent the clearest quality unlock.
 
   - layout: chart
-    variant: story
+    variant: d3-webgpu
     transition: fade
     kicker: "SEGMENT PERFORMANCE"
-    title: "Platform revenue nearly tripled; every segment contributed to growth."
+    title: "Platforms changed the trajectory."
     subtitle: "FY24 and FY25 revenue by primary customer segment."
     chart:
       type: bar
@@ -326,7 +341,7 @@ slides:
     variant: story
     transition: fade
     kicker: "GROWTH BRIDGE"
-    title: "New logos supplied 57% of growth; expansion validated retention."
+    title: "New customers drove 57% of growth."
     subtitle: "The bridge reconciles FY24 revenue to the FY25 outcome."
     chart:
       type: waterfall
@@ -347,12 +362,14 @@ slides:
       New logos added a further 4.5 million dollars of revenue.
 
   - layout: table
+    composition: ledger
     variant: editorial
     transition: fade
     kicker: "UNIT ECONOMICS"
-    title: "Enterprise payback fell to 16 months as CAC declined."
+    title: "Enterprise pays back in 16 months."
     subtitle: "The improvement came from acquisition efficiency and margin, not ACV inflation."
     table:
+      emphasis_rows: [4]
       headers: ["Enterprise metric", "FY24", "FY25", "Change"]
       rows:
         - ["CAC per new logo", "$132K", "$110K", "−17%"]
@@ -373,7 +390,7 @@ slides:
     variant: story
     transition: fade
     kicker: "COHORT EXPANSION"
-    title: "Every mature cohort is above 125% revenue retention."
+    title: "The cohorts keep expanding."
     subtitle: "Revenue index by customer go-live quarter; month zero equals 100."
     chart:
       type: heatmap
@@ -402,10 +419,11 @@ slides:
       The pattern supports the view that usage deepens after onboarding.
 
   - layout: table
+    composition: ledger
     variant: editorial
     transition: fade
     kicker: "CUSTOMER PROOF"
-    title: "Top-account expansion is broad; SaaS MRR is not concentrated."
+    title: "Expansion reaches across accounts."
     subtitle: "Platform subscription MRR only; transaction fees are excluded."
     table:
       headers: ["Account", "Segment", "MRR", "YoY growth", "Motion"]
@@ -417,18 +435,18 @@ slides:
         - ["Asia Connect", "Standard", "$2.4K", "+60%", "Upgrading"]
       column_types: ["text", "tag", "amount", "amount", "tag"]
       highlight_column: 3
-    insight: "The top five represent 16.5 percent of SaaS MRR; the largest account represents 6.3 percent."
+    insight: "These five accounts contribute $33K of monthly subscriptions; PayFlow has the fastest expansion at +120%."
     source: "DEMO CRM and billing snapshot · December 2025"
-    footnote: "Concentration ratios are derived from $2.4M annual SaaS revenue."
+    footnote: "Selected accounts only; total December MRR is not supplied."
     narration: >
       Expansion is broad across the five highlighted accounts, led by PayFlow at 120 percent.
-      The largest account is only 6.3 percent of total SaaS MRR.
+      These selected accounts contribute 33 thousand dollars in monthly subscription revenue.
 
   - layout: dashboard
     columns: 2
     transition: fade
     kicker: "COMMERCIAL ENGINE"
-    title: "One in five qualified accounts converted; efficiency varies by segment."
+    title: "One in five qualified accounts converts."
     subtitle: "The aggregate funnel is healthy; the segment frontier shows where operating discipline matters."
     panels:
       - type: chart
@@ -477,7 +495,7 @@ slides:
     variant: story
     transition: fade
     kicker: "CASH FLOW"
-    title: "Near-breakeven operations limited cash use to $2.3M."
+    title: "Cash use narrowed to $2.3M."
     subtitle: "Working capital and product investment—not operating losses—consumed cash."
     chart:
       type: waterfall
@@ -498,10 +516,11 @@ slides:
       The movement reflects working capital and product investment rather than recurring operating losses.
 
   - layout: dashboard
+    composition: register
     columns: 3
     transition: fade
     kicker: "LIQUIDITY"
-    title: "A debt-free $9.5M cash position preserves execution flexibility."
+    title: "$9.5M cash. No debt. Room to execute."
     subtitle: "The year-end balance sheet remains liquid and conservatively funded."
     panels:
       - type: metric
@@ -540,10 +559,11 @@ slides:
       A 3.3 times current ratio provides room to execute the FY26 plan.
 
   - layout: dashboard
+    composition: register
     columns: 3
     transition: fade
     kicker: "FINANCE OPERATIONS"
-    title: "The close is faster; three controls must scale before volume does."
+    title: "Scale the controls before the volume."
     subtitle: "Automation is high, but exception governance remains the constraint."
     panels:
       - type: chart
@@ -595,10 +615,11 @@ slides:
       Three control actions must close before transaction volume scales materially.
 
   - layout: dashboard
+    composition: feature
     columns: 2
     transition: fade
     kicker: "QUALITY DIAGNOSTICS"
-    title: "Control maturity broadened; remaining exceptions cluster in monitoring."
+    title: "Monitoring is the remaining gap."
     subtitle: "The operating system improved, but the residual control workload is still concentrated."
     panels:
       - type: chart
@@ -636,10 +657,11 @@ slides:
       Forty-four percent of open exceptions sit in transaction monitoring, which makes that domain the next remediation priority.
 
   - layout: chart
+    composition: evidence
     variant: story
     transition: fade
     kicker: "MARKET PRIORITIES"
-    title: "Four corridors define the opportunity; LatAm comes first."
+    title: "Four corridors. LatAm first."
     subtitle: "Serviceable payment volume by management-priority corridor."
     chart:
       type: treemap
@@ -666,7 +688,7 @@ slides:
     variant: story
     transition: fade
     kicker: "MARKET TAPE"
-    title: "Public-market appetite for stablecoin infrastructure strengthened into year-end."
+    title: "The market repriced infrastructure."
     subtitle: "Illustrative infrastructure-basket index; January 2025 open equals 100."
     chart:
       type: candlestick
@@ -696,10 +718,10 @@ slides:
       The signal is supportive, but it is not a substitute for company execution.
 
   - layout: chart
-    variant: story
+    variant: d3-webgpu
     transition: fade
     kicker: "PUBLIC COMPS"
-    title: "Public markets reward durable growth and gross-profit quality."
+    title: "Growth and quality travel together."
     subtitle: "Bubble size represents gross margin; labels are anonymized demo peers."
     chart:
       type: bubble
@@ -736,6 +758,8 @@ slides:
       options:
         x_label: "NTM revenue growth (%)"
         y_label: "EV / NTM revenue (×)"
+        size_label: "Gross margin (%)"
+        depth_label: "Gross margin (%)"
         format_x: percent
         show_legend: false
         show_all_labels: true
@@ -747,12 +771,14 @@ slides:
       Acme's operating plan targets the profile, not a specific valuation outcome.
 
   - layout: table
+    composition: ledger
     variant: editorial
     transition: fade
     kicker: "FY26 OUTLOOK"
-    title: "Base case reaches $28.2M; downside remains EBITDA-positive."
+    title: "A $28.2M base case, with a buffer."
     subtitle: "The range is defined by launch timing, payment volume, and enterprise attach."
     table:
+      emphasis_rows: [1, 4, 5]
       headers: ["Metric", "Downside", "Base", "Upside"]
       rows:
         - ["Revenue", "$22.5M", "$28.2M", "$32.0M"]
@@ -771,10 +797,11 @@ slides:
       Even the modeled downside remains EBITDA-positive.
 
   - layout: chart
+    composition: evidence
     variant: story
     transition: fade
     kicker: "PLAN SENSITIVITY"
-    title: "Launch timing and payment volume create the widest plan variance."
+    title: "Timing and volume move the plan."
     subtitle: "Illustrative FY26 adjusted EBITDA impact versus the base case."
     chart:
       type: tornado
@@ -796,10 +823,11 @@ slides:
       That makes operating gates more useful than a static annual budget alone.
 
   - layout: bullets
+    composition: sequence
     variant: pillars
     transition: fade
     kicker: "STRATEGIC CHOICES"
-    title: "Three bets carry the plan; the rest is enabling work."
+    title: "Three bets. A deliberate sequence."
     subtitle: "The strategy is deliberately narrower than the product backlog."
     items:
       - title: "Win priority corridors"
@@ -819,11 +847,12 @@ slides:
       Everything else should be treated as enabling work or deferred.
 
   - layout: timeline
+    composition: roadmap
     variant: editorial
     orientation: horizontal
     transition: fade
     kicker: "EXECUTION SEQUENCE"
-    title: "The roadmap gates expansion before layering platform complexity."
+    title: "Earn the next stage."
     subtitle: "Each quarter has a deliverable and an explicit exit criterion."
     items:
       - title: "Q1 · LatAm live"
@@ -849,7 +878,7 @@ slides:
     variant: story
     transition: fade
     kicker: "CAPITAL ALLOCATION"
-    title: "Each investment pool maps to a measurable operating outcome."
+    title: "Every investment has a destination."
     subtitle: "The incremental FY26 envelope links reinvestment pools, programs, and board-level proof points."
     chart:
       type: sankey
@@ -874,6 +903,16 @@ slides:
           - { source: "Risk & controls", target: "Launch readiness", value: 1.1 }
           - { source: "Enterprise attach", target: "Margin expansion", value: 3.6 }
       options:
+        node_labels:
+          Opening-cash allocation: "Opening\ncash"
+          Gross-profit reinvestment: "Gross profit"
+          Product platform: "Product\nplatform"
+          Corridor launches: "Corridor\nlaunches"
+          Enterprise attach: "Enterprise\nattach"
+          Revenue growth: "Revenue\ngrowth"
+          Risk & controls: "Risk &\ncontrol"
+          Margin expansion: "Margin\nexpansion"
+          Launch readiness: "Launch\nready"
         show_legend: false
     insight: "Funding releases only when the linked proof point is visible in the operating scorecard."
     source: "DEMO FY26 capital-allocation model"
@@ -883,10 +922,10 @@ slides:
       Product funding must show enterprise attach and margin expansion, while launch funding must show corridor revenue and readiness.
 
   - layout: chart
-    variant: story
+    variant: d3-webgpu
     transition: fade
     kicker: "ENTERPRISE RISK"
-    title: "Regulatory readiness and delivery capacity are the two active risks."
+    title: "Readiness sets the speed limit."
     subtitle: "Likelihood and impact are scored from one to five; bubble size indicates exposure."
     chart:
       type: bubble
@@ -942,6 +981,7 @@ slides:
       The proposed guardrail is simple: no launch without clearance and redundancy.
 
   - layout: title
+    composition: chapter
     variant: editorial
     tone: dark
     transition: fade
@@ -950,17 +990,10 @@ slides:
       value: "#0B0F17"
     kicker: "MARKETS & RISK LAB"
     label: "10"
-    badge: "ECHARTS FINANCE SHOWCASE"
-    title: "From market tape to macro scenarios—in one visual system."
+    badge: "MARKET PERSPECTIVES"
+    title: "Read the market. See the exposure."
     subtitle: "Trading · Portfolio · Risk · Liquidity · Rates · Economics"
-    metrics:
-      - label: "DSL patterns"
-        value: "28"
-      - label: "Live renderer"
-        value: "SVG"
-      - label: "External calls"
-        value: "0"
-    source: "DEMO Gamma Slides visualization catalogue · ECharts 6.1"
+    source: "DEMO market laboratory · Synthetic data"
     footnote: "The following market, portfolio, and economic series are synthetic demonstrations—not investment data."
     narration: >
       The next section is a deliberate finance and markets laboratory.
@@ -970,7 +1003,7 @@ slides:
     variant: story
     transition: fade
     kicker: "TRADING WORKSTATION"
-    title: "Daily bars, Bollinger, RSI, MACD, and OBV—one synchronized tape."
+    title: "One tape. Five perspectives."
     subtitle: "OHLC, MA overlays, volatility bands, volume, flow, momentum, linked crosshairs, and zoom."
     insight: "Read — the trend remained constructive, but momentum softened during the final five sessions."
     chart:
@@ -1031,7 +1064,7 @@ slides:
     columns: 2
     transition: fade
     kicker: "MARKET MICROSTRUCTURE"
-    title: "The spread is tight; liquidity thins quickly beyond the top five levels."
+    title: "A tight spread can hide thin liquidity."
     subtitle: "Cumulative depth and side-by-side book imbalance reveal execution risk."
     panels:
       - type: chart
@@ -1039,7 +1072,7 @@ slides:
         chart:
           type: market_depth
           data:
-            bids: [[99.80, 9], [99.85, 18], [99.90, 31], [99.95, 49], [100.00, 72]]
+            bids: [[99.80, 72], [99.85, 63], [99.90, 54], [99.95, 41], [100.00, 23]]
             asks: [[100.05, 16], [100.10, 29], [100.15, 45], [100.20, 63], [100.25, 86]]
           options:
             x_label: "Price"
@@ -1052,8 +1085,10 @@ slides:
             labels: ["L5", "L4", "L3", "L2", "L1"]
             datasets:
               - label: "Bid"
+                color: positive
                 values: [-9, -9, -13, -18, -23]
               - label: "Ask"
+                color: negative
                 values: [23, 18, 16, 13, 16]
           options:
             format_y: "compact"
@@ -1064,10 +1099,11 @@ slides:
       The paired book view makes the immediate bid ask imbalance visible without forcing the audience to read a raw ladder.
 
   - layout: dashboard
+    composition: feature
     columns: 2
     transition: fade
     kicker: "DISTRIBUTION RISK"
-    title: "The average hides the tail: loss frequency rises sharply beyond the VaR threshold."
+    title: "The average hides the tail."
     subtitle: "A return histogram and cross-asset boxplots expose skew, dispersion, and outliers."
     panels:
       - type: chart
@@ -1081,7 +1117,7 @@ slides:
                 values: [3, 7, 15, 34, 62, 88, 70, 41, 20, 9, 4]
           options:
             threshold_index: 2
-            threshold_label: "95% historical VaR"
+            threshold_label: "Illustrative loss threshold"
             y_label: "Sessions"
       - type: chart
         title: "Return dispersion by asset"
@@ -1097,7 +1133,7 @@ slides:
               - [-1.5, -0.3, 0.0, 0.4, 1.6]
               - [-5.8, -1.5, 0.3, 1.9, 6.4]
             outliers: [[0, -4.1], [1, 2.4], [2, -3.0], [4, -7.2], [4, 8.1]]
-    source: "DEMO synthetic portfolio return distribution · 400 sessions"
+    source: "DEMO synthetic portfolio return distribution · 353 sessions"
     footnote: "Box order is minimum, first quartile, median, third quartile, maximum."
     narration: >
       Distribution views prevent averages from hiding the tail.
@@ -1107,7 +1143,7 @@ slides:
     columns: 2
     transition: fade
     kicker: "SEASONALITY & DRAWDOWN"
-    title: "Stress clustered in October; the portfolio recovered without regaining its prior peak."
+    title: "Recovery has not erased the drawdown."
     subtitle: "Calendar density and the underwater curve show when and how long pain persisted."
     panels:
       - type: chart
@@ -1169,7 +1205,7 @@ slides:
     columns: 2
     transition: fade
     kicker: "CROSS-ASSET RISK"
-    title: "Correlation rose in stress while factor exposures remained uneven."
+    title: "The portfolio shares common exposures."
     subtitle: "The matrix shows co-movement; parallel coordinates reveal scenario-level trade-offs."
     panels:
       - type: chart
@@ -1205,16 +1241,17 @@ slides:
               - [0.9, 1.2, 1.0, 4.6, 1.4]
               - [3.5, 2.7, 4.1, 2.0, 3.8]
     source: "DEMO synthetic cross-asset risk model · December 2025"
-    footnote: "Parallel-coordinate values are normalized scenario scores from one to five."
+    footnote: "Parallel-coordinate values are normalized scenario scores."
     narration: >
       Correlation and factor exposure answer different questions.
       The matrix shows which assets move together, while parallel coordinates show how each macro scenario loads across multiple risk dimensions.
 
   - layout: dashboard
+    composition: feature
     columns: 2
     transition: fade
     kicker: "PORTFOLIO CONSTRUCTION"
-    title: "Diversification is visible in both hierarchy and risk-adjusted opportunity."
+    title: "Allocation meets risk-adjusted return."
     subtitle: "Allocation drill-down sits beside an efficient-frontier style risk-return map."
     panels:
       - type: chart
@@ -1267,10 +1304,10 @@ slides:
       The adjacent risk return map shows whether those allocations occupy distinct parts of the opportunity set.
 
   - layout: chart
-    variant: story
+    variant: d3-webgpu
     transition: fade
     kicker: "EXPOSURE TOPOLOGY"
-    title: "Two hubs concentrate counterparty and settlement contagion risk."
+    title: "Two hubs carry the network."
     subtitle: "A network view surfaces dependency paths that tables conceal."
     insight: "Control — cap settlement-bank exposure and add a second liquidity route before corridor expansion."
     chart:
@@ -1303,10 +1340,11 @@ slides:
       The two central hubs are settlement bank A and the liquidity provider, which creates a clear control priority.
 
   - layout: chart
+    composition: evidence
     variant: story
     transition: fade
     kicker: "CAPITAL FLOWS"
-    title: "AI and infrastructure absorbed the largest share of incremental sector flows."
+    title: "Capital is rotating toward infrastructure."
     subtitle: "A theme river shows how leadership rotates through time—not only where it ends."
     insight: "Flow regime — leadership broadened in Q4, but defensive sectors never regained the first-half flow share."
     chart:
@@ -1347,7 +1385,7 @@ slides:
     columns: 2
     transition: fade
     kicker: "RATES & MACRO"
-    title: "Disinflation remains the base case; the rates curve reprices more slowly."
+    title: "The forecast is a range, not a point."
     subtitle: "A forecast fan separates uncertainty from the central path while curves retain term structure."
     panels:
       - type: chart
@@ -1386,6 +1424,7 @@ slides:
       The adjacent yield curves show that short rates can reprice faster than the long end even as inflation declines.
 
   - layout: closing
+    composition: decisions
     variant: decisions
     tone: dark
     transition: fade

@@ -30,12 +30,16 @@ const revealCss = protectInlineStyle(readPackageText('reveal.js/dist/reveal.css'
 const revealJs = protectInlineScript(readPackageText('reveal.js/dist/reveal.js'));
 const revealNotesJs = protectInlineScript(readPackageText('reveal.js/plugin/notes/notes.js'));
 const echartsJs = protectInlineScript(readPackageText('echarts/dist/echarts.min.js'));
+const d3Js = protectInlineScript(readFileSync(join(dirname(require.resolve('d3')), '../dist/d3.min.js'), 'utf8'));
+const pixiJs = protectInlineScript(readFileSync(join(dirname(require.resolve('pixi.js')), '../dist/pixi.min.js'), 'utf8'));
 
 export const deckRuntimeAssets = Object.freeze({
   revealCss,
   revealJs,
   revealNotesJs,
   echartsJs,
+  d3Js,
+  pixiJs,
 });
 
 let legacyRuntimeAssets;
@@ -187,4 +191,9 @@ export function embeddedFontCSS(theme = {}) {
   if (/Archivo|Azeret Mono/u.test(names)) bundles.push(presentationThemeFonts());
   if (/\bInter\b|JetBrains Mono/u.test(names)) bundles.push(standardFonts());
   return bundles.join('\n');
+}
+
+let cinematicThree;
+export function getCinematicThree(){
+  return cinematicThree ??= protectInlineScript(readPackageText("three"));
 }

@@ -1,7 +1,7 @@
 import { escapeHtml } from '../html.js';
 import { renderSlideHeader, renderInsight, renderSource } from '../components/slide-header.js';
 
-export function renderTable(slide, theme) {
+export function renderTable(slide, theme, deck) {
   const spec = slide.table;
   if (!spec) return '';
 
@@ -36,7 +36,7 @@ export function renderTable(slide, theme) {
   };
 
   const bodyRows = rows.map((row, rowIndex) =>
-    `<tr data-row="${rowIndex + 1}">${row.map((cell, i) => {
+    `<tr data-row="${rowIndex + 1}"${spec.emphasis_rows?.includes(rowIndex + 1) ? ' data-emphasis="true"' : ''}>${row.map((cell, i) => {
       const type = colTypes[i] || 'text';
       const classes = [`cell-${type}`, type === 'amount' ? 'amount' : '', i === highlightColumn ? 'col-highlight' : ''].filter(Boolean).join(' ');
       return `<td class="${classes}" data-label="${escapeHtml(spec.headers[i] || '')}" data-column="${i}">${renderCell(cell, i)}</td>`;
@@ -45,10 +45,11 @@ export function renderTable(slide, theme) {
 
   const overflow = remaining > 0 ? `<tr class="table-overflow"><td colspan="${spec.headers.length}">… and ${remaining} more rows</td></tr>` : '';
   const tableLabel = escapeHtml(slide.title || 'Data table');
+  const unit = deck?.meta?.experience && /^[$€£¥][KMB]?$/.test(spec.headers[0] || '') ? `<caption class="experience-table-unit">Amounts in ${escapeHtml(spec.headers[0])}</caption>` : '';
 
   if (slide.variant === 'editorial') {
     return `${renderSlideHeader(slide)}<div class="editorial-table-wrap"><table class="data-table" data-columns="${spec.headers.length}" aria-label="${tableLabel}">
-      <thead><tr>${headers}</tr></thead><tbody>${bodyRows}${overflow}</tbody>
+      ${unit}<thead><tr>${headers}</tr></thead><tbody>${bodyRows}${overflow}</tbody>
     </table></div>${renderInsight(slide)}${renderSource(slide)}`;
   }
 
