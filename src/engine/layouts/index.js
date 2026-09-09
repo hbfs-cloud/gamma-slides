@@ -1,3 +1,4 @@
+import { renderVideoStory } from '../components/video-story.js';
 import {renderVisual} from './visual.js';
 import {renderMedia,renderBrowser} from './media.js';
 import { renderTitle } from './title.js';
@@ -43,7 +44,7 @@ export function renderSlide(slide, theme, deck, index = 0, total = 1) {
   const renderer = layouts[slide.layout];
   if (!renderer) return `<section><h2>Unknown layout: ${escapeHtml(slide.layout)}</h2></section>`;
 
-  const content = (deck.meta?.experience ? experienceCompositionHTML(slide) : null) ?? renderer(slide, theme, deck);
+  const content = renderVideoStory(slide) ?? (deck.meta?.experience ? experienceCompositionHTML(slide) : null) ?? renderer(slide, theme, deck);
   const background = slide.background;
   const bgAttr = background?.type === 'image'
     ? ` data-background-image="${safeUrl(background.value)}"`

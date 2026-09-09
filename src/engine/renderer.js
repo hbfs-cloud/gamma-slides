@@ -1,3 +1,6 @@
+import { studioFrameClockJS } from './components/studio-frame-clock.js';
+import {studioProductionCSS,studioProductionJS} from './components/studio-production.js';
+import {videoStoryCSS} from './components/video-story.js';
 import {visualCSS} from './layouts/visual.js';
 import {studioOutputCSS,studioOutputJS} from './components/studio-output.js';
 import {studioBrowserCSS,studioBrowserJS} from './components/studio-browser.js';
@@ -161,7 +164,7 @@ export function renderDeck(deck) {
     ${presenterStudioCSS(defaultTheme)}
   </style>
   <style id="gamma-theme-runtime">${themeCssSets[defaultTheme.id || deck.theme]}</style>
-  <style>${actionOrbitCSS()}${studioLiveCSS()}${studioBrowserCSS()}${studioOutputCSS()}${visualCSS()}</style>
+  <style>${actionOrbitCSS()}${studioLiveCSS()}${studioProductionCSS()}${studioBrowserCSS()}${studioOutputCSS()}${visualCSS()}${videoStoryCSS()}</style>
   ${deck.meta?.experience ? `<style data-gamma-experience>${experienceCSS()}${experienceCompositionsCSS()}</style>` : ''}
   ${slidesHtml.includes('class="archify-slide"') ? `<style data-gamma-archify>${archifySlideCSS()}</style>` : ''}
 </head>
@@ -181,6 +184,8 @@ ${slidesHtml}
   ${(slidesHtml.includes('cinema-stage') || slidesHtml.includes('d3-depth-toggle') || slidesHtml.includes('revenue-sculpture')) ? `<script data-gamma-runtime="three@0.185.1">window.GammaThree={};(function(exports){${getCinematicThree()}})(window.GammaThree);<\/script>` : ''}
   <script>
     window.__GAMMA_READY__ = false;
+    window.__gammaScenes = ${serializeForScript(deck.slides.map(slide => slide.scene || null))};
+    ${studioFrameClockJS()}
     const gammaExportMode = new URLSearchParams(window.location.search).has('gamma-export') || new URLSearchParams(window.location.search).has('print-pdf');
     if (gammaExportMode) document.documentElement.classList.add('gamma-export');
     const gammaThemeCssSets = ${serializeForScript(themeCssSets)};
@@ -227,6 +232,7 @@ ${slidesHtml}
       });
       ${actionOrbitJS()}
       ${studioLiveJS()}
+      ${studioProductionJS()}
 ${studioBrowserJS()}
 ${studioOutputJS()}
       ${deck.meta?.motion === 'presenter' ? presenterMotionJS() : ''}

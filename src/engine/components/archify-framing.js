@@ -1,6 +1,6 @@
 // The upstream SVG stays semantically intact. The slide adapter frames only the
 // populated graph, excluding empty bands and the standalone viewer's legend.
-export function frameDiagramSVG(svg, type) {
+export function frameDiagramSVG(svg, type, textSizes = null) {
   const points=[];
   const attr=(tag,name)=>Number(tag.match(new RegExp(`\\b${name}="([^\"]+)"`))?.[1]);
   for(const match of svg.matchAll(/<g\b[^>]*data-node-id="[^"]+"[^>]*>[\s\S]*?<rect\b([^>]+)>/g)) {
@@ -14,7 +14,7 @@ export function frameDiagramSVG(svg, type) {
   for(const match of svg.matchAll(/<text\b([^>]*class="t-dim"[^>]*)>/g)){const y=attr(match[1],'y');if(Number.isFinite(y)&&y<maxY)minY=Math.min(minY,y-12);}
   const padding=28;
   let result=svg.replace(/viewBox="[^"]+"/,`viewBox="${minX-padding} ${minY-padding} ${maxX-minX+padding*2} ${maxY-minY+padding*2}"`);
-  const sizes=type==='architecture'?{node:14,context:10,edge:12}:type==='sequence'?{node:16,context:12,edge:12}:null;
+  const sizes=textSizes || (type==='architecture'?{node:14,context:10,edge:12}:type==='sequence'?{node:16,context:12,edge:12}:null);
   if(sizes)result=result.replace(/<text\b([^>]*)>/g,(whole,attributes)=>{
     if(attributes.includes('class="t-dim"'))return whole;
     const size=attributes.includes('data-node-label')?sizes.node:attributes.includes('data-detail="context"')?sizes.context:sizes.edge;

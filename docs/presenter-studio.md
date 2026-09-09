@@ -25,7 +25,7 @@ Ouvrir `http://127.0.0.1:4173` dans Chrome, en fenêtre normale. La [source de d
 
 Le mode **Capture brute** filme aussi les menus présents dans la source sélectionnée. Le mode **Source externe** filme l'écran ou l'onglet choisi avec la caméra composée dessus. Ils ne donnent pas la garantie d'exclusion des commandes du mode Sortie propre.
 
-Dans **Démonstrations → À diffuser dans la vidéo**, choisir explicitement **Slides**, **Terminal** ou **Navigateur**. Terminal et navigateur sont exclusifs ; ouvrir l'un des outils ne suffit pas à le diffuser. Le terminal transmet son contenu de sortie, le navigateur transmet l'image de la page. Revenir à **Slides** pour terminer la démonstration. Les commandes de préparation lancées dans un autre terminal restent hors de la sortie propre.
+Dans **Démonstrations → À diffuser dans la vidéo**, choisir explicitement **Slides**, **Terminal** ou **Navigateur**. Terminal et navigateur sont exclusifs ; ouvrir l'un des outils ne suffit pas à le diffuser. Le terminal transmet son contenu de sortie, le navigateur transmet la vidéo et le son de sa page. Revenir à **Slides** pour terminer la démonstration. Les commandes de préparation lancées dans un autre terminal restent hors de la sortie propre.
 
 ## Pendant et après l'enregistrement
 
@@ -47,7 +47,17 @@ La barre de prise donne accès au temps écoulé, à **Pause / Resume**, au micr
 
 Les champs de saisie conservent leurs touches. Archify possède son plein écran, ses parcours et ses commandes dans M → Explorer. Le navigateur dispose d'un agrandissement propre à sa fenêtre.
 
-Après l'arrêt, lire la prise dans la revue : le format réel, les dimensions, la durée et la taille y sont affichés. Le navigateur choisit un codec disponible ; le fichier peut être MP4 ou WebM. Sauvegarder le fichier, puis vérifier sa lecture. Si le navigateur lance un téléchargement sans confirmer l'écriture, la copie reste en mémoire et demande une confirmation après vérification du fichier. **Revoir la prise** dans Studio permet de la retrouver après un retour aux slides. Une prise non sauvegardée bloque son remplacement ; fermer ou recharger la page peut la perdre.
+Après l’arrêt, la revue affiche le format réel, les dimensions, la durée et la taille. MP4 ou WebM dépend du codec disponible. Chaque fragment est conservé progressivement dans IndexedDB ; le compteur indique les octets réellement validés. **Prises conservées sur cet appareil** permet de retrouver une prise après rechargement ou crash du renderer, jusqu’au dernier fragment écrit. Cette copie dépend du même navigateur, profil et origine (hôte et port) : supprimer les données du site la supprime aussi. Exporter les prises importantes.
+
+La prévisualisation intégrée est limitée à 128 Mio. Au-delà, **Exporter** écrit les fragments successivement dans le fichier choisi, sans reconstruire toute la prise en mémoire ; utiliser Chrome avec son sélecteur de fichier. Le téléchargement de secours est limité aux petites prises et demande de vérifier le fichier. L’export conserve la copie locale jusqu’à sa suppression explicite. Un stockage plein ou trop lent arrête la prise et conserve les fragments déjà écrits.
+
+### Image et son
+
+Les formats fixes refusent une source trop petite : sélectionner 1080p ne transforme plus une capture 720p en faux master 1080p. **Agrandir la sortie** tente de dimensionner sa fenêtre ; le navigateur peut la limiter à l’écran disponible. Vérifier ensuite la résolution réellement partagée, ou choisir **Garder la résolution source**. Une réduction de la source sous le format demandé pendant la prise provoque un arrêt propre.
+
+**Son du programme** donne des gains séparés pour la voix et les médias, un abaissement automatique des médias pendant la parole, un limiteur et un vumètre de crête pendant l’enregistrement. Le limiteur ne répare pas une saturation déjà présente dans le microphone. **Périphériques** permet de remplacer caméra et micro pendant une prise ou sa pause.
+
+Activer **Pistes brutes pour le montage** avant la prise pour conserver séparément Voix et Médias. Elles suivent pause/reprise et sont exportables depuis les prises conservées. Elles sont prises avant les gains et le limiteur : un gain à zéro dans le mix ne les efface pas ; couper le microphone coupe aussi sa piste brute. La synchronisation n’est pas garantie à l’échantillon près.
 
 ## Préparer le contenu avec un LLM
 
@@ -86,9 +96,13 @@ Demander au LLM des sources pour les chiffres, des unités explicites, une alter
 
 ## Portée de la vidéo et contrôles
 
-- Le navigateur local transmet des captures d'écran interactives de sa session isolée, **sans son de cette session**. Il ne réutilise pas les connexions du Chrome personnel. Sur fichier statique ou Pages, l'intégration repose sur une iframe que le site distant peut refuser ; utiliser alors le lien d'ouverture séparée.
+- Le navigateur local transmet une vidéo WebRTC native visée à 1920 × 1080 / 30 images par seconde, avec le son de sa session isolée activable explicitement. Le débit réel dépend de la machine. Pendant sa diffusion, son monitoring opérateur est coupé pour éviter un doublon avec la sortie vidéo. Il ne réutilise pas les connexions du Chrome personnel. Sur fichier statique ou Pages, l'intégration repose sur une iframe que le site distant peut refuser ; utiliser alors le lien d'ouverture séparée.
 - Le rendu responsive desktop, tablette et mobile ne garantit pas la capture d'écran sur ces appareils. `getDisplayMedia` est souvent indisponible dans les navigateurs mobiles ; utiliser alors l'enregistreur système et vérifier ce qu'il filme. Une émulation Playwright ne remplace pas un essai sur l'appareil réel.
 - Une prise possède un format fixe : dimensions de la source, 1920 × 1080, 1080 × 1920 ou 1080 × 1080. Une source de proportions différentes peut produire des bandes. Préparer et regarder la sortie au format cible avant chaque prise ; un même fichier ne devient pas automatiquement idéal en horizontal et vertical.
 - L'export vidéo narré du CLI compose des captures de slides et des transitions ; il ne remplace pas l'enregistrement Studio des interactions en direct.
 
+Le [pilote YouTube de 20 scènes](youtube-production.md) fournit une narration cohérente, de grands textes et des gros plans Archify. Son champ `scene.camera` règle la visibilité, la position et la largeur de caméra par scène sans couper le micro.
+
 Les contrôles Studio sont dans [qa/studio-recording.spec.js](../qa/studio-recording.spec.js). Ils produisent leurs preuves dans [output/studio-review/](../output/studio-review/), dont les vidéos enregistrées, images décodées et rapports lorsqu'ils ont été exécutés. Examiner ces fichiers et la sortie publique réelle ; distinguer les sources caméra/micro synthétiques des essais matériels. Ne pas annoncer une validation d'appareil ou une qualité universelle à partir des seules assertions automatiques.
+
+Les tests complémentaires couvrent la [durabilité et le son](../qa/studio-durability.spec.js), la [production et la prise d’endurance](../qa/studio-production.spec.js), le [flux du navigateur](../qa/browser-stream.spec.js) et sa [diffusion propre](../qa/browser-broadcast.spec.js). L’endurance s’active avec `GAMMA_ENDURANCE_SECONDS=900 npx playwright test qa/studio-production.spec.js -g "native clean capture endurance"`.

@@ -17,7 +17,8 @@
     "README.md",
     ".agents/skills/repo-presentation/",
     "docs/repository-presentations.md",
-    "docs/presenter-studio.md"
+    "docs/presenter-studio.md",
+    "docs/youtube-production.md"
   ],
   "scripts": {
     "start": "node bin/gamma-slides.js",

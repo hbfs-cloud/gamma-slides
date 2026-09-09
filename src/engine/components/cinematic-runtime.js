@@ -14,7 +14,7 @@ function initCinematicComparisons() {
   }
   function recolor(s){const colors=palette(s);s.floor?.material.color.set(getComputedStyle(s.root).getPropertyValue('--gamma-bg').trim()).multiplyScalar(1.4);s.meshes.forEach((mesh,i)=>{const index=i%s.model.labels.length,j=Math.floor(i/s.model.labels.length),color=colors[j].clone().multiplyScalar(.6+.10*index);mesh.material.color.copy(color);});}
 
-  function stop(){cancelAnimationFrame(frame);frame=0;if(active)active.root.dataset.cinemaMoving='false';}
+  function stop(){(window.__gammaCancelFrame || cancelAnimationFrame)(frame);frame=0;if(active)active.root.dataset.cinemaMoving='false';}
   function project(s,x,y,z=0){const p=new T.Vector3(x,y,z).project(s.camera);return [(p.x+1)*s.w/2,(1-p.y)*s.h/2];}
   function labelAt(el,p){el.style.left=p[0]+'px';el.style.top=p[1]+'px';}
   function layout(s){
@@ -133,8 +133,8 @@ function initCinematicComparisons() {
       button.textContent=to?(fr?'Revoir l’ensemble':'See the whole'):(fr?'D’où vient la croissance ?':'What changed?');
       if(reduced.matches){draw(s,to);return;}
       const start=performance.now();root.dataset.cinemaMoving='true';
-      function animate(now){if(active!==s||printing)return;const t=Math.min((now-start)/1100,1),ease=t*t*(3-2*t);draw(s,from+(to-from)*ease);if(t<1)frame=requestAnimationFrame(animate);else{frame=0;root.dataset.cinemaMoving='false';}}
-      frame=requestAnimationFrame(animate);
+      function animate(now){if(active!==s||printing)return;const t=Math.min((now-start)/1100,1),ease=t*t*(3-2*t);draw(s,from+(to-from)*ease);if(t<1)frame=(window.__gammaFrame || requestAnimationFrame)(animate);else{frame=0;root.dataset.cinemaMoving='false';}}
+      frame=(window.__gammaFrame || requestAnimationFrame)(animate);
     }
   }));
   Reveal.on('slidechanged',activate);

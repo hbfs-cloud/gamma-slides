@@ -142,7 +142,7 @@ export function initGPUCharts(buildScene, writeSVG) {
     return result;
   }
   function dispose(state) {
-    cancelAnimationFrame(state.frame); state.frame = 0;
+    (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0;
     if (state.app) { const app = state.app; state.app = null; state.root._pixiApp = null; try { app.destroy({ removeView: false }, { children: true, texture: true, textureSource: true }); } catch {} }
   }
   function fallback(state, error) {
@@ -157,7 +157,7 @@ export function initGPUCharts(buildScene, writeSVG) {
     state.svg.setAttribute('viewBox', `0 0 ${width} ${height}`); state.svg.innerHTML = writeSVG(state.scene); state.root.dataset.d3DataCount = String(state.scene.marks.length);
   }
   function draw(state, progress = 1) {
-    if (!state.app || !state.active || document.hidden) return;
+    if (!state.app || !state.active || (document.hidden && !window.__gammaBroadcastActive)) return;
     try {
       const app = state.app, scene = state.scene, colors = palette(state.root);
       // Opaque theme backing preserves antialiasing in canvas.captureStream video.
@@ -213,16 +213,16 @@ export function initGPUCharts(buildScene, writeSVG) {
     } catch (error) { fallback(state, error); }
   }
   function render(state, animate = false) {
-    cancelAnimationFrame(state.frame); state.frame = 0;
+    (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0;
     if (!animate || reduced.matches) { draw(state); return; }
     const start = performance.now();
     const frame = now => {
       state.frame = 0;
-      if (!state.active || document.hidden || !state.app) return;
+      if (!state.active || (document.hidden && !window.__gammaBroadcastActive) || !state.app) return;
       const t = Math.min(1, (now - start) / 600); draw(state, 1 - Math.pow(1 - t, 4));
-      if (t < 1 && state.app) state.frame = requestAnimationFrame(frame);
+      if (t < 1 && state.app) state.frame = (window.__gammaFrame || requestAnimationFrame)(frame);
     };
-    state.frame = requestAnimationFrame(frame);
+    state.frame = (window.__gammaFrame || requestAnimationFrame)(frame);
   }
   async function activate(state) {
     refreshScene(state);
@@ -252,7 +252,7 @@ export function initGPUCharts(buildScene, writeSVG) {
   function sync() {
     const current = typeof Reveal !== 'undefined' ? Reveal.getCurrentSlide() : null;
     states.forEach(state => {
-      const active = !document.hidden && state.root.dataset.d3View !== '3d' && (current ? current.contains(state.root) : state.root === roots[0]); state.active = active;
+      const active = (!document.hidden || window.__gammaBroadcastActive) && state.root.dataset.d3View !== '3d' && (current ? current.contains(state.root) : state.root === roots[0]); state.active = active;
       if (active) activate(state);
       else { state.generation++; dispose(state); state.root.dataset.d3Renderer = 'svg'; state.root.dataset.d3State = state.failed ? 'fallback' : 'idle'; state.root.querySelector('dialog')?.close(); }
     });

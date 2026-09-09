@@ -126,6 +126,7 @@
         "background": { "$ref": "#/definitions/background" },
         "narration": { "type": "string" },
         "notes": { "type": "string" },
+        "scene": { "type": "object", "additionalProperties": false, "properties": { "camera": { "type": "object", "additionalProperties": false, "properties": { "visible": { "type": "boolean" }, "position": { "enum": ["tl", "tr", "bl", "br"] }, "width": { "type": "number", "minimum": 0.12, "maximum": 0.3 } } } } },
         "show_meta": { "type": "boolean" },
         "variant": { "type": "string", "description": "Layout variant. Chart slides support immersive for 3D bar-series comparison or XYZ scatter exploration, with a standard chart fallback. Cinematic compares two additive, nonnegative bar series across up to five categories as proportional volumes that open into their segments." },
         "composition": {"type": "string", "enum": ["brief", "scorecard", "evidence", "ledger", "feature", "register", "sequence", "roadmap", "chapter", "decisions"], "description": "Content-led composition for experience presentations."},

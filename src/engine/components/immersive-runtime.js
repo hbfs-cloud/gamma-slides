@@ -158,7 +158,7 @@ function initImmersiveCharts() {
   }
   function render(now = performance.now()) {
     frame = 0;
-    if (!current || !gl || document.hidden || Reveal.isOverview() || current.root.dataset.immersiveView !== 'spatial') return;
+    if (!current || !gl || (document.hidden && !window.__gammaBroadcastActive) || Reveal.isOverview() || current.root.dataset.immersiveView !== 'spatial') return;
     const state = current;
     if(state.motion) {
       const progress=clamp((now-state.motion.start)/state.motion.duration,0,1), ease=1-Math.pow(1-progress,4);
@@ -191,7 +191,7 @@ function initImmersiveCharts() {
     state.root.dataset.spatialFrames = String(Number(state.root.dataset.spatialFrames || 0) + 1);
     if(state.motion)request();
   }
-  function request() { if (!frame && current && !document.hidden) frame = requestAnimationFrame(render); }
+  function request() { if (!frame && current && (!document.hidden || window.__gammaBroadcastActive)) frame = (window.__gammaFrame || requestAnimationFrame)(render); }
   function resize() {
     if (!current) return;
     const viewport = current.root.querySelector('.spatial-viewport');
@@ -232,8 +232,8 @@ function initImmersiveCharts() {
       current = state; state.root.querySelector('.spatial-viewport').prepend(canvas);
       geometry(state); resize();
     } else {
-      if (current === state) { current = null; cancelAnimationFrame(frame); frame = 0; }
-      if (mode === 'flat') requestAnimationFrame(() => { initCharts(state.root); resizeChartsWithin(state.root); });
+      if (current === state) { current = null; (window.__gammaCancelFrame || cancelAnimationFrame)(frame); frame = 0; }
+      if (mode === 'flat') (window.__gammaFrame || requestAnimationFrame)(() => { initCharts(state.root); resizeChartsWithin(state.root); });
     }
     if (!failed) state.root.querySelector('.spatial-status').textContent = mode === 'spatial'
       ? (fr ? 'Choisissez une observation pour suivre sa trajectoire.' : 'Select an observation to follow it through the data.')
@@ -244,7 +244,7 @@ function initImmersiveCharts() {
   }
   function activate() {
     if(current){current.motion=null;current.root.dataset.spatialMoving='false';}
-    cancelAnimationFrame(frame); frame = 0; current = null; observer?.disconnect();
+    (window.__gammaCancelFrame || cancelAnimationFrame)(frame); frame = 0; current = null; observer?.disconnect();
     const state = states.get(Reveal.getCurrentSlide()?.querySelector('.immersive-chart'));
     const mobileMode=Boolean(state && mobile.matches && !exporting);
     if (document.body.classList.contains('gamma-immersive-mobile') !== mobileMode) {
@@ -352,7 +352,7 @@ function initImmersiveCharts() {
     failed=false; states.forEach(state => { state.root.querySelector('[data-spatial-action="spatial"]').disabled=false; });
   });
   Reveal.on('slidechanged', activate);
-  Reveal.on('overviewshown', () => { cancelAnimationFrame(frame); frame=0; });
+  Reveal.on('overviewshown', () => { (window.__gammaCancelFrame || cancelAnimationFrame)(frame); frame=0; });
   Reveal.on('overviewhidden', activate);
   Reveal.on('resize', resize);
   window.addEventListener('resize', resize);
@@ -364,7 +364,7 @@ function initImmersiveCharts() {
     });
     if (current && gl) { geometry(current); request(); }
   });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(frame); frame=0; } else request(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && !window.__gammaBroadcastActive) { (window.__gammaCancelFrame || cancelAnimationFrame)(frame); frame=0; } else request(); });
   reduced.addEventListener('change', () => { if (reduced.matches && current) view(current,'flat'); });
   const printViews = new Map();
   window.addEventListener('beforeprint', () => {
@@ -376,7 +376,7 @@ function initImmersiveCharts() {
     printViews.clear(); activate();
   });
   window.addEventListener('pagehide', e => {
-    cancelAnimationFrame(frame); frame=0;
+    (window.__gammaCancelFrame || cancelAnimationFrame)(frame); frame=0;
     if (!e.persisted && gl) { gl.deleteBuffer(buffer); gl.deleteProgram(program); gl.getExtension('WEBGL_lose_context')?.loseContext(); }
   });
   window.addEventListener('pageshow', e => { if (e.persisted) activate(); });

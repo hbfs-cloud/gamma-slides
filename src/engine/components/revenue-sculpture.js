@@ -80,7 +80,7 @@ function initRevenueSculptures() {
   const exported = params.has('gamma-export') || params.has('print-pdf') || document.documentElement.classList.contains('gamma-export');
   const states = [];
   const currency = value => '$' + (value / 1e6).toFixed(1) + 'M';
-  const visible = state => !exported && !printing.matches && !document.hidden && (!window.Reveal || Reveal.getCurrentSlide()?.contains(state.root));
+  const visible = state => !exported && !printing.matches && (!document.hidden || window.__gammaBroadcastActive) && (!window.Reveal || Reveal.getCurrentSlide()?.contains(state.root));
 
   // Closed, curved strips: equal-unit end caps stay in z=0 for every segment.
   // The common orthographic camera preserves their proportional measurements.
@@ -125,7 +125,7 @@ function initRevenueSculptures() {
   }
   function request(state) {
     if (state.frame || !state.renderer || !visible(state)) return;
-    state.frame = requestAnimationFrame(() => { state.frame = 0; render(state); });
+    state.frame = (window.__gammaFrame || requestAnimationFrame)(() => { state.frame = 0; render(state); });
   }
   function resize(state) {
     if (!state.renderer) return;
@@ -140,7 +140,7 @@ function initRevenueSculptures() {
     request(state);
   }
   function dispose(state) {
-    cancelAnimationFrame(state.frame); state.frame = 0;
+    (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0;
     state.scene?.traverse(object => { object.geometry?.dispose(); if (object.material) object.material.dispose(); });
     const renderer = state.renderer; state.renderer = null;
     renderer?.dispose(); renderer?.forceContextLoss(); renderer?.domElement.remove();
@@ -192,14 +192,14 @@ function initRevenueSculptures() {
       // A single light pass reveals the actual surfaces. The financial geometry
       // is complete on frame one, and no renderer keeps running at rest.
       if (!reduced.matches && !state.introduced) {
-        state.introduced = true; const start = performance.now(); cancelAnimationFrame(state.frame);
+        state.introduced = true; const start = performance.now(); (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame);
         const frame = now => {
           state.frame = 0; if (!state.renderer || !visible(state)) return;
           const t = Math.min(1, (now - start) / 850), eased = 1 - Math.pow(1 - t, 4);
           state.keyLight.position.x = -3 + eased * 6; render(state);
-          if (t < 1) state.frame = requestAnimationFrame(frame);
+          if (t < 1) state.frame = (window.__gammaFrame || requestAnimationFrame)(frame);
         };
-        state.frame = requestAnimationFrame(frame);
+        state.frame = (window.__gammaFrame || requestAnimationFrame)(frame);
       }
     } catch (error) { state.failed = true; state.root.dataset.revenueError = String(error.message || error); dispose(state); }
   }
@@ -226,7 +226,7 @@ function initRevenueSculptures() {
   window.addEventListener('resize', () => states.forEach(resize));
   printing.addEventListener('change', sync);
   window.addEventListener('gamma:theme-changed', () => states.forEach(state => { dispose(state); state.failed = false; build(state); }));
-  reduced.addEventListener('change', () => states.forEach(state => { if (reduced.matches) { cancelAnimationFrame(state.frame); state.frame = 0; render(state); } }));
+  reduced.addEventListener('change', () => states.forEach(state => { if (reduced.matches) { (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0; render(state); } }));
   window.addEventListener('pagehide', () => states.forEach(dispose)); window.addEventListener('pageshow', sync); sync();
 }
 

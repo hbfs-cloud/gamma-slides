@@ -84,6 +84,8 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 M → Studio opens the live controls for camera, microphone, recording and demonstrations. Its separate **video output** keeps operator menus out of a clean recording; terminal and browser content enter that output only when explicitly selected for broadcast. The camera can be moved and resized, microphone and camera controls are independent, and recording supports pause, resume and review before saving. Clean capture checks the selected output tab's identity; use normal Chrome, since private browsing can prevent that verification.
 
+The [20-scene French YouTube pilot](docs/youtube-production.md) adds a coherent narrated episode, large text and architecture closeups. Studio writes recoverable fragments locally, validates native capture resolution, and provides voice/media mixing plus optional separate audio tracks.
+
 The [Presenter Studio guide](docs/presenter-studio.md) covers the 47-slide demo, local `--browser --terminal` launch, LLM-authored SVG/images/GIF/audio/video, native JSON ECharts, recording and responsive limits. Mobile slide rendering does not imply mobile screen-capture support; each recording has one chosen output aspect ratio.
 
 | Shortcut | Action |
@@ -155,7 +157,7 @@ The video renderer works slide by slide: each PNG and narration file is deleted 
 
 ## Local video master
 
-Presenter Studio records the chosen screen, microphone, shared audio, and optional movable facecam into a local 1080p WebM master. Nothing is uploaded automatically. The resulting file can be reviewed, edited, converted, archived, or uploaded manually to YouTube.
+Presenter Studio records the chosen screen, microphone, shared audio, and optional movable facecam into a local MP4 or WebM master at the verified source or selected fixed resolution. Nothing is uploaded automatically. The resulting file can be reviewed, edited, converted, archived, or uploaded manually to YouTube.
 
 For a narrated MP4 generated directly from the deck:
 

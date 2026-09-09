@@ -36,8 +36,8 @@ function initThreeExploration() {
   const exported = params.has('gamma-export') || params.has('print-pdf') || document.documentElement.classList.contains('gamma-export');
   const printing = matchMedia('print');
   const request = state => {
-    if (state.frame || !state.renderer || !state.active || document.hidden) return;
-    state.frame = requestAnimationFrame(() => { state.frame = 0; render(state); });
+    if (state.frame || !state.renderer || !state.active || (document.hidden && !window.__gammaBroadcastActive)) return;
+    state.frame = (window.__gammaFrame || requestAnimationFrame)(() => { state.frame = 0; render(state); });
   };
   function render(state) {
     if (!state.renderer || !state.active) return;
@@ -105,7 +105,7 @@ function initThreeExploration() {
     state.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2) * cssScale); state.renderer.setSize(state.width, state.height, false); state.renderer.domElement.style.height = state.height + 'px'; request(state);
   }
   function dispose(state) {
-    cancelAnimationFrame(state.frame); state.frame = 0;
+    (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0;
     if (state.scene) state.scene.traverse(object => { object.geometry?.dispose(); if (Array.isArray(object.material)) object.material.forEach(material => material.dispose()); else object.material?.dispose(); });
     const renderer = state.renderer; state.renderer = null;
     renderer?.dispose(); renderer?.forceContextLoss(); renderer?.domElement.remove(); state.scene = null; state.points = [];
@@ -255,7 +255,7 @@ function initThreeExploration() {
     state.observer = new ResizeObserver(() => resize(state)); state.observer.observe(plot);
   });
   const sync = () => states.forEach(state => {
-    const visible = !document.hidden && !exported && !printing.matches && Reveal.getCurrentSlide()?.contains(state.root);
+    const visible = (!document.hidden || window.__gammaBroadcastActive) && !exported && !printing.matches && Reveal.getCurrentSlide()?.contains(state.root);
     setMode(state, Boolean(visible && state.prefer3D && !state.toggle.disabled));
   });
   Reveal.on('slidechanged', sync); document.addEventListener('visibilitychange', sync);

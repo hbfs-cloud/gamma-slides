@@ -163,7 +163,7 @@ slides:
   assert.match(html, /aria-label="Microphone device"/);
   assert.match(html, /action==='mic'\)toggleMicrophone\(\)/);
   assert.match(html, /gamma-camera-frame-v1/);
-  assert.match(html, /videoBitsPerSecond:12000000/);
+  assert.match(html, /videoBitsPerSecond:\s*12000000/);
   assert.match(html, /data-testid="studio-request-screen"/);
   assert.match(html, /data-testid="studio-summary"/);
   assert.match(html, /data-testid="studio-pause"/);
@@ -175,8 +175,8 @@ slides:
   assert.match(html, /\[5,30\]\.forEach\(seconds/);
   assert.match(html, /Math\.max\(0,reviewVideo\.currentTime-/);
   assert.match(html, /showSaveFilePicker/);
-  assert.match(html, /Your browser controls the destination; check Downloads/);
-  assert.match(html, /state\.recorder\.onpause=\(\)=>\{syncPauseUI\(true\)/);
+  assert.match(html, /Téléchargement lancé · vérifiez le fichier/);
+  assert.match(html, /recorder\.onpause\s*=\s*\(\)\s*=>\s*\{\s*syncPauseUI\(true\)/);
   assert.match(html, /state\.phase='ready';await startRecording\(\)/);
   assert.match(html, /state\.step=Math\.min\(4,state\.step\+1\)/);
   assert.match(html, /if\(selectStudioTheme\(themeId\)\)\{state\.step=2;renderWizard\(\)\}/);

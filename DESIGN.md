@@ -35,6 +35,31 @@ colors:
   studio-cobalt: "#315DFF"
   studio-focus: "#87A2FF"
 typography:
+  video-bookend-support:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "48px"
+    fontWeight: 450
+    lineHeight: 1.2
+  video-explanation:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "40px"
+    fontWeight: 500
+    lineHeight: 1.2
+  video-mobile-message:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "30px"
+    fontWeight: 450
+    lineHeight: 1.2
+  video-mobile-closeup-title:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "36px"
+    fontWeight: 550
+    lineHeight: 1.06
+  video-mobile-closeup-explanation:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "26px"
+    fontWeight: 450
+    lineHeight: 1.2
   experience-display:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "5.5rem"
@@ -547,3 +572,28 @@ The operator uses the round M menu. Studio is a compact, non-modal equipment pan
 The audience window is a separate rendering surface: no studio, menu, navigation hints, camera handles, notices or recording controls. Terminal and browser content enter it only through an exclusive explicit broadcast selection. Canvas and SVG output mirror the operator's rendered data. Video dimensions stay constant during a take; source aspect is the default.
 
 Live controls use Archivo 14px/1.4, source selects 16px, status/help 12px/1.5 and panel headings 24px/1.2. Reuse the documented studio palette, 9px control radius and 16px panel radius. These operational steps extend the earlier compact toolbar typography to readable live and touch controls. Visual-story slides use a responsive 32–64px heading, 16px icon labels, 12px attribution, and a two-column image/copy composition that stacks on mobile.
+
+### YouTube pilot · fixed video scenes
+
+`presentations/youtube-pilot.yaml` is a French, 20-scene technical explanation with one narrative: declarative content → verified document → clean audience output → reviewed recording. It preserves Signal Room, using Archivo evidence and Source Serif 4 bookends. It does not replace the 47-slide studio catalogue.
+
+The `video-story` variant is an authored 1280×720 composition. Ordinary titles use Archivo 64px/1.06 at 550; primary messages and sequence labels use 52px/1.2; code uses Azeret Mono 48px/1.35; essential secondary text uses 40px. Source Serif 4 bookends use 88px/1.05 at 400. Margins are 40px top, 64px sides and 56px bottom; the gap after the title is 42px; sequence rows use 22px gaps. Sources use Archivo 16px/1.4 and are duplicated in presenter notes so understanding does not depend on reading provenance in a small video player.
+
+With `scene.camera.visible: true`, the pilot reserves the lower-right field for a camera of 18% viewport width in position `br`; body content stays within 880px and source text within 850px. Code and closeup scenes hide the camera while preserving the microphone. These are authored scene choices, not a collision-avoidance guarantee for arbitrary text or camera settings.
+
+`video-closeup` keeps the real Archify SVG and interaction model but uses two-node mechanisms with node/context/edge type at 22/16/20 SVG units. The default framing sizes of existing diagrams are preserved. Static SVG images explicitly declare the embedded JetBrains Mono family instead of relying on body inheritance. The phone-video check reduces actual 1280×720 frames to a 390px-wide player; responsive HTML remains a separate reading surface.
+
+#### Video story type ramp and production controls
+
+| Role | Desktop | Phone / tablet ≤900px | Weight / line height |
+| --- | --- | --- | --- |
+| Video message | 52px | 30px | 450 / 1.2 |
+| Video bookend support | 48px | 30px | 450 / 1.2 |
+| Video supporting explanation | 40px | 24px | 500 / 1.2 |
+| Video code | 48px | 25px | 500 / 1.35 |
+| Video closeup title | 64px | 36px | 550 / 1.06 |
+| Video closeup explanation | 40px | 26px | 450 / 1.2 |
+
+Production devices, audio and retained takes use disclosure in the existing Studio panel. Its opaque sticky header keeps Close reachable while scrolling. Review transport wraps; on phones metadata receives its own row, help precedes the actions, and Export spans the action group. Status and metadata use the existing 12px step, transport uses 14px and all actions retain 44px targets. The audio meter and committed-storage counter are operator-only.
+
+GPU frames requested during audience broadcast use a Worker clock when the operator is hidden; queued animation frames migrate on visibility changes. The audience owns the canvas mirror so hidden-source capture throttling cannot leave the chart blank. Leaving a slide still disposes its GPU resources; no perpetual chart animation is introduced.
