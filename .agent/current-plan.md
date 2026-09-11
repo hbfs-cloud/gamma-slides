@@ -68,6 +68,10 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 
 - [x] DONE — Correct the published asset URL and keep the verified arm64 DMG/ZIP reachable from the landing, README, and macOS guide.
 
+## Capability-tour runtime recovery — opened 2026-09-11
+
+- [x] DONE — Remove the generated host-script terminator that prevents Archify slides from initializing and stalls the published capability tour on slide one. The generated, Bun-bundled capability tour was checked to retain the runtime-safe terminator and to contain no raw `</script>` in the Archify host script.
+
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
 - [x] DONE — Refaire le mode Présentation avec aperçu, téléprompteur et chronométrage réinitialisable.

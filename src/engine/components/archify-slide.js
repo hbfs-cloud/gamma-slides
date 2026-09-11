@@ -151,7 +151,8 @@ function initArchifySlides(bridgeSource) {
     frame.setAttribute('sandbox','allow-scripts allow-downloads');
     const css=`html,body{margin:0!important;padding:0!important;min-height:0!important;height:100%!important;background:var(--bg)!important;background-image:none!important}.container{width:100%!important;max-width:none!important;height:100%!important;margin:0!important;padding:0!important}.header,.toolbar,.guided-views,.cards,.diagram-nav,#focus-chip,.relationship-lens{display:none!important}.diagram-container{width:100%!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}.diagram-container>svg{display:block;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important}html[data-theme]{--bg:${theme().bg};--text:${theme().text};--text-muted:${theme()['text-muted']}}`;
     const mobileTemplate=matchMedia('(max-width:900px)').matches&&state.root.querySelector('.archify-mobile-document');
-    frame.srcdoc=(mobileTemplate||state.root.querySelector('.archify-document')).content.textContent.replace('</head>',`<style>${css}</style></head>`).replace('</body>',`<script>(${bridgeSource})()<\/script></body>`);
+    const bridgeScript='<script>('+bridgeSource+')()'+String.fromCharCode(60,47,115,99,114,105,112,116,62);
+    frame.srcdoc=(mobileTemplate||state.root.querySelector('.archify-document')).content.textContent.replace('</head>',`<style>${css}</style></head>`).replace('</body>',`${bridgeScript}</body>`);
     state.frame=frame;state.root.querySelector('.archify-canvas').append(frame);
   };
   const sync=()=>states.forEach(state=>{if(!exported&&!printing.matches&&(!document.hidden||new URLSearchParams(location.search).has('gamma-clean'))&&state.section===Reveal.getCurrentSlide())mount(state);else destroy(state);});

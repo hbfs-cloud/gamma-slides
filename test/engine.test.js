@@ -7,7 +7,7 @@ import { escapeHtml, safeUrl, richText } from '../src/engine/html.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
 import { buildEChartsConfig } from '../src/engine/components/chart-builder.js';
-import { renderDiagram } from '../src/engine/components/archify-slide.js';
+import { archifySlideJS, renderDiagram } from '../src/engine/components/archify-slide.js';
 import { getTheme } from '../src/themes/index.js';
 import { renderPublishingHTML, renderYouTubeStudioHTML } from '../src/youtube/studio.js';
 import { uploadToYouTube, uploadVideoResumable } from '../src/youtube/upload.js';
@@ -117,6 +117,11 @@ test('the complete Gamma Presenter capability tour keeps the product proof live 
   assert.ok(deck.slides.some(slide => slide.layout === 'chart' && slide.variant === 'immersive'));
   assert.ok(deck.slides.some(slide => slide.layout === 'browser'));
   assert.match(deck.slides.find(slide => slide.visual?.mechanism?.type === 'queue').visual.mechanism.status, /HUMAN APPROVAL/);
+  const archifyRuntime = archifySlideJS();
+  assert.ok(archifyRuntime.includes("const bridgeScript='<script>('+bridgeSource+')()'+String.fromCharCode(60,47,115,99,114,105,112,116,62);"));
+  assert.doesNotMatch(archifyRuntime, /<\/script>/i);
+  assert.doesNotThrow(() => new Function(archifyRuntime));
+  assert.match(renderDeck(deck), /function initArchifySlides/);
 });
 
 test('video close-up diagrams build a readable mobile Archify composition', () => {
