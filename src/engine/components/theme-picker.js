@@ -65,24 +65,25 @@ export function themePickerCSS() {
     .gamma-theme-option[aria-checked="true"] { box-shadow:inset 0 3px 0 var(--theme-choice-color,#8BA8FF); }
     .gamma-theme-preview { position:relative; display:block; height:180px; margin-bottom:20px; overflow:hidden; border:1px solid #2A3850; }
     .gamma-theme-preview i, .gamma-theme-preview b, .gamma-theme-preview em, .gamma-theme-preview u { position:absolute; display:block; font-style:normal; text-decoration:none; }
-    .theme-analyst-proof { --theme-choice-color:#1748D5; }
-    .theme-analyst-proof .gamma-theme-preview { background:#F3F0E8; }
-    .theme-analyst-proof .gamma-theme-preview i { inset:20px auto 20px 20px; width:21%; background:#1748D5; }
-    .theme-analyst-proof .gamma-theme-preview b { left:32%; right:22px; top:27px; height:40px; border-top:7px solid #111318; border-bottom:7px solid #111318; }
-    .theme-analyst-proof .gamma-theme-preview em { left:32%; right:22px; bottom:47px; height:1px; background:#111318; box-shadow:0 25px 0 #CFC9BD; }
-    .theme-analyst-proof .gamma-theme-preview u { right:22px; bottom:20px; width:31%; height:3px; background:#1748D5; }
-    .theme-cutting-room { --theme-choice-color:#FF5A1F; }
-    .theme-cutting-room .gamma-theme-preview { background:#080808; }
-    .theme-cutting-room .gamma-theme-preview i { inset:0 auto 0 0; width:36%; background:#FF5A1F; }
-    .theme-cutting-room .gamma-theme-preview b { left:45%; right:20px; top:33px; height:44px; border-top:10px solid #F4F0E7; border-bottom:10px solid #F4F0E7; }
-    .theme-cutting-room .gamma-theme-preview em { left:45%; right:32%; bottom:36px; height:2px; background:#FF5A1F; }
-    .theme-cutting-room .gamma-theme-preview u { left:0; right:0; bottom:12px; height:6px; background:repeating-linear-gradient(90deg,#FF5A1F 0 13px,transparent 13px 20px); }
-    .theme-signal-room { --theme-choice-color:#FFB000; }
-    .theme-signal-room .gamma-theme-preview { background:#05070A; }
-    .theme-signal-room .gamma-theme-preview i { left:20px; right:20px; top:28px; height:1px; background:#2A3850; box-shadow:0 38px 0 #2A3850,0 76px 0 #2A3850; }
-    .theme-signal-room .gamma-theme-preview b { left:22px; top:22px; width:34%; height:8px; background:#F5F7FC; box-shadow:0 38px 0 #AAB7CA; }
-    .theme-signal-room .gamma-theme-preview em { left:48%; right:24px; bottom:35px; height:70px; border-bottom:2px solid #3FD49A; transform:skewY(-13deg); box-shadow:0 19px 0 #8BA8FF; }
-    .theme-signal-room .gamma-theme-preview u { right:22px; top:22px; width:8px; height:8px; background:#FFB000; }
+    /* Scope each swatch to its option: the active deck also has a theme-* body class. */
+    .gamma-theme-option.theme-analyst-proof { --theme-choice-color:#1748D5; }
+    .gamma-theme-option.theme-analyst-proof .gamma-theme-preview { background:#F3F0E8; }
+    .gamma-theme-option.theme-analyst-proof .gamma-theme-preview i { inset:20px auto 20px 20px; width:21%; background:#1748D5; }
+    .gamma-theme-option.theme-analyst-proof .gamma-theme-preview b { left:32%; right:22px; top:27px; height:40px; border-top:7px solid #111318; border-bottom:7px solid #111318; }
+    .gamma-theme-option.theme-analyst-proof .gamma-theme-preview em { left:32%; right:22px; bottom:47px; height:1px; background:#111318; box-shadow:0 25px 0 #CFC9BD; }
+    .gamma-theme-option.theme-analyst-proof .gamma-theme-preview u { right:22px; bottom:20px; width:31%; height:3px; background:#1748D5; }
+    .gamma-theme-option.theme-cutting-room { --theme-choice-color:#FF5A1F; }
+    .gamma-theme-option.theme-cutting-room .gamma-theme-preview { background:#080808; }
+    .gamma-theme-option.theme-cutting-room .gamma-theme-preview i { inset:0 auto 0 0; width:36%; background:#FF5A1F; }
+    .gamma-theme-option.theme-cutting-room .gamma-theme-preview b { left:45%; right:20px; top:33px; height:44px; border-top:10px solid #F4F0E7; border-bottom:10px solid #F4F0E7; }
+    .gamma-theme-option.theme-cutting-room .gamma-theme-preview em { left:45%; right:32%; bottom:36px; height:2px; background:#FF5A1F; }
+    .gamma-theme-option.theme-cutting-room .gamma-theme-preview u { left:0; right:0; bottom:12px; height:6px; background:repeating-linear-gradient(90deg,#FF5A1F 0 13px,transparent 13px 20px); }
+    .gamma-theme-option.theme-signal-room { --theme-choice-color:#FFB000; }
+    .gamma-theme-option.theme-signal-room .gamma-theme-preview { background:#05070A; }
+    .gamma-theme-option.theme-signal-room .gamma-theme-preview i { left:20px; right:20px; top:28px; height:1px; background:#2A3850; box-shadow:0 38px 0 #2A3850,0 76px 0 #2A3850; }
+    .gamma-theme-option.theme-signal-room .gamma-theme-preview b { left:22px; top:22px; width:34%; height:8px; background:#F5F7FC; box-shadow:0 38px 0 #AAB7CA; }
+    .gamma-theme-option.theme-signal-room .gamma-theme-preview em { left:48%; right:24px; bottom:35px; height:70px; border-bottom:2px solid #3FD49A; transform:skewY(-13deg); box-shadow:0 19px 0 #8BA8FF; }
+    .gamma-theme-option.theme-signal-room .gamma-theme-preview u { right:22px; top:22px; width:8px; height:8px; background:#FFB000; }
     .gamma-theme-purpose { display:block; margin-top:8px; color:var(--theme-choice-color,#8BA8FF); font:650 10px/1 'Azeret Mono',monospace; letter-spacing:.06em; }
     .gamma-theme-option > strong { display:block; color:#F5F7FC; font:660 27px/1.08 'Archivo',system-ui,sans-serif; letter-spacing:-.025em; }
     .gamma-theme-description { display:block; margin-top:7px; color:#AAB7CA; font:430 12px/1.48 'Archivo',system-ui,sans-serif; }

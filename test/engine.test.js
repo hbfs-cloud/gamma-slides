@@ -93,8 +93,11 @@ slides:
     assert.equal(result.entries[0].slug, 'comite-fy26');
     const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
     assert.match(landing, /Gamma Presenter/);
-    assert.match(landing, /Presentations that refuse to be flat/);
-    assert.match(landing, /Comité FY26/);
+    assert.match(landing, /The native macOS app for presentations that need a real runtime/);
+    assert.match(landing, /gamma-presenter-icon\.svg/);
+    assert.match(landing, /class="github-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
+    assert.match(landing, />View on GitHub</);
+    assert.match(landing, /releases\/latest\/download\/Gamma%20Presenter-2\.0\.0-arm64-mac\.zip/);
     assert.match(readFileSync(join(outputDir, 'presentations.json'), 'utf-8'), /"slug": "comite-fy26"/);
     assert.match(readFileSync(join(outputDir, 'comite-fy26', 'index.html'), 'utf-8'), /Décider maintenant/);
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-control-room.png')));

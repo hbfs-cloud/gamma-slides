@@ -4,13 +4,7 @@ Gamma Presenter is the macOS desktop application for Gamma Slides. Its Author wo
 
 Every shipped product surface is English: macOS menus, status, errors, inspector, stage, speaker view, README, and guides.
 
-![Markdown editing in Gamma Presenter](images/gamma-presenter-author-markdown.png)
-
-![Cinematic YAML deck in the editor](images/gamma-presenter-author-rich.png)
-
-![Rich chart slide in the embedded preview](images/gamma-presenter-author-chart.png)
-
-These are local Electron captures. They show the Author workspace, then the same Gamma renderer displaying a cinematic YAML deck and a rich chart slide. They do not certify every media or animation path; the verification matrix below states the current coverage.
+The current validated control-room capture appears below. Earlier editing captures are intentionally not used as marketing proof because they predate the English-first desktop surface. They do not certify every media or animation path; the verification matrix below states the current coverage.
 
 ## Start in development
 
@@ -85,6 +79,8 @@ The adjacent **Local AI co-pilot** panel detects `codex` and `claude` on your `P
 - File menu export supports source Markdown, PDF, standalone HTML, PowerPoint, a PNG sequence, and speaker handouts as HTML or PDF. The PowerPoint export carries titles, text, lists, quotes, comparisons, tables, local still images, and speaker notes. Charts, diagrams, 3D, video, and animations remain honestly identified as Gamma runtime scenes: use standalone HTML/Stage for their interactive form. Handouts are print-ready local documents that carry stage copy, tables, media references, and speaker notes; interactive/animated visuals remain described semantically rather than being flattened into a misleading still.
 
 ## Build the macOS application
+
+For an Apple-silicon Mac, download the [current Gamma Presenter ZIP](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma%20Presenter-2.0.0-arm64-mac.zip). The link resolves to the latest GitHub Release and contains the `.app`; the package is unsigned until a Developer ID identity is supplied.
 
 ```bash
 bun run desktop:package

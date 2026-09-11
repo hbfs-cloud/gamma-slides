@@ -4,7 +4,7 @@
 
 Gamma Presenter brings writing, live visuals, presentation control, recording, and carefully bounded AI co-piloting into one macOS workspace. It is built on the open-source Gamma Slides engine, so the Markdown, YAML, and JSON you author remain durable, inspectable source—not a locked canvas.
 
-[Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
+[Download for Apple silicon](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma%20Presenter-2.0.0-arm64-mac.zip) · [Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
 
 ![Gamma Presenter’s control room: timers, approved live-action requests, and a local AI co-pilot inside the Author workspace](docs/images/gamma-presenter-control-room.png)
 
@@ -19,8 +19,6 @@ Gamma Presenter brings writing, live visuals, presentation control, recording, a
 | Co-animate | A loopback-only MCP endpoint and local Codex/Claude CLI workflow. Consequential Stage, recording, capture, browser, terminal, and spoken-note requests require an explicit operator approval. |
 | Deliver | Standalone HTML, PDF, PNG, PowerPoint, speaker handouts, and local recording controls—without pretending interactive runtime scenes are editable PowerPoint objects. |
 
-![Rich Gamma YAML authoring beside the exact rendered scene](docs/images/gamma-presenter-author-rich.png)
-
 Gamma Presenter is deliberately local-first. Media remains project-local, the presentation MCP service only listens on `127.0.0.1` with an ephemeral bearer token, and capture or terminal access is never ambient. The [macOS guide](docs/gamma-presenter-macos.md) documents the functional coverage, security boundary, known limits, and comparison with iA Presenter, reveal.js, Marp, and Slidev.
 
 ## Run Gamma Presenter on macOS
@@ -34,7 +32,7 @@ bun install
 bun run desktop
 ```
 
-Package a local arm64 application with `bun run desktop:package`. Apple signing and notarization need the product owner’s Apple Developer credentials, so repository-built artifacts are intentionally not represented as signed releases.
+Download the current Apple-silicon ZIP from the [GitHub Release](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma%20Presenter-2.0.0-arm64-mac.zip), or package it locally with `bun run desktop:package`. Releases are built by GitHub Actions from version tags. Apple signing and notarization need the product owner’s Apple Developer credentials, so the package is explicitly unsigned.
 
 ## Gamma Slides engine
 

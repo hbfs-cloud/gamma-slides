@@ -49,6 +49,20 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - [x] DONE — Reframe the README around adoption, positioning, visual proof, and an honest local macOS quick start while retaining the Gamma Slides engine reference.
 - [x] DONE — Validate the generated site, asset paths, focused tests, and the final diff; update the Pages trigger paths for future marketing assets.
 
+## Landing visual recovery — opened 2026-09-11
+
+- [x] DONE — Replace the weak marketing surface with a proof-led landing built from the current Author control-room capture and selected real decks.
+- [x] DONE — Make the Gamma Presenter identity and the GitHub source route explicit in the first viewport, then rebuild and validate the generated Pages artifact.
+
+## Theme identity recovery — opened 2026-09-11
+
+- [x] DONE — Turn the three desktop presentation themes from palette variants into visibly distinct publishing compositions in both Author preview and Stage.
+- [x] DONE — Prove the complete desktop theme switch path with automated visual-contract checks and a packaged Electron run across all three themes.
+
+## GitHub macOS distribution — opened 2026-09-11
+
+- [ ] IN PROGRESS — Publish the verified arm64 DMG/ZIP as a GitHub Release from a version tag, and keep a direct ZIP link on the landing, README, and macOS guide.
+
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
 - [x] DONE — Refaire le mode Présentation avec aperçu, téléprompteur et chronométrage réinitialisable.
@@ -97,6 +111,8 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - 2026-09-11 — Packaging regression fixed: bridge injection now targets the final document `</body>` rather than a literal string inside the embedded ECharts runtime. This fixed the packaged Stage `Unexpected identifier 'gamma'` failure. The source regression test and a packaged Author → authenticated MCP → Stage smoke both pass. Final unsigned arm64 outputs are `dist-presenter-control-room-final/Gamma Presenter-2.0.0-arm64.dmg` (SHA-256 `f81d1f172f6512c65c4bfb902860594151a21e2041df7643df29d2a9660a0f5e`) and `dist-presenter-control-room-final/Gamma Presenter-2.0.0-arm64-mac.zip` (SHA-256 `d57018180cc8a5dcabf97acd79a5fc909f709fb94464d2e1b533ad2314c57a2c`). `docs/images/gamma-presenter-control-room.png` is a packaged Electron capture with the bearer token masked.
 
 - 2026-09-11 — Public marketing delivery: the Pages root is now an English-first Gamma Presenter landing with self-hosted type, verified Electron captures, product positioning, local macOS quick start, and stable generated-deck routes. The builder copies the exact screenshot, icon, and font assets into the static artifact. It also fixes the mobile Archify short-chain fallback that previously made the YouTube pilot block a full Pages build. The Bun suite passes with 95 tests and one intentional isolated-browser skip; a full seven-deck library build completes.
+- 2026-09-11 — Theme identity recovery: the active deck's `theme-*` class was selecting every nested chooser swatch, so all three previews inherited the same appearance. Swatches are now scoped to their own option. Plain Presenter Markdown title slides now use the same editorial cover composition as their selected theme, with honest defaults (`01` and the deck title) instead of generic engine output. The full Bun suite passes (98 passed, 1 explicit browser skip) and the real source Electron smoke cycles the three themes, verifies three background/font systems, then completes the Author → MCP → approved action → Stage flow.
+- 2026-09-11 — Release readiness: the fresh unsigned arm64 ZIP and DMG were built locally, and the packaged Electron smoke completed Author → all three theme identities → authenticated MCP approval → Stage. The release workflow uploads only the DMG, ZIP, and SHA-256 manifest from a `v*` tag; the Pages/README/macOS guide use the stable latest-release ZIP URL.
 
 # Decisions
 

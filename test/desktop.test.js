@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { markdownToDeck } from '../src/desktop/markdown.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
+import { themePickerCSS } from '../src/engine/components/theme-picker.js';
 import { insertMediaSlideSource, mutateSlidesSource, parseRichSource, patchMarkdownSlideSource, patchRichSlideSource, richSlideRanges } from '../src/desktop/deck-source.js';
 import { renderHandoutHtml } from '../src/desktop/handout.js';
 import { writeDeckPptx } from '../src/desktop/pptx.js';
@@ -71,6 +72,45 @@ slides:
   assert.match(html, /data-gamma-runtime="echarts@6\.1\.0"/);
   assert.match(html, /studio-visual/);
   assert.match(html, /chart-/);
+});
+
+test('Gamma Presenter themes are separate publishing systems, not three palette aliases', () => {
+  const deck = { meta: { title: 'Theme proof', presentation: 'direct' }, slides: [{ layout: 'title', title: 'One decision', subtitle: 'Keep the content stable while changing the edition.' }] };
+  const analyst = renderDeck({ ...deck, theme: 'analyst-proof' });
+  const cutting = renderDeck({ ...deck, theme: 'cutting-room' });
+  const signal = renderDeck({ ...deck, theme: 'signal-room' });
+
+  assert.match(analyst, /data-presentation-theme="analyst-proof"/);
+  assert.match(analyst, /background:#F3F0E8/);
+  assert.match(analyst, /writing-mode:vertical-rl/);
+  assert.match(cutting, /data-presentation-theme="cutting-room"/);
+  assert.match(cutting, /background:#080808/);
+  assert.match(cutting, /text-transform:uppercase/);
+  assert.match(cutting, /repeating-linear-gradient\(90deg,#FF5A1F/);
+  assert.match(signal, /data-presentation-theme="signal-room"/);
+  assert.match(signal, /background:#05070A/);
+  assert.match(signal, /font-family:'Azeret Mono',monospace/);
+  assert.match(signal, /@keyframes signalDepth/);
+  assert.notEqual(analyst, cutting);
+  assert.notEqual(cutting, signal);
+});
+
+test('Gamma Presenter gives a plain Markdown opening slide the selected theme composition', () => {
+  const deck = markdownToDeck('# A clear story\n## The message your audience should remember', { theme: 'cutting-room' });
+  const html = renderDeck(deck);
+
+  assert.match(html, /class="editorial-cover"/);
+  assert.match(html, /class="cover-index"><span>A clear story<\/span><strong>01<\/strong>/);
+  assert.match(html, /class="cover-content">[\s\S]*<h1>A clear story<\/h1>/);
+  assert.doesNotMatch(html, /Board material|>Q4</);
+});
+
+test('Gamma Presenter theme chooser keeps every theme swatch isolated from the active deck class', () => {
+  const css = themePickerCSS();
+  for (const theme of ['analyst-proof', 'cutting-room', 'signal-room']) {
+    assert.match(css, new RegExp(`\\.gamma-theme-option\\.theme-${theme} \\.gamma-theme-preview`));
+    assert.doesNotMatch(css, new RegExp(`(?<!gamma-theme-option)\\.theme-${theme} \\.gamma-theme-preview`));
+  }
 });
 
 test('Gamma Presenter rich inspector patches YAML source without dropping chart structure', () => {
