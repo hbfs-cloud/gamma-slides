@@ -45,13 +45,13 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .template-dialog-content { min-width: 0; }
 .template-dialog-header { display: flex; align-items: start; justify-content: space-between; gap: 24px; padding: 26px 28px 22px; border-bottom: 1px solid var(--line); }
 .template-dialog-header h1 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.1; letter-spacing: -.025em; }
-.template-dialog-header p { max-width: 460px; margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.template-dialog-header p { max-width: 460px; margin: 7px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
 .template-dialog-header button { min-height: 30px; padding: 0 10px; border-radius: 9px; color: var(--muted); background: var(--button); font-size: 12px; font-weight: 650; }
 .template-dialog-header button:hover { color: var(--ink); background: var(--accent); }
 .template-list { display: grid; gap: 1px; padding: 10px; background: var(--line); }
 .template-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; width: 100%; padding: 18px; border: 0; border-radius: 9px; color: var(--ink); background: var(--pane); text-align: left; }
 .template-option:hover { background: var(--button); }
-.template-option strong { display: block; font-size: 15px; line-height: 1.15; letter-spacing: -.015em; }
+.template-option strong { display: block; font-size: 16px; line-height: 1.15; letter-spacing: -.015em; }
 .template-option p { max-width: 52ch; margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .template-option span { align-self: start; padding: 4px 7px; border-radius: 9px; color: var(--accent-soft); background: var(--editor); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
 
