@@ -49,10 +49,10 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - [x] DONE — Reframe the README around adoption, positioning, visual proof, and an honest local macOS quick start while retaining the Gamma Slides engine reference.
 - [x] DONE — Validate the generated site, asset paths, focused tests, and the final diff; update the Pages trigger paths for future marketing assets.
 
-## Landing visual recovery — opened 2026-09-11
+## Landing visual recovery — reopened 2026-09-11
 
-- [x] DONE — Replace the weak marketing surface with a proof-led landing built from the current Author control-room capture and selected real decks.
-- [x] DONE — Make the Gamma Presenter identity and the GitHub source route explicit in the first viewport, then rebuild and validate the generated Pages artifact.
+- [x] DONE — Replace the current generic landing with an evidence-led, light editorial product launch surface: immediate native-app proof, a direct release route, and concrete author → stage → operator evidence.
+- [x] DONE — Inspect desktop and mobile Electron captures, remove invalid black demo frames, and close the bounded independent design review.
 
 ## Theme identity recovery — opened 2026-09-11
 
@@ -61,7 +61,7 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 
 ## GitHub macOS distribution — opened 2026-09-11
 
-- [ ] IN PROGRESS — Publish the verified arm64 DMG/ZIP as a GitHub Release from a version tag, and keep a direct ZIP link on the landing, README, and macOS guide.
+- [x] DONE — Correct the published asset URL and keep the verified arm64 DMG/ZIP reachable from the landing, README, and macOS guide.
 
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
@@ -113,6 +113,7 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - 2026-09-11 — Public marketing delivery: the Pages root is now an English-first Gamma Presenter landing with self-hosted type, verified Electron captures, product positioning, local macOS quick start, and stable generated-deck routes. The builder copies the exact screenshot, icon, and font assets into the static artifact. It also fixes the mobile Archify short-chain fallback that previously made the YouTube pilot block a full Pages build. The Bun suite passes with 95 tests and one intentional isolated-browser skip; a full seven-deck library build completes.
 - 2026-09-11 — Theme identity recovery: the active deck's `theme-*` class was selecting every nested chooser swatch, so all three previews inherited the same appearance. Swatches are now scoped to their own option. Plain Presenter Markdown title slides now use the same editorial cover composition as their selected theme, with honest defaults (`01` and the deck title) instead of generic engine output. The full Bun suite passes (98 passed, 1 explicit browser skip) and the real source Electron smoke cycles the three themes, verifies three background/font systems, then completes the Author → MCP → approved action → Stage flow.
 - 2026-09-11 — Release readiness: the fresh unsigned arm64 ZIP and DMG were built locally, and the packaged Electron smoke completed Author → all three theme identities → authenticated MCP approval → Stage. The release workflow uploads only the DMG, ZIP, and SHA-256 manifest from a `v*` tag; the Pages/README/macOS guide use the stable latest-release ZIP URL.
+- 2026-09-11 — Landing recovery completed: the public surface is now a light paper/ink/cobalt editorial composition, with the actual English Author control-room capture as product proof, a first-viewport Apple-silicon download/source route, verified direct Release asset URL, and real deck routes. Electron captures were inspected at desktop and mobile sizes. The first capture revealed black lazy iframe previews; these were removed in favor of clear direct deck routes. Impeccable finish review disposition: `ship`.
 
 # Decisions
 
