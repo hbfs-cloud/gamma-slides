@@ -1,0 +1,26 @@
+import {loadDeck}from'../src/loader/index.js';
+import {test,expect}from'@playwright/test';
+import{mkdtempSync,writeFileSync,rmSync,mkdirSync}from'node:fs';import{tmpdir}from'node:os';import{join}from'node:path';import{execFileSync}from'node:child_process';
+import{renderDeck}from'../src/engine/renderer.js';import{serveRepositoryPresentation}from'../src/repository/server.js';
+let dir,live;const evidence='output/terminal-hotfix';
+test.beforeAll(async()=>{mkdirSync(evidence,{recursive:true});dir=mkdtempSync(join(tmpdir(),'gamma-pty-qa-'));writeFileSync(join(dir,'index.html'),renderDeck(loadDeck(JSON.stringify({version:'1',theme:'signal-room',meta:{title:'Terminal isolation',experience:true,presentation:'direct',language:'fr'},slides:[{layout:'title',title:'Première slide'},{layout:'title',title:'Deuxième slide'},{layout:'title',title:'Troisième slide'}]}))));live=await serveRepositoryPresentation(dir,{port:0,terminal:true,cwd:dir});});
+test.afterAll(async()=>{if(live)await new Promise(r=>live.server.close(r));rmSync(dir,{recursive:true,force:true});});
+async function open(page){await page.goto(live.url);await page.waitForFunction(()=>window.__GAMMA_READY__);await page.evaluate(()=>{Reveal.slide(1);window.dispatchEvent(new Event('gamma:terminal-request'));});await expect(page.locator('.gamma-terminal-input')).toBeVisible();}
+const state=page=>page.evaluate(()=>({slide:Reveal.getIndices().h,overview:Reveal.isOverview(),paused:Reveal.isPaused(),studio:__gammaStudio.snapshot().phase}));
+test('real htop owns typing, navigation and q on desktop and mobile',async({page})=>{
+ test.skip(!(()=>{try{execFileSync('/usr/bin/which',['htop']);return true;}catch{return false;}})(),'htop is not installed');
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ for(const viewport of[{width:1440,height:900},{width:390,height:844}]){
+ await page.setViewportSize(viewport);await open(page);const before=await state(page);await page.locator('.gamma-terminal-input').fill('htop');await page.locator('.gamma-terminal-input').press('Enter');await expect(page.locator('.gamma-terminal-status')).toContainText('Interactif');await expect.poll(()=>page.evaluate(()=>window.__gammaTerminalText())).toMatch(/CPU|Mem|Tasks|Load|Uptime/);
+ await page.evaluate(()=>{window.terminalKeyLeaks=0;document.addEventListener('keydown',()=>window.terminalKeyLeaks++);});const keys=page.locator('.gamma-terminal-pty textarea');await keys.press('ArrowDown');await keys.press('ArrowUp');await keys.press('h');await keys.press('Escape');await keys.press('t');await keys.press('p');await keys.press('m');expect(await state(page)).toEqual(before);expect(await page.evaluate(()=>window.terminalKeyLeaks)).toBe(0);
+ await page.screenshot({path:evidence+'/htop-'+viewport.width+'.png'});await keys.press('q');await expect(page.locator('.gamma-terminal')).not.toHaveClass(/is-busy/);expect(await state(page)).toEqual(before);await page.locator('.gamma-terminal-input').fill('pwd');await page.locator('.gamma-terminal-input').press('Enter');await expect(page.locator('.gamma-terminal-output')).toContainText(dir);await expect(page.locator('.gamma-terminal')).not.toHaveClass(/is-busy/);
+ await page.locator('[data-terminal-action=close]').click();await page.locator('body').press('ArrowRight');await expect.poll(()=>page.evaluate(()=>Reveal.getIndices().h)).toBe(2);
+ }expect(errors).toEqual([]);
+});
+test('Ctrl+C, stop and close restore the console without moving the slide',async({page})=>{
+ await open(page);const before=await state(page);
+ for(const action of['ctrl','button','close']){await page.locator('.gamma-terminal-input').fill('sleep 60');await page.locator('.gamma-terminal-input').press('Enter');await expect(page.locator('.gamma-terminal-status')).toContainText('Interactif');if(action==='ctrl')await page.locator('.gamma-terminal-pty textarea').press('Control+c');if(action==='button')await page.getByRole('button',{name:'Interrompre la commande'}).click();if(action==='close')await page.locator('[data-terminal-action=close]').click();await expect(page.locator('.gamma-terminal')).not.toHaveClass(/is-busy/);expect(await state(page)).toEqual(before);if(action==='close'){await page.locator('body').press('t');await expect(page.locator('.gamma-terminal')).toBeVisible();}}
+});
+test('terminal output is excluded from the audience until explicitly broadcast',async({page,context})=>{
+ await open(page);const popup=context.waitForEvent('page');await page.evaluate(()=>window.__gammaOpenOutput());const audience=await popup;await audience.waitForFunction(()=>window.__GAMMA_READY__);await page.locator('.gamma-terminal-input').fill("printf 'PTY_CANARY'; sleep 60");await page.locator('.gamma-terminal-input').press('Enter');await expect.poll(()=>page.evaluate(()=>__gammaTerminalText())).toContain('PTY_CANARY');await expect(audience.locator('pre.gamma-output-demo')).not.toBeVisible();await page.evaluate(()=>window.__gammaOutputFlags.terminal=true);await expect(audience.locator('pre.gamma-output-demo')).toContainText('PTY_CANARY');await expect(audience.locator('.gamma-terminal')).toHaveCount(0);await page.evaluate(()=>window.__gammaOutputFlags.terminal=false);await expect(audience.locator('pre.gamma-output-demo')).not.toBeVisible();await page.getByRole('button',{name:'Interrompre la commande'}).click();await audience.close();
+});

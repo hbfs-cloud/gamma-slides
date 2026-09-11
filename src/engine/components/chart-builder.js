@@ -340,7 +340,7 @@ export function buildEChartsConfig(chartSpec, theme) {
         itemWidth: 12, itemHeight: 12, itemGap: 16,
       },
       title: type === 'doughnut' ? {
-        text: staticFormat(total, opts.format_y), subtext: opts.center_label || 'Total',
+        text: staticFormat(Number.isInteger(opts.center_index) && opts.center_index >= 0 && opts.center_index < values.length ? values[opts.center_index] : total, opts.format_y), subtext: opts.center_label || 'Total',
         left: 'center', top: '34%',
         textStyle: { color: theme.text, fontSize: 22, fontWeight: 800, fontFamily: theme.fontHeading || 'Inter' },
         subtextStyle: { color: theme.textMuted, fontSize: 11, fontWeight: 600 },
@@ -973,7 +973,8 @@ export function buildEChartsConfig(chartSpec, theme) {
       series: datasets.map((ds, i) => ({
         name: safeText(ds.label, `Series ${i + 1}`),
         type: 'line',
-        smooth: true,
+        smooth: ds.step ? false : opts.smooth !== false,
+        step: ds.step || false,
         symbolSize: 8,
         lineStyle: { width: 3, color: resolveColor(ds.color || palette[i]), type: ds.dashed ? 'dashed' : 'solid' },
         itemStyle: { color: resolveColor(ds.color || palette[i]) },

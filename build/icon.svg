@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Gamma Presenter">
+  <rect width="1024" height="1024" rx="224" fill="#050912"/>
+  <rect x="72" y="72" width="880" height="880" rx="176" fill="#0A101B" stroke="#2A3850" stroke-width="16"/>
+  <path d="M753 264H376L235 462v300h160V536h220v226h160V462H455l60-82h238z" fill="#315DFF"/>
+  <path d="M735 264H515l-60 82h320z" fill="#87A2FF" opacity=".82"/>
+  <circle cx="760" cy="760" r="42" fill="#FFB000"/>
+</svg>

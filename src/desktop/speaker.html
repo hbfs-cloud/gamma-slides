@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Speaker view — Gamma Presenter</title>
+    <link rel="stylesheet" href="./desktop.css">
+  </head>
+  <body class="presentation-shell notes-mode">
+    <header class="presentation-toolbar">
+      <div class="view-switch" aria-label="Display mode"><button class="mode-button active" data-mode="notes" aria-pressed="true" title="Notes mode">Notes</button><button class="mode-button" data-mode="thumbnails" aria-pressed="false" title="Slide mode">Slides</button></div>
+      <span id="position">01 / 01</span>
+      <div class="speaker-timing" aria-live="polite"><span><small>Deck</small><strong id="timer">00:00</strong></span><span><small>Slide</small><strong id="slide-timer">00:00</strong></span><span id="speaker-countdown" class="speaker-countdown" hidden><small>Countdown</small><strong>00:00</strong></span></div>
+      <button id="stop" class="stop-button" title="Stop presenting">Stop</button>
+    </header>
+    <main class="presentation-main">
+      <section class="teleprompter-panel">
+        <div class="live-preview rich-stage-preview" aria-label="Faithful stage preview"><span class="preview-brand">Gamma Presenter</span><iframe id="speaker-preview" title="Gamma render of the active slide" allow="autoplay; fullscreen"></iframe><span id="preview-counter"></span></div>
+        <article id="speaker-cue" class="speaker-cue" hidden></article>
+        <article class="spoken-notes"><p class="notes-label">Say</p><div id="notes" class="teleprompter"></div></article>
+      </section>
+      <aside class="presentation-rail"><p id="rail-label">Run of show</p><div id="slide-queue" class="slide-queue"></div></aside>
+    </main>
+    <footer class="presentation-controls"><button data-nav="previous" aria-label="Previous slide">Previous</button><button data-nav="next" class="next-button">Next</button></footer>
+    <script type="module" src="./speaker.js"></script>
+  </body>
+</html>

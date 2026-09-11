@@ -57,13 +57,7 @@ export function formatSpatialValue(value, format = '') {
 }
 
 export function immersiveChartHTML(model, chart, language = 'en') {
-  const fr = language.startsWith('fr');
-  const t = fr ? {
-    spatial: 'Vue 3D', flat: 'Vue 2D', data: 'Valeurs', reset: 'Recentrer', left: 'Tourner à gauche', right: 'Tourner à droite',
-    zoomIn: 'Agrandir', zoomOut: 'Réduire', explore: 'Explorer les données',
-    help: 'Glisser pour tourner · Flèches au clavier · + / − pour zoomer',
-    status: 'Projection orthographique · valeurs exactes', select: 'Observation', series: 'Série',
-  } : {
+  const t = {
     spatial: '3D view', flat: '2D view', data: 'Values', reset: 'Reset view', left: 'Rotate left', right: 'Rotate right',
     zoomIn: 'Zoom in', zoomOut: 'Zoom out', explore: 'Explore data',
     help: 'Drag to orbit · Arrow keys · + / − to zoom',
@@ -77,8 +71,8 @@ export function immersiveChartHTML(model, chart, language = 'en') {
     <script type="application/json" class="spatial-model">${json}</script>
     <div class="spatial-toolbar" role="group" aria-label="${t.explore}">
       <div class="spatial-views">${button('spatial', t.spatial)}${button('flat', t.flat)}${button('data', t.data)}</div>
-      <div class="spatial-shots" role="group" aria-label="${fr ? 'Point de vue' : 'Viewpoint'}">${button('reset', t.reset, fr ? 'Ensemble' : 'Overview')}${button('profile', fr ? 'Vue de profil' : 'Profile view', fr ? 'Profil' : 'Profile')}${button('plan', fr ? 'Vue de dessus' : 'Top view', fr ? 'Dessus' : 'Top')}</div>
-      <details class="spatial-camera-tools"><summary>${fr ? 'Caméra' : 'Camera'}</summary><div class="spatial-camera">${button('left', t.left, getIcon('rotate-left'))}${button('right', t.right, getIcon('rotate-right'))}${button('zoom-in', t.zoomIn, getIcon('plus'))}${button('zoom-out', t.zoomOut, getIcon('minus'))}</div></details>
+      <div class="spatial-shots" role="group" aria-label="Viewpoint">${button('reset', t.reset, 'Overview')}${button('profile', 'Profile view', 'Profile')}${button('plan', 'Top view', 'Top')}</div>
+      <details class="spatial-camera-tools"><summary>Camera</summary><div class="spatial-camera">${button('left', t.left, getIcon('rotate-left'))}${button('right', t.right, getIcon('rotate-right'))}${button('zoom-in', t.zoomIn, getIcon('plus'))}${button('zoom-out', t.zoomOut, getIcon('minus'))}</div></details>
     </div>
     <div class="spatial-body">
       <div class="spatial-viewport" tabindex="0" role="group" aria-label="${t.explore}. ${t.help}"><div class="spatial-labels" aria-hidden="true"></div></div>

@@ -1,35 +1,29 @@
-# Produire l’épisode pilote
+# Produce the pilot episode
 
-Le [pilote français](../presentations/youtube-pilot.yaml) suit une seule question : comment passer d’un contenu déclaratif à une vidéo compréhensible ? Ses 20 scènes vont du contrat YAML au rendu HTML, puis de la sortie propre à la revue de prise. Les trois diagrammes sont des gros plans de relations observées dans le code ; ils ne représentent pas toute l’architecture. Les références par scène se trouvent dans `source` et dans les notes.
+The [English pilot](../presentations/youtube-pilot.yaml) follows one question: how does declarative content become an understandable video? Its 20 scenes go from the YAML contract to HTML rendering, then from clean output to take review. Its three diagrams are close-ups of relationships observed in code; they do not represent the full architecture. Per-scene references live in `source` and notes.
 
-La narration comporte environ 1 520 mots. Prévoir environ 10 à 12 minutes à débit explicatif ; seule la génération audio ou une prise réelle permet d’en connaître la durée. La voix déclarée est `fr-FR-HenriNeural`, avec un débit de `-5%`. Les réglages YouTube restent privés ; générer le deck ou la vidéo ne constitue pas une publication.
+The narration is approximately 1,520 words. Allow roughly 10–12 minutes at an explanatory pace; only generated audio or a real take establishes duration. The declared voice is `fr-FR-HenriNeural` at `-5%`. YouTube settings remain private: generating the deck or video is not publication.
 
-## Générer et présenter
-
-Depuis la racine du dépôt :
+## Generate and present
 
 ```bash
-node bin/gamma-slides.js generate -f presentations/youtube-pilot.yaml -o output/youtube-pilot.html
-node bin/gamma-slides.js serve -f output/youtube-pilot.html --port 4173 --browser --terminal
+bun bin/gamma-slides.js generate -f presentations/youtube-pilot.yaml -o output/youtube-pilot.html
+bun bin/gamma-slides.js serve -f output/youtube-pilot.html --port 4173 --browser --terminal
 ```
 
-Le navigateur et le terminal sont facultatifs. Le pilote reste une explication préparée sans eux. Pour filmer une manipulation, préparer une courte action locale, annoncer ce qu’elle doit prouver et choisir explicitement sa diffusion dans Studio. Ne pas transformer la prise en lecture improvisée du dépôt.
+Browser and terminal are optional. The pilot remains a prepared explanation without them. To film an interaction, prepare one short local action, state what it must prove, and explicitly select it for Studio broadcast. Do not turn a take into an improvised repository read-through.
 
-L’extrait de commande de la scène 10 est réparti sur plusieurs lignes pour la lecture. La commande exécutable ci-dessus donne les chemins depuis la racine. Le YAML de la scène 4 est un extrait de slide, pas un document complet à copier seul.
+## Video composition
 
-## Composition vidéo
+The pilot uses `video-story` in the existing Signal Room world: dark field, amber accent, Archivo for explanation, and Source Serif 4 for opening/closing scenes. The working frame is 1280 × 720, exported at 1920 × 1080. Ordinary titles are 64px, messages and sequence items 52px, code 48px, and important secondary text 40px. Provenance references stay small, appear in notes too, and never carry a required explanatory step.
 
-Ce pilote utilise la variante `video-story` dans le monde Signal Room existant : fond sombre, accent ambre, Archivo pour les explications et Source Serif 4 pour les deux scènes de début et de fin. Le cadre vidéo de travail fait 1280 × 720, exporté en 1920 × 1080. Les titres ordinaires font 64 px, les messages et les éléments de séquence 52 px, le code 48 px. Le texte secondaire important descend à 40 px. Les références de provenance restent petites : elles sont également disponibles dans les notes et ne portent jamais une étape nécessaire à la compréhension.
+`video-closeup` displays two Archify elements per scene. Node labels are 22 SVG units (about 50px once fitted); action labels are 20. This is a dedicated composition, not a global scaling of existing diagrams. Static SVG explicitly declares embedded JetBrains Mono so it retains the interactive rendering family.
 
-La variante `video-closeup` montre deux éléments Archify par scène. Les libellés des nœuds font 22 unités SVG, soit environ 50 px une fois le diagramme ajusté à la largeur du cadre ; l’action entre les nœuds fait 20 unités. C’est une composition dédiée, sans agrandissement global des diagrammes existants. Les textes du SVG statique déclarent explicitement la police JetBrains Mono embarquée pour conserver la même famille que le rendu interactif.
+A 1280 × 720 image viewed at 390px width is reduced to about 30.5%; 52px text becomes about 15.8px. Inspect that reduction when judging horizontal video on a phone. Responsive deck HTML is a separate check: it reorganizes content while the video file does not.
 
-Une image 1280 × 720 affichée à 390 px de largeur est réduite à environ 30,5 %. Un texte de 52 px devient environ 15,8 px. C’est cette réduction qu’il faut regarder pour évaluer la vidéo horizontale sur téléphone. La page responsive du deck est un contrôle distinct : elle réorganise le contenu, alors qu’un fichier vidéo ne le fait pas.
+Reading evidence appears in `output/youtube-review/` after checks: `fixed-player-390.png`, `phone-player.html`, individual scenes, and `scene-review.json`.
 
-Les preuves de lecture se trouvent dans `output/youtube-review/` après les contrôles : `fixed-player-390.png`, `phone-player.html`, les scènes individuelles et `scene-review.json`. Les légendes de provenance restent volontairement hors du propos indispensable ; les agrandir ne doit pas remplir le cadre au détriment de l’explication.
-
-## Caméra par scène
-
-Chaque scène déclare son intention dans `scene.camera` :
+## Camera per scene
 
 ```yaml
 scene:
@@ -39,30 +33,30 @@ scene:
     width: 0.18
 ```
 
-Le pilote place la caméra en bas à droite à 18 % de la largeur. Les scènes d’explication réservent la partie droite inférieure : le corps du texte est limité à 880 px, et les sources à 850 px. Les scènes de code, les séquences longues et les gros plans Archify masquent la caméra. Le changement de scène règle sa visibilité et son placement ; il ne doit pas couper le microphone ni demander une nouvelle autorisation de caméra. Activer et choisir le matériel dans Studio avant la prise.
+The pilot places camera lower-right at 18% width. Explanatory scenes reserve the lower-right field: body is capped at 880px and sources at 850px. Code, long sequence, and Archify close-up scenes hide camera. Scene changes adjust visibility/placement without muting the microphone or requesting camera permission again. Enable and choose hardware in Studio before recording.
 
-Cette réserve est conçue pour ce pilote en 16:9. Changer la position, dépasser la largeur prévue, augmenter le texte ou enregistrer en vertical demande une nouvelle inspection. Un rectangle synthétique peut contrôler l’absence de recouvrement ; il ne valide pas la lumière, le regard, le rendu du visage ou la qualité d’une vraie caméra.
+This reservation is designed for this 16:9 pilot. Changing position, exceeding width, enlarging text, or recording vertically requires a new inspection. A synthetic rectangle can check overlap only; it cannot validate lighting, eyeline, face rendering, or real camera quality.
 
-## Répéter et enregistrer
+## Rehearse and record
 
-1. Lire les notes et préparer les éventuelles manipulations locales.
-2. Ouvrir Studio, choisir caméra et micro, puis écouter un essai court avec le matériel réel.
-3. Garder Sortie propre et ouvrir la sortie vidéo.
-4. Partager précisément l’onglet de sortie dans le sélecteur du navigateur.
-5. Vérifier le format et le cadrage dans cette sortie, puis lancer la prise.
-6. Utiliser Pause pour préparer un passage ; revenir aux slides après une démonstration.
-7. Arrêter, relire, sauvegarder et ouvrir le fichier sauvegardé.
+1. Read notes and prepare local interactions.
+2. Open Studio, choose camera and microphone, then listen to a short check on real hardware.
+3. Keep Clean Output and open the video output.
+4. Share the output tab precisely in the browser picker.
+5. Check format and framing in that output, then start the take.
+6. Use Pause to prepare a passage; return to slides after a demonstration.
+7. Stop, review, save, and open the saved file.
 
-Les détails sur les modes de capture, les permissions, les codecs et la reprise d’une prise sont dans [Presenter Studio](presenter-studio.md).
+See [Presenter Studio](presenter-studio.md) for capture modes, permissions, codecs, and take recovery.
 
-## Contrôles et portée
+## Checks and scope
 
 ```bash
-npx playwright test qa/youtube-pilot.spec.js --reporter=list --output=output/playwright-youtube
+bunx playwright test qa/youtube-pilot.spec.js --reporter=list --output=output/playwright-youtube
 ```
 
-Ce contrôle examine le débordement des 20 scènes en 1280 × 720, leur échelle typographique principale, les libellés des gros plans et le cadrage de l’architecture existante en vue d’ensemble desktop, mobile et plein écran. Le mobile interactif peut démarrer sur un composant ; le test revient explicitement à la vue d’ensemble pour vérifier le cadrage.
+This checks 20 scenes for overflow at 1280 × 720, primary type scale, close-up labels, and existing architecture framing in desktop overview, mobile, and fullscreen. Interactive mobile can begin in a component; the test explicitly returns to overview to verify framing.
 
-Le premier audit avait observé un bord droit tronqué pendant l’entrée de l’architecture. La vue d’ensemble stabilisée a ensuite montré les sept nœuds complets avec le cadrage existant. Aucun changement spéculatif de géométrie générale n’est revendiqué. Les captures doivent distinguer la transition d’entrée, une vue sélectionnée, une vue d’ensemble et une sortie statique.
+An initial audit observed a clipped right edge during architecture entry. The stabilized overview subsequently showed all seven nodes at existing framing. No speculative global geometry change is claimed. Captures must distinguish entry transition, selected view, overview, and static output.
 
-Ces contrôles n’établissent pas la rétention d’audience, la qualité d’une prise matérielle ou un résultat identique sur tous les navigateurs. La voix, la synchronisation, l’éclairage et la stabilité d’une longue prise doivent être jugés sur le fichier réellement produit.
+These checks do not establish audience retention, hardware-take quality, or identical behavior in every browser. Judge voice, synchronization, lighting, and long-take stability from the file actually produced.

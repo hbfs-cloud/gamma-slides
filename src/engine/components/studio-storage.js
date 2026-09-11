@@ -9,10 +9,10 @@ function initStudioStorage() {
   });
   const complete = tx => new Promise((resolve, reject) => {
     tx.oncomplete = resolve;
-    tx.onabort = tx.onerror = () => reject(tx.error || new Error('Écriture interrompue.'));
+    tx.onabort = tx.onerror = () => reject(tx.error || new Error('Write interrupted.'));
   });
   const open = () => opening ||= new Promise((resolve, reject) => {
-    if (!window.indexedDB) { reject(new Error('Le stockage local est indisponible.')); return; }
+    if (!window.indexedDB) { reject(new Error('Local storage is unavailable.')); return; }
     const req = indexedDB.open(DATABASE, 1);
     req.onupgradeneeded = () => {
       req.result.createObjectStore('takes', { keyPath: 'id' });
@@ -38,7 +38,7 @@ function initStudioStorage() {
   async function update(id, patch) {
     const db = await open(), tx = db.transaction('takes', 'readwrite'), done = complete(tx);
     const store = tx.objectStore('takes'), take = await request(store.get(id));
-    if (!take) { await done; throw new Error('Prise introuvable.'); }
+    if (!take) { await done; throw new Error('Take not found.'); }
     const next = { ...take, ...patch, id, updatedAt: Date.now() };
     store.put(next); await done; emit(); return next;
   }
@@ -64,10 +64,10 @@ function initStudioStorage() {
       get pendingChunks() { return pendingChunks; },
       get error() { return failure; },
       append(blob, patch = {}) {
-        if (closed || failure) return Promise.reject(failure || new Error('Prise terminée.'));
+        if (closed || failure) return Promise.reject(failure || new Error('Take finished.'));
         if (!blob.size) return Promise.resolve(take);
         if (pendingBytes + blob.size > maxPendingBytes || pendingChunks >= maxPendingChunks) {
-          failure = new Error('Le disque ne suit pas le débit. La prise est arrêtée ; les fragments déjà écrits sont conservés.');
+          failure = new Error('The disk cannot keep up with the bitrate. The take has stopped; already-written segments are retained.');
           failure.name = 'BackpressureError';
           return Promise.reject(failure);
         }
@@ -102,30 +102,30 @@ function initStudioStorage() {
   }
   async function* chunks(id) {
     const take = await get(id);
-    if (!take) throw new Error('Prise introuvable.');
+    if (!take) throw new Error('Take not found.');
     const db = await open();
     for (let index = 0; index < take.chunks; index++) {
       const row = await request(db.transaction('chunks').objectStore('chunks').get([id, index]));
-      if (!row) throw new Error('Fragment manquant : ' + (index + 1));
+      if (!row) throw new Error('Missing segment: ' + (index + 1));
       yield row.blob;
     }
   }
   async function toBlob(id, limit = PREVIEW_LIMIT) {
     const take = await get(id);
-    if (!take) throw new Error('Prise introuvable.');
-    if (take.size > Math.min(limit, PREVIEW_LIMIT)) throw new Error('Cette prise dépasse la limite de prévisualisation. Enregistrez-la sur disque pour la regarder.');
+    if (!take) throw new Error('Take not found.');
+    if (take.size > Math.min(limit, PREVIEW_LIMIT)) throw new Error('This take exceeds the preview limit. Save it to disk to watch it.');
     const parts = [];
     for await (const chunk of chunks(id)) parts.push(chunk);
     return new Blob(parts, { type: take.mime || 'video/webm' });
   }
   async function save(id, options = {}) {
     const take = await get(id);
-    if (!take?.size) throw new Error('Cette prise ne contient aucun fragment enregistré.');
+    if (!take?.size) throw new Error('This take contains no recorded segments.');
     const mp4 = take.mime?.includes('mp4'), audio = take.mime?.startsWith('audio/');
     let handle = options.handle;
     if (!handle && window.showSaveFilePicker) handle = await window.showSaveFilePicker({
       suggestedName: take.filename,
-      types: [{ description: audio ? 'Audio' : 'Vidéo', accept: audio ? (mp4 ? { 'audio/mp4': ['.m4a'] } : { 'audio/webm': ['.webm'] }) : (mp4 ? { 'video/mp4': ['.mp4'] } : { 'video/webm': ['.webm'] }) }],
+      types: [{ description: audio ? 'Audio' : 'Video', accept: audio ? (mp4 ? { 'audio/mp4': ['.m4a'] } : { 'audio/webm': ['.webm'] }) : (mp4 ? { 'video/mp4': ['.mp4'] } : { 'video/webm': ['.webm'] }) }],
     });
     if (handle) {
       const writable = await handle.createWritable();

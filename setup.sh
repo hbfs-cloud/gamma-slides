@@ -21,23 +21,23 @@ echo ""
 OS=$(uname -s)
 MISSING=0
 
-# ── Node.js ──────────────────────────────────────────────
-if command -v node &>/dev/null; then
-  NODE_VER=$(node -v | sed 's/v//')
-  NODE_MAJOR=$(echo "$NODE_VER" | cut -d. -f1)
-  if [ "$NODE_MAJOR" -ge 18 ]; then
-    ok "Node.js $NODE_VER"
+# ── Bun ──────────────────────────────────────────────────
+if command -v bun &>/dev/null; then
+  BUN_VER=$(bun --version)
+  BUN_MAJOR=$(echo "$BUN_VER" | cut -d. -f1)
+  if [ "$BUN_MAJOR" -ge 1 ]; then
+    ok "Bun $BUN_VER"
   else
-    warn "Node.js $NODE_VER found (need >= 18)"
+    warn "Bun $BUN_VER found (need >= 1.3)"
     MISSING=1
   fi
 else
-  fail "Node.js not found"
+  fail "Bun not found"
   MISSING=1
   if [ "$OS" = "Darwin" ]; then
-    info "Install: brew install node"
+    info "Install: brew install bun"
   else
-    info "Install: curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs"
+    info "Install: curl -fsSL https://bun.com/install | bash"
   fi
 fi
 
@@ -89,7 +89,7 @@ for cmd in chromium chromium-browser google-chrome google-chrome-stable; do
   fi
 done
 if [ "$CHROME_FOUND" -eq 0 ]; then
-  # Puppeteer will download its own on npm install, so this is a soft warning
+  # Puppeteer will download its own on bun install, so this is a soft warning
   warn "No system Chromium found (Puppeteer will download its own)"
 fi
 
@@ -106,16 +106,17 @@ if [ "$1" = "--install" ] || [ "$1" = "-i" ]; then
       info "Installing Homebrew..."
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    command -v node &>/dev/null    || brew install node
+    command -v bun &>/dev/null     || brew install bun
     command -v ffmpeg &>/dev/null  || brew install ffmpeg
     command -v python3 &>/dev/null || brew install python3
   else
     # Linux (Debian/Ubuntu)
     sudo apt-get update -qq
-    command -v node &>/dev/null || {
-      curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-      sudo apt-get install -y nodejs
-    }
+    if ! command -v bun &>/dev/null; then
+      curl -fsSL https://bun.com/install | bash
+      export BUN_INSTALL="${BUN_INSTALL:-$HOME/.bun}"
+      export PATH="$BUN_INSTALL/bin:$PATH"
+    fi
     command -v ffmpeg &>/dev/null  || sudo apt-get install -y ffmpeg
     command -v python3 &>/dev/null || sudo apt-get install -y python3 python3-pip
     # Install Chromium for Linux (Puppeteer perf)
@@ -133,14 +134,14 @@ if [ "$1" = "--install" ] || [ "$1" = "-i" ]; then
   echo ""
 fi
 
-# ── npm install ──────────────────────────────────────────
+# ── bun install ──────────────────────────────────────────
 if [ ! -d "node_modules" ]; then
-  echo -e "  ${BOLD}Installing npm packages...${NC}"
-  npm install
+  echo -e "  ${BOLD}Installing Bun packages...${NC}"
+  bun install
   echo ""
-  ok "npm packages installed"
+  ok "Bun packages installed"
 else
-  ok "npm packages already installed"
+  ok "Bun packages already installed"
 fi
 
 echo ""

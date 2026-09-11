@@ -101,7 +101,8 @@ function initThreeExploration() {
     state.baseViewHeight = viewH;
     state.camera.left = -viewH * aspect / 2; state.camera.right = viewH * aspect / 2;
     state.camera.top = viewH / 2; state.camera.bottom = -viewH / 2; state.camera.updateProjectionMatrix();
-    const cssScale = state.viewport.getBoundingClientRect().width / state.width;
+    // Reveal's entrance transform is transient; its layout scale is stable.
+    const cssScale = matchMedia('(max-width:900px)').matches ? 1 : (Reveal.getScale() || 1);
     state.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2) * cssScale); state.renderer.setSize(state.width, state.height, false); state.renderer.domElement.style.height = state.height + 'px'; request(state);
   }
   function dispose(state) {
@@ -121,7 +122,7 @@ function initThreeExploration() {
       return (label || '').replace(/\s*\([%×]\)/g, '') + ': ' + number.format(value) + unit;
     };
     state.readout.textContent = point ? [point.name, dimension(state.model.options.x_label, point.x), dimension(state.model.options.y_label, point.y), dimension(state.model.options.depth_label, point.size)].join(' · ') : state.depthHint;
-    state.selection.textContent = point ? `${number.format(point.x)}% ${state.fr ? 'croissance' : 'growth'} · ${number.format(point.y)}× EV/revenue · ${number.format(point.size)}% ${state.fr ? 'marge' : 'margin'}` : (state.fr ? 'Choisissez une entreprise pour lire ses trois valeurs.' : 'Select a company to read its three values.');
+    state.selection.textContent = point ? [dimension(state.model.options.x_label, point.x), dimension(state.model.options.y_label, point.y), dimension(state.model.options.depth_label, point.size)].join(' · ') : state.depthHint;
     state.selection.setAttribute('aria-label', state.readout.textContent);
     state.points.forEach((mesh, pointIndex) => mesh.material.color.set(pointIndex === index ? state.selectedColor : state.pointColor));
     state.labels.forEach(label => { if (label.kind === 'point') label.element.dataset.selected = String(label.index === index); });
@@ -134,7 +135,7 @@ function initThreeExploration() {
     state.toggle.setAttribute('aria-pressed', String(enabled));
     state.toggle.textContent = enabled ? (state.fr ? 'Comparer en 2D' : 'Compare in 2D') : (state.fr ? 'Explorer en 3D' : 'Explore in 3D');
     const subtitle = state.root.querySelector('.d3-webgpu-heading p');
-    if (subtitle) subtitle.textContent = enabled ? (state.fr ? 'Croissance en X, multiple en Y, marge brute en profondeur.' : 'Growth on X, valuation multiple on Y, gross margin in depth.') : state.subtitle;
+    if (subtitle) subtitle.textContent = state.subtitle;
     const flatState = window.__gammaGPUCharts?.states.find(candidate => candidate.root === state.root);
     const flatSelection = flatState?.scene?.hits.find(hit => hit.key === flatState.selected)?.label;
     state.readout.textContent = enabled ? state.depthHint : flatSelection || state.hint;
@@ -179,12 +180,13 @@ function initThreeExploration() {
         state.labels.push({ element, kind, index, name: value, position: new T.Vector3(...position) });
       };
       // Three orthogonal measurement axes: no synthetic depth coordinate.
+      const tick = (value, axis) => new Intl.NumberFormat('en-US').format(value) + (model.options[axis]?.match(/\(([%×])\)/)?.[1] || '');
       line([xMin, -1.45, -2], [xMax, -1.45, -2], 0.8, true);
       line([xMin, -1.45, -2], [xMin, 1.65, -2], 0.8, true);
       line([xMin, -1.45, -2], [xMin, -1.45, 2], 0.8, true);
-      x.ticks(state.compact ? 2 : 4).forEach(value => { line([x(value), -1.45, -2], [x(value), -1.45, 2], 0.16); if (value > x.domain()[0]) label(value + '%', [x(value), -1.68, -2]); });
-      y.ticks(state.compact ? 2 : 3).forEach(value => { line([xMin, y(value), -2], [xMax, y(value), -2], 0.13); label(value + '×', [xMin - .23, y(value), -2]); });
-      z.ticks(state.compact ? 2 : 3).forEach(value => { line([xMin, -1.45, z(value)], [xMax, -1.45, z(value)], 0.16); if (value > z.domain()[0]) label(value + '%', [xMin - .25, -1.5, z(value)]); });
+      x.ticks(state.compact ? 2 : 4).forEach(value => { line([x(value), -1.45, -2], [x(value), -1.45, 2], 0.16); if (value > x.domain()[0]) label(tick(value, 'x_label'), [x(value), -1.68, -2]); });
+      y.ticks(state.compact ? 2 : 3).forEach(value => { line([xMin, y(value), -2], [xMax, y(value), -2], 0.13); label(tick(value, 'y_label'), [xMin - .23, y(value), -2]); });
+      z.ticks(state.compact ? 2 : 3).forEach(value => { line([xMin, -1.45, z(value)], [xMax, -1.45, z(value)], 0.16); if (value > z.domain()[0]) label(tick(value, 'depth_label'), [xMin - .25, -1.5, z(value)]); });
       label(model.options.x_label, [1.2, -2.1, -2], 'axis');
       label(model.options.y_label, [-2.5, 2.1, -2], 'axis');
       label(model.options.depth_label, [-2.6, -1.6, 2.6], 'axis');
@@ -226,13 +228,13 @@ function initThreeExploration() {
     } catch (error) { state.host.dataset.depthError = String(error.message || error); setMode(state, false); state.toggle.disabled = true; }
   }
   toggles.forEach(toggle => {
-    const root = toggle.closest('.d3-webgpu-stage'), plot = root.querySelector('.d3-webgpu-plot'), model = JSON.parse(root.querySelector('.d3-webgpu-model').textContent), fr = model.language.startsWith('fr');
+    const root = toggle.closest('.d3-webgpu-stage'), plot = root.querySelector('.d3-webgpu-plot'), model = JSON.parse(root.querySelector('.d3-webgpu-model').textContent), fr = false;
     const host = document.createElement('div'); host.className = 'd3-depth-scene';
-    host.innerHTML = `<div class="d3-depth-viewport"><svg class="d3-depth-leaders" aria-hidden="true"></svg><div class="d3-depth-labels"></div></div><div class="d3-depth-toolbar"><select class="d3-depth-select" aria-label="${fr ? 'Examiner une entreprise' : 'Inspect a company'}"><option value="-1">${fr ? 'Choisir une entreprise' : 'Inspect a company'}</option></select><nav class="d3-depth-controls" aria-label="${fr ? 'Vue 3D' : '3D view'}"><button type="button" data-depth-action="left" aria-label="${fr ? 'Tourner à gauche' : 'Rotate left'}"><svg viewBox="0 0 20 20"><path d="M12 4l-6 6 6 6"/></svg></button><button type="button" data-depth-action="reset">${fr ? 'Réinitialiser' : 'Reset'}</button><button type="button" data-depth-action="right" aria-label="${fr ? 'Tourner à droite' : 'Rotate right'}"><svg viewBox="0 0 20 20"><path d="M8 4l6 6-6 6"/></svg></button></nav></div><p class="d3-depth-selection" aria-live="polite"></p><p class="d3-depth-instruction">${fr ? 'Choisir un point · Glisser pour tourner' : 'Select a point · Drag to rotate'}</p>`;
+    host.innerHTML = `<div class="d3-depth-viewport"><svg class="d3-depth-leaders" aria-hidden="true"></svg><div class="d3-depth-labels"></div></div><div class="d3-depth-toolbar"><select class="d3-depth-select" aria-label="Inspect an observation"><option value="-1">Inspect an observation</option></select><nav class="d3-depth-controls" aria-label="3D view"><button type="button" data-depth-action="left" aria-label="Rotate left"><svg viewBox="0 0 20 20"><path d="M12 4l-6 6 6 6"/></svg></button><button type="button" data-depth-action="reset">Reset</button><button type="button" data-depth-action="right" aria-label="Rotate right"><svg viewBox="0 0 20 20"><path d="M8 4l6 6-6 6"/></svg></button></nav></div><p class="d3-depth-selection" aria-live="polite"></p><p class="d3-depth-instruction">Select a point · Drag to rotate</p>`;
     const axisKey = document.createElement('ul'); axisKey.className = 'd3-depth-axis-key';
     [['X',model.options.x_label],['Y',model.options.y_label],['Z',model.options.depth_label]].forEach(([axis,name]) => { const item = document.createElement('li'); item.textContent = axis + ' · ' + name; axisKey.append(item); }); host.append(axisKey);
     plot.append(host);
-    const state = { root, plot, toggle, model, host, viewport:host.querySelector('.d3-depth-viewport'), selection:host.querySelector('.d3-depth-selection'), select:host.querySelector('.d3-depth-select'), readout:root.querySelector('.d3-webgpu-readout'), labelLayer: host.querySelector('.d3-depth-labels'), leaders: host.querySelector('.d3-depth-leaders'), labels: [], points: [], selected:-1, prefer3D:true, renderer: null, active: false, frame: 0, draws: 0, azimuth: -0.68, elevation:matchMedia('(max-width:900px)').matches ? 0.35 : 0.15, fr, subtitle: root.querySelector('.d3-webgpu-heading p')?.textContent || '', hint: root.querySelector('.d3-webgpu-readout').textContent, depthHint:fr ? 'Croissance, valorisation et marge. Sélectionnez une entreprise pour lire ses valeurs.' : 'Growth, valuation and margin. Select a company to inspect its values.' };
+    const state = { root, plot, toggle, model, host, viewport:host.querySelector('.d3-depth-viewport'), selection:host.querySelector('.d3-depth-selection'), select:host.querySelector('.d3-depth-select'), readout:root.querySelector('.d3-webgpu-readout'), labelLayer: host.querySelector('.d3-depth-labels'), leaders: host.querySelector('.d3-depth-leaders'), labels: [], points: [], selected:-1, prefer3D:true, renderer: null, active: false, frame: 0, draws: 0, azimuth: -0.68, elevation:matchMedia('(max-width:900px)').matches ? 0.35 : 0.15, fr, subtitle: root.querySelector('.d3-webgpu-heading p')?.textContent || '', hint: root.querySelector('.d3-webgpu-readout').textContent, depthHint:'Select an observation to inspect its three values.' };
     model.points.forEach((point, index) => { const option = document.createElement('option'); option.value = String(index); option.textContent = point.name; state.select.append(option); });
     root.dataset.d3View = '2d';
     root._threeExploration = state; states.push(state);

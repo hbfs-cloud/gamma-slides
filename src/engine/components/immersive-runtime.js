@@ -238,9 +238,9 @@ function initImmersiveCharts() {
     if (!failed) state.root.querySelector('.spatial-status').textContent = mode === 'spatial'
       ? (fr ? 'Choisissez une observation pour suivre sa trajectoire.' : 'Select an observation to follow it through the data.')
       : mode === 'flat' && state.model.kind === 'scatter'
-        ? (fr ? 'Projection X / Y · troisième axe disponible dans Valeurs' : 'X / Y projection · third axis available in Values')
-        : (fr ? 'Valeurs issues des données source' : 'Values from the source data');
-    if (failed) state.root.querySelector('.spatial-status').textContent = fr ? '3D indisponible · les données restent accessibles en 2D et dans Valeurs.' : '3D unavailable · explore the 2D chart or exact values.';
+        ? 'X / Y projection · third axis available in Values'
+        : 'Values from the source data';
+    if (failed) state.root.querySelector('.spatial-status').textContent = '3D unavailable · explore the 2D chart or exact values.';
   }
   function activate() {
     if(current){current.motion=null;current.root.dataset.spatialMoving='false';}

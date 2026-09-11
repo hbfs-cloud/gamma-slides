@@ -1,45 +1,37 @@
-# Flagship — revue du 9 septembre 2026
+# Flagship — September 9, 2026 review
 
-Livrable principal : output/flagship-demo.html, issu de presentations/flagship.yaml. Le deck contient 38 slides, 37 graphiques, 28 familles de visualisations et six chapitres. Les données restent explicitement illustratives.
+Primary artifact: `output/flagship-demo.html`, generated from `presentations/flagship.yaml`. The deck has 38 slides, 37 charts, 28 visualization families, and six chapters. All data is explicitly illustrative.
 
-## Présentation et rendu
+## Presentation and rendering
 
-Vingt slides ont une composition adaptée à leur contenu : synthèse, scorecard, grand tableau financier, preuve graphique, analyse asymétrique, registre de contrôles, séquence stratégique, feuille de route, chapitre et décisions. Archivo porte les données et les titres ordinaires ; Source Serif 4 distingue les synthèses et les décisions. Les styles et leurs adaptations sont consignés dans DESIGN.md et .impeccable/design.json.
+Twenty slides have content-specific composition: brief, scorecard, large financial table, chart evidence, asymmetric analysis, control register, strategic sequence, roadmap, chapter, and decisions. Archivo carries data and ordinary headings; Source Serif 4 distinguishes briefs and decisions. Styles and adaptations are recorded in `DESIGN.md` and `.impeccable/design.json`.
 
-L’ouverture dessine cinq rubans Three.js en WebGL. Leurs largeurs utilisent une échelle commune issue des revenus FY24/FY25 : 8,3 puis 16,2 millions de dollars. Chaque segment est sélectionnable et conserve ses deux valeurs exactes. Le passage de lumière est fini ; aucune animation permanente au repos.
+The opening draws five Three.js ribbons in WebGL. Their widths use a common scale from FY24/FY25 revenue: $8.3m then $16.2m. Each segment is selectable and retains exact values. The lighting transition is finite; no animation runs at rest.
 
-Quatre scènes utilisent D3 pour les échelles ou les positions et Pixi.js pour dessiner les données avec WebGPU : revenus (9), comparables en vue 2D (21), risques (27) et réseau (35). Les preuves contrôlent un contexte réel, des objets graphiques et des pixels non vides ; le chargement d’une bibliothèque seul ne compte pas comme validation GPU.
+Four scenes use D3 for scale/layout and Pixi.js/WebGPU for actual data rendering: revenue (9), 2D comparables (21), risks (27), and network (35). Evidence checks a real context, graphics objects, and non-empty pixels; loading a library is not GPU validation. Comparables (21) open in Three.js/WebGL, with growth, valuation multiple, and gross margin on measured axes. Names remain near spheres, selected values near controls, including on phones. Reset restores the initial view. Other charts use ECharts/SVG; this is not all-WebGPU rendering.
 
-Les comparables (21) s’ouvrent en Three.js/WebGL. Croissance, multiple de valorisation et marge brute occupent trois axes mesurés. Les noms restent à proximité des sphères ; les valeurs sélectionnées restent près des commandes, y compris sur téléphone. Le cadrage suit les rotations pour conserver les cinq sphères dans le champ, puis Reset restaure la vue initiale. Les autres graphiques utilisent ECharts/SVG. Il ne s’agit pas d’un rendu WebGPU intégral.
+## Reading and interaction
 
-## Lecture et interactions
+Mobile slides use real phone width and vertical scrolling. **More below** reserves 44px above navigation. Tables retain headers/values and the income statement retains its $M unit. Briefs and decisions expose principal signals on the first screen.
 
-Les slides mobiles utilisent la largeur réelle du téléphone et défilent verticalement. Le bouton « More below » dispose d’un emplacement réservé de 44px au-dessus de la navigation. Les tableaux conservent leurs intitulés et leurs valeurs ; le compte de résultat garde son unité $M. Les synthèses et décisions exposent leurs signaux principaux dès le premier écran.
+All native controls work without unintentionally advancing Reveal. GPU scenes free resources off-slide, honor reduced motion, and offer SVG/full-data fallbacks for no/lost GPU, print, and export. Three.js resolution uses actual displayed size after Reveal transforms.
 
-Les neuf nœuds du Sankey (26) portent leurs libellés courts directement dans le diagramme. Une section dépliable conserve les noms sources complets. Sur la slide 33, Scenario A–E identifie chaque trajectoire ; la légende accepte clavier et toucher, garde la sélection au changement de thème ou de largeur et conserve des axes fixes lors de l’isolation. Tous les intitulés de corrélation, dont Rates et FX, restent visibles. La légende du graphique circulaire (8) dispose d’un espace distinct sous son arc.
+## Final validation
 
-Les contrôles natifs restent utilisables sans faire avancer involontairement Reveal. Les scènes GPU libèrent leurs ressources hors slide, respectent le mouvement réduit et disposent de vues SVG et de données complètes pour l’absence du GPU, sa perte, l’impression et l’export. La résolution des scènes Three.js tient compte de la taille réellement affichée après la transformation Reveal.
+- 48 unit tests passed: financial data, totals, proportional scale, schema, and generation.
+- 40 Playwright scenarios passed in one batch: no failure, skip, or flaky test. Command: `bunx playwright test qa/flagship-*.spec.js`.
+- Real traversal of all 38 slides from fresh `file://`: no forced theme or artificial panel removal; desktop keyboard and phone `isMobile`, `hasTouch`, DPR 2.
+- 38 desktop captures at 1440×900 and 76 mobile captures at 390×844, including continuations; additional 1920×1080, 3D, and selection states.
+- 535 desktop and 572 mobile HTML contrast checks with transparent compositing. No checked fault or JavaScript error in complete traversals. SVG text received targeted visual checks; HTML checks do not cover every canvas pixel.
+- Exact source values, real WebGPU/WebGL rendering, theme/width changes, keyboard, touch, GPU loss, print, extreme rotation framing, and no idle continuous render were tested.
+- Export CLI QA: 38 slides, no blocker and no warning. GPU scenes and SVG fallbacks are listed in `output/flagship-review/export/report.json`.
 
-## Validation finale
+## Independent reviews and limits
 
-- 48 tests unitaires réussis : données financières, totaux, échelles proportionnelles, schéma et génération.
-- 40 scénarios Playwright réussis dans un même lot, sans échec, scénario ignoré ni test instable. Commande : npx playwright test qa/flagship-*.spec.js.
-- Parcours réel des 38 slides depuis une ouverture file:// vierge, sans thème forcé ni suppression artificielle de panneaux. Navigation desktop au clavier ; téléphone avec isMobile, hasTouch et DPR 2.
-- 38 captures desktop à 1440 × 900 et 76 captures mobiles à 390 × 844, continuations incluses. Captures supplémentaires à 1920 × 1080 et dans les états 3D et de sélection.
-- 535 contrôles de contraste HTML desktop et 572 sur mobile, avec composition des transparences. Aucun défaut contrôlé ni erreur JavaScript dans les deux parcours complets. Les textes des graphiques font aussi l’objet d’inspections visuelles et de contrôles SVG ciblés ; le contrôle HTML ne couvre pas à lui seul chaque pixel du canvas.
-- Tests des valeurs sources exactes, du rendu réel WebGPU/WebGL, des changements de thème et de largeur, du clavier, du toucher, de la perte du GPU, de l’impression, du cadrage aux rotations extrêmes et de l’absence de rendu continu au repos.
-- QA CLI d’export : 38 slides, zéro blocage et zéro avertissement. Les scènes GPU et leurs vues SVG sont recensées dans output/flagship-review/export/report.json.
+The visual review examined both 38-slide boards, readable individual captures, mobile continuations, and 1920px views. It required six corrections: mobile diagram identities, named scenarios, wider 3D framing, complete legends/labels, mobile financial unit, and documentation of the real system. The replacement captures were marked `ship`; those six items were resolved without a material regression found in that pass. The verdict covers those points only. Final record: `.impeccable/review/flagship-finish-review.md`.
 
-## Revues indépendantes
+A contrarian code review identified clipping of three spheres at permitted rotation limits. Dynamic framing corrected it; the dedicated test now checks all five spheres, their labels, and no collision at keyboard/drag extremes. No other confirmed blocker was found in the reviewed scope. Record: `.impeccable/review/flagship-contrarian-code.md`.
 
-La revue visuelle complète a examiné les deux planches de 38 slides, des captures individuelles lisibles, des continuations mobiles et les vues 1920px. Elle a demandé six corrections : identités proches des diagrammes mobiles, scénarios nommés, cadrage 3D plus ample, légendes et intitulés complets, unité financière mobile et documentation du système réel. Le même relecteur a rendu disposition: ship sur les captures remplacées : les six corrections sont résolues, sans régression matérielle identifiée dans cette passe. Ce verdict couvre ces six points. Verdict final consigné dans .impeccable/review/flagship-finish-review.md.
+Local gallery: `output/flagship-review/index.html`. Final reports include `browser-final.json`, manifests, GPU and revenue manifests. The main file is copied unchanged from the exact tested input; `artifact.json` records SHA-256 identities and `main-file-smoke.json` checks final-path opening.
 
-La revue de code contrarian a identifié une coupure de trois sphères aux limites autorisées de rotation. Le cadrage dynamique corrige ce défaut ; le test dédié vérifie maintenant les cinq sphères complètes, leurs noms et l’absence de collision aux extrêmes du clavier et du glisser. Aucun autre blocage confirmé dans le périmètre relu : revenus, DPR, destruction des scènes, clavier, sélection et export. Compte rendu : .impeccable/review/flagship-contrarian-code.md.
-
-Les rôles Impeccable de revue finale et de documentation ont été remplis par des agents génériques indépendants suivant les contrats du skill, les classes d’agents nommées du plugin n’étant pas exposées par le harness. Le détecteur a été exécuté une fois pendant cette passe ; résultat vide dans output/flagship-review/design-audit.json. Aucun nouvel ignore Impeccable ajouté. Les corrections de la revue n’ont pas déclenché un second passage du détecteur.
-
-## Preuves et limites
-
-Galerie locale : output/flagship-review/index.html. Rapports du lot final : browser-final.json, desktop-manifest.json, mobile-manifest.json, gpu-manifest.json et revenue-*-manifest.json dans le même dossier. Le fichier principal est copié sans régénération depuis le fichier exact passé aux tests ; artifact.json consigne les empreintes SHA-256 et l’identité des deux fichiers. Son ouverture à son chemin final fait l’objet de main-file-smoke.json.
-
-La validation couvre Chrome desktop et l’émulation mobile tactile ; aucun essai sur un téléphone physique ou Safari n’est revendiqué. Une revue visuelle, un verdict sur ses corrections et des tests verts ne constituent pas une certification esthétique de 9/10.
+Coverage is Chrome desktop plus touch-mobile emulation. No physical phone or Safari run is claimed. Visual review, correction verdict, and green tests do not constitute a universal aesthetic or device certification.

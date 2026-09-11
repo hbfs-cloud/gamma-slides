@@ -1,3 +1,5 @@
+import {mechanismCSS,mechanismJS} from './components/mechanism.js';
+import {explainerCSS,explainerJS} from './components/explainer.js';
 import { studioFrameClockJS } from './components/studio-frame-clock.js';
 import {studioProductionCSS,studioProductionJS} from './components/studio-production.js';
 import {videoStoryCSS} from './components/video-story.js';
@@ -108,6 +110,9 @@ export function renderDeck(deck) {
   ${deck.meta?.author ? `<meta name="author" content="${escapeHtml(deck.meta.author)}">` : ''}
   ${deck.meta?.description ? `<meta name="description" content="${escapeHtml(deck.meta.description)}">` : ''}
   ${deck.branding?.favicon ? `<link rel="icon" href="${safeUrl(deck.branding.favicon)}">` : ''}
+  <style data-gamma-runtime="xterm">${deckRuntimeAssets.xtermCss}</style>
+  <script data-gamma-runtime="xterm">${deckRuntimeAssets.xtermJs}<\/script>
+  <script data-gamma-runtime="xterm-fit">${deckRuntimeAssets.xtermFitJs}<\/script>
   <style data-gamma-runtime="reveal.js@5.1.0">${deckRuntimeAssets.revealCss}</style>
   <style data-gamma-fonts="embedded">${fontCSS}</style>
   <script data-gamma-runtime="echarts@6.1.0">${deckRuntimeAssets.echartsJs}<\/script>
@@ -164,12 +169,12 @@ export function renderDeck(deck) {
     ${presenterStudioCSS(defaultTheme)}
   </style>
   <style id="gamma-theme-runtime">${themeCssSets[defaultTheme.id || deck.theme]}</style>
-  <style>${actionOrbitCSS()}${studioLiveCSS()}${studioProductionCSS()}${studioBrowserCSS()}${studioOutputCSS()}${visualCSS()}${videoStoryCSS()}</style>
+  <style>${actionOrbitCSS()}${studioLiveCSS()}${studioProductionCSS()}${studioBrowserCSS()}${studioOutputCSS()}${visualCSS()}${explainerCSS()}${mechanismCSS()}${videoStoryCSS()}</style>
   ${deck.meta?.experience ? `<style data-gamma-experience>${experienceCSS()}${experienceCompositionsCSS()}</style>` : ''}
   ${slidesHtml.includes('class="archify-slide"') ? `<style data-gamma-archify>${archifySlideCSS()}</style>` : ''}
 </head>
 <body class="theme-${escapeHtml(deck.theme)} aesthetic-${escapeHtml(defaultTheme.aesthetic || 'standard')}${slidesHtml.includes('cinema-stage') ? ' gamma-cinema-deck' : ''}${deck.meta?.presentation === 'direct' ? ' gamma-direct-deck' : ''}${deck.meta?.experience ? ' gamma-experience' : ''}" data-presentation-theme="${escapeHtml(defaultTheme.id || deck.theme)}">
-  ${directionContract}
+  ${deck.meta?.direction_contract ? '<!--'+String(deck.meta.direction_contract).replaceAll('--','—')+'-->' : directionContract}
   <div class="reveal">
     <div class="slides">
 ${slidesHtml}
@@ -191,6 +196,8 @@ ${slidesHtml}
     const gammaThemeCssSets = ${serializeForScript(themeCssSets)};
     ${themesEnabled ? themePickerJS(themeFamily, defaultTheme.id) : ''}
     ${autoAnimateJS()}
+    ${explainerJS()}
+    ${mechanismJS()}
     ${immersiveJS()}
     ${cinematicJS()}
     ${slidesHtml.includes('d3-webgpu-stage') ? d3WebGPUJS() : ''}
@@ -211,8 +218,13 @@ ${slidesHtml}
     });
     ${presenterStudioJS()}
     Reveal.on('ready', async () => {
+      await Promise.all([document.fonts.load('550 36px Archivo'),document.fonts.load('450 24px Archivo')]);
+      await document.fonts.ready;
+      Reveal.layout();
       ${deck.meta?.experience ? '' : 'applyAnimations();'}
       ${themesEnabled ? 'initThemePicker();' : ''}
+      initExplainers();
+      initMechanisms();
       initImmersiveCharts();
       initCinematicComparisons();
       ${slidesHtml.includes('d3-webgpu-stage') ? 'initD3WebGPU();' : ''}
@@ -383,6 +395,28 @@ ${studioOutputJS()}
           const config = JSON.parse(JSON.stringify(rawConfig));
           ${deck.meta?.experience ? `const palette = getComputedStyle(document.body);
           adaptExperienceChart(config, el.closest('[data-chart-type]')?.dataset.chartType, el.clientWidth, matchMedia('(max-width:900px)').matches, { text:palette.getPropertyValue('--gamma-text').trim(), bg:palette.getPropertyValue('--gamma-bg').trim() });` : ''}
+          if(el.closest('.video-chart')){
+            const size=matchMedia('(max-width:900px)').matches?16:24;
+            config.textStyle={...config.textStyle,fontSize:size};
+            for(const series of [].concat(config.series||[]))if(series.label)series.label={...series.label,fontSize:size};
+            for(const key of ['xAxis','yAxis'])for(const axis of [].concat(config[key]||[])){axis.axisLabel={...axis.axisLabel,fontSize:size,hideOverlap:true,alignMinLabel:'left',alignMaxLabel:'right'};axis.nameTextStyle={...axis.nameTextStyle,fontSize:size};}
+            const legends=[].concat(config.legend||[]);
+            for(const legend of legends){legend.textStyle={...legend.textStyle,fontSize:size};legend.top=0;legend.left=0;legend.right='auto';legend.orient='vertical';legend.itemGap=8;}
+            const seriesCount=Array.isArray(config.series)?config.series.length:1;
+            const legendHeight=legends.length?(legends[0].data?.length||seriesCount)*(size+8)+16:16;
+            for(const [index,grid] of [].concat(config.grid||[]).entries()){if(index===0)grid.top=Math.max(Number(grid.top)||0,legendHeight);grid.containLabel=true;grid.left=8;grid.right=16;}
+            for(const axis of [].concat(config.xAxis||[]))if(axis.type==='category'&&axis.data?.length<=8){axis.axisLabel={...axis.axisLabel,interval:0,hideOverlap:false,rotate:size===16&&axis.data.length>4?60:0};if(axis.axisLabel.rotate){delete axis.axisLabel.alignMinLabel;delete axis.axisLabel.alignMaxLabel;for(const grid of [].concat(config.grid||[]))grid.bottom=100;}}
+            if(el.closest('[data-chart-type=stock]')&&config.grid?.length===2){
+              const h=el.clientHeight,priceTop=legendHeight,available=Math.max(120,h-priceTop-116),priceHeight=Math.floor(available*.73),volumeTop=priceTop+priceHeight+24,volumeHeight=Math.max(24,available-priceHeight);
+              config.grid=[{left:54,right:16,top:priceTop,height:priceHeight},{left:54,right:16,top:volumeTop,height:volumeHeight}];
+              config.graphic=[{type:'text',left:4,top:volumeTop,silent:true,style:{text:'VOL',fill:getComputedStyle(document.body).getPropertyValue('--gamma-muted').trim(),fontSize:12,fontFamily:'Archivo'}}];
+              config.xAxis.forEach((axis,i)=>{axis.axisLabel={...axis.axisLabel,show:i===1,fontSize:12,hideOverlap:true,showMinLabel:true,showMaxLabel:true,alignMinLabel:'left',alignMaxLabel:'right',margin:12};});
+              config.dataZoom=(config.dataZoom||[]).filter(zoom=>zoom.type!=='slider');
+            }
+
+
+            for(const title of [].concat(config.title||[])){title.textStyle={...title.textStyle,fontSize:size*2};title.subtextStyle={...title.subtextStyle,fontSize:size};}
+          }
           const formatValue = (value, format = 'compact') => {
             const number = Number(value);
             if (format === 'currency_m') {
@@ -426,7 +460,7 @@ ${studioOutputJS()}
               const hasScalarLabels = !['scatter', 'heatmap', 'candlestick'].includes(s.type);
               const scalarFormat = formatLeft || formatX;
               if (s.label?.show && scalarFormat && hasScalarLabels) {
-                s.label.formatter = params => formatValue(params.value, scalarFormat);
+                s.label.formatter = params => formatValue(el.closest('.video-chart')?Math.round(Number(params.value)*100)/100:params.value, scalarFormat);
               }
               if (s.symbolSize === '__gammaBubbleSize') s.symbolSize = value => Math.max(10, Math.min(48, Math.sqrt(Number(value?.[2] || 1)) * 5));
               if (isWaterfall && s.label?.show) s.label.formatter = params => formatValue(params.data?.raw ?? params.value, formatLeft);

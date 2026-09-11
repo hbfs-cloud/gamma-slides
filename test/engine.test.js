@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { escapeHtml, safeUrl, richText } from '../src/engine/html.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
 import { buildEChartsConfig } from '../src/engine/components/chart-builder.js';
+import { renderDiagram } from '../src/engine/components/archify-slide.js';
 import { getTheme } from '../src/themes/index.js';
 import { renderPublishingHTML, renderYouTubeStudioHTML } from '../src/youtube/studio.js';
 import { uploadToYouTube, uploadVideoResumable } from '../src/youtube/upload.js';
@@ -90,12 +91,40 @@ slides:
     const result = buildPresentationLibrary({ inputDir: sourceDir, outputDir, include: [fallback] });
     assert.equal(result.entries.length, 1);
     assert.equal(result.entries[0].slug, 'comite-fy26');
-    assert.match(readFileSync(join(outputDir, 'index.html'), 'utf-8'), /Comité FY26/);
+    const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
+    assert.match(landing, /Gamma Presenter/);
+    assert.match(landing, /Presentations that refuse to be flat/);
+    assert.match(landing, /Comité FY26/);
     assert.match(readFileSync(join(outputDir, 'presentations.json'), 'utf-8'), /"slug": "comite-fy26"/);
     assert.match(readFileSync(join(outputDir, 'comite-fy26', 'index.html'), 'utf-8'), /Décider maintenant/);
+    assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-control-room.png')));
+    assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-icon.svg')));
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
+});
+
+test('video close-up diagrams build a readable mobile Archify composition', () => {
+  const slide = {
+    title: 'Validate before rendering',
+    variant: 'video-closeup',
+    diagram: {
+      type: 'architecture',
+      spec: {
+        schema_version: 1,
+        diagram_type: 'architecture',
+        meta: { title: 'Validation path', quality_profile: 'showcase', viewBox: [600, 300] },
+        components: [
+          { id: 'deck', type: 'backend', label: 'Deck', pos: [30, 85], size: [150, 90] },
+          { id: 'schema', type: 'frontend', label: 'Schema', pos: [340, 85], size: [150, 90] },
+        ],
+        connections: [{ from: 'deck', to: 'schema', label: 'validate', variant: 'emphasis' }],
+      },
+    },
+  };
+  const html = renderDiagram(slide, getTheme('signal-room'), { meta: { language: 'en' } });
+  assert.match(html, /archify-mobile-document/);
+  assert.match(html, /data-video-overview/);
 });
 
 test('GitHub Pages presentation identifiers are normalized and validated', () => {
@@ -175,7 +204,7 @@ slides:
   assert.match(html, /\[5,30\]\.forEach\(seconds/);
   assert.match(html, /Math\.max\(0,reviewVideo\.currentTime-/);
   assert.match(html, /showSaveFilePicker/);
-  assert.match(html, /Téléchargement lancé · vérifiez le fichier/);
+  assert.match(html, /Download started · check the file/);
   assert.match(html, /recorder\.onpause\s*=\s*\(\)\s*=>\s*\{\s*syncPauseUI\(true\)/);
   assert.match(html, /state\.phase='ready';await startRecording\(\)/);
   assert.match(html, /state\.step=Math\.min\(4,state\.step\+1\)/);

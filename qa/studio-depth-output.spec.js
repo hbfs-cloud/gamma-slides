@@ -1,0 +1,20 @@
+import {test,expect} from '@playwright/test';
+import {mkdtempSync,writeFileSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {loadDeck} from '../src/loader/index.js';
+import {renderDeck} from '../src/engine/renderer.js';
+import {serveRepositoryPresentation} from '../src/repository/server.js';
+import {orbitAction,orbitBranch} from './orbit-helpers.js';
+let directory,live;
+test.beforeAll(async()=>{directory=mkdtempSync(join(tmpdir(),'gamma-clean-depth-'));const deck=loadDeck('presentations/flagship.yaml');deck.slides=deck.slides.filter(s=>s.chart?.options?.depth_label&&s.variant==='d3-webgpu');writeFileSync(join(directory,'index.html'),renderDeck(deck));live=await serveRepositoryPresentation(directory,{port:0});});
+test.afterAll(async()=>{await new Promise(r=>live.server.close(r));rmSync(directory,{recursive:true,force:true});});
+test('clean output preserves 3D identities above GPU pixels and follows the operator projection',async({page,context})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(live.url);await page.waitForFunction(()=>window.__GAMMA_READY__);const source=page.locator('section.present .d3-webgpu-stage');await expect(source).toHaveAttribute('data-d3-view','3d');
+ await orbitBranch(page,'studio');const popup=context.waitForEvent('page');await page.locator('[data-live=output-window]').click();const audience=await popup;audience.on('pageerror',e=>errors.push(e.message));await audience.setViewportSize({width:1920,height:1080});await audience.waitForFunction(()=>window.__GAMMA_READY__);
+ const layer=audience.locator('.gamma-output-depth-labels');const names=await source.locator('.d3-depth-label[data-kind=point]').allTextContents();await expect(layer.locator('[data-kind=point]')).toHaveText(names);await expect(audience.locator('.d3-depth-instruction')).toBeHidden();await expect(audience.locator('.d3-depth-selection')).toBeHidden();
+ expect(await layer.evaluate(el=>Number(getComputedStyle(el).zIndex)>Number(getComputedStyle(el.parentElement.querySelector('.gamma-output-canvas')).zIndex))).toBe(true);
+ await page.bringToFront();await page.locator('[data-live=close]').click();await (await orbitAction(page,source.locator('.d3-depth-select'))).selectOption('4');await expect(audience.locator('.d3-depth-selection')).toContainText('42%');
+ const before=await layer.innerHTML();await (await orbitAction(page,source.locator('[data-depth-action=right]'))).click();await expect.poll(()=>layer.innerHTML()).not.toBe(before);
+ const operatorPositions=await source.locator('.d3-depth-label[data-kind=point]').evaluateAll(nodes=>nodes.map(n=>[n.style.left,n.style.top]));await expect.poll(()=>layer.locator('[data-kind=point]').evaluateAll(nodes=>nodes.map(n=>[n.style.left,n.style.top]))).toEqual(operatorPositions);expect(errors).toEqual([]);await audience.close();
+});

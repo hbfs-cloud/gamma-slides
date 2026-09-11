@@ -303,7 +303,7 @@ function buildHTML(title, slides, theme, data) {
           data: {
             labels: ['ACH', 'VTE', 'BQ', 'OD', 'AN'],
             datasets: [{
-              label: 'Écritures',
+              label: 'Entries',
               data: [2800, 4200, 5100, 1932, 800],
               backgroundColor: ['${theme.primary}', '${theme.secondary}', '${theme.accent || '#FD79A8'}', '#74B9FF', '#FFEAA7'],
               borderRadius: 6,
@@ -387,7 +387,7 @@ function buildHTML(title, slides, theme, data) {
           data: {
             labels: ${JSON.stringify((data.cohort_analysis || { months: [] }).months.map(m => 'M' + m))},
             datasets: [{
-              label: 'Rétention %',
+              label: 'Retention %',
               data: ${JSON.stringify((data.cohort_analysis || { retention: [] }).retention)},
               borderColor: '${theme.secondary}',
               backgroundColor: 'rgba(0,184,148,0.1)',

@@ -32,6 +32,15 @@ export function actionOrbitCSS() { return `
   .archify-reading:has(>.gamma-orbit-managed) { grid-template-columns:1fr; }
   .gamma-orbit-managed { display:none!important; }
   @media(max-width:900px) { .gamma-orbit { right:16px; bottom:max(24px,min(116px,calc(100dvh - var(--orbit-size) - 16px))); }.gamma-orbit-panel { right:16px; bottom:152px; } }
+  @media(max-width:900px) {
+    body.gamma-experience .gamma-orbit { top:4px; bottom:auto; }
+    body.gamma-experience .gamma-orbit-hub { top:0; bottom:auto; width:44px; height:44px; }
+    body.gamma-experience .gamma-orbit[data-open=true] .gamma-orbit-hub { transform:translate(calc((44px - var(--orbit-size)) / 2),calc((var(--orbit-size) - 44px) / 2)); }
+    body.gamma-experience .gamma-orbit-canopy { transform-origin:calc(100% - 22px) 22px; }
+    body.gamma-experience .gamma-orbit:not([data-open=true]) .gamma-orbit-branch { transform:translate(calc((var(--orbit-size) - 44px) / 2),calc((44px - var(--orbit-size)) / 2)) scale(.5); }
+    body.gamma-experience .gamma-orbit-panel { top:64px; bottom:auto; max-height:calc(100dvh - 144px); }
+    body.gamma-experience .experience-masthead > a { max-width:calc(100% - 60px); overflow:hidden; }
+  }
   @media(prefers-reduced-motion:reduce) { .gamma-orbit-canopy,.gamma-orbit-branch,.gamma-orbit-hub { transition:none; } }
   @media print { .gamma-orbit { display:none!important; }.gamma-orbit-managed { display:none!important; } }
   html.gamma-export .gamma-orbit { display:none; }
@@ -40,7 +49,7 @@ export function actionOrbitCSS() { return `
 function initActionOrbit(icons) {
   if (new URLSearchParams(location.search).has('gamma-clean') || new URLSearchParams(location.search).has('gamma-export') || new URLSearchParams(location.search).has('print-pdf')) return;
   const fr=document.documentElement.lang.startsWith('fr');
-  const t=fr?{menu:'Actions de la slide',actions:'Explorer',full:'Plein écran',back:'Retour',terminal:'Terminal',theme:'Apparence',studio:'Studio',close:'Fermer',empty:'Aucun réglage sur cette slide.'}:{menu:'Slide actions',actions:'Explore',full:'Full screen',back:'Return',terminal:'Terminal',theme:'Appearance',studio:'Studio',close:'Close',empty:'No settings on this slide.'};
+  const t={menu:'Slide actions',actions:'Explore',full:'Full screen',back:'Return',terminal:'Terminal',theme:'Appearance',studio:'Studio',close:'Close',empty:'No settings on this slide.'};
   const root=document.createElement('nav');root.className='gamma-orbit';root.setAttribute('aria-label',t.menu);root.dataset.open='false';
   // Five equally spaced actions on one radius around the expanded M hub.
   const branches=[['studio',t.studio],['full',t.full],['actions',t.actions],['terminal',t.terminal],['theme',t.theme]].map(([id,label],i)=>{const angle=(-90+i*72)*Math.PI/180;return [id,label,Math.cos(angle),Math.sin(angle)];});
@@ -48,7 +57,7 @@ function initActionOrbit(icons) {
   document.body.append(root);document.body.classList.add('gamma-orbit-enabled');
   const hub=root.querySelector('.gamma-orbit-hub'),panel=root.querySelector('.gamma-orbit-panel'),fields=root.querySelector('.gamma-orbit-fields');let timer,controls=[],proxies=[],openedByHover=false,controlSequence=0;
   const current=()=>document.querySelector('.archify-fullscreen[open] .archify-slide')||Reveal.getCurrentSlide();
-  const sourceSelector='.revenue-sculpture-key,.archify-controls,.archify-reading>label,.archify-data,.d3-webgpu-actions,.d3-depth-toolbar,.spatial-toolbar,.spatial-inspector>label,.cinema-actions,.cinema-tools,.chart-scenario-legend,.studio-slide-actions';
+  const sourceSelector='.explainer-actions,.revenue-sculpture-key,.archify-controls,.archify-reading>label,.archify-data,.d3-webgpu-actions,.d3-depth-toolbar,.spatial-toolbar,.spatial-inspector>label,.cinema-actions,.cinema-tools,.chart-scenario-legend,.studio-slide-actions';
   function collect(){
     const slide=current();if(!slide)return [];
     const containers=[...slide.querySelectorAll(sourceSelector)];

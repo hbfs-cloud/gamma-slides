@@ -13,7 +13,7 @@ export async function exportPDF(opts) {
   const outputPath = resolve(opts.output || defaultOutput);
 
   if (!existsSync(filePath)) {
-    throw new Error(`Fichier source non trouvé: ${filePath}`);
+    throw new Error(`Source file not found: ${filePath}`);
   }
 
   const spinner = ora({
@@ -30,7 +30,7 @@ export async function exportPDF(opts) {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
 
-    spinner.text = 'Chargement de la présentation...';
+    spinner.text = 'Loading presentation...';
 
     // Use print-pdf query param for Reveal.js
     const fileUrl = new URL(pathToFileURL(filePath));
@@ -44,7 +44,7 @@ export async function exportPDF(opts) {
       return typeof Reveal !== 'undefined' && Reveal.isReady() && window.__GAMMA_READY__ === true;
     }, { timeout: 30000 });
 
-    spinner.text = 'Génération du PDF...';
+    spinner.text = 'Generating PDF...';
 
     await page.pdf({
       path: outputPath,
@@ -55,7 +55,7 @@ export async function exportPDF(opts) {
       margin: { top: 0, right: 0, bottom: 0, left: 0 }
     });
 
-    spinner.succeed(chalk.green('PDF généré avec succès'));
+    spinner.succeed(chalk.green('PDF generated successfully'));
   } finally {
     await browser.close();
   }

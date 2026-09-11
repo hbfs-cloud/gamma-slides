@@ -14,14 +14,23 @@ export function diagramFacts(spec) {
 export function renderDiagram(slide, theme, deck) {
   const compiled = compileDiagram(slide.diagram), facts = diagramFacts(slide.diagram.spec);
   const fr = deck.meta?.language?.startsWith('fr');
-  const labels = fr ? { play:'Lire le parcours', pause:'Pause', all:'Vue d’ensemble', view:'Parcours', node:'Composant ou étape', data:'Lire les relations', inspect:'Sélectionner un élément pour lire ses relations.', static:'Vue statique', zoomIn:'Agrandir', zoomOut:'Réduire', fullscreen:'Plein écran', close:'Retour à la slide' } : { play:'Play story', pause:'Pause', all:'Overview', view:'Story', node:'Component or step', data:'Read relationships', inspect:'Select an element to read its relationships.', static:'Static view', zoomIn:'Zoom in', zoomOut:'Zoom out', fullscreen:'Full screen', close:'Back to slide' };
-  const config = { title:slide.title, ...facts, labels, language:deck.meta?.language || 'en', background:theme.background, text:theme.text, muted:theme.textMuted, primary:theme.primary };
-  const framedSVG=frameDiagramSVG(compiled.svg,slide.diagram.type,slide.variant==='video-closeup'?{node:22,context:16,edge:20}:null);
-  const svgDocument = framedSVG.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" data-theme="dark" ').replace(/(<svg[^>]*>)/, `$1<style><![CDATA[${compiled.css.replaceAll('</style', '<\\/style')} svg { font-family:'JetBrains Mono',ui-monospace,monospace; } :root { --bg:${theme.background}; --text:${theme.text}; --text-muted:${theme.textMuted}; }]]></style>`);
+  const labels = { play:'Play story', pause:'Pause', all:'Overview', view:'Story', node:'Component or step', data:'Read relationships', inspect:'Select an element to read its relationships.', static:'Static view', zoomIn:'Zoom in', zoomOut:'Zoom out', fullscreen:'Full screen', close:'Back to slide' };
+  const config = { title:slide.title, ...facts, labels, language:deck.meta?.language || 'en', mobileOverview:slide.variant==='video-closeup', background:theme.background, text:theme.text, muted:theme.textMuted, primary:theme.primary };
+  const framedSVG=frameDiagramSVG(compiled.svg,slide.diagram.type,slide.variant==='video-closeup'?{node:40,context:24,edge:24}:null);
+  // Short explanatory chains get a genuine vertical Archify composition on phones.
+  const shortChain=slide.variant==='video-closeup'&&facts.nodes.length<=4&&facts.edges.length===facts.nodes.length-1&&facts.edges.every((edge,i)=>edge.from===facts.nodes[i]?.id&&edge.to===facts.nodes[i+1]?.id);
+  let mobileDocument='';
+  if(shortChain){
+    const compact=compileDiagram({type:'architecture',spec:{schema_version:1,diagram_type:'architecture',meta:{...slide.diagram.spec.meta,viewBox:[400,Math.max(300,facts.nodes.length*155+40)]},components:facts.nodes.map((node,i)=>({id:node.id,type:'backend',label:node.label,pos:[40,40+i*155],size:[290,105]})),connections:facts.edges.map((edge,index)=>({from:edge.from,to:edge.to,label:edge.label||'',fromSide:'bottom',toSide:'top',...(edge.label?{labelAt:[185,159+index*155]}:{})}))}});
+    const mobileSvg=frameDiagramSVG(compact.svg,'architecture',{node:28,context:16,edge:20}).replace('<svg ','<svg data-video-overview="true" ');
+    mobileDocument=compact.html.replace(compact.svg,mobileSvg);
+  }
+  const svgDocument = framedSVG.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" data-theme="dark" ').replace(/(<svg[^>]*>)/, `$1<style><![CDATA[${compiled.css.replaceAll('</style', '<\\/style')} svg { font-family:'Azeret Mono',ui-monospace,monospace; } :root { --bg:${theme.background}; --text:${theme.text}; --text-muted:${theme.textMuted}; }]]></style>`);
   const staticImage = `data:image/svg+xml;base64,${Buffer.from(svgDocument).toString('base64')}`;
   return `${renderSlideHeader(slide)}<div class="archify-slide" data-archify-type="${escapeHtml(slide.diagram.type)}" data-archify-source="${compiled.sourceHash}">
     <script type="application/json" class="archify-config">${JSON.stringify(config).replaceAll('<','\\u003c')}</script>
     <template class="archify-document">${escapeHtml(compiled.html.replace(compiled.svg,framedSVG))}</template>
+    ${mobileDocument?`<template class="archify-mobile-document">${escapeHtml(mobileDocument)}</template>`:''}
     <div class="archify-controls">
       <button type="button" class="archify-play" data-archify-action="play" aria-pressed="false">${getIcon('play','currentColor',18)}<span>${labels.play}</span></button>
       <label class="archify-view-choice"><span>${labels.view}</span><select data-archify-view aria-label="${labels.view}"><option value="">${labels.all}</option>${facts.views.map(view=>`<option value="${escapeHtml(view.id)}">${escapeHtml(view.label)}</option>`).join('')}</select></label>
@@ -35,7 +44,7 @@ export function renderDiagram(slide, theme, deck) {
     </div>
     <div class="archify-canvas"><img class="archify-static" src="${staticImage}" alt="${escapeHtml(slide.diagram.spec.meta.title)}"></div>
     <div class="archify-reading"><label>${labels.node}<select data-archify-node><option value="">${labels.all}</option>${facts.nodes.map(node=>`<option value="${escapeHtml(node.id)}">${escapeHtml(node.label)}</option>`).join('')}</select></label><p data-archify-status aria-live="polite">${labels.inspect}</p></div>
-    <details class="archify-data"><summary>${labels.data}</summary><dl>${facts.nodes.map(node=>`<div><dt>${escapeHtml(node.label)}</dt><dd>${escapeHtml(node.sublabel || '')}${facts.edges.filter(edge=>edge.from===node.id).map(edge=>`<span>${escapeHtml(edge.label || '→')} → ${escapeHtml(facts.nodes.find(n=>n.id===edge.to)?.label || edge.to)}</span>`).join('')}</dd></div>`).join('')}</dl></details>
+    <details class="archify-data"><summary>${labels.data}</summary><dl>${facts.nodes.map(node=>`<div><dt>${escapeHtml(node.label)}</dt><dd>${escapeHtml(node.sublabel || '')}${facts.edges.filter(edge=>edge.from===node.id).map(edge=>`<span>${escapeHtml(edge.label || '')} → ${escapeHtml(facts.nodes.find(n=>n.id===edge.to)?.label || edge.to)}</span>`).join('')}</dd></div>`).join('')}</dl></details>
   </div>${renderSource(slide, {context:false})}`;
 }
 
@@ -92,7 +101,7 @@ function archifyFrameBridge() {
   const overview=svg.getAttribute('viewBox');let cameraNode=null;
   window.addEventListener('resize',()=>{cameraNode=null;if(innerWidth>720)svg.setAttribute('viewBox',overview);send();});
   function mobileCamera(id) {
-    if(innerWidth>720)return;
+    if(innerWidth>720||svg.dataset.videoOverview==='true')return;
     if(id===cameraNode)return;cameraNode=id;
     const node=[...svg.querySelectorAll('[data-node-id]')].find(node=>node.dataset.nodeId===id);
     if(!node){svg.setAttribute('viewBox',overview);return;}
@@ -137,11 +146,12 @@ function initArchifySlides(bridgeSource) {
   const destroy = state => { state.frame?.remove();state.frame=null;state.root.dataset.ready='false';state.playing=false;state.root.querySelector('[data-archify-action="play"] span').textContent=state.config.labels.play;state.root.querySelector('[data-archify-action="play"]').setAttribute('aria-pressed','false'); };
   const mount = state => {
     if (state.frame) return;
-    if(matchMedia('(max-width:900px)').matches&&!state.node&&!state.view)state.node=state.config.nodes[0]?.id || '';
+    if(!state.config.mobileOverview&&matchMedia('(max-width:900px)').matches&&!state.node&&!state.view)state.node=state.config.nodes[0]?.id || '';
     const frame=document.createElement('iframe');frame.title=state.section.querySelector('h2')?.textContent || 'Archify';
     frame.setAttribute('sandbox','allow-scripts allow-downloads');
     const css=`html,body{margin:0!important;padding:0!important;min-height:0!important;height:100%!important;background:var(--bg)!important;background-image:none!important}.container{width:100%!important;max-width:none!important;height:100%!important;margin:0!important;padding:0!important}.header,.toolbar,.guided-views,.cards,.diagram-nav,#focus-chip,.relationship-lens{display:none!important}.diagram-container{width:100%!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}.diagram-container>svg{display:block;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important}html[data-theme]{--bg:${theme().bg};--text:${theme().text};--text-muted:${theme()['text-muted']}}`;
-    frame.srcdoc=state.root.querySelector('.archify-document').content.textContent.replace('</head>',`<style>${css}</style></head>`).replace('</body>',`<script>(${bridgeSource})()<\/script></body>`);
+    const mobileTemplate=matchMedia('(max-width:900px)').matches&&state.root.querySelector('.archify-mobile-document');
+    frame.srcdoc=(mobileTemplate||state.root.querySelector('.archify-document')).content.textContent.replace('</head>',`<style>${css}</style></head>`).replace('</body>',`<script>(${bridgeSource})()<\/script></body>`);
     state.frame=frame;state.root.querySelector('.archify-canvas').append(frame);
   };
   const sync=()=>states.forEach(state=>{if(!exported&&!printing.matches&&(!document.hidden||new URLSearchParams(location.search).has('gamma-clean'))&&state.section===Reveal.getCurrentSlide())mount(state);else destroy(state);});
@@ -178,7 +188,7 @@ function initArchifySlides(bridgeSource) {
     state.root.querySelector('[data-archify-action="play"]').setAttribute('aria-pressed',String(state.playing));
     const id=event.data.beat?.nodeId || (typeof event.data.node==='string'?event.data.node:null) || state.node;
     const node=state.config.nodes.find(node=>node.id===id),view=state.config.views.find(view=>view.id===event.data.view);
-    if(node){if(!state.playing)state.node=node.id;state.root.querySelector('[data-archify-node]').value=node.id;state.root.querySelector('[data-archify-status]').textContent=[node.label,node.sublabel,...state.config.edges.filter(edge=>edge.from===node.id).map(edge=>`${edge.label||'→'} → ${state.config.nodes.find(node=>node.id===edge.to)?.label||edge.to}`)].filter(Boolean).join(' · ');}
+    if(node){if(!state.playing)state.node=node.id;state.root.querySelector('[data-archify-node]').value=node.id;state.root.querySelector('[data-archify-status]').textContent=[node.label,node.sublabel,...state.config.edges.filter(edge=>edge.from===node.id).map(edge=>`${edge.label||''} → ${state.config.nodes.find(node=>node.id===edge.to)?.label||edge.to}`)].filter(Boolean).join(' · ');}
     else state.root.querySelector('[data-archify-status]').textContent=view?.note || state.config.labels.inspect;
     state.root.querySelector('[data-archify-view]').value=view?.id||'';
   });

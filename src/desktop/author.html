@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Gamma Presenter</title>
+    <link rel="stylesheet" href="./desktop.css">
+  </head>
+  <body class="author-shell">
+    <header class="titlebar">
+      <div class="document-title"><strong id="document-name">New presentation</strong><span id="document-meta">2 slides · 1 min</span></div>
+      <div class="title-actions">
+        <button id="open-document" title="Open (⌘O)">Open</button>
+        <button id="save-document" title="Save (⌘S)">Save</button>
+        <button class="play-button" id="present" title="Present (⌘↩)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.7 13 8 4 13.3Z"/></svg><span>Present</span></button>
+      </div>
+    </header>
+    <main class="editor-workspace">
+      <aside class="thumbnail-pane" aria-label="Slides">
+        <div class="pane-heading"><span>Slides</span><button id="add-slide" title="New slide" aria-label="New slide">+</button></div>
+        <div class="thumbnail-list" id="thumbnail-list" aria-label="Slide thumbnails"></div>
+        <div class="slide-actions" aria-label="Selected slide actions">
+          <button id="duplicate-slide" type="button">Duplicate</button>
+          <button id="move-slide-up" type="button" title="Move slide earlier">Move up</button>
+          <button id="move-slide-down" type="button" title="Move slide later">Move down</button>
+          <button id="delete-slide" class="danger-action" type="button">Delete</button>
+        </div>
+        <footer class="thumbnail-footer"><span id="deck-duration">Estimated duration: 1 min</span></footer>
+      </aside>
+      <section class="editor-pane" aria-label="Presentation editor">
+        <div class="editor-toolbar"><span id="current-slide-label">Slide 1</span><span class="source-language" id="source-language">Markdown</span><span id="feedback" role="status" aria-live="polite">Ready</span></div>
+        <textarea id="source" spellcheck="true" aria-label="Presentation source"></textarea>
+        <section class="renderer-preview" aria-label="Live Gamma render">
+          <div class="preview-toolbar"><strong>Gamma render</strong><span id="renderer-status">All Gamma runtime capabilities are available</span><button id="focus-preview" type="button" aria-pressed="false">Expand preview</button></div>
+          <iframe id="renderer-preview" title="Faithful Gamma presentation preview" allow="autoplay; fullscreen"></iframe>
+        </section>
+        <footer class="editor-footer"><span><kbd>⌘↩</kbd> present</span><span><kbd>⌘D</kbd> focus</span><span><kbd>⌘S</kbd> save</span></footer>
+      </section>
+      <aside class="inspector-pane" aria-label="Inspector">
+        <div class="pane-heading"><span>Inspector</span></div>
+        <section class="inspector-section">
+          <h2>Speaker notes</h2>
+          <p id="source-help">This text supports you and is not projected.</p>
+          <button class="inspector-action" data-insert="\n\nYour speaker note.\n">Add note</button>
+          <button class="inspector-action" data-insert="\n\nA sentence to say with intent.\n">Add note emphasis</button>
+        </section>
+        <section class="inspector-section markdown-inspector" id="markdown-inspector" hidden>
+          <h2>Selected slide</h2>
+          <p>Use the visual editor for the selected Markdown slide. Lists, quotes, tables, and media stay in source untouched.</p>
+          <label>Title <input id="markdown-title" type="text" autocomplete="off"></label>
+          <label>Subtitle <input id="markdown-subtitle" type="text" autocomplete="off"></label>
+          <label>Speaker notes <textarea id="markdown-notes" rows="5"></textarea></label>
+          <button id="apply-markdown-slide" type="button">Apply selected slide</button>
+        </section>
+        <section class="inspector-section rich-inspector" id="rich-inspector" hidden>
+          <h2>Selected slide</h2>
+          <p id="rich-inspector-help">Edit common properties without losing the Gamma format.</p>
+          <label>Title <input id="rich-title" type="text" autocomplete="off"></label>
+          <label>Subtitle <input id="rich-subtitle" type="text" autocomplete="off"></label>
+          <label>Layout <select id="rich-layout"></select></label>
+          <label>Media <select id="rich-media-kind"><option value="none">None</option><option value="image">Image</option><option value="visual">Visual / GIF</option><option value="media">Video / audio</option></select></label>
+          <label>URL or path <input id="rich-media-src" type="text" autocomplete="off"></label>
+          <label>Notes <textarea id="rich-notes" rows="4"></textarea></label>
+          <details class="rich-advanced"><summary>Full slide configuration</summary><textarea id="rich-configuration" rows="12" spellcheck="false"></textarea><button id="apply-rich-configuration" type="button">Apply configuration</button></details>
+        </section>
+        <section class="inspector-section">
+          <h2>On the slide</h2>
+          <button class="inspector-action" data-insert="\n## Your message\n">Subtitle</button>
+          <button class="inspector-action" data-insert="\n- One idea\n">List</button>
+          <button class="inspector-action" data-insert="\n> “A sentence worth remembering.” — Speaker\n">Quote layout</button>
+          <button class="inspector-action" data-insert="\n| Before | After |\n| --- | --- |\n| Manual | Automated |\n">Comparison</button>
+          <button class="inspector-action" data-insert="\n| Signal | Owner | Status |\n| --- | --- | --- |\n| Decision | Team | Active |\n">Table</button>
+          <button class="inspector-action" data-insert="\n![Description](image.png)\n">Image</button>
+          <button class="inspector-action" data-insert="\n![Animation](animation.gif)\n">Animated GIF</button>
+          <button class="inspector-action" id="import-media" type="button">Import local media…</button>
+        </section>
+        <section class="inspector-section appearance-section">
+          <h2>Appearance</h2>
+          <label>Theme <select id="theme" aria-label="Presentation theme"></select></label>
+          <label>Display <select id="display" aria-label="Stage display"></select></label>
+          <p class="render-capabilities">The integrated renderer preserves images, GIFs, video, audio, ECharts, D3/Pixi, Archify, Three.js and deck animations.</p>
+        </section>
+        <section class="inspector-section control-room-section">
+          <h2>Control room</h2>
+          <div class="live-clocks"><span><small>Presentation</small><strong id="presentation-elapsed">00:00</strong></span><span><small>Slide</small><strong id="slide-elapsed">00:00</strong></span></div>
+          <label>Countdown minutes <input id="countdown-minutes" type="number" min="1" max="240" value="5"></label>
+          <div class="compact-actions"><button id="set-countdown" type="button">Set</button><button id="toggle-countdown" type="button">Start</button><button id="clear-countdown" type="button">Clear</button></div>
+          <p id="countdown-status" class="control-status">No countdown running.</p>
+          <label>Private speaker cue <textarea id="copilot-cue" rows="3" maxlength="500" placeholder="e.g. Ask for the decision now."></textarea></label>
+          <div class="compact-actions"><button id="send-cue" type="button">Show cue</button><button id="send-urgent-cue" class="urgent-action" type="button">Urgent</button><button id="clear-cue" type="button">Clear</button></div>
+        </section>
+        <section class="inspector-section approvals-section">
+          <h2>Live action approvals</h2>
+          <p id="approval-status" class="control-status">No pending co-pilot actions.</p>
+          <div id="operator-requests" class="operator-requests" aria-live="polite"></div>
+          <p class="render-capabilities">MCP can request Studio, capture, recording, browser, and terminal actions. Nothing sensitive runs until an operator approves it here.</p>
+        </section>
+        <section class="inspector-section copilot-section">
+          <h2>Local AI co-pilot</h2>
+          <p id="copilot-status">Checking local CLIs…</p>
+          <label>CLI <select id="copilot-cli"><option value="codex">Codex CLI</option><option value="claude">Claude Code</option></select></label>
+          <label>Instruction <textarea id="copilot-prompt" rows="4" maxlength="12000" placeholder="Draft a concise transition to the next slide."></textarea></label>
+          <button id="run-copilot" type="button">Ask local co-pilot</button>
+          <pre id="copilot-output" class="copilot-output" hidden></pre>
+        </section>
+        <section class="inspector-section mcp-section">
+          <h2>LLM control (MCP)</h2>
+          <p id="mcp-scope">Starting local MCP…</p>
+          <label>Endpoint <input id="mcp-endpoint" type="text" readonly></label>
+          <label>Bearer token <input id="mcp-token" type="password" readonly></label>
+          <div class="compact-actions"><button id="copy-mcp-config" type="button">Copy connection</button><button id="reveal-mcp-token" type="button">Reveal token</button></div>
+          <p class="render-capabilities">Only a local process with this short-lived token can drive this open presentation.</p>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="./author.js"></script>
+  </body>
+</html>

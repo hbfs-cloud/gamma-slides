@@ -1,74 +1,72 @@
-# Présenter un dépôt Git
+# Present a Git repository
 
-La skill `repo-presentation` transforme « analyse et présente ce dépôt » en un deck complet puis une URL consultable. Le CLI sépare la collecte déterministe des preuves, l’analyse par le LLM, la compilation et la validation du rendu.
+The `repo-presentation` skill turns “analyse and present this repository” into a complete deck and a reviewable URL. The CLI separates deterministic evidence collection, LLM analysis, compilation, and render validation.
 
 ```sh
-# Un seul parcours, auteur Codex configuré sur cette machine
+# One workflow, using the Codex author configured on this machine
 gamma-slides repo-present --repo owner/repository --port 4173
-# Ou un dépôt local : analyse du commit HEAD, pas des modifications non committées
-gamma-slides repo-present --local /chemin/du/repo --port 4173
+# Or a local repository: analyse HEAD, not uncommitted changes
+gamma-slides repo-present --local /path/to/repository --port 4173
 ```
 
-Le mode autonome appelle `codex exec` avec le compte et le modèle configurés dans Codex. Chrome/Chromium est nécessaire aux contrôles navigateur (`PUPPETEER_EXECUTABLE_PATH` si nécessaire). `GITHUB_TOKEN` peut fournir l’accès GitHub privé ou augmenter les quotas ; il n’est pas écrit dans le dossier. Les fichiers lus restent des entrées non fiables, pas des instructions à exécuter.
+Standalone mode calls `codex exec` with the account and model configured in Codex. Chrome/Chromium is required for browser checks; on macOS set `GAMMA_BROWSER_EXECUTABLE` (or `PUPPETEER_EXECUTABLE_PATH`) to a dedicated compatible Chromium binary, because Gamma does not launch the system browser implicitly. `GITHUB_TOKEN` can provide private GitHub access or higher quotas; it is never written into the working directory. Read files remain untrusted input, not executable instructions.
 
-Dans une conversation avec le LLM, la skill fait travailler **le LLM courant** : `repo-brief` → lecture des sources → écriture du YAML → `repo-present --deck`. Il n’est alors pas nécessaire d’appeler un deuxième agent.
+In an LLM conversation, the skill uses the current LLM: `repo-brief` → read evidence → write YAML → `repo-present --deck`. A second agent is unnecessary.
 
 ```sh
-gamma-slides repo-brief --repo owner/repository -o output/revue/brief.json
-# Le LLM écrit output/revue/deck.yaml à partir de ce dossier.
-gamma-slides repo-present --repo owner/repository --ref <SHA-du-dossier> \
-  --deck output/revue/deck.yaml -o output/revue --port 4173
+gamma-slides repo-brief --repo owner/repository -o output/review/brief.json
+# The LLM writes output/review/deck.yaml from this directory.
+gamma-slides repo-present --repo owner/repository --ref <REPOSITORY-SHA> \
+  --deck output/review/deck.yaml -o output/review --port 4173
 ```
 
-Le deck comporte `meta.repository_review` avec `repository`, `revision` (SHA complet) et `collected_at`. Le CLI refuse une source liée à une autre révision ou à un autre dépôt, moins de 18 slides, des slides sans provenance et l’absence d’architecture + workflow/séquence. La collecte est bornée à 24 fichiers pertinents, chaque extrait à 16 000 caractères. L’analyse de sécurité, de marché ou de production n’est pas déduite automatiquement d’une arborescence : le LLM lit les preuves manquantes et marque les inconnues.
+The deck includes `meta.repository_review` with `repository`, full `revision`, and `collected_at`. The CLI rejects a source tied to another revision/repository, fewer than 18 slides, slides without provenance, and a missing architecture plus workflow/sequence. Collection is bounded to 24 relevant files and 16,000 characters per extract. Security, market, and production analysis cannot be inferred from a tree: the LLM reads missing evidence and marks unknowns.
 
-## Sorties et preuve de travail
+## Outputs and proof of work
 
-- `author/repository-brief.json` : révision, inventaire, statistiques datées, extraits et limites de collecte. Hors serveur.
-- `deck.yaml` : source éditable, hors serveur.
-- `site/index.html` : présentation autonome, servie en loopback.
-- `site/proof.json` : révision, hashes du HTML/deck, provenance des fichiers et résultats des contrôles.
-- `qa/report.json` et captures : chaque slide dans les trois thèmes, en desktop 1440×900 et mobile 390×844 DPR2, avec continuations mobiles. Le contrôle utilise un vrai serveur HTTP.
+- `author/repository-brief.json`: revision, inventory, dated statistics, extracts, and collection limits. Not served.
+- `deck.yaml`: editable source. Not served.
+- `site/index.html`: standalone presentation served over loopback.
+- `site/proof.json`: revision, HTML/deck hashes, file provenance, and check results.
+- `qa/report.json` and captures: every slide across three themes, desktop 1440×900 and mobile 390×844 DPR2, including mobile continuations. Checks use a real HTTP server.
 
-Les checks vérifient chargement des images, débordements, erreurs JavaScript, contraste du texte avec composition des transparences, montage/démontage des viewers et, pour chaque diagramme en Signal Room, progression du parcours, pause et sélection via M → Explorer. Ils ne remplacent pas l’examen visuel des captures, une validation des affirmations ni un audit sécurité. Un échec laisse le site précédent intact : construction et QA ont lieu dans un nouveau répertoire, puis le lien `site` bascule atomiquement. Les générations précédentes restent dans `builds/`.
+Checks cover image loading, overflow, JavaScript errors, text contrast with transparent compositing, viewer mount/unmount, and—for every Signal Room diagram—tour progress, pause, and selection through M → Explorer. They do not replace capture review, claim validation, or a security audit. A failure leaves the previous site intact: build and QA run in a new directory, then the `site` link switches atomically. Previous generations remain in `builds/`.
 
-Pour construire sans serveur : `--build-only`. Pour relancer : `gamma-slides serve -d output/revue/site --port 4173`. Le serveur ne livre que la présentation et son reçu ; il n’expose ni le dépôt ni les extraits de sources. Une dépendance média relative non embarquée échoue lors du contrôle HTTP.
+Use `--build-only` to build without serving. Run `gamma-slides serve -d output/review/site --port 4173` to serve again. The server serves only the presentation and receipt—not the repository or evidence extracts. A relative media dependency that was not embedded fails HTTP validation.
 
-## Commandes et terminal local
+## Commands and local terminal
 
-Le bouton rond **M** ouvre cinq branches : Explorer, Plein écran, Terminal, Apparence et Studio. Survoler avec la souris ou cliquer ; sur téléphone, toucher M. Au clavier, Tab atteint le bouton, Entrée/Espace ouvre, les flèches parcourent les branches et Échap ferme. Explorer regroupe les contrôles natifs de la slide : parcours, composant, zoom, vues 2D/3D ou données. Les légendes et valeurs restent lisibles sur la slide ; glissement et manipulation directe des scènes restent disponibles. Sur téléphone, M reste au-dessus de la barre de continuation.
+The round **M** control opens five branches: Explorer, Fullscreen, Terminal, Appearance, and Studio. Hover or click with a mouse; touch M on a phone. Keyboard: Tab reaches the control, Enter/Space opens it, arrows move through branches, and Escape closes it. Explorer groups native slide controls: tour, component, zoom, 2D/3D views, or data. Labels and values remain readable on-slide; direct scene manipulation stays available. M remains above the mobile continuation bar.
 
-Pour un shell local, démarrer explicitement avec `--terminal` :
+Start a local shell explicitly with `--terminal`:
 
 ```sh
-gamma-slides repo-present --local /chemin/du/repo --terminal --port 4173
-# Ou servir les mêmes octets HTML déjà vérifiés :
-gamma-slides serve --directory output/revue/site --terminal --port 4173
+gamma-slides repo-present --local /path/to/repository --terminal --port 4173
+# Or serve the same already-verified HTML bytes:
+gamma-slides serve --directory output/review/site --terminal --port 4173
 ```
 
-M → Terminal ouvre la console. Le shell part du répertoire courant du serveur ; `cd` persiste pour les commandes suivantes. Le serveur écoute sur `127.0.0.1` et vérifie Host, Origin et le jeton de session. La découverte du bridge se fait par handshake sans modifier le HTML vérifié. Sans `--terminal`, dans un fichier local ou sur Pages, la console conserve les commandes de présentation (`next`, `prev`, `go 12`, `overview`) sans shell distant.
+M → Terminal opens the console. The shell starts in the server directory; `cd` persists for following commands. The server binds to `127.0.0.1` and validates Host, Origin, and a session token. Bridge discovery uses a handshake without modifying verified HTML. Without `--terminal`, in a local file, or on Pages, the console retains presentation commands (`next`, `prev`, `go 12`, `overview`) without a remote shell.
 
 ## GitHub Pages
 
 ```sh
-gamma-slides repo-present --repo owner/source --ref <SHA> --deck output/revue/deck.yaml \
-  -o output/revue --publish owner/pages-repo --slug revue-source
+gamma-slides repo-present --repo owner/source --ref <SHA> --deck output/review/deck.yaml \
+  -o output/review --publish owner/pages-repo --slug source-review
 ```
 
-`gh auth` doit donner accès au dépôt cible, déjà initialisé avec un commit. Choisir un dépôt Pages dédié : une configuration Actions ou une publication Jekyll existante est refusée avant mutation. Les autres fichiers d’une branche statique `gh-pages` sont préservés ; aucune mise à jour forcée. Le CLI publie les **octets HTML déjà contrôlés**, puis vérifie les hashes distants du HTML et du reçu. Après expiration du délai, il annonce le commit et une disponibilité non confirmée, sans annoncer de déploiement validé. Les sources ne sont pas publiées par cette commande, mais le texte du deck et les chemins de provenance peuvent être internes : choisir une destination autorisée.
+`gh auth` must access the initialized target repository. Use a dedicated Pages repository: an existing Actions configuration or Jekyll publication is rejected before mutation. Other files on a static `gh-pages` branch are preserved; no force update is used. The CLI publishes the **already-checked HTML bytes**, then verifies remote HTML and receipt hashes. When the wait expires, it reports the commit and unconfirmed availability; it never claims a verified deployment. Sources are not published by this command, but deck text and provenance paths may be internal—choose an authorized destination.
 
-## Diagrammes Archify
+## Archify diagrams and MCP
 
-`layout: diagram` contient `diagram: {type, spec}`. Types : architecture, workflow, sequence, dataflow, lifecycle. `spec` est le JSON typé natif d’Archify, conservé éditable dans le YAML. Les schémas upstream et commun sont exposés par `gamma_archify_schema`. `meta.quality_profile: showcase` et `meta.animation: trace` activent les contrôles et les parcours finis ; nommer les vues dans `meta.views`.
+`layout: diagram` contains `diagram: {type, spec}`. Supported types: architecture, workflow, sequence, dataflow, lifecycle. `spec` is Archify’s native typed JSON and remains editable in YAML. Upstream/common schemas are available through `gamma_archify_schema`. `meta.quality_profile: showcase` and `meta.animation: trace` enable finite tours and controls; name views in `meta.views`.
 
-Le renderer/validateur/viewer réel est intégré sans modification des sources upstream. Version 2.17.0-dev.1, révision `10722002bb8777ecb639d93c49586fae4adf3ae4`, licence MIT ; provenance et notices dans `src/vendor/archify/`. L’adaptateur Gamma ajoute commandes françaises, lecture textuelle, caméra mobile et isolation iframe. Certains libellés internes d’Archify restent anglais. M → Plein écran ouvre le diagramme dans un dialogue plein écran, avec plein écran navigateur si disponible ; Retour ou Échap restaure la slide. Le déplacement conserve le runtime si `moveBefore` est disponible ; sinon le viewer est remonté et la sélection/le parcours et la lecture reprennent. Le sandbox iframe reste opaque et la légende autonome Archify est masquée. Le viewer actif seulement est monté ; impression/export utilisent le SVG statique embarqué. Archify est un moteur SVG animé ; Three.js/PixiJS restent les moteurs GPU des autres visualisations.
+Gamma embeds the real renderer, validator, and viewer without modifying upstream sources. Archify is an animated SVG engine; Three.js/PixiJS remain GPU engines for other visualizations. The adapter adds English controls, text reading, mobile camera behavior, and iframe isolation. M → Fullscreen opens a diagram in a full-screen dialog; Back/Escape restores the slide. Only the active viewer is mounted; print/export uses embedded static SVG.
 
-## Outils MCP
+- `gamma_inspect_repository`: remote or local collection.
+- `gamma_archify_schema`: native schemas by type.
+- `gamma://guides/repository`: analysis and narrative contract.
+- `create_repository_presentation`: complete technical-review prompt.
+- `gamma_validate_deck`, `gamma_generate_deck`: strict Archify validation and generation.
 
-- `gamma_inspect_repository` : collecte distante ou locale.
-- `gamma_archify_schema` : schémas natifs, par type.
-- `gamma://guides/repository` : contrat d’analyse et de narration.
-- `create_repository_presentation` : prompt de revue technique complète.
-- `gamma_validate_deck`, `gamma_generate_deck` : validation stricte Archify et génération.
-
-Le prompt MCP renvoie vers la preuve CLI pour obtenir le serveur local ou les octets publiés. Exemple complet : `presentations/repository-review.yaml`, 21 slides sur Gamma Slides à `e2f9996`. Reconstruction de cet exemple : `node scripts/build-repository-demo.mjs`. Les chiffres GitHub de l’exemple sont datés du 9 septembre 2026 ; les mettre à jour exige une nouvelle collecte et une nouvelle revue.
+The MCP prompt points to CLI evidence for the local server or published bytes. Full example: `presentations/repository-review.yaml`, a 21-slide Gamma Slides review at `e2f9996`. Rebuild it with `node scripts/build-repository-demo.mjs`. The example’s GitHub numbers are dated September 9, 2026; refresh them through a new collection and review.

@@ -190,8 +190,8 @@ slides:
           quality_profile: showcase
           animation: none
           viewBox:
-            - 520
-            - 260
+            - 600
+            - 300
         components:
           - id: from
             type: backend
@@ -217,6 +217,9 @@ slides:
             to: to
             label: valider
             variant: emphasis
+            labelAt:
+              - 260
+              - 210
     source: src/loader/index.js · src/schema/validate.js
     narration: >-
       Le chargeur lit le YAML ou le JSON, puis appelle la validation du deck. Une structure invalide
@@ -325,8 +328,8 @@ slides:
           quality_profile: showcase
           animation: none
           viewBox:
-            - 520
-            - 260
+            - 600
+            - 300
         components:
           - id: from
             type: backend
@@ -494,8 +497,8 @@ slides:
           quality_profile: showcase
           animation: none
           viewBox:
-            - 520
-            - 260
+            - 600
+            - 300
         components:
           - id: from
             type: backend

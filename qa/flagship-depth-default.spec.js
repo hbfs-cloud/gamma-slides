@@ -78,7 +78,7 @@ test('comparables opens in real 3D and preserves an explicit 2D choice', async (
   expect(await root.evaluate(el => ({ count:el._threeExploration.points.length, context:!!el._threeExploration.renderer.getContext(), pixi:!!el._pixiApp }))).toEqual({ count:5, context:true, pixi:false });
   await (await orbitAction(page,root.locator('.d3-depth-select'))).selectOption('4');
   await expect(root.locator('.d3-webgpu-readout')).toHaveText('Stablecoin Infra · NTM revenue growth: 42% · EV / NTM revenue: 8.5× · Gross margin: 71%');
-  await expect(root.locator('.d3-depth-selection')).toHaveText('42% growth · 8.5× EV/revenue · 71% margin');
+  await expect(root.locator('.d3-depth-selection')).toHaveText('NTM revenue growth: 42% · EV / NTM revenue: 8.5× · Gross margin: 71%');
   const point = await pointPosition(root, 0);
   await page.mouse.click(point.x, point.y);
   await expect(root.locator('.d3-webgpu-readout')).toHaveText('Legacy Processor · NTM revenue growth: 8% · EV / NTM revenue: 2.2× · Gross margin: 48%');
@@ -213,7 +213,7 @@ test.describe('touch comparables', () => {
     await page.touchscreen.tap(point.x, point.y);
     await expect(root.locator('.d3-webgpu-readout')).toContainText('Stablecoin Infra');
     await expect(root.locator('.d3-webgpu-readout')).toContainText('71%');
-    await expect(root.locator('.d3-depth-selection')).toHaveText('42% growth · 8.5× EV/revenue · 71% margin');
+    await expect(root.locator('.d3-depth-selection')).toHaveText('NTM revenue growth: 42% · EV / NTM revenue: 8.5× · Gross margin: 71%');
     await expectImmediateIdentities(root);
     await (await orbitAction(page,scene.locator('[data-depth-action="right"]'))).tap();
     await expect(root.locator('.d3-webgpu-readout')).toContainText('Stablecoin Infra');

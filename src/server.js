@@ -10,8 +10,8 @@ export async function servePresentation(opts) {
   const filePath = resolve(opts.file);
 
   if (!existsSync(filePath)) {
-    console.error(chalk.red('✗') + ` Fichier non trouvé: ${filePath}`);
-    console.log(chalk.dim('  Générez d\'abord une présentation avec: fipto-slides generate -t <template>'));
+    console.error(chalk.red('✗') + ` File not found: ${filePath}`);
+    console.log(chalk.dim('  Generate a presentation first with: gamma-slides generate -t <template>'));
     process.exit(1);
   }
 
@@ -39,7 +39,7 @@ export async function servePresentation(opts) {
     console.log(chalk.dim('  Reveal.js shortcuts:'));
     console.log(chalk.dim('  [F] Fullscreen  [S] Speaker view  [O] Overview  [ESC] Exit'));
     console.log('');
-    console.log(chalk.dim('  Ctrl+C pour arrêter'));
+    console.log(chalk.dim('  Ctrl+C to stop'));
     console.log('');
 
     if(opts.open!==false)open(url);

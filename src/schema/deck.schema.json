@@ -161,7 +161,7 @@
         "diagram": { "$ref": "#/definitions/diagramSpec" },
         "browser": {"type":"object","required":["url"],"properties":{"url":{"type":"string","pattern":"^https?://"},"label":{"type":"string"}}},
         "media": {"type":"object","required":["kind","src"],"properties":{"kind":{"enum":["video","audio"]},"src":{"type":"string","minLength":1},"poster":{"type":"string"},"caption":{"type":"string"},"alt":{"type":"string"},"captions":{"type":"string"},"language":{"type":"string"}}},
-        "visual": {"type":"object","required":["src","alt"],"properties":{"src":{"type":"string"},"alt":{"type":"string"},"caption":{"type":"string"},"icons":{"type":"array","maxItems":4,"items":{"type":"object","required":["name","label"],"properties":{"name":{"type":"string"},"label":{"type":"string"}}}}}}
+        "visual": {"type":"object","required":["alt"],"properties":{"src":{"type":"string"},"alt":{"type":"string"},"caption":{"type":"string"},"icons":{"type":"array","maxItems":4,"items":{"type":"object","required":["name","label"],"properties":{"name":{"type":"string"},"label":{"type":"string"}}}},"story":{"type":"object","required":["type","labels"],"additionalProperties":false,"properties":{"type":{"enum":["recovery","correlation","converge","fork","funnel","mountain","payoff","balance","timeline","survivors","network","drawdown","distribution","calendar","orbit","tiles","ladder","journey"]},"labels":{"type":"array","minItems":1,"maxItems":4,"items":{"type":"string","maxLength":36}},"icons":{"type":"array","maxItems":4,"items":{"type":"string"}},"values":{"type":"array","maxItems":12,"items":{"type":"number"}}}},"mechanism":{"type":"object","required":["type","status","steps"],"additionalProperties":false,"properties":{"type":{"enum":["flow","queue","allocation","formula","ledger","branches"]},"status":{"type":"string","maxLength":100},"steps":{"type":"array","minItems":2,"maxItems":4,"items":{"type":"object","required":["label"],"additionalProperties":false,"properties":{"label":{"type":"string","maxLength":44},"detail":{"type":"string","maxLength":58},"value":{"type":"string","maxLength":26},"icon":{"type":"string"},"tone":{"enum":["normal","reject"]}}}}}}},"anyOf":[{"required":["src"]},{"required":["story"]},{"required":["mechanism"]}]}
       }
     },
     "background": {
@@ -303,6 +303,7 @@
                   "color": { "type": "string" },
                   "colors": { "type": "array", "items": { "type": "string" } },
                   "dashed": { "type": "boolean" },
+                  "step": { "enum": ["start", "middle", "end"] },
                   "y_axis": { "type": "string" }
                 }
               }
@@ -347,6 +348,8 @@
             "show_values": { "type": "boolean" },
             "node_labels": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Short readable Sankey node labels for compact views; keys match complete source node names." },
             "center_label": { "type": "string" },
+            "center_index": { "type": "integer", "minimum": 0, "description": "Use this slice value as the doughnut center; total otherwise." },
+            "video_readable": { "type": "boolean", "description": "Large labels and values for sparse D3 video charts." },
             "stacked": { "type": "boolean" },
             "total_indices": { "type": "array", "items": { "type": "integer" } },
             "horizontal": { "type": "boolean" },
@@ -363,6 +366,7 @@
             "label": { "type": "string" },
             "correlation": { "type": "boolean" },
             "show_all_labels": { "type": "boolean" },
+            "video_compare": { "type": "boolean" },
             "legend_labels": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string" } },
             "data_zoom": { "type": "boolean" },
             "smooth": { "type": "boolean" },
@@ -370,7 +374,7 @@
             "x_max": { "type": "number" },
             "y_min": { "type": "number" },
             "y_max": { "type": "number" },
-            "moving_averages": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "type": "integer", "minimum": 2, "maximum": 200 } },
+            "moving_averages": { "type": "array", "minItems": 0, "maxItems": 4, "items": { "type": "integer", "minimum": 2, "maximum": 200 } },
             "show_macd": { "type": "boolean" },
             "show_rsi": { "type": "boolean" },
             "rsi_period": { "type": "integer", "minimum": 2, "maximum": 100 },

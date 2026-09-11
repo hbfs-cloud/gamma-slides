@@ -1,16 +1,53 @@
-# Gamma Slides
+# Gamma Presenter
 
-Présenter un dépôt Git : `$repo-presentation` dans le LLM, ou `gamma-slides repo-present --repo owner/repo` / `--local /repo`. Le parcours livre un deck technique complet, des diagrammes Archify animés, un serveur local et une preuve des contrôles desktop/mobile. Publication des octets vérifiés avec `--publish owner/pages-repo`. [Guide et commandes](docs/repository-presentations.md).
+## The local presentation studio for ideas that refuse to be flat.
 
+Gamma Presenter brings writing, live visuals, presentation control, recording, and carefully bounded AI co-piloting into one macOS workspace. It is built on the open-source Gamma Slides engine, so the Markdown, YAML, and JSON you author remain durable, inspectable source—not a locked canvas.
 
-An editorial presentation and local video engine for finance, markets, economics, and board reporting. Decks are authored in YAML or JSON, rendered as self-contained interactive HTML, exported as vector-friendly PDF, and recorded or narrated into high-quality local video masters.
+[Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
 
-## One-line setup for Claude and Codex
+![Gamma Presenter’s control room: timers, approved live-action requests, and a local AI co-pilot inside the Author workspace](docs/images/gamma-presenter-control-room.png)
 
-With Node.js installed, run this once from any directory:
+## Everything needed to run a serious room
+
+| Moment | Gamma Presenter keeps it together |
+| --- | --- |
+| Write | Markdown for velocity; YAML and JSON for full Gamma layouts, notes, themes, and advanced configuration. |
+| Shape | A source-aware slide rail, inspector, direct media import, and an embedded renderer preserve the story and the rich scene behind it. |
+| Present | A selected-display Stage, Speaker View, notes, elapsed timers, countdowns, private cues, Dock actions, and a menu-bar controller. |
+| Make it live | Images, GIFs, video, audio, ECharts, Archify, D3, Pixi, Three.js, animation, browser demonstrations, and terminal scenes. |
+| Co-animate | A loopback-only MCP endpoint and local Codex/Claude CLI workflow. Consequential Stage, recording, capture, browser, terminal, and spoken-note requests require an explicit operator approval. |
+| Deliver | Standalone HTML, PDF, PNG, PowerPoint, speaker handouts, and local recording controls—without pretending interactive runtime scenes are editable PowerPoint objects. |
+
+![Rich Gamma YAML authoring beside the exact rendered scene](docs/images/gamma-presenter-author-rich.png)
+
+Gamma Presenter is deliberately local-first. Media remains project-local, the presentation MCP service only listens on `127.0.0.1` with an ephemeral bearer token, and capture or terminal access is never ambient. The [macOS guide](docs/gamma-presenter-macos.md) documents the functional coverage, security boundary, known limits, and comparison with iA Presenter, reveal.js, Marp, and Slidev.
+
+## Run Gamma Presenter on macOS
+
+With [Bun](https://bun.com/) installed:
 
 ```bash
-npm install --global --loglevel=error https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
+git clone https://github.com/hbfs-cloud/gamma-slides.git
+cd gamma-slides
+bun install
+bun run desktop
+```
+
+Package a local arm64 application with `bun run desktop:package`. Apple signing and notarization need the product owner’s Apple Developer credentials, so repository-built artifacts are intentionally not represented as signed releases.
+
+## Gamma Slides engine
+
+Gamma Presenter is backed by Gamma Slides: an editorial presentation and local video engine for finance, markets, economics, board reporting, and technical repository reviews. Decks are authored in YAML or JSON, rendered as self-contained interactive HTML, exported as vector-friendly PDF, and recorded or narrated into high-quality local video masters.
+
+Present a Git repository with `$repo-presentation` in the LLM, or `gamma-slides repo-present --repo owner/repo` / `--local /repo`. The workflow produces a complete technical deck, animated Archify diagrams, a local server, and desktop/mobile test evidence. Publish verified bytes with `--publish owner/pages-repo`. [Guide and commands](docs/repository-presentations.md).
+
+### One-line setup for Claude and Codex
+
+With Bun installed, run this once from any directory:
+
+```bash
+bun install --global https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
 ```
 
 It installs the current GitHub version and connects its MCP server to every installed client it finds: Claude Code and/or Codex. The registered command uses the stable global installation path, not this clone. Verify it with `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list`.
@@ -51,16 +88,16 @@ See [the complete Claude/Codex and CRUD guide](docs/LLM_QUICKSTART.md).
 ## Local development
 
 ```bash
-npm install
-node bin/gamma-slides.js generate \
+bun install
+bun bin/gamma-slides.js generate \
   -f src/schema/examples/corporate-demo.yaml \
   -o output/q4-2025-revenue-report.html
 
-node bin/gamma-slides.js preview \
+bun bin/gamma-slides.js preview \
   -f src/schema/examples/corporate-demo.yaml \
   --terminal
 
-node bin/gamma-slides.js site \
+bun bin/gamma-slides.js site \
   -f src/schema/examples/corporate-demo.yaml \
   -o site
 ```
@@ -68,8 +105,8 @@ node bin/gamma-slides.js site \
 The 38-slide flagship covers the **Gamma Finance Catalog v1** across reporting, markets, trading, portfolio, risk, liquidity, rates, and economics. Its 37 charts include a multi-pane stock workstation, market depth, return histogram, boxplot, calendar heatmap, parallel coordinates, allocation, exposure network, theme river, and forecast fan. The opening uses five real Three.js revenue ribbons with one common amount scale. Four chart slides use D3 scales/layout with Pixi.js rendering the actual data, axes, and labels through WebGPU (WebGL fallback). Public peers open in Three.js: growth, valuation multiple, and gross margin occupy three measured axes, with selectable companies and an immediate 2D comparison.
 
 ```bash
-node bin/gamma-slides.js generate -f presentations/flagship.yaml -o output/flagship-demo.html
-npx playwright test qa/flagship-*.spec.js
+bun bin/gamma-slides.js generate -f presentations/flagship.yaml -o output/flagship-demo.html
+bunx playwright test qa/flagship-*.spec.js
 ```
 
 `meta.experience: true` adds persistent chapter navigation and full-size mobile reading, with scrollable slides and tables that expose every column as labeled values. `meta.chapters` accepts one-based `start`, `label`, and optional `detail`. The flagship opens directly; Appearance, Studio, Terminal, fullscreen, and slide settings remain available through the round M menu (mouse hover, tap, or keyboard). GPU resources stop off-slide, data dialogs retain exact values, and print/export uses SVG. Browser evidence is written to `output/flagship-review/`.
@@ -99,18 +136,18 @@ The [Presenter Studio guide](docs/presenter-studio.md) covers the 47-slide demo,
 | `S` | Open speaker notes |
 | `F` | Toggle fullscreen |
 
-The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. M → Terminal is available in static files and public deployments for presentation commands. Start a localhost preview with `--terminal` to enable shell commands; commands such as `pwd`, `ls`, `npm test`, or `node --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. For repository reviews, enable the same local shell with `repo-present --terminal` or `serve --directory output/revue/site --terminal`. That server binds to `127.0.0.1`, validates Host/Origin and a per-session token, and discovers the bridge without changing the verified HTML. Static files and Pages never provide a remote shell.
+The Studio Console opens as a docked split view so it does not cover the slide. Its left splitter controls the workspace ratio; the header can float, redock, minimize, restore, or close the console, and the chosen geometry is remembered. Shell state is sessionful: `cd` changes the working directory for following commands, the current path and execution status remain visible, command history survives reloads, and quick actions cover common checks. M → Terminal is available in static files and public deployments for presentation commands. Start a localhost preview with `--terminal` to enable shell commands; commands such as `pwd`, `ls`, `bun test`, or `bun --version` run directly, while presentation commands such as `next`, `prev`, `go 12`, `overview`, `camera`, and `record` remain available. For repository reviews, enable the same local shell with `repo-present --terminal` or `serve --directory output/revue/site --terminal`. That server binds to `127.0.0.1`, validates Host/Origin and a per-session token, and discovers the bridge without changing the verified HTML. Static files and Pages never provide a remote shell.
 
 ## Quality assurance and exports
 
 ```bash
-node bin/gamma-slides.js validate -f src/schema/examples/corporate-demo.yaml
-node bin/gamma-slides.js qa --live -f output/q4-2025-revenue-report.html
-node bin/gamma-slides.js qa -f output/q4-2025-revenue-report.html
-node bin/gamma-slides.js export \
+bun bin/gamma-slides.js validate -f src/schema/examples/corporate-demo.yaml
+bun bin/gamma-slides.js qa --live -f output/q4-2025-revenue-report.html
+bun bin/gamma-slides.js qa -f output/q4-2025-revenue-report.html
+bun bin/gamma-slides.js export \
   -f output/q4-2025-revenue-report.html \
   -o output/q4-2025-revenue-report.pdf
-node bin/gamma-slides.js video \
+bun bin/gamma-slides.js video \
   -f src/schema/examples/corporate-demo.yaml \
   -o output/q4-2025-revenue-report.mp4
 ```
@@ -120,8 +157,8 @@ Ordinary charts and exports render ECharts as SVG. Immersive chart slides use a 
 ### Immersive data presentations
 
 ```bash
-node bin/gamma-slides.js generate -f presentations/immersive-data.yaml -o output/immersive-data.html
-npm run test:browser
+bun bin/gamma-slides.js generate -f presentations/immersive-data.yaml -o output/immersive-data.html
+bun run test:browser
 ```
 
 Set `variant: immersive` on a `layout: chart` slide. Bar charts map category, value, and series to three axes. Scatter charts require a numeric `z` on every point and support `chart.options.z_label` and `format_z`, alongside the existing X/Y options. The example reuses the flagship's illustrative segment revenue and public-peer data; peer gross margin becomes the third spatial axis.
@@ -151,7 +188,7 @@ Drag to orbit, use arrow keys while the plot is focused, or move between **Overv
 
 Supported inputs are at most six series, twelve bar categories, or 500 scatter points. Stacked/horizontal bars, secondary Y axes, missing bar values, missing XYZ coordinates, and other chart types retain the standard SVG view. Reduced motion starts in 2D. Missing or lost WebGL also falls back to 2D, and exports use SVG. This variant uses native WebGL and remains self-contained, without a CDN. One shared WebGL context renders on demand, with a two-megapixel canvas budget; there is no perpetual orbit loop.
 
-Playwright uses an installed Chrome/Chromium when available, or its managed Chromium (`npx playwright install chromium`). `PUPPETEER_EXECUTABLE_PATH` can select a local executable. Browser captures and JSON results are written to `output/immersive-qa/`; the review record is in `docs/immersive-qa.md`.
+Playwright uses its managed Chromium (`bunx playwright install chromium`) for browser checks. Gamma's isolated-browser feature never launches a macOS system browser implicitly: configure a dedicated compatible Chromium binary with `GAMMA_BROWSER_EXECUTABLE=/path/to/chromium` (or `PUPPETEER_EXECUTABLE_PATH`) when enabling it. Browser captures and JSON results are written to `output/immersive-qa/`; the review record is in `docs/immersive-qa.md`.
 
 The video renderer works slide by slide: each PNG and narration file is deleted immediately after its compressed segment is produced. The temporary workspace is removed on success or failure.
 
@@ -162,7 +199,7 @@ Presenter Studio records the chosen screen, microphone, shared audio, and option
 For a narrated MP4 generated directly from the deck:
 
 ```bash
-node bin/gamma-slides.js video \
+bun bin/gamma-slides.js video \
   -f src/schema/examples/corporate-demo.yaml \
   -o output/q4-2025-master.mp4
 ```
@@ -171,9 +208,9 @@ The offline renderer produces H.264 at CRF 18 with AAC audio, creates slides and
 
 ## Requirements
 
-- Node.js 18+
+- Bun 1.3.11+
 - GitHub CLI authenticated with `gh auth login` for managed web deployments
-- Chromium or Chrome (Puppeteer can provision it)
+- A dedicated compatible Chromium executable for the optional isolated-browser feature; on macOS configure it explicitly with `GAMMA_BROWSER_EXECUTABLE`
 - FFmpeg and FFprobe for video
 - `edge-tts` for narration
 
@@ -185,7 +222,7 @@ All example company, market, financial, and forecast data in the flagship deck i
 `presentations/cinematic-revenue.yaml` is the complete immersive demonstration: an authored opening, two proportional revenue volumes, a segment-by-segment reveal, a profit-quality scene, and a decision close. The leading contribution owns the second state. On phones, the opening and close use their own composition, while every 3D scene remains annotated and interactive. Theme and recording tools open through the shared **M** menu; the presentation opens directly.
 
 ```bash
-node bin/gamma-slides.js generate -f presentations/cinematic-revenue.yaml -o output/cinematic-revenue.html
+bun bin/gamma-slides.js generate -f presentations/cinematic-revenue.yaml -o output/cinematic-revenue.html
 ```
 
 Use `layout: chart`, `variant: cinematic` with two additive, nonnegative bar series and one to five categories. Percentages, ratios, unsupported chart options and incomplete data keep the SVG chart with its provenance. The series must represent additive quantities; the engine cannot infer accounting semantics from labels.

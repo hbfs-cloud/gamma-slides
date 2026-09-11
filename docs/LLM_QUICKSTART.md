@@ -5,13 +5,13 @@ Gamma Slides gives Claude Code and Codex the same MCP tools: schema and flagship
 ## One line, once
 
 ```bash
-npm install --global --loglevel=error https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
+bun install --global https://github.com/hbfs-cloud/gamma-slides/archive/refs/heads/main.tar.gz && gamma-slides setup
 ```
 
 This installs the current GitHub version, detects installed Claude Code and Codex clients, and registers a user-scoped `gamma-slides` MCP server in each. The registered command uses the absolute path of the global installation, so it does not depend on a project clone or download dependencies on every session.
 
 ```text
-/absolute/global/node /absolute/global/gamma-slides/bin/gamma-slides.js mcp
+/absolute/global/bun /absolute/global/gamma-slides/bin/gamma-slides.js mcp
 ```
 
 The setup therefore has no clone-specific absolute path. Run `/mcp`, `claude mcp get gamma-slides`, or `codex mcp list` to check it.
@@ -69,7 +69,7 @@ For another repository, add `--repo owner/repository` or set `GAMMA_SLIDES_REPO=
 ## Build a standalone site without GitHub
 
 ```bash
-node bin/gamma-slides.js site \
+bun bin/gamma-slides.js site \
   -f src/schema/examples/corporate-demo.yaml \
   -o site
 ```

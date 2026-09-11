@@ -1,12 +1,12 @@
-# Stage 1: Install Node dependencies
-FROM node:22-bookworm-slim AS deps
+# Stage 1: Install Bun dependencies
+FROM oven/bun:1.3.11-slim AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json bun.lock ./
 ENV PUPPETEER_SKIP_DOWNLOAD=true
-RUN npm ci --omit=dev
+RUN bun install --frozen-lockfile --production
 
 # Stage 2: Runtime with all system dependencies
-FROM node:22-bookworm-slim
+FROM oven/bun:1.3.11-slim
 
 # Prevent Puppeteer from downloading Chromium (we use system Chromium)
 ENV PUPPETEER_SKIP_DOWNLOAD=true
@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy node_modules from build stage
+# Copy dependencies from build stage
 COPY --from=deps /app/node_modules ./node_modules
 
 # Copy application code

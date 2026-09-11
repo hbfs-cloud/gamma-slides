@@ -5,12 +5,12 @@ async function startStudioCapture(h) {
     stopRecording, syncPauseUI } = h;
   if (['starting', 'recording', 'paused', 'countdown', 'finalizing'].includes(state.phase)) return;
   if (state.lastRecording && !state.lastRecording.saved) {
-    openRecordingReview('Conservez ou supprimez la prise précédente avant de recommencer.'); return;
+    openRecordingReview('Keep or delete the previous take before starting again.'); return;
   }
-  if (!readiness().screenReady) { showNotice('Choisissez la source à enregistrer dans Studio.', 'error'); return; }
+  if (!readiness().screenReady) { showNotice('Choose the recording source in Studio.', 'error'); return; }
   const track = state.displayStream.getVideoTracks()[0];
   if ((state.options.captureMode || 'clean') === 'clean' && track.getCaptureHandle?.()?.handle !== window.__gammaCleanHandle) {
-    showNotice('Source refusée : sélectionnez uniquement l’onglet SORTIE VIDÉO.', 'error'); return;
+    showNotice('Source rejected: select only the VIDEO OUTPUT tab.', 'error'); return;
   }
   if (state.lastRecording) clearLastRecording();
   state.phase = 'starting'; actionButton('record').classList.add('is-starting');
@@ -19,7 +19,7 @@ async function startStudioCapture(h) {
   const stems = [];
   const duration = () => Math.max(0, Date.now() - state.recordStartedAt - state.pausedTotal - (state.pausedAt ? Date.now() - state.pausedAt : 0));
   try {
-    if (!window.__gammaTakeStore || !window.__gammaAudioMixer) throw new Error('Le stockage ou le mixeur du studio est indisponible.');
+    if (!window.__gammaTakeStore || !window.__gammaAudioMixer) throw new Error('Studio storage or audio mixing is unavailable.');
     screenVideo = document.createElement('video');
     screenVideo.srcObject = state.displayStream; screenVideo.muted = true; screenVideo.playsInline = true;
     await screenVideo.play();
@@ -30,9 +30,9 @@ async function startStudioCapture(h) {
     const dimensions = profile === 'portrait' ? [1080, 1920] : profile === 'landscape' ? [1920, 1080] : profile === 'square' ? [1080, 1080] : ratio >= 1
       ? [even(Math.min(1920, sourceWidth)), even(Math.min(1920, sourceWidth) / ratio)]
       : [even(Math.min(1920, sourceHeight) * ratio), even(Math.min(1920, sourceHeight))];
-    if (!sourceWidth || !sourceHeight) throw new Error('La source vidéo n’a pas fourni de dimensions.');
+    if (!sourceWidth || !sourceHeight) throw new Error('The video source did not provide dimensions.');
     if (sourceWidth < dimensions[0] || sourceHeight < dimensions[1]) {
-      throw new Error('Source ' + sourceWidth + ' × ' + sourceHeight + ' insuffisante pour ' + dimensions.join(' × ') + '. Agrandissez la sortie ou choisissez Dimensions de la source.');
+      throw new Error('Source ' + sourceWidth + ' × ' + sourceHeight + ' is too small for ' + dimensions.join(' × ') + '. Enlarge output or choose Source dimensions.');
     }
     const canvas = document.createElement('canvas');
     [canvas.width, canvas.height] = dimensions;
@@ -46,7 +46,7 @@ async function startStudioCapture(h) {
       if (w < canvas.width || height < canvas.height) {
         if (!sourceTooSmall) {
           sourceTooSmall = true;
-          showNotice('La source a rétréci sous la résolution choisie. La prise est arrêtée sans agrandissement artificiel.', 'error');
+          showNotice('The source dropped below the selected resolution. The take stopped without artificial upscaling.', 'error');
           stopRecording();
         }
         return;
@@ -95,15 +95,15 @@ async function startStudioCapture(h) {
       if (storageError) return;
       storageError = error;
       state.storageStatus.error = error.message || error.name;
-      showNotice('Écriture interrompue : ' + (error.name === 'QuotaExceededError' ? 'stockage local plein.' : error.message) + ' Les fragments déjà enregistrés sont récupérables dans Studio.', 'error');
+      showNotice('Write interrupted: ' + (error.name === 'QuotaExceededError' ? 'local storage is full.' : error.message) + ' Already-recorded segments can be recovered in Studio.', 'error');
       stopRecording(); emit();
     };
     if (state.options.audioStems) {
       const stemMime = ['audio/mp4;codecs=mp4a.40.2', 'audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find(type => MediaRecorder.isTypeSupported(type));
-      if (!stemMime) throw new Error('Ce navigateur ne permet pas les pistes audio séparées. Désactivez cette option pour enregistrer le mix.');
+      if (!stemMime) throw new Error('This browser does not support separate audio tracks. Disable this option to record the mix.');
       const roles = ['mic', ...(state.options.systemAudio && state.displayStream.getAudioTracks().length ? ['shared'] : [])];
       for (const role of roles) {
-        const label = role === 'mic' ? 'Voix' : 'Médias', suffix = stemMime.includes('mp4') ? 'm4a' : 'webm';
+        const label = role === 'mic' ? 'Voice' : 'Media', suffix = stemMime.includes('mp4') ? 'm4a' : 'webm';
         const stemWriter = await window.__gammaTakeStore.create({
           parentId: writer.id, role, label, mime: stemMime, filename: filename.replace(/\.[^.]+$/, '') + '-' + (role === 'mic' ? 'voix' : 'medias') + '.' + suffix,
           dimensions: null, audio: true,
@@ -119,7 +119,7 @@ async function startStudioCapture(h) {
         stemRecorder.ondataavailable = event => {
           if (event.data.size) stemWriter.append(event.data, { durationMs: duration() }).catch(failStorage);
         };
-        stemRecorder.onerror = event => failStorage(event.error || new Error('Une piste audio a été interrompue.'));
+        stemRecorder.onerror = event => failStorage(event.error || new Error('An audio track was interrupted.'));
         stems.push(stem);
       }
     }
@@ -139,7 +139,7 @@ async function startStudioCapture(h) {
       for (const stem of stems) if (stem.recorder.state === 'paused') stem.recorder.resume();
       emit();
     };
-    recorder.onerror = e => { showNotice('Erreur d’enregistrement : ' + (e.error?.message || 'capture interrompue'), 'error'); stopRecording(); };
+    recorder.onerror = e => { showNotice('Recording error: ' + (e.error?.message || 'capture interrupted'), 'error'); stopRecording(); };
     recorder.onstop = async () => {
       const durationMs = duration();
       let take;
@@ -149,37 +149,37 @@ async function startStudioCapture(h) {
         take = await writer.finish({ durationMs, status: sourceTooSmall || storageError ? 'interrupted' : 'complete', error: storageError?.message || storageError?.name });
         state.storageStatus = { id: take.id, bytes: take.size, pendingBytes: 0, ...(take.error ? { error: take.error } : {}) };
       } catch (error) {
-        showNotice('Finalisation interrompue : ' + error.message + '. Retrouvez les fragments conservés dans Studio.', 'error');
+        showNotice('Finalization interrupted: ' + error.message + '. Recover retained segments in Studio.', 'error');
         try { take = await window.__gammaTakeStore.get(writer.id); } catch {}
       } finally {
         try { await releaseRecordingResources(); }
-        catch (error) { showNotice('Les sources ont été arrêtées ; vérifiez la prise conservée : ' + error.message, 'error'); }
+        catch (error) { showNotice('Sources stopped; check the retained take: ' + error.message, 'error'); }
         state.recorder = null;
         recordingBadge.querySelectorAll('button').forEach(button => button.disabled = false);
         emit();
       }
       if (!take?.size) {
-        showNotice('Prise vide. Choisissez à nouveau la source puis réessayez.', 'error'); emit(); return;
+        showNotice('Empty take. Choose the source again and retry.', 'error'); emit(); return;
       }
       let blob = null;
       if (take.size <= window.__gammaTakeStore.previewLimit) {
         try { blob = await window.__gammaTakeStore.toBlob(take.id); }
-        catch (error) { showNotice('La prise reste sur disque ; aperçu indisponible : ' + error.message, 'error'); }
+        catch (error) { showNotice('The take remains on disk; preview unavailable: ' + error.message, 'error'); }
       }
       state.lastRecording = {
         storageId: take.id, size: take.size, mime, filename, blob,
         url: blob ? URL.createObjectURL(blob) : null, durableOnly: !blob,
         saved: false, dimensions, durationMs: take.durationMs, audio: true,
       };
-      openRecordingReview(storageError ? 'Prise interrompue. Les fragments écrits sont conservés ; vérifiez la vidéo récupérée.' : 'Prise conservée dans ce navigateur, récupérable après rechargement. Enregistrez une copie sur disque.');
+      openRecordingReview(storageError ? 'Take interrupted. Written segments are retained; check the recovered video.' : 'Take retained in this browser and recoverable after reload. Save a copy to disk.');
       emit();
     };
     track.addEventListener('capturehandlechange', () => {
       if ((state.options.captureMode || 'clean') === 'clean' && track.getCaptureHandle?.()?.handle !== window.__gammaCleanHandle) {
-        showNotice('La sortie vidéo a changé. La prise est arrêtée pour protéger son contenu.', 'error'); stopRecording();
+        showNotice('Video output changed. The take stopped to protect its content.', 'error'); stopRecording();
       }
     }, { once: true });
-    track.addEventListener('ended', () => { showNotice('Partage terminé. Finalisation de la prise.'); stopRecording(); }, { once: true });
+    track.addEventListener('ended', () => { showNotice('Sharing ended. Finalizing take.'); stopRecording(); }, { once: true });
     state.recordStartedAt = Date.now(); state.pausedTotal = 0; state.pausedAt = 0;
     for (const stem of stems) stem.recorder.start(1000);
     recorder.start(1000); state.phase = 'recording';
@@ -187,7 +187,7 @@ async function startStudioCapture(h) {
       const seconds = Math.floor(duration() / 1000);
       recordingBadge.querySelector('b').textContent = String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0'); emit();
     }, 250);
-    recordingBadge.classList.add('is-visible'); recordingBadge.querySelector('.gamma-record-state').textContent = 'Enregistrement';
+    recordingBadge.classList.add('is-visible'); recordingBadge.querySelector('.gamma-record-state').textContent = 'Recording';
     actionButton('record').classList.remove('is-starting'); actionButton('record').classList.add('is-recording'); emit();
   } catch (error) {
     for (const stem of stems) {
@@ -201,7 +201,7 @@ async function startStudioCapture(h) {
     await mixer?.dispose();
     if (screenVideo) { screenVideo.pause(); screenVideo.srcObject = null; }
     await releaseRecordingResources(); state.recorder = null;
-    showNotice('Enregistrement impossible : ' + error.message, 'error'); emit();
+    showNotice('Unable to record: ' + error.message, 'error'); emit();
   }
 }
 export const studioCaptureJS = () => startStudioCapture.toString();

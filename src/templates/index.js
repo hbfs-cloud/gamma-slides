@@ -2,14 +2,14 @@ import chalk from 'chalk';
 
 export const templateRegistry = {
   fec: {
-    name: 'FEC - Fichier des Écritures Comptables',
-    description: 'Analyse complète du FEC: balance, journaux, KPIs, conformité',
+    name: 'FEC - Accounting Entries File',
+    description: 'Complete FEC analysis: trial balance, journals, KPIs, compliance',
     dataFile: 'fec-mock.json',
     slides: 10
   },
   consolidation: {
     name: 'Consolidation Groupe',
-    description: 'Périmètre, éliminations IC, P&L et bilan consolidés, effets de change',
+    description: 'Scope, intercompany eliminations, consolidated P&L and balance sheet, currency effects',
     dataFile: 'consolidation-mock.json',
     slides: 10
   },
@@ -26,7 +26,7 @@ export function listTemplates() {
   for (const [key, tpl] of Object.entries(templateRegistry)) {
     console.log(`  ${chalk.hex('#00B894').bold(key.padEnd(18))} ${tpl.name}`);
     console.log(`  ${''.padEnd(18)} ${chalk.dim(tpl.description)}`);
-    console.log(`  ${''.padEnd(18)} ${chalk.dim(`${tpl.slides} slides • données: ${tpl.dataFile}`)}\n`);
+    console.log(`  ${''.padEnd(18)} ${chalk.dim(`${tpl.slides} slides • data: ${tpl.dataFile}`)}\n`);
   }
 }
 

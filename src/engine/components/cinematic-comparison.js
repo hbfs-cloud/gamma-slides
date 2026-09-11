@@ -30,10 +30,10 @@ export function cinematicHTML(slide, chart, model, language='en') {
     <svg class="cinema-leaders" aria-hidden="true"></svg>
     <div class="cinema-segment-labels" aria-hidden="true"></div>
     <div class="cinema-fallback">${chart.html.replace('min-height: 280px','height: 100%; min-height: 0')}</div>
-    <aside class="cinema-takeaway"><b>${escapeHtml(model.labels[model.winner])}</b><p>${fr?'Première contribution à la variation':'Largest contribution to the change'}<br><strong>${model.changes[model.winner]>=0?'+':''}${fmt(model.changes[model.winner])}</strong> ${fr?'sur':'of'} ${sumChange>=0?'+':''}${fmt(sumChange)}</p></aside>
-    <nav class="cinema-actions" aria-label="${fr?'Explorer la présentation':'Explore the presentation'}"><button type="button" data-cinema-action="split">${fr?'D’où vient la croissance ?':'What changed?'} <span aria-hidden="true">↗</span></button><button type="button" data-cinema-action="values">${fr?'Les chiffres':'The numbers'}</button></nav>
+    <aside class="cinema-takeaway"><b>${escapeHtml(model.labels[model.winner])}</b><p>Largest contribution to the change<br><strong>${model.changes[model.winner]>=0?'+':''}${fmt(model.changes[model.winner])}</strong> of ${sumChange>=0?'+':''}${fmt(sumChange)}</p></aside>
+    <nav class="cinema-actions" aria-label="Explore the presentation"><button type="button" data-cinema-action="split">What changed? <span aria-hidden="true">↗</span></button><button type="button" data-cinema-action="values">The numbers</button></nav>
     <button type="button" class="cinema-tools" data-cinema-action="tools">${fr?'Outils':'Tools'}</button>
-    <dialog class="cinema-data"><button type="button" data-cinema-action="close">${fr?'Fermer':'Close'}</button><table><caption>${fr?'Données source':'Source data'}</caption><thead><tr><th scope="col">${fr?'Segment':'Segment'}</th>${model.series.map(name=>`<th scope="col">${escapeHtml(name)}</th>`).join('')}<th scope="col">${fr?'Variation':'Change'}</th></tr></thead><tbody>${model.labels.map((name,i)=>`<tr><th scope="row">${escapeHtml(name)}</th><td>${fmt(model.values[0][i])}</td><td>${fmt(model.values[1][i])}</td><td>${model.changes[i]>=0?'+':''}${fmt(model.changes[i])}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row">Total</th>${model.totals.map(v=>`<td>${fmt(v)}</td>`).join('')}<td>${sumChange>=0?'+':''}${fmt(sumChange)}</td></tr></tfoot></table></dialog>
+    <dialog class="cinema-data"><button type="button" data-cinema-action="close">Close</button><table><caption>Source data</caption><thead><tr><th scope="col">Segment</th>${model.series.map(name=>`<th scope="col">${escapeHtml(name)}</th>`).join('')}<th scope="col">Change</th></tr></thead><tbody>${model.labels.map((name,i)=>`<tr><th scope="row">${escapeHtml(name)}</th><td>${fmt(model.values[0][i])}</td><td>${fmt(model.values[1][i])}</td><td>${model.changes[i]>=0?'+':''}${fmt(model.changes[i])}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row">Total</th>${model.totals.map(v=>`<td>${fmt(v)}</td>`).join('')}<td>${sumChange>=0?'+':''}${fmt(sumChange)}</td></tr></tfoot></table></dialog>
   </div>`;
 }
 
@@ -201,7 +201,7 @@ export function cinematicCSS(){return `
     body.gamma-cinema-deck .reveal .slides section:not(.variant-cinematic) > .slide-source { left:24px; right:24px; bottom:42px; display:flex; flex-direction:column; gap:4px; font-size:10px; line-height:1.25; }
     body.gamma-cinema-active .reveal .slides { transform:none!important; zoom:1!important; inset:0!important; width:100%!important; height:100%!important; }
     body.gamma-cinema-active .reveal .slides section.variant-cinematic:has(.cinema-stage) { inset:0!important; width:100%!important; height:100%!important; }
-    .cinema-heading { left:24px; top:58px; width:calc(100% - 48px); }
+    .cinema-heading { left:24px; top:24px; width:calc(100% - 48px); }
     .reveal .cinema-heading h2 { font:500 46px/1 'Source Serif 4',Georgia,serif; max-width:360px; }
     .reveal .cinema-heading p { font:450 13px/1.4 Archivo,system-ui,sans-serif; margin-top:12px; }
     .cinema-amount strong { font:500 52px/1 Archivo,system-ui,sans-serif; }
@@ -210,7 +210,8 @@ export function cinematicCSS(){return `
     .cinema-takeaway { left:24px; bottom:132px; width:calc(100% - 48px); }
     .cinema-takeaway > b { font:600 21px/1.2 Archivo,system-ui,sans-serif; }
     .cinema-actions { left:24px; right:24px; bottom:70px; justify-content:space-between; gap:12px; }
-    body.gamma-cinema-active .reveal .slides section.variant-cinematic:has(.cinema-stage) > .slide-source { left:24px; right:24px; bottom:12px; flex-direction:column; gap:3px; font:450 10px/1.25 Archivo,system-ui,sans-serif; }
+    body.gamma-experience .cinema-takeaway { bottom:70px; }
+    body.gamma-cinema-active .reveal .slides section.variant-cinematic:has(.cinema-stage) > .slide-source { position:absolute!important; top:auto!important; left:24px; right:24px; bottom:12px; flex-direction:column; gap:3px; font:450 10px/1.25 Archivo,system-ui,sans-serif; }
     .cinema-stage[data-cinema-mode="split"] .cinema-heading { width:calc(100% - 48px); }
     .cinema-stage[data-cinema-mode="split"] .cinema-heading h2 { font:500 34px/1.1 'Source Serif 4',Georgia,serif; }
     .cinema-feature { left:24px; top:152px; width:calc(100% - 48px); }

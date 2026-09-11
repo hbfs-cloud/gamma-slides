@@ -35,6 +35,101 @@
         ],
         "createdAt": "2026-09-01T08:09:21.289Z",
         "reason": "Agent: Presenter Studio uses dense operational micro-type distinct from slide typography, scoped only to this file."
+      },
+      {
+        "rule": "broken-image",
+        "value": "<img onerror=x>",
+        "files": [
+          "test/explainer.test.js"
+        ],
+        "createdAt": "2026-09-10T05:51:46.326Z",
+        "reason": "Intentional hostile input in an escaping regression test; no image is rendered."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#dce7ff",
+        "createdAt": "2026-09-11T13:57:30.618Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#ff5d62",
+        "createdAt": "2026-09-11T13:57:30.631Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,.22)",
+        "createdAt": "2026-09-11T13:57:30.635Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#aebbd1",
+        "createdAt": "2026-09-11T13:57:30.637Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#fff",
+        "createdAt": "2026-09-11T13:57:47.027Z",
+        "reason": "Agent: Stage HUD needs a bright operational contrast color inside the rendered presentation and is scoped to the local control overlay."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,.15)",
+        "createdAt": "2026-09-11T13:57:47.153Z",
+        "reason": "Agent: Stage HUD uses a translucent separator over arbitrary slide themes; this is intentional operational chrome."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "instrument",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:42.638Z",
+        "reason": "Agent: Instrument is the local self-hosted alias for the documented Instrument Sans family in this generated static landing."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "sourceserif",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:42.901Z",
+        "reason": "Agent: SourceSerif is the local self-hosted alias for the documented Source Serif 4 family in this generated static landing."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#c9d0d6",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:43.191Z",
+        "reason": "Agent: The landing uses this one elevated body-text tone over the Signal void for readable long-form marketing copy."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.42)",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:43.444Z",
+        "reason": "Agent: Screenshot depth uses a transparent black shadow so its opacity adapts to the image it supports."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.34)",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:43.706Z",
+        "reason": "Agent: The local command surface uses a transparent black shadow for depth over the Signal void."
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "src/site/library.js"
+        ],
+        "createdAt": "2026-09-11T17:02:43.944Z",
+        "reason": "Agent: This responsive public landing composes the documented display, editorial, and report scales with intentional fluid endpoints."
       }
     ]
   }

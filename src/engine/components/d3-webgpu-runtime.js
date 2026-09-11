@@ -2,7 +2,8 @@
 export function buildGPUScene(model, width, height, d3) {
   const mobile = width < 600;
   const scene = { width, height, shapes: [], texts: [], marks: [], hits: [] };
-  const fontSize = mobile ? 11 : 14;
+  const video = model.options.video_readable === true;
+  const fontSize = video ? (mobile ? 16 : 30) : (mobile ? 11 : 14);
   const text = (value, x, y, options = {}) => scene.texts.push({ value: String(value), x, y, size: fontSize, color: 'text', ...options });
   const line = (x1, y1, x2, y2, options = {}) => scene.shapes.push({ type: 'line', x1, y1, x2, y2, color: 'muted', alpha: 0.22, width: 1, ...options });
   const fmt = (value, format) => {
@@ -21,34 +22,35 @@ export function buildGPUScene(model, width, height, d3) {
   const options = model.options;
 
   if (model.type === 'bar') {
-    const left = mobile ? 0 : 156, right = width - (mobile ? 49 : 74);
+    const hasNegative=model.series.some(series=>series.values.some(value=>value<0));
+    const left = hasNegative ? (video ? (mobile ? 76 : 160) : mobile ? 50 : 156) : video ? 0 : mobile ? 0 : 156, right = width - (video ? (mobile ? 72 : 150) : mobile ? 49 : 74);
     const allValues = model.series.flatMap(series => series.values);
     const extent = [Math.min(0, d3.min(allValues)), Math.max(0, d3.max(allValues))];
     if (extent[0] === extent[1]) extent[1] = extent[0] + 1;
     const x = d3.scaleLinear().domain(extent).nice().range([left, right]);
-    const band = d3.scaleBand().domain(model.labels).range([40, height - 25]).paddingInner(mobile ? 0.3 : 0.36);
-    const barsHeight = mobile ? Math.max(6, Math.min(11, (band.bandwidth() - 17) / model.series.length)) : Math.min(14, band.bandwidth() / (model.series.length + 0.5));
+    const band = d3.scaleBand().domain(model.labels).range([video ? (mobile ? 48 : 66) : 40, height - (video ? 42 : 25)]).paddingInner(video ? .18 : mobile ? 0.3 : 0.36);
+    const barsHeight = video ? Math.max(4,Math.min(mobile ? 20 : 36,(band.step()-(mobile ? 42 : 56))/model.series.length)) : mobile ? Math.max(6, Math.min(11, (band.bandwidth() - 17) / model.series.length)) : Math.min(14, band.bandwidth() / (model.series.length + 0.5));
     x.ticks(mobile ? 3 : 5).forEach(value => {
       line(x(value), 34, x(value), height - 25, { alpha: value === 0 ? 0.36 : 0.14 });
-      text(fmt(value, options.format_y), x(value), height - 8, { color: 'muted', anchor: 'middle', size: mobile ? 10 : 12 });
+      text(fmt(value, options.format_y), x(value), height - 8, { color: 'muted', anchor: x(value)<30?'start':x(value)>width-30?'end':'middle', size: video ? (mobile ? 14 : 22) : mobile ? 10 : 12 });
     });
     let legendX = left;
     model.series.forEach((series, seriesIndex) => {
       const color = model.series.length === 1 || seriesIndex === model.series.length - 1 ? 'primary' : colors[(seriesIndex + 1) % colors.length];
       scene.shapes.push({ type: 'rect', x: legendX, y: 4, w: 15, h: 6, radius: 2, color, alpha: 1 });
-      text(series.name, legendX + 23, 7, { size: mobile ? 11 : 12, color: 'muted' });
-      legendX += 42 + series.name.length * (mobile ? 6 : 7);
+      text(series.name, legendX + 23, 7, { size: video ? (mobile ? 14 : 28) : mobile ? 11 : 12, color: 'muted' });
+      legendX += 42 + series.name.length * (video ? (mobile ? 8 : 17) : mobile ? 6 : 7);
     });
     model.labels.forEach((label, index) => {
       const y = band(label);
-      text(label, mobile ? 0 : left - 18, mobile ? y + 2 : y + band.bandwidth() / 2, { anchor: mobile ? 'start' : 'end', weight: 600, size: mobile ? 12 : 14 });
+      text(label, video || mobile ? 0 : left - 18, video || mobile ? y + 2 : y + band.bandwidth() / 2, { anchor: video || mobile ? 'start' : 'end', weight: 600, size: video ? (mobile ? 16 : 32) : mobile ? 12 : 14 });
       model.series.forEach((series, seriesIndex) => {
         const value = series.values[index];
         const color = model.series.length === 1 || seriesIndex === model.series.length - 1 ? 'primary' : colors[(seriesIndex + 1) % colors.length];
-        const barY = y + (mobile ? 14 : (band.bandwidth() - model.series.length * barsHeight) / 2) + seriesIndex * barsHeight;
+        const barY = y + (video ? Math.max(4,Math.min(mobile ? 20 : 36,(band.step()-(mobile ? 42 : 56))/model.series.length)) : mobile ? 14 : (band.bandwidth() - model.series.length * barsHeight) / 2) + seriesIndex * barsHeight;
         const shape = { type: 'rect', x: Math.min(x(0), x(value)), y: barY, w: Math.max(Math.abs(x(value) - x(0)), 0.5), h: barsHeight - 3, radius: 2, color, alpha: 1, key: index };
         scene.marks.push(shape);
-        text(fmt(value, options.format_y), x(value) + (value < 0 ? -6 : 7), barY + shape.h / 2, { anchor: value < 0 ? 'end' : 'start', size: mobile ? 10 : 12, color, key: index });
+        text(fmt(value, options.format_y), x(value) + (value < 0 ? -6 : 7), barY + shape.h / 2, { anchor: value < 0 ? 'end' : 'start', size: video ? (mobile ? 18 : model.series.length>1 ? 28 : 36) : mobile ? 10 : 12, color, key: index });
       });
       scene.hits.push({ x: 0, y: y - 7, w: width, h: band.bandwidth() + 10, key: index, label: label + ' · ' + model.series.map(series => series.name + ': ' + fmt(series.values[index], options.format_y)).join(' · ') });
     });
@@ -62,10 +64,10 @@ export function buildGPUScene(model, width, height, d3) {
     const y = d3.scaleLinear().domain(domain(model.points.map(point => point.y), options.y_min, options.y_max)).range([bottom, top]);
     const largest = d3.max(model.points, point => Math.max(0, point.size || 0)) || 1;
     const radius = d3.scaleSqrt().domain([0, largest]).range([0, mobile ? 15 : 25]);
-    x.ticks(mobile ? 4 : 6).forEach(value => { line(x(value), top, x(value), bottom, { alpha: 0.12 }); text(fmt(value, options.format_x), x(value), bottom + 19, { anchor: 'middle', color: 'muted', size: mobile ? 10 : 12 }); });
-    y.ticks(4).forEach(value => { line(left, y(value), right, y(value), { alpha: 0.18 }); text(fmt(value, options.format_y), left - 10, y(value), { anchor: 'end', color: 'muted', size: mobile ? 10 : 12 }); });
-    text(options.y_label || 'Y', left, 10, { color: 'muted', size: mobile ? 11 : 12 });
-    text(options.x_label || 'X', (left + right) / 2, height - 12, { anchor: 'middle', color: 'muted', size: mobile ? 11 : 12 });
+    x.ticks(mobile ? 4 : 6).forEach(value => { line(x(value), top, x(value), bottom, { alpha: 0.12 }); text(fmt(value, options.format_x), x(value), bottom + 19, { anchor: 'middle', color: 'muted', size: video ? (mobile ? 14 : 22) : mobile ? 10 : 12 }); });
+    y.ticks(4).forEach(value => { line(left, y(value), right, y(value), { alpha: 0.18 }); text(fmt(value, options.format_y), left - 10, y(value), { anchor: 'end', color: 'muted', size: video ? (mobile ? 14 : 22) : mobile ? 10 : 12 }); });
+    text(options.y_label || 'Y', left, 10, { color: 'muted', size: video ? (mobile ? 14 : 28) : mobile ? 11 : 12 });
+    text(options.x_label || 'X', (left + right) / 2, height - 12, { anchor: 'middle', color: 'muted', size: video ? (mobile ? 14 : 28) : mobile ? 11 : 12 });
     const positions = model.points.map((point, index) => ({ ...point, key: index, px: x(point.x), py: y(point.y), r: point.size === null ? (mobile ? 7 : 9) : radius(Math.max(0, point.size)) }));
     const occupied = [];
     positions.forEach(point => {

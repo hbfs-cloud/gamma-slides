@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T10:06:36.245408+00:00",
+  "generatedAt": "2026-09-10T06:27:39.237383+00:00",
   "title": "Design System: Gamma Slides",
   "extensions": {
     "colorMeta": {
@@ -290,6 +290,22 @@
       "experience-chapter-display": {
         "displayName": "Flagship Market Chapter Statement",
         "purpose": "Source Serif 4 chapter statement on slide 28, with 2.75rem phone sizing; its three link names retain the separate observed serif role."
+      },
+      "video-illustration-title": {
+        "displayName": "Explanatory Video Title",
+        "purpose": "Archivo heading for the retained SVG illustration family from the earlier edition; video charts share its size, weight and line height. Current HTML mechanisms use mechanism-title."
+      },
+      "mechanism-title": {
+        "displayName": "Repository Mechanism Title",
+        "purpose": "Archivo heading for the 39 HTML mechanism scenes; adapts to 36px on phones."
+      },
+      "video-comparison-label": {
+        "displayName": "Video Comparison Identity",
+        "purpose": "Names and shared metric heading use the 32px desktop step in the simultaneous comparison rail. Names become 24px on phones; the metric heading retains its effective 32px size and may wrap."
+      },
+      "video-comparison-value": {
+        "displayName": "Video Comparison Values",
+        "purpose": "Tabular gain, drawdown and volatility values shown simultaneously beside the plot; adapts to 24px on phones."
       }
     },
     "shadows": [
@@ -374,6 +390,36 @@
         "name": "action-orbit-branches",
         "value": "240ms cubic-bezier(.16,1,.3,1); opacity 140ms",
         "purpose": "Place the five round branches; reduced motion uses opacity 100ms only."
+      },
+      {
+        "name": "explanation-draw",
+        "value": "3s cubic-bezier(.22,1,.36,1)",
+        "purpose": "One SVG path reveal; complete still for reduced motion and export."
+      },
+      {
+        "name": "explanation-arrive",
+        "value": ".9s cubic-bezier(.22,1,.36,1)",
+        "purpose": "Finite 12px rise for explanatory objects; Replay and Pause are operator controls."
+      },
+      {
+        "name": "explanation-transfer",
+        "value": "5s cubic-bezier(.22,1,.36,1)",
+        "purpose": "Single transfer between positions in the balance mechanism; holds its final state."
+      },
+      {
+        "name": "explanation-filter",
+        "value": "1.5s ease",
+        "purpose": "Rejected objects settle at .12 opacity; no perpetual loop."
+      },
+      {
+        "name": "explanation-bar",
+        "value": "1s ease",
+        "purpose": "Finite bar growth from the baseline; complete geometry remains at rest."
+      },
+      {
+        "name": "mechanism-row-arrive",
+        "value": ".8s ease; .25s stagger",
+        "purpose": "Finite 16px rise of mechanism rows. Reduced motion and export show the final state; Replay and Pause remain operator actions."
       }
     ],
     "breakpoints": [
@@ -409,6 +455,16 @@
         "name": "action-orbit-mobile",
         "value": "900px",
         "purpose": "Hub moves to right 20px, bottom 116px to clear the reading/navigation rails; panel uses right 16px."
+      },
+      {
+        "name": "explanatory-video-reading",
+        "value": "900px",
+        "purpose": "Stack image/copy and candle/chart fields; explanatory titles become 36px and insights 24px. Simple video-closeup Archify chains use a vertical native composition. This is separate from 390px-wide recorded-frame verification."
+      },
+      {
+        "name": "mechanism-whole-word-reading",
+        "value": "900px",
+        "purpose": "Flow columns become rows; values longer than nine characters move to a second full-width label-column row. Video comparison plot and evidence rail stack."
       }
     ]
   },
@@ -513,11 +569,25 @@
       "description": "Purpose: One recurring entry point across the 21-slide repository review and 38-slide flagship. Five labeled SVG branches expose Explorer, Full screen, Terminal, Appearance, and Studio (localized in French). Explorer is disabled when the current slide has no settings.\nInteraction: Mouse hover opens the radial menu on desktop; click or tap toggles it. Tab reaches M, Enter/Space activates, and arrows move among available branches. Explorer opens a native button/select panel; arrows and Home/End move among its buttons. Escape closes the menu and returns focus to M. Outside presses and slide changes dismiss it. Existing slide swipe, direct 3D dragging, and plot keyboard controls stay direct.\nPlacement: Desktop hub: right 28px, bottom 80px. At 900px and below: right 20px, bottom 116px, above the continuation/navigation rails. The 340px Explorer panel uses a viewport-bounded width and scrolling height, right 28px (16px on phones), bottom 152px, and 20px padding.\nStyle: The resting hub reverses theme text/background; expanded state uses the primary accent. The radial field and panel use the theme background and muted border. Archivo carries 14px control labels, 12px branch labels, 20px hub/panel titles, and 16px selects. Focus is a 2px primary outline with a 4px offset. Titles explicitly use --gamma-text across all three themes.\nMotion and evidence: Canopy/branch transforms take 220/240ms with cubic-bezier(.16,1,.3,1) and 140ms opacity; reduced motion uses 100ms opacity only. Controls are mirrored from their original handlers; static legends, axis keys, values, and readouts remain on the slide. The menu hides for theme/setup dialogs, recording review/countdown, print, and export. The preview depicts expanded geometry; runtime handlers perform the actions.",
       "html": "<nav class=\"ds-orbit\" aria-label=\"Slide actions\"><button type=\"button\" style=\"left:24px;top:204px\" aria-label=\"Terminal\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"4 17 10 11 4 5\"/><line x1=\"12\" x2=\"20\" y1=\"19\" y2=\"19\"/></svg><span>Terminal</span></button><button type=\"button\" style=\"left:30px;top:118px\" aria-label=\"Appearance\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 3v18\"/></svg><span>Appearance</span></button><button type=\"button\" style=\"left:88px;top:44px\" aria-label=\"Studio\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 9h10M7 14h6\"/></svg><span>Studio</span></button><button type=\"button\" style=\"left:176px;top:34px\" aria-label=\"Full screen\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m12 1v5h-5m5 0-6-6\"/></svg><span>Full screen</span></button><button type=\"button\" style=\"left:204px;top:122px\" aria-label=\"Explore\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 7h9m4 0h3M4 17h3m4 0h9M13 4v6M7 14v6\"/></svg><span>Explore</span></button><button type=\"button\" class=\"ds-orbit-hub\" aria-label=\"Slide actions\" aria-expanded=\"true\">M</button></nav>",
       "css": ".ds-orbit{position:relative;width:288px;height:288px;background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2);border:1px solid var(--gamma-muted,#A3ADB8);border-radius:50%;font:500 14px/1.4 Archivo,system-ui,sans-serif}.ds-orbit button{position:absolute;width:48px;height:48px;padding:12px;border:1px solid var(--gamma-muted,#A3ADB8);border-radius:50%;background:var(--gamma-bg,#05070A);color:inherit;cursor:pointer}.ds-orbit button:is(:hover,[aria-expanded=true]){background:var(--gamma-primary,#FFB000);border-color:var(--gamma-primary,#FFB000);color:var(--gamma-bg,#05070A)}.ds-orbit button:focus-visible{outline:2px solid var(--gamma-primary,#FFB000);outline-offset:4px}.ds-orbit svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5}.ds-orbit span{position:absolute;top:52px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:0 4px;background:var(--gamma-bg,#05070A);color:var(--gamma-text,#F3F6F2);font:500 12px/1.4 Archivo,sans-serif}.ds-orbit .ds-orbit-hub{right:12px;bottom:32px;width:56px;height:56px;font:650 20px/1 Archivo,sans-serif;background:var(--gamma-primary,#FFB000);border-color:var(--gamma-primary,#FFB000);color:var(--gamma-bg,#05070A)}"
+    },
+    {
+      "name": "Native Explanatory Illustration",
+      "kind": "custom",
+      "description": "Retained SVG illustration family from the earlier edition: one mechanism with direct labels and an interpretation, shown as a settled loss-and-recovery V.",
+      "html": "<figure class=\"ds-explainer\"><svg viewBox=\"0 0 960 450\" role=\"img\" aria-label=\"100 devient 50 puis revient à 100, soit moins 50 pour cent puis plus 100 pour cent\"><path d=\"M150 100 L480 310 L810 100\"/><g class=\"ds-ex-number\"><text x=\"150\" y=\"65\">100</text><text x=\"480\" y=\"390\">50</text><text x=\"810\" y=\"65\">100</text></g><g class=\"ds-ex-label\"><text x=\"240\" y=\"250\">−50 %</text><text x=\"730\" y=\"250\">+100 %</text></g></svg><figcaption>Perdre 50 % exige ensuite de gagner 100 %.</figcaption></figure>",
+      "css": ".ds-explainer{margin:0;color:var(--gamma-text,#F3F6F2);background:var(--gamma-bg,#05070A);font-family:Archivo,sans-serif}.ds-explainer svg{display:block;width:100%;height:auto}.ds-explainer path{fill:none;stroke:var(--gamma-primary,#FFB000);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}.ds-explainer text{text-anchor:middle}.ds-ex-number{font:550 64px Archivo,sans-serif;fill:var(--gamma-primary,#FFB000)}.ds-ex-label{font:550 36px Archivo,sans-serif;fill:var(--gamma-text,#F3F6F2)}.ds-explainer figcaption{font:450 40px/1.2 Archivo,sans-serif;text-align:center;margin:12px 0}"
+    },
+    {
+      "name": "Repository Mechanism Row",
+      "kind": "custom",
+      "description": "Open evidence row with label, detail and a complete value; long values move below on phones.",
+      "html": "<div class=\"ds-mechanism-row\"><span class=\"ds-mechanism-index\">01</span><div class=\"ds-mechanism-label\"><strong>Scanner</strong><span>Candidats classés</span></div><b class=\"ds-mechanism-value\">N candidats</b></div>",
+      "css": ".ds-mechanism-row{display:flex;align-items:center;gap:24px;border-top:1px solid var(--gamma-muted,#A3ADB8);padding:8px 0;color:var(--gamma-text,#F3F6F2);background:var(--gamma-bg,#05070A)}.ds-mechanism-index{font:550 24px/1.2 \"Azeret Mono\",monospace;color:var(--gamma-primary,#FFB000);width:40px;flex:none;text-align:center}.ds-mechanism-label{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}.ds-mechanism-label strong{font:550 32px/1.15 Archivo,sans-serif}.ds-mechanism-label>span{font:450 24px/1.2 Archivo,sans-serif;color:var(--gamma-muted,#A3ADB8)}.ds-mechanism-value{font:550 48px/1 Archivo,sans-serif;color:var(--gamma-primary,#FFB000);text-align:right;max-width:52%;overflow-wrap:normal;word-break:normal}@media(max-width:900px){.ds-mechanism-row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;padding:16px 0}.ds-mechanism-index{width:24px;font-size:16px}.ds-mechanism-label strong{font-size:24px}.ds-mechanism-label>span{font-size:16px}.ds-mechanism-value{grid-column:2;text-align:left;max-width:none;font-size:32px}}"
     }
   ],
   "narrative": {
     "northStar": "The Three Editions Desk",
-    "overview": "Gamma Slides treats a financial deck as one body of evidence that can be published in three complete editions. Analyst Proof is for review: marked paper, serif authority, cobalt corrections, and measured grids. Cutting Room is for presentation: a black work print, signal orange, condensed pacing, and a film rail that makes sequence visible. Signal Room is for decision: an emissive void, amber hierarchy, and layered data with almost no enclosure. Its base theme uses monospaced headlines; the flagship experience explicitly replaces ordinary headings with Archivo.\n\nThe base themes replace typography, composition rules, surfaces, and ECharts configurations while preserving the slide, data, and navigation state. The flagship experience deliberately retains its Archivo and Source Serif 4 role assignments and responsive compositions across Appearance choices. Presenter Studio remains a fourth, operational realm: compact navy equipment surfaces that frame every theme without adopting any one theme's voice.\n\nThe current flagship is the complete 38-slide deck in `presentations/flagship.yaml`, rendered as `output/flagship-demo.html`. Its experience layer expands Signal Room into a continuous board review with six chapters, 20 authored composition assignments, full-width phone reading, four D3/Pixi.js chart scenes, a Three.js opening revenue sculpture, and comparables that open in Three.js with a reversible 2D view. Archivo carries ordinary headings and financial copy; Source Serif 4 gives the brief, scorecard, sequence, roadmap, market chapter, and decisions their editorial roles. This scope is separate from the earlier five-slide cinematic demonstration.\n\nThe repository review in `presentations/repository-review.yaml`, built as `output/repository-review.html`, extends the same Signal Room editorial experience to a 21-slide technical decision. It retains the dark reading field, amber navigation, Archivo evidence, and Source Serif 4 editorial compositions. Real Archify SVG diagrams sit inside the slide frame with a native reading and control layer; their component roles and relationships come from the authored specifications.",
+    "overview": "Gamma Slides treats a financial deck as one body of evidence that can be published in three complete editions. Analyst Proof is for review: marked paper, serif authority, cobalt corrections, and measured grids. Cutting Room is for presentation: a black work print, signal orange, condensed pacing, and a film rail that makes sequence visible. Signal Room is for decision: an emissive void, amber hierarchy, and layered data with almost no enclosure. Its base theme uses monospaced headlines; the flagship experience explicitly replaces ordinary headings with Archivo.\n\nThe base themes replace typography, composition rules, surfaces, and ECharts configurations while preserving the slide, data, and navigation state. The flagship experience deliberately retains its Archivo and Source Serif 4 role assignments and responsive compositions across Appearance choices. Presenter Studio remains a fourth, operational realm: compact navy equipment surfaces that frame every theme without adopting any one theme's voice.\n\nThe current flagship is the complete 38-slide deck in `presentations/flagship.yaml`, rendered as `output/flagship-demo.html`. Its experience layer expands Signal Room into a continuous board review with six chapters, 20 authored composition assignments, full-width phone reading, four D3/Pixi.js chart scenes, a Three.js opening revenue sculpture, and comparables that open in Three.js with a reversible 2D view. Archivo carries ordinary headings and financial copy; Source Serif 4 gives the brief, scorecard, sequence, roadmap, market chapter, and decisions their editorial roles. This scope is separate from the earlier five-slide cinematic demonstration.\n\nThe repository review in `presentations/repository-review.yaml`, built as `output/repository-review.html`, extends the same Signal Room editorial experience to a 21-slide technical decision. It retains the dark reading field, amber navigation, Archivo evidence, and Source Serif 4 editorial compositions. Real Archify SVG diagrams sit inside the slide frame with a native reading and control layer; their component roles and relationships come from the authored specifications.\n\nThe current systematic-trading explanation in `output/systematic-tss-inside/preview/index.html` replaces the earlier 65-scene YouTube edition with 61 scenes grounded in the repository’s actual mechanisms: 39 native HTML mechanism scenes, 13 charts, and nine Archify diagrams, including a workflow. Signal Room and Archivo remain the reading world. The opening follows scanner candidates through the portfolio manager to broker executions. Measured comparisons and causal relations carry the lesson; source details remain provenance rather than required video reading. The operator reaches tools through M, while audience output uses the separate clean video surface. The earlier SVG illustration family and metaphor-image composition remain available in the engine; they do not describe this edition’s opening or its 39 mechanism scenes.",
     "keyCharacteristics": [
       "Three purpose-led themes named for the reading job: review, present, and decide.",
       "Complete theme compilation from tokens through chart configuration; no post-render recoloring.",
@@ -527,7 +597,8 @@
       "A shared round M action menu with native controls, visible keyboard focus, reduced-motion fallback, and Appearance choices with shareable query values.",
       "A flagship reading layer with Archivo evidence and Source Serif 4 editorial roles, persistent chapter navigation, and phone layouts that retain the complete evidence.",
       "Source-scaled opening revenue ribbons, four D3/Pixi.js scenes, and default Three.js comparables with direct names, exact-value access, and deterministic SVG exports.",
-      "Repository diagrams pair populated SVG framing with selectable components, guided stories, and complete text relationships on desktop and phones."
+      "Repository diagrams pair populated SVG framing with selectable components, guided stories, and complete text relationships on desktop and phones.",
+      "Beginner video scenes explain real mechanisms through ruled HTML evidence, causal Archify diagrams, and directly labeled measured charts."
     ],
     "rules": [
       {
@@ -561,6 +632,11 @@
         "section": "typography"
       },
       {
+        "name": "The Visible Proof Rule",
+        "body": "Put the comparison and its result in the picture or its large explanatory sentence. A title alone, a tooltip, or a microannotation cannot carry essential video evidence.",
+        "section": "typography"
+      },
+      {
         "name": "The Authored Composition Rule",
         "body": "The 20 assignments in `presentations/flagship.yaml` are brief (2), scorecard (3), evidence (4, 19, 23, 36), ledger (7, 11, 13, 22), feature (8, 18, 31, 34), register (16, 17), sequence (24), roadmap (25), chapter (28), and decisions (38). These compositions stage the authored evidence without altering its data or the ordinary layouts of other decks.",
         "section": "layout"
@@ -573,6 +649,16 @@
       {
         "name": "The Stable Evidence Rule",
         "body": "Theme switching may change how evidence is staged, never its numbers, labels, semantic colors, source, or slide position.",
+        "section": "layout"
+      },
+      {
+        "name": "The Whole Meaning Rule",
+        "body": "Preserve category identity, complete words, and the measured relationship across responsive layouts. Sources may remain small; the explanatory sentence and essential comparison may not depend on reading them.",
+        "section": "layout"
+      },
+      {
+        "name": "The One Relationship Rule",
+        "body": "Each explanatory video scene teaches one relationship. Use the native mechanism, a measured chart, or a short Archify chain that makes that relationship visible before adding another scene.",
         "section": "layout"
       },
       {
@@ -596,13 +682,18 @@
         "section": "elevation"
       },
       {
+        "name": "The Diagram Reading Rule",
+        "body": "Keep native component selection and complete text relationships reachable through M → Explorer, with relationship readouts beside the genuine SVG viewer. Frame populated content for the slide and selected content for narrow screens; preserve node identity, relationship labels, and routes through those framing changes.",
+        "section": "components"
+      },
+      {
         "name": "The Historical Verdict Boundary",
         "body": "Historical independent visual verdict for that five-slide demo: 6.5/10, presentable, with moderate immersive impact and still-stylized materials. This is not a flagship rating. The current flagship’s technical evidence is recorded in `docs/flagship-qa.md`; its captures are in `output/flagship-review/desktop-*.png`, `mobile-*.png`, `desktop-3d-21.png`, and `mobile-3d-21.png`. Those checks and artifacts establish their stated technical coverage, not an aesthetic guarantee or a new quality score.",
         "section": "components"
       },
       {
-        "name": "The Diagram Reading Rule",
-        "body": "Keep native component selection and complete text relationships reachable through M → Explorer, with relationship readouts beside the genuine SVG viewer. Frame populated content for the slide and selected content for narrow screens; preserve node identity, relationship labels, and routes through those framing changes.",
+        "name": "The Finite Explanation Rule",
+        "body": "Motion reveals the mechanism once and resolves into a complete, readable still. Replay and Pause remain operator actions; the audience must be able to understand the settled frame.",
         "section": "components"
       }
     ],
@@ -614,7 +705,10 @@
       "Do keep focus, keyboard navigation, reduced motion, and export selection working for every theme.",
       "Do use Source Serif 4, Archivo, and Azeret Mono for their assigned editorial jobs; preserve the flagship’s explicit serif compositions and ordinary Archivo headings, and keep Instrument Sans in Presenter Studio.",
       "Do preserve complete labels, exact values, source notes, and full-size reading on phones.",
-      "Do describe GPU support by its actual scope and backend; retain deterministic SVG exports."
+      "Do describe GPU support by its actual scope and backend; retain deterministic SVG exports.",
+      "Do verify essential video evidence in a 390px-wide 16:9 player separately from responsive HTML reading.",
+      "Do preserve native SVG mechanisms, direct chart labels, and the final still state of explanatory motion.",
+      "Do keep factual scope below the title, source text in its own flow, and all named video comparisons visible without interaction."
     ],
     "donts": [
       "Don't expose themes as A/B/C, “visual cuts,” or cosmetic modes.",
@@ -622,7 +716,8 @@
       "Don't put decorative kickers above headings or theme names; factual context belongs in the margin, source line, or after the name.",
       "Don't turn charts, metrics, or narrative regions into generic rounded shadow cards.",
       "Don't use gradients, glass, glow, or emoji as substitutes for authored financial structure.",
-      "Don't allow a theme switcher, console, or camera frame to cover decision-critical slide content."
+      "Don't allow a theme switcher, console, or camera frame to cover decision-critical slide content.",
+      "Don't treat source microannotations or fine axis ticks as the type scale for essential YouTube explanation."
     ]
   }
 }

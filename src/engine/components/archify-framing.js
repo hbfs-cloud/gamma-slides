@@ -20,6 +20,13 @@ export function frameDiagramSVG(svg, type, textSizes = null) {
     const size=attributes.includes('data-node-label')?sizes.node:attributes.includes('data-detail="context"')?sizes.context:sizes.edge;
     return `<text${attributes.replace(/font-size="[^"]+"/,`font-size="${size}"`)}>`;
   });
+  if(type==='workflow' && textSizes)result=result.replace(/(<g\b[^>]*data-node-id="[^"]+"[^>]*>)([\s\S]*?)(<text\b[^>]*data-node-label[^>]*>)/g,(whole,group,body,label)=>{
+    const rect=body.match(/<rect\b([^>]+)>/)?.[1];
+    if(!rect)return whole;
+    const [x,y,width,height]=['x','y','width','height'].map(name=>attr(rect,name));
+    if(![x,y,width,height].every(Number.isFinite))return whole;
+    return group+body+label.replace(/\bx="[^"]+"/,`x="${x+width/2}"`).replace(/\by="[^"]+"/,`y="${y+height/2+sizes.node*.33}"`);
+  });
   // Relationship masks follow the enlarged labels, without changing routes.
   if(sizes)result=result.replace(/(<g\b[^>]*data-edge-from[^>]*>\s*)<rect\b([^>]+)\/>\s*(<text\b[^>]*>)([^<]*)(<\/text>)/g,(whole,group,attributes,text,label,end)=>{
     const x=attr(attributes,'x'),width=attr(attributes,'width'),y=attr(attributes,'y'),height=attr(attributes,'height');

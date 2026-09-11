@@ -27,21 +27,21 @@ export function d3WebGPUModel(chart) {
   return model;
 }
 
-function sourceTable(model, fr) {
+function sourceTable(model) {
   const row = values => `<tr>${values.map((value, index) => `<${index ? 'td' : 'th scope="row"'}>${escapeHtml(String(value ?? '—'))}</${index ? 'td' : 'th'}>`).join('')}</tr>`;
   let headers, rows;
   if (model.type === 'bar') {
     headers = ['Segment', ...model.series.map(series => series.name)];
     rows = model.labels.map((label, index) => [label, ...model.series.map(series => series.values[index])]);
   } else if (model.type === 'scatter') {
-    headers = ['Observation', model.options.x_label || 'X', model.options.y_label || 'Y', model.options.size_label || (fr ? 'Taille' : 'Size')];
+    headers = ['Observation', model.options.x_label || 'X', model.options.y_label || 'Y', model.options.size_label || 'Size'];
     rows = model.points.map(point => [point.name, point.x, point.y, point.size]);
   } else {
-    headers = [fr ? 'Nœud' : 'Node', fr ? 'Catégorie' : 'Category', fr ? 'Exposition' : 'Exposure'];
+    headers = ['Node', 'Category', 'Exposure'];
     rows = model.nodes.map(node => [node.name, node.category, node.value]);
   }
   const table = (caption, heads, body) => `<table><caption>${escapeHtml(caption)}</caption><thead><tr>${heads.map(head => `<th scope="col">${escapeHtml(head)}</th>`).join('')}</tr></thead><tbody>${body.map(row).join('')}</tbody></table>`;
-  return table(fr ? 'Données exactes' : 'Exact source values', headers, rows) + (model.type === 'network' ? table(fr ? 'Relations' : 'Connections', ['Source', fr ? 'Cible' : 'Target', fr ? 'Exposition' : 'Exposure'], model.links.map(link => [link.source, link.target, link.value])) : '');
+  return table('Exact source values', headers, rows) + (model.type === 'network' ? table('Connections', ['Source', 'Target', 'Exposure'], model.links.map(link => [link.source, link.target, link.value])) : '');
 }
 
 export function d3WebGPUHTML(slide, chart, language = 'en') {
@@ -49,16 +49,19 @@ export function d3WebGPUHTML(slide, chart, language = 'en') {
   const fr = language.startsWith('fr'), id = `gpu-chart-${++nextChartId}`;
   const json = JSON.stringify(model).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026');
   const initialScene = buildGPUScene(model, 1100, 380, d3);
-  const hint = model.type === 'network' ? (fr ? 'Sélectionnez un nœud pour suivre ses connexions.' : 'Select a node to trace its connections.') : (fr ? 'Sélectionnez une observation pour lire ses valeurs.' : 'Select an observation to inspect its values.');
-  return `<div class="d3-webgpu-stage" data-d3-type="${model.type}" data-d3-renderer="svg" data-d3-state="idle" data-d3-draws="0" data-d3-marks="0">
+  const hint = model.type === 'network' ? 'Select a node to trace its connections.' : 'Select an observation to inspect its values.';
+  const compare=model.type==='scatter'&&model.options.video_compare===true;
+  const format=v=>Number.isFinite(v)?new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(v)+' %':'—';
+  const summary=compare?`<div class="d3-video-summary"><p>Return · drawdown · volatility</p>${model.points.map(p=>`<div><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(format(p.y))}<i> / </i>${escapeHtml(format(p.x))}<i> / </i>${escapeHtml(format(p.size))}</span></div>`).join('')}</div>`:'';
+  return `<div class="d3-webgpu-stage" data-video-compare="${compare}" data-video-readable="${model.options.video_readable===true}" data-d3-type="${model.type}" data-d3-renderer="svg" data-d3-state="idle" data-d3-draws="0" data-d3-marks="0">
     <script type="application/json" class="d3-webgpu-model">${json}</script>
     <header class="d3-webgpu-heading"><h2 id="${id}-title">${escapeHtml(slide.title || '')}</h2>${slide.subtitle ? `<p>${escapeHtml(slide.subtitle)}</p>` : ''}</header>
     <div class="d3-webgpu-plot" tabindex="0" role="group" aria-labelledby="${id}-title" aria-describedby="${id}-hint">
       <canvas class="d3-webgpu-canvas" aria-hidden="true"></canvas>
       <svg class="d3-webgpu-fallback" viewBox="0 0 1100 380" role="img" aria-label="${escapeHtml(slide.title || '')}">${sceneToSVG(initialScene)}</svg>
     </div>
-    <footer class="d3-webgpu-caption"><div><p class="d3-webgpu-insight">${escapeHtml(slide.insight || '')}</p><p class="d3-webgpu-readout" data-default-hint="${escapeHtml(hint)}" id="${id}-hint" aria-live="polite" aria-atomic="true">${escapeHtml(hint)}</p></div><nav class="d3-webgpu-actions" aria-label="${fr ? 'Explorer les données' : 'Explore data'}">${model.type === 'scatter' && model.options.depth_label ? `<button type="button" class="d3-depth-toggle" aria-pressed="false">${fr ? 'Explorer en 3D' : 'Explore in 3D'}</button>` : ''}<button type="button" data-d3-action="values">${fr ? 'Voir les données' : 'View data'}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h12v12H4zM4 8h12M4 12h12M9 4v12"/></svg></button></nav></footer>
-    <dialog class="d3-webgpu-data" aria-labelledby="${id}-data-title"><div class="d3-webgpu-data-heading"><h3 id="${id}-data-title">${escapeHtml(slide.title || '')}</h3><button type="button" data-d3-action="close">${fr ? 'Fermer' : 'Close'}</button></div>${sourceTable(model, fr)}</dialog>
+    ${summary}<footer class="d3-webgpu-caption"><div><p class="d3-webgpu-insight">${escapeHtml(slide.insight || '')}</p><p class="d3-webgpu-readout" data-default-hint="${escapeHtml(hint)}" id="${id}-hint" aria-live="polite" aria-atomic="true">${escapeHtml(hint)}</p></div><nav class="d3-webgpu-actions" aria-label="Explore data">${model.type === 'scatter' && model.options.depth_label ? `<button type="button" class="d3-depth-toggle" aria-pressed="false">Explore in 3D</button>` : ''}<button type="button" data-d3-action="values">View data<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h12v12H4zM4 8h12M4 12h12M9 4v12"/></svg></button></nav></footer>
+    <dialog class="d3-webgpu-data" aria-labelledby="${id}-data-title"><div class="d3-webgpu-data-heading"><h3 id="${id}-data-title">${escapeHtml(slide.title || '')}</h3><button type="button" data-d3-action="close">Close</button></div>${sourceTable(model)}</dialog>
   </div>`;
 }
 

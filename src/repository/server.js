@@ -15,7 +15,9 @@ export async function serveRepositoryPresentation(directory,{port=4173,terminal=
     if(!file||!['GET','HEAD'].includes(request.method)){response.writeHead(404);response.end('Not found');return;}
     try{const content=readFileSync(join(root,file));response.writeHead(200,{'Content-Type':file.endsWith('.json')?'application/json; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});response.end(request.method==='HEAD'?undefined:content);}catch{response.writeHead(404);response.end('Not found');}
   });
-  server.on('close',()=>web.close());
+  server.on('close',()=>{web.close();shell.close();});
+  const closeServer=server.close.bind(server);
+  server.close=callback=>{shell.close();web.close();return closeServer(callback);};
   await new Promise((res,rej)=>{server.once('error',rej);server.listen(Number(port),'127.0.0.1',res);});
   return {server,url:`http://127.0.0.1:${server.address().port}/`};
 }

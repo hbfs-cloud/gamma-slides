@@ -47,24 +47,24 @@ function initStudioProduction() {
   const quality = node('div', { className: 'gamma-production-quality' });
   const qualityNote = node('p', { className: 'gamma-production-note' }); qualityNote.setAttribute('role', 'status');
   const enlarge = node('button', { textContent: 'Agrandir la sortie' });
-  const useSource = node('button', { textContent: 'Garder la résolution source' });
+  const useSource = node('button', { textContent: 'Keep source resolution' });
   quality.append(qualityNote, enlarge, useSource);
   panel.querySelector('[data-live-support]').after(quality);
   enlarge.onclick = () => window.__gammaResizeOutput?.(api.snapshot().output);
   useSource.onclick = () => api.setOutput('source');
   const unblock = node('button', { textContent: 'Activer le son de sortie', hidden: true });
   quality.append(unblock);
-  unblock.onclick = async () => { try { await window.__gammaOutputWindow?.__gammaResumeOutputAudio?.(); unblock.hidden = true; } catch { qualityNote.textContent = 'Cliquez dans la fenêtre de sortie pour autoriser son audio.'; } };
+  unblock.onclick = async () => { try { await window.__gammaOutputWindow?.__gammaResumeOutputAudio?.(); unblock.hidden = true; } catch { qualityNote.textContent = 'Click in the output window to allow its audio.'; } };
 
-  const devices = details('Périphériques');
+  const devices = details('Devices');
   const selectors = {};
-  for (const [kind, title] of [['camera', 'Caméra'], ['mic', 'Microphone']]) {
+  for (const [kind, title] of [['camera', 'Camera'], ['mic', 'Microphone']]) {
     const label = node('label', { textContent: title }), select = node('select');
     select.setAttribute('aria-label', title + ' du studio'); select.dataset.productionDevice = kind;
-    select.append(node('option', { value: '', textContent: 'Périphérique par défaut' })); label.append(select); devices.append(label); selectors[kind] = select;
+    select.append(node('option', { value: '', textContent: 'Default device' })); label.append(select); devices.append(label); selectors[kind] = select;
     select.onchange = async () => { select.disabled = true; try { await api.setDevice(kind, select.value); } finally { select.disabled = false; } };
   }
-  const deviceNote = node('p', { className: 'gamma-production-note', textContent: 'Vous pouvez remplacer une caméra ou un micro pendant la prise, y compris en pause.' }); devices.append(deviceNote);
+  const deviceNote = node('p', { className: 'gamma-production-note', textContent: 'You can replace a camera or microphone during a take, including while paused.' }); devices.append(deviceNote);
   async function refreshDevices() {
     if (!navigator.mediaDevices?.enumerateDevices) return;
     const all = await navigator.mediaDevices.enumerateDevices(), state = api.snapshot();
@@ -72,9 +72,9 @@ function initStudioProduction() {
       const current = state.devices[kind + 'Id'], options = all.filter(d => d.kind === (kind === 'camera' ? 'videoinput' : 'audioinput'));
       const signature = JSON.stringify(options.map(d => [d.deviceId, d.label]));
       if (signature !== select.dataset.signature) {
-        select.replaceChildren(node('option', { value: '', textContent: 'Périphérique par défaut' }));
-        options.forEach((d, i) => select.append(node('option', { value: d.deviceId, textContent: d.label || 'Périphérique ' + (i + 1) })));
-        if (current && !options.some(d => d.deviceId === current)) select.append(node('option', { value: current, textContent: 'Périphérique déconnecté' }));
+        select.replaceChildren(node('option', { value: '', textContent: 'Default device' }));
+        options.forEach((d, i) => select.append(node('option', { value: d.deviceId, textContent: d.label || 'Device ' + (i + 1) })));
+        if (current && !options.some(d => d.deviceId === current)) select.append(node('option', { value: current, textContent: 'Disconnected device' }));
         select.dataset.signature = signature;
       }
       select.value = current || '';
@@ -86,27 +86,27 @@ function initStudioProduction() {
   const configure = panel.querySelector('[data-live=configure]'); configure.hidden = true;
 
   const mix = details('Son du programme'); mix.className = 'gamma-production-mix';
-  for (const [key, title] of [['micGain', 'Voix'], ['sharedGain', 'Médias et navigateur']]) {
+  for (const [key, title] of [['micGain', 'Voice'], ['sharedGain', 'Media and browser']]) {
     const label = node('label', { textContent: title }), value = node('output', { textContent: '100 %' });
     const input = node('input', { type: 'range', min: '0', max: '200', step: '5', value: '100' }); input.setAttribute('aria-label', 'Volume ' + title.toLowerCase()); input.dataset.productionGain = key;
     label.append(value, input); mix.append(label);
     input.oninput = () => { value.value = input.value + ' %'; api.setAudio({ [key]: Number(input.value) / 100 }); };
   }
-  const duckLabel = node('label', { textContent: 'Baisser les médias quand je parle' }), duck = node('input', { type: 'checkbox' });
+  const duckLabel = node('label', { textContent: 'Lower media while I speak' }), duck = node('input', { type: 'checkbox' });
   duck.dataset.productionDuck = ''; duckLabel.append(duck); mix.append(duckLabel); duck.onchange = () => api.setAudio({ ducking: duck.checked });
   const stemsLabel = node('label', { textContent: 'Pistes brutes pour le montage (avant gains)' }), stems = node('input', { type: 'checkbox' }); stems.dataset.productionStems = ''; stemsLabel.append(stems); mix.append(stemsLabel); stems.onchange = () => api.setAudio({ audioStems: stems.checked });
-  mix.append(node('p', { className: 'gamma-production-note', textContent: 'Les pistes séparées sont optionnelles. Couper le micro coupe aussi la piste voix.' }));
-  mix.append(node('p', { className: 'gamma-production-note', textContent: 'Le limiteur protège le mix. Si le signal sature avant le mixeur, baissez le volume du périphérique.' }));
+  mix.append(node('p', { className: 'gamma-production-note', textContent: 'Separate tracks are optional. Muting the microphone also mutes the voice track.' }));
+  mix.append(node('p', { className: 'gamma-production-note', textContent: 'The limiter protects the mix. If the signal clips before the mixer, lower the device volume.' }));
   const meter = node('div', { className: 'gamma-production-meter' });
   const meterLabel = node('span', { textContent: 'Son' }), level = node('meter', { min: -60, max: 0, value: -60 }), peak = node('span', { textContent: '— dBFS' });
-  level.setAttribute('aria-label', 'Crête du son enregistré'); meter.append(meterLabel, level, peak);
+  level.setAttribute('aria-label', 'Recorded audio peak'); meter.append(meterLabel, level, peak);
   const storageStatus = node('span', { className: 'gamma-production-storage' }); storageStatus.setAttribute('role', 'status');
   const transport = document.querySelector('.gamma-recording-badge'); transport?.append(meter, storageStatus);
   window.addEventListener('gamma:studio-audio', e => {
     const data = e.detail, db = 20 * Math.log10(Math.max(0.001, data.output || 0)); level.value = db; peak.textContent = db <= -60 ? 'Silence' : db.toFixed(1) + ' dBFS'; meter.dataset.clip = String(!!data.clipping); meterLabel.textContent = data.clipping ? 'Baissez le gain' : data.ducked ? 'Voix prioritaire' : 'Son';
   });
 
-  const takes = details('Prises conservées sur cet appareil');
+  const takes = details('Takes stored on this device');
   const takeList = node('div'), takeStatus = node('p', { className: 'gamma-production-note' }); takeStatus.setAttribute('role', 'status');
   takes.append(takeStatus, takeList);
   const bytes = size => (size / 1048576).toFixed(1) + ' Mo';
@@ -115,20 +115,20 @@ function initStudioProduction() {
     if (!window.__gammaTakeStore) return;
     try {
       const list = await window.__gammaTakeStore.list();
-      takeStatus.textContent = list.length ? 'Copies locales conservées jusqu’à suppression. Exportez vos prises importantes.' : 'Les nouvelles prises seront sauvegardées progressivement ici.';
+      takeStatus.textContent = list.length ? 'Local copies are retained until deletion. Export important takes.' : 'New takes will be progressively saved here.';
       takeList.replaceChildren();
       for (const take of list) {
         const row = node('article', { className: 'gamma-production-take' }); row.dataset.takeId = take.id;
-        row.append(node('p', { textContent: (take.label ? take.label + ' · ' : '') + take.filename + ' · ' + bytes(take.size) + ' · ' + (take.status === 'complete' ? 'Terminée' : 'Prise à récupérer') }));
-        const restore = node('button', { textContent: 'Revoir / récupérer' }), save = node('button', { textContent: 'Exporter' }), remove = node('button', { textContent: 'Supprimer' });
+        row.append(node('p', { textContent: (take.label ? take.label + ' · ' : '') + take.filename + ' · ' + bytes(take.size) + ' · ' + (take.status === 'complete' ? 'Complete' : 'Take to recover') }));
+        const restore = node('button', { textContent: 'Review / recover' }), save = node('button', { textContent: 'Export' }), remove = node('button', { textContent: 'Delete' });
         const active = ['starting','countdown','recording','paused','finalizing'].includes(api.snapshot().phase);
         restore.disabled = active || !take.size; save.disabled = active || !take.size; remove.disabled = active;
         restore.onclick = () => api.recover(take.id).catch(e => takeStatus.textContent = e.message);
-        save.onclick = async () => { try { const result = await window.__gammaTakeStore.save(take.id); takeStatus.textContent = result.saved ? 'Fichier enregistré.' : 'Téléchargement lancé. Vérifiez le fichier.'; } catch (e) { takeStatus.textContent = 'Copie conservée : ' + e.message; } };
+        save.onclick = async () => { try { const result = await window.__gammaTakeStore.save(take.id); takeStatus.textContent = result.saved ? 'File saved.' : 'Download started. Check the file.'; } catch (e) { takeStatus.textContent = 'Copy retained: ' + e.message; } };
         remove.onclick = async () => { if (remove.dataset.armed !== 'true') { remove.dataset.armed = 'true'; remove.textContent = 'Confirmer la suppression'; return; } try { await window.__gammaTakeStore.remove(take.id); await refreshTakes(); } catch (e) { takeStatus.textContent = e.message; } };
         row.append(restore, save, remove); takeList.append(row);
       }
-    } catch (e) { takeStatus.textContent = 'Stockage local indisponible : ' + e.message; }
+    } catch (e) { takeStatus.textContent = 'Local storage unavailable: ' + e.message; }
   }
   takes.addEventListener('toggle', () => { if (takes.open) refreshTakes(); });
   window.addEventListener('gamma:studio-takes', () => { if (!takes.open || takeTimer) return; takeTimer = setTimeout(() => { takeTimer = null; refreshTakes(); }, 1000); });
@@ -138,11 +138,11 @@ function initStudioProduction() {
     const state = api.snapshot(), source = state.sourceSettings;
     const desired = { landscape: [1920,1080], portrait: [1080,1920], square: [1080,1080] }[state.output];
     const insufficient = source && desired && (source.width < desired[0] || source.height < desired[1]);
-    qualityNote.textContent = source ? 'Source capturée : ' + source.width + ' × ' + source.height + (insufficient ? '. Trop petite pour ' + desired.join(' × ') + '.' : '. Aucun agrandissement artificiel.') : '';
+    qualityNote.textContent = source ? 'Captured source: ' + source.width + ' × ' + source.height + (insufficient ? '. Too small for ' + desired.join(' × ') + '.' : '. No artificial upscaling.') : '';
     qualityNote.dataset.error = String(!!insufficient); enlarge.hidden = useSource.hidden = !insufficient;
     if (insufficient) panel.querySelector('[data-live=record]').disabled = true;
     unblock.hidden = !window.__gammaOutputAudioBlocked;
-    storageStatus.textContent = state.storage?.error ? 'Stockage interrompu' : state.storage?.bytes ? 'Protégée · ' + bytes(state.storage.bytes) : '';
+    storageStatus.textContent = state.storage?.error ? 'Storage interrupted' : state.storage?.bytes ? 'Protected · ' + bytes(state.storage.bytes) : '';
     for (const input of mix.querySelectorAll('[data-production-gain]')) { if (document.activeElement !== input) { input.value = String(state.audio[input.dataset.productionGain] * 100); input.previousElementSibling.value = input.value + ' %'; } }
     duck.checked = state.audio.ducking; stems.checked = state.audio.audioStems; stems.disabled = !['ready','setup'].includes(state.phase);
   }

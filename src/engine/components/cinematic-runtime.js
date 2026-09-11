@@ -18,12 +18,13 @@ function initCinematicComparisons() {
   function project(s,x,y,z=0){const p=new T.Vector3(x,y,z).project(s.camera);return [(p.x+1)*s.w/2,(1-p.y)*s.h/2];}
   function labelAt(el,p){el.style.left=p[0]+'px';el.style.top=p[1]+'px';}
   function layout(s){
-    const rect=s.root.getBoundingClientRect();s.w=s.root.clientWidth;s.h=s.root.clientHeight;s.mobile=rect.width<700;
+    s.w=s.root.clientWidth;s.h=s.root.clientHeight;s.mobile=matchMedia('(max-width:900px)').matches;
     const viewH=s.mobile?10.0:7.4, aspect=s.w/s.h;
     s.camera.left=-viewH*aspect/2;s.camera.right=viewH*aspect/2;s.camera.top=viewH/2;s.camera.bottom=-viewH/2;
     s.camera.position.set(0,4.8,15);s.camera.lookAt(0,2,0);s.camera.updateProjectionMatrix();s.camera.updateMatrixWorld();
-    const pixelRatio=Math.min(devicePixelRatio||1,1.5,Math.sqrt(2e6/(rect.width*rect.height)));
-    renderer.setPixelRatio(pixelRatio);renderer.setSize(rect.width,rect.height,false);
+    const scale=s.mobile?1:(Reveal.getScale()||1);
+    const pixelRatio=Math.min((devicePixelRatio||1)*scale,2,Math.sqrt(2e6/(s.w*s.h)));
+    renderer.setPixelRatio(pixelRatio);renderer.setSize(s.w,s.h,false);
     const m=s.model, totalScale=s.mobile?2.45:3.5, max=Math.max(...m.totals), maxValue=Math.max(...m.values.flat());
     s.targets=[];
     m.values.forEach((values,j)=>{
@@ -62,8 +63,8 @@ function initCinematicComparisons() {
   function updateCopy(s,to){
     const root=s.root,fr=document.documentElement.lang.startsWith('fr');
     const change=s.model.totals[1]-s.model.totals[0],delta=s.model.changes[s.model.winner],share=change?delta/change*100:null;
-    root.querySelector('h2').textContent=to?(fr?(change>0?'La croissance, ouverte.':'La variation, décomposée.'):(change>0?'Growth, opened up.':'The change, opened up.')):s.title;
-    root.querySelector('.cinema-heading p').textContent=to?(s.model.series.join(' → ')+(fr?' · Les mêmes volumes, segment par segment.':' · The same volumes, segment by segment.')):s.subtitle;
+    root.querySelector('h2').textContent=to?(change>0?'Growth, opened up.':'The change, opened up.'):s.title;
+    root.querySelector('.cinema-heading p').textContent=to?(s.model.series.join(' → ')+' · The same volumes, segment by segment.'):s.subtitle;
     const feature=root.querySelector('.cinema-feature');feature.querySelector('b').textContent=s.model.labels[s.model.winner];feature.querySelector('strong').textContent=(delta>=0?'+':'')+format(delta,s.model);
     feature.querySelector('p').textContent=share===null?(fr?'Des variations qui se compensent.':'Offsetting changes.'):(share.toFixed(1)+(fr?' % de la variation nette.':'% of the net change.'));
 
@@ -130,7 +131,7 @@ function initCinematicComparisons() {
       stop();const s=active,from=s.progress,to=root.dataset.cinemaMode==='total'?1:0;
       root.dataset.cinemaMode=to?'split':'total';
       updateCopy(s,to);
-      button.textContent=to?(fr?'Revoir l’ensemble':'See the whole'):(fr?'D’où vient la croissance ?':'What changed?');
+      button.textContent=to?'See the whole':'What changed?';
       if(reduced.matches){draw(s,to);return;}
       const start=performance.now();root.dataset.cinemaMoving='true';
       function animate(now){if(active!==s||printing)return;const t=Math.min((now-start)/1100,1),ease=t*t*(3-2*t);draw(s,from+(to-from)*ease);if(t<1)frame=(window.__gammaFrame || requestAnimationFrame)(animate);else{frame=0;root.dataset.cinemaMoving='false';}}

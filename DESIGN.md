@@ -35,6 +35,28 @@ colors:
   studio-cobalt: "#315DFF"
   studio-focus: "#87A2FF"
 typography:
+  mechanism-title:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "48px"
+    fontWeight: 550
+    lineHeight: 1.06
+    letterSpacing: "-0.03em"
+  video-comparison-label:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "32px"
+    fontWeight: 550
+    lineHeight: 1.2
+  video-comparison-value:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "32px"
+    fontWeight: 550
+    lineHeight: 1.2
+  video-illustration-title:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "64px"
+    fontWeight: 550
+    lineHeight: 1.06
+    letterSpacing: "-0.035em"
   video-bookend-support:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "48px"
@@ -269,6 +291,8 @@ The current flagship is the complete 38-slide deck in `presentations/flagship.ya
 
 The repository review in `presentations/repository-review.yaml`, built as `output/repository-review.html`, extends the same Signal Room editorial experience to a 21-slide technical decision. It retains the dark reading field, amber navigation, Archivo evidence, and Source Serif 4 editorial compositions. Real Archify SVG diagrams sit inside the slide frame with a native reading and control layer; their component roles and relationships come from the authored specifications.
 
+The current systematic-trading explanation in `output/systematic-tss-inside/preview/index.html` replaces the earlier 65-scene YouTube edition with 61 scenes grounded in the repository’s actual mechanisms: 39 native HTML mechanism scenes, 13 charts, and nine Archify diagrams, including a workflow. Signal Room and Archivo remain the reading world. The opening follows scanner candidates through the portfolio manager to broker executions. Measured comparisons and causal relations carry the lesson; source details remain provenance rather than required video reading. The operator reaches tools through M, while audience output uses the separate clean video surface. The earlier SVG illustration family and metaphor-image composition remain available in the engine; they do not describe this edition’s opening or its 39 mechanism scenes.
+
 **Key Characteristics:**
 
 - Three purpose-led themes named for the reading job: review, present, and decide.
@@ -280,6 +304,7 @@ The repository review in `presentations/repository-review.yaml`, built as `outpu
 - A flagship reading layer with Archivo evidence and Source Serif 4 editorial roles, persistent chapter navigation, and phone layouts that retain the complete evidence.
 - Source-scaled opening revenue ribbons, four D3/Pixi.js scenes, and default Three.js comparables with direct names, exact-value access, and deterministic SVG exports.
 - Repository diagrams pair populated SVG framing with selectable components, guided stories, and complete text relationships on desktop and phones.
+- Beginner video scenes explain real mechanisms through ruled HTML evidence, causal Archify diagrams, and directly labeled measured charts.
 
 ## Colors
 
@@ -375,6 +400,18 @@ Cover tracking is −.04em; ordinary slide-heading and brief tracking is −.035
 
 **The Number Discipline Rule.** Financial canvases use lining tabular numerals. Values align and compare before they decorate.
 
+### Explanatory video type
+
+The current mechanism family uses `mechanism-title`, followed by Archivo labels at 32px/1.15, details at 24px/1.2, and primary values at 48px/1; headings and values use weight 550. Formula values use the established 64px step, flow values use 40px, and the explanatory sentence uses 30px/1.2 at 450. On phones the title becomes 36px, labels and interpretation 24px, details 16px, and ordinary/formula values 32px. Long words receive a second full-width value row rather than character-level wrapping or a smaller global scale.
+
+The video comparison rail uses `video-comparison-label` for portfolio identities and its shared gain/recul/volatilité heading, and `video-comparison-value` for each simultaneous value triplet. Names, the shared metric heading, and value triplets all use the 32px desktop step. Values use tabular numerals. At 900px and below, names and values become 24px; the shared metric heading retains its effective 32px size and may wrap. These are CSS sizes before stage fitting; essential meaning is verified separately in the reduced video frame. This is a component-specific comparison scale, not permission to shrink every video explanation.
+
+The `video-illustration-title` token records the recurring Archivo title shared by the explanatory scenes; the chart title uses the same size, weight, and line height. Illustration numbers also use the established 64px step. Diagram labels use 36px at 550, and the sentence below the picture uses 40px/1.2 at 450. These extend the existing video ramp rather than introducing a second small body scale. A D3 scene marked `video_readable` uses a 48px heading and 36px insight, with category names above bars and values attached to their endpoints.
+
+At the existing 900px breakpoint, explanatory and chart titles use 36px and their explanatory sentences use 24px. These are responsive HTML reading sizes. A recorded frame reduced to a 390px-wide 16:9 player is a separate legibility check: the central relationship, category identity, and result must survive that reduction. The 12px provenance lines and fine axis details are not essential YouTube reading and must not become the scale for future explanation text.
+
+**The Visible Proof Rule.** Put the comparison and its result in the picture or its large explanatory sentence. A title alone, a tooltip, or a microannotation cannot carry essential video evidence.
+
 ## Layout
 
 Base presentation slides use a 1280×720 canvas with 72px horizontal gutters, 44px top padding, and 72px bottom clearance. The shared editorial layouts use asymmetric 3:8, 4:7, 5:7, and 8:3 structures with 42–80px gaps. Dashboards use two to four columns with 12px gaps, but each theme changes how those regions join: proof uses hairlines, cutting uses a continuous film rail and narrative partitions, and signal uses brightness and depth with minimal enclosure.
@@ -413,6 +450,20 @@ Presenter Studio remains fixed above the deck. Docked tools reserve stage width 
 The repository review reuses the experience stage and five authored chapter starts: La décision (1), Le système (6), Les alternatives (12), La confiance (15), and Le pilote (20). Diagram slides place the heading above a wide SVG field and an open relationship readout. Commands and component selection open in M → Explorer. The graph frame follows populated nodes and composition points with 28 SVG units of clearance; unused bands sit outside this frame and the standalone viewer legend is explicitly hidden in both viewer and static SVG. Desktop architecture and sequence text is enlarged in the slide adapter: node/context/relationship sizes are 14/10/12 and 16/12/12 SVG units respectively. These are diagram-local sizes before stage fitting, not a new editorial type ramp.
 
 The diagram field has a 420px base height and flexes within the desktop slide; its reading rail becomes one column when the selector moves into the menu. At 900px and below, the field becomes 240px tall, while menu controls stack in a bounded scrolling panel. Phones initially focus the first component; selecting a component or guided beat frames it for reading inside the narrow iframe. “Vue d’ensemble” restores the overview. Complete relationships remain available in text when the overview is dense. The graph stays flat, unboxed, and aligned with the surrounding evidence.
+
+### Explanatory video compositions
+
+The earlier SVG illustration family places one short heading above an open SVG field and one interpretation below. The SVG uses a 960×450 viewBox within a 400px desktop illustration field. No card shell is added around the mechanism. Video charts use the same heading → evidence → interpretation order; the candlestick teaching view pairs the actual price chart with one annotated candle, then stacks both fields on phones. The earlier metaphor-image opening uses the existing visual-story composition, with image and copy side by side on desktop and stacked on phones. The current 61-scene edition opens with an HTML mechanism instead.
+
+Short `video-closeup` Archify chains of up to four sequential nodes receive a genuine vertical architecture composition at the 900px breakpoint. Nodes retain identity and edge labels; each successive connection runs from the lower side to the upper side of the next node. This is specific to simple chains. Complex repository diagrams retain their existing focused mobile framing and complete relationship readout.
+
+The current HTML mechanism family keeps heading, factual scope, figure, interpretation, and source in measured vertical flow. Source text is a separate non-shrinking final block with its own margin; it never overlays the lesson. Repeated steps use open ruled rows, not enclosed cards. Flow steps form desktop columns and stack on phones. Allocation shares are thin bars whose lengths follow the authored percentages. At the 900px breakpoint, values longer than nine characters move below their label in the remaining full-width column; longer scenes can scroll without breaking words.
+
+Video comparison scenes put the live plot and a complete value rail beside one another in a 1:1.15 grid, with heading and interpretation spanning both columns. All four authored observations remain visible without a selection. The two regions stack on phones. The stock teaching scene allocates separate price and volume regions, with one shared date axis below, and keeps its annotated candle in the mobile continuation.
+
+**The Whole Meaning Rule.** Preserve category identity, complete words, and the measured relationship across responsive layouts. Sources may remain small; the explanatory sentence and essential comparison may not depend on reading them.
+
+**The One Relationship Rule.** Each explanatory video scene teaches one relationship. Use the native mechanism, a measured chart, or a short Archify chain that makes that relationship visible before adding another scene.
 
 ## Elevation & Depth
 
@@ -532,7 +583,7 @@ These are base theme treatments; the flagship’s ordinary type and responsive c
 
 - **Controls:** Solid navy fills, real inline SVG icons, compact Instrument Sans labels, visible focus, and explicit ready/warning/error states.
 - **Boundary:** Studio chrome may frame any theme but must not inherit its display type or alter its chart palette. M → Studio opens setup; the scattered Studio toolbar is hidden.
-- **Console:** M → Terminal opens the dockable Studio Console everywhere. Static files and Pages retain slide commands; shell commands require an explicitly enabled local bridge. For repository presentations, use `repo-present --terminal` or `serve --directory <verified-site> --terminal`. The server binds to `127.0.0.1`, validates Host/Origin and a session token, and discovers the bridge through a handshake without modifying the verified HTML.
+- **Console:** M → Terminal opens the dockable Studio Console everywhere. Local interactive commands render in an xterm viewport backed by a PTY. Keep its grid track shrinkable, preserve keyboard ownership while a command runs, and provide an unobstructed interruption control before the command input. Closing returns focus to the slide; a saved desktop width must not constrain the mobile console. Static files and Pages retain slide commands; shell commands require an explicitly enabled local bridge. For repository presentations, use `repo-present --terminal` or `serve --directory <verified-site> --terminal`. The server binds to `127.0.0.1`, validates Host/Origin and a session token, and discovers the bridge through a handshake without modifying the verified HTML.
 
 
 ### Historical Cinematic Comparison — separate five-slide demo
@@ -542,28 +593,6 @@ This record applies only to `presentations/cinematic-revenue.yaml`, the earlier 
 This is an explicit exception to flat chart surfaces: Three.js provides bounded physical lighting, a generated reflection environment, chamfered geometry and cast shadows. Theme colors come from compiled chart configurations. White lights and neutral environment panels describe illumination, not a new UI palette. Copy and controls use existing Source Serif 4 and Archivo roles. No perpetual render loop; reduced motion snaps the decomposition. Presenter tools are disclosed on request.
 
 **The Historical Verdict Boundary.** Historical independent visual verdict for that five-slide demo: 6.5/10, presentable, with moderate immersive impact and still-stylized materials. This is not a flagship rating. The current flagship’s technical evidence is recorded in `docs/flagship-qa.md`; its captures are in `output/flagship-review/desktop-*.png`, `mobile-*.png`, `desktop-3d-21.png`, and `mobile-3d-21.png`. Those checks and artifacts establish their stated technical coverage, not an aesthetic guarantee or a new quality score.
-
-## Do's and Don'ts
-
-### Do:
-
-- **Do** choose themes by reading purpose: review evidence, tell the story, or decide from signal.
-- **Do** compile every theme from real tokens and regenerate charts when the theme changes.
-- **Do** keep the current slide, source, data values, and semantic finance roles stable across themes.
-- **Do** let one accent own the composition and use neutral fields generously around it.
-- **Do** keep focus, keyboard navigation, reduced motion, and export selection working for every theme.
-- **Do** use Source Serif 4, Archivo, and Azeret Mono for their assigned editorial jobs; preserve the flagship’s explicit serif compositions and ordinary Archivo headings, and keep Instrument Sans in Presenter Studio.
-- **Do** preserve complete labels, exact values, source notes, and full-size reading on phones.
-- **Do** describe GPU support by its actual scope and backend; retain deterministic SVG exports.
-
-### Don't:
-
-- **Don't** expose themes as A/B/C, “visual cuts,” or cosmetic modes.
-- **Don't** recolor a single compiled deck and call the result a theme.
-- **Don't** put decorative kickers above headings or theme names; factual context belongs in the margin, source line, or after the name.
-- **Don't** turn charts, metrics, or narrative regions into generic rounded shadow cards.
-- **Don't** use gradients, glass, glow, or emoji as substitutes for authored financial structure.
-- **Don't** allow a theme switcher, console, or camera frame to cover decision-critical slide content.
 
 ### Presenter Studio · live and clean output (September 2026)
 
@@ -581,7 +610,7 @@ The `video-story` variant is an authored 1280×720 composition. Ordinary titles 
 
 With `scene.camera.visible: true`, the pilot reserves the lower-right field for a camera of 18% viewport width in position `br`; body content stays within 880px and source text within 850px. Code and closeup scenes hide the camera while preserving the microphone. These are authored scene choices, not a collision-avoidance guarantee for arbitrary text or camera settings.
 
-`video-closeup` keeps the real Archify SVG and interaction model but uses two-node mechanisms with node/context/edge type at 22/16/20 SVG units. The default framing sizes of existing diagrams are preserved. Static SVG images explicitly declare the embedded JetBrains Mono family instead of relying on body inheritance. The phone-video check reduces actual 1280×720 frames to a 390px-wide player; responsive HTML remains a separate reading surface.
+`video-closeup` keeps the real Archify SVG and interaction model. Its current desktop node/context/edge type is 40/24/24 SVG units; these are diagram-local units before framing, not CSS body sizes. The short-chain mobile composition retains 28/16/20 SVG units. Workflow labels are centered within their node geometry after resizing, and relationship masks grow with their labels without changing routes. The default framing sizes of existing diagrams are preserved. Static SVG images explicitly declare Azeret Mono with monospace fallbacks instead of relying on body inheritance. The phone-video check reduces actual 1280×720 frames to a 390px-wide player; responsive HTML remains a separate reading surface.
 
 #### Video story type ramp and production controls
 
@@ -597,3 +626,58 @@ With `scene.camera.visible: true`, the pilot reserves the lower-right field for 
 Production devices, audio and retained takes use disclosure in the existing Studio panel. Its opaque sticky header keeps Close reachable while scrolling. Review transport wraps; on phones metadata receives its own row, help precedes the actions, and Export spans the action group. Status and metadata use the existing 12px step, transport uses 14px and all actions retain 44px targets. The audio meter and committed-storage counter are operator-only.
 
 GPU frames requested during audience broadcast use a Worker clock when the operator is hidden; queued animation frames migrate on visibility changes. The audience owns the canvas mirror so hidden-source capture throttling cannot leave the chart blank. Leaving a slide still disposes its GPU resources; no perpetual chart animation is introduced.
+
+### Native explanatory illustrations
+
+This retained SVG family belongs to the earlier explanatory edition. The current 61-scene repository explanation uses the HTML mechanism family documented below.
+
+- **Material:** Open SVG mechanisms use the theme’s primary signal for the active path, secondary signal for comparison, and muted lines for axes and context. Reused SVG icons identify objects; paths, areas, positions, and labels explain their relationship. The opening raster metaphor establishes the subject; the subsequent explanatory mechanisms remain native geometry.
+- **Meaning:** Correlated series carry their identities at the line endpoints. A loss-and-recovery V labels both the amounts and the unequal percentage changes. A donut’s center identifies the contribution being taught. These are direct labels attached to evidence, not decorative numbers.
+- **Motion:** Drawings trace once over 3s; elements arrive over .9s, filter over 1.5s, transfer over 5s, and bars grow over 1s. Drawing, arrival, and transfer use `cubic-bezier(.22,1,.36,1)`. The final state remains readable at rest. Replay and Pause are native controls available through the operator’s Explorer; reduced motion and export render the final illustration immediately.
+- **Charts:** ECharts retains real chart data; D3/Pixi.js uses the same deterministic scene description for live rendering and SVG fallback. The video-readable bar composition places category names above the measured rows, names series, and prints endpoint values. The candle inset derives open, close, low, and high from an actual bar and attaches leader lines to their exact geometry. Three.js retains its existing explicit data-depth scope.
+- **Operator boundary:** M and production controls belong to the operator surface. A capture of the interactive preview can include M; the clean audience output omits it. Do not infer broadcast cleanliness from a screenshot of the preview alone.
+
+**The Finite Explanation Rule.** Motion reveals the mechanism once and resolves into a complete, readable still. Replay and Pause remain operator actions; the audience must be able to understand the settled frame.
+
+### Repository mechanism scenes and video comparisons
+
+- **Scope below the title:** Necessary configuration, illustration, and research status appears after the heading in a factual line. The opening and closing omit decorative status. This line identifies how to interpret evidence; it is not a reusable eyebrow style.
+- **Mechanism:** Ruled HTML rows combine a native SVG symbol or ordinal, a whole-word label, optional detail, and an accent value. Flow, formula, and allocation variants retain the same type family and evidence hierarchy. The desktop figure shares available height with its interpretation and source; phones retain intentional vertical reading.
+- **Finite entrance:** Rows arrive once over .8s with `ease`, 16px rise and .25s stagger. Replay and Pause remain operator actions. Reduced motion and export show the settled content immediately.
+- **Causal topology:** Diagrams preserve the lesson’s actual branching: two pocket owners contribute to one broker aggregate; held capital stays separate from transferable cash; publication availability gates an admissible decision. The PM ordering is a genuine Archify workflow: protections and exits precede permitted entries. A generic serial chain does not replace these relationships.
+- **Measured comparison:** The D3/Pixi.js/Three.js comparison retains its original observations and adds simultaneous named gain, drawdown, and volatility values. The explanatory surface does not require clicking a point. Category bars retain each alternative; a discrete trailing-stop rule uses an explicit staircase with an unsmoothed price path and stated scale bounds.
+- **Provenance:** One authoritative spoken track lives in presenter notes alongside prepared demonstration beats and source references. Historical narration is archived separately. Small source paths establish traceability; they must never collide with the interpretation or become required reading for the video’s meaning.
+
+The deck’s actual `meta.direction_contract` is emitted as the first body comment by the renderer. For this artifact it records:
+
+> THESIS: expliquer les mécanismes réels de systematic-tss et leurs limites à un public francophone débutant. OWN-WORLD: Signal Room, Archivo, géométrie de données et relations causales. STORY: candidats, PM, poches, routeur, simulateur, recherche et verdicts. FIRST VIEWPORT: le scanner, le gestionnaire et le courtier transforment N candidats en achats possibles puis en exécutions. FORM: reconstruction guidée par le code, sans comp ni note esthétique approuvées. FINISH: preuves navigateur, sortie vidéo, revue indépendante et documentation du système.
+
+This is a code-led artifact contract, not a comp approval or an aesthetic rating. Its FINISH clause names the required validation workflow; this design-system record does not itself establish that the pending validation has passed.
+
+## Do's and Don'ts
+
+### Do:
+
+- **Do** choose themes by reading purpose: review evidence, tell the story, or decide from signal.
+- **Do** compile every theme from real tokens and regenerate charts when the theme changes.
+- **Do** keep the current slide, source, data values, and semantic finance roles stable across themes.
+- **Do** let one accent own the composition and use neutral fields generously around it.
+- **Do** keep focus, keyboard navigation, reduced motion, and export selection working for every theme.
+- **Do** use Source Serif 4, Archivo, and Azeret Mono for their assigned editorial jobs; preserve the flagship’s explicit serif compositions and ordinary Archivo headings, and keep Instrument Sans in Presenter Studio.
+- **Do** preserve complete labels, exact values, source notes, and full-size reading on phones.
+- **Do** describe GPU support by its actual scope and backend; retain deterministic SVG exports.
+
+- **Do** verify essential video evidence in a 390px-wide 16:9 player separately from responsive HTML reading.
+- **Do** preserve native SVG mechanisms, direct chart labels, and the final still state of explanatory motion.
+
+- **Do** keep factual scope below the title, source text in its own flow, and all named video comparisons visible without interaction.
+
+### Don't:
+
+- **Don't** expose themes as A/B/C, “visual cuts,” or cosmetic modes.
+- **Don't** recolor a single compiled deck and call the result a theme.
+- **Don't** put decorative kickers above headings or theme names; factual context belongs in the margin, source line, or after the name.
+- **Don't** turn charts, metrics, or narrative regions into generic rounded shadow cards.
+- **Don't** use gradients, glass, glow, or emoji as substitutes for authored financial structure.
+- **Don't** allow a theme switcher, console, or camera frame to cover decision-critical slide content.
+- **Don't** treat source microannotations or fine axis ticks as the type scale for essential YouTube explanation.

@@ -34,6 +34,9 @@ const d3Js = protectInlineScript(readFileSync(join(dirname(require.resolve('d3')
 const pixiJs = protectInlineScript(readFileSync(join(dirname(require.resolve('pixi.js')), '../dist/pixi.min.js'), 'utf8'));
 
 export const deckRuntimeAssets = Object.freeze({
+  xtermCss:protectInlineStyle(readPackageText('@xterm/xterm/css/xterm.css')),
+  xtermJs:protectInlineScript(readPackageText('@xterm/xterm')),
+  xtermFitJs:protectInlineScript(readPackageText('@xterm/addon-fit')),
   revealCss,
   revealJs,
   revealNotesJs,
