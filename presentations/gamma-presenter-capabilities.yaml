@@ -1,0 +1,230 @@
+version: '1'
+theme: analyst-proof
+meta:
+  title: Gamma Presenter · Complete capability tour
+  subtitle: The full author → runtime → stage → operator workflow
+  language: en
+  description: A single, live product tour covering Gamma Presenter's authoring, runtime, presentation, and local operator capabilities.
+  experience: true
+  chapters:
+    - start: 1
+      label: Author
+    - start: 4
+      label: Runtime
+    - start: 8
+      label: Operate
+slides:
+  - layout: title
+    composition: brief
+    label: '01'
+    kicker: GAMMA PRESENTER · COMPLETE DEMO
+    title: One document. A complete live presentation system.
+    subtitle: Author source, keep the runtime alive, operate the room, and retain final control.
+    metrics:
+      - { label: Authoring, value: Markdown · YAML · JSON }
+      - { label: Runtime, value: Media · charts · diagrams · GPU }
+      - { label: Operations, value: Stage · recording · local AI }
+    source: Gamma Presenter product capability tour
+    narration: This is the complete tour. It follows one document from authoring through rich live rendering, then into presentation operations and operator-approved AI assistance.
+
+  - layout: visual
+    composition: feature
+    title: Author without flattening the source.
+    subtitle: The native workspace keeps the writer, slide rail, visual inspector, and live Gamma preview in one place.
+    visual:
+      src: ../docs/images/gamma-presenter-author-rich.png
+      alt: Gamma Presenter Author workspace showing a slide rail, source editor, inspector, and rich live preview.
+      caption: Actual Gamma Presenter Author workspace.
+    source: Packaged Gamma Presenter capture
+    narration: Start in one native authoring surface. Markdown stays fast, while YAML and JSON retain the rich configuration that makes an advanced scene possible.
+
+  - layout: visual
+    composition: feature
+    title: Keep every content type as source.
+    subtitle: Import local images, GIFs, video, and audio; then write around charts, diagrams, browser scenes, and terminal output without converting them to screenshots.
+    visual:
+      alt: A Gamma Presenter content flow from source files to a live deck, retaining media and structured runtime blocks.
+      mechanism:
+        type: flow
+        status: LOCAL FILES STAY LOCAL
+        steps:
+          - { label: Markdown, detail: Fast narrative editing, value: '# source' }
+          - { label: YAML / JSON, detail: Structured Gamma scenes, value: 'schema' }
+          - { label: Project media, detail: 'Images, GIFs, video, audio', value: 'portable' }
+          - { label: Live deck, detail: One rendered document, value: 'Stage' }
+    source: Gamma Presenter authoring model
+    narration: Content remains a document. Rich configuration and local media travel with the deck rather than being copied into a disconnected presentation canvas.
+
+  - layout: media
+    title: Play real media on the stage.
+    subtitle: This local calibration clip is embedded into the generated deck. Video, audio, still imagery, and GIFs remain live presentation content.
+    media:
+      kind: video
+      src: assets/studio-motion.mp4
+      alt: Short locally generated video calibration clip.
+      caption: Local MP4 embedded directly in this demonstration.
+    source: Gamma Slides local media fixture
+    narration: The deck itself contains the local media reference. The renderer carries it into the portable output, without a hosted asset dependency.
+
+  - layout: chart
+    composition: feature
+    title: Use a real data runtime, not an image export.
+    subtitle: Native ECharts options, labels, legends, and zoom remain interactive inside the presentation.
+    chart:
+      type: bar
+      data:
+        labels: [Author, Media, Data, Stage, Operator]
+        datasets:
+          - label: Live capability coverage
+            values: [100, 100, 100, 100, 100]
+            color: primary
+      options:
+        show_values: true
+        show_legend: false
+        y_label: Capability coverage
+        x_label: Product surface
+    insight: "The point is not a score: each surface remains connected to the same presentation document."
+    source: Gamma Presenter capability map · illustrative values
+    footnote: Illustrative values are a tour index, not a performance measurement.
+    narration: Gamma uses the data runtime for the work itself. This is a declarative chart with a live renderer, not a screenshot pasted into a slide.
+
+  - layout: diagram
+    title: Explain systems as systems.
+    subtitle: Archify diagrams expose relationships, focus views, and animation rather than reducing architecture to a static picture.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: From source to an operator-controlled stage
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: authoring
+              label: Authoring
+              focus: [source, renderer, stage]
+              note: One source enters one renderer and reaches one live stage.
+        components:
+          - id: source
+            type: external
+            label: Source document
+            sublabel: Markdown · YAML · JSON
+            pos: [40, 190]
+            size: [185, 76]
+          - id: renderer
+            type: backend
+            label: Gamma runtime
+            sublabel: Media · charts · diagrams · GPU
+            pos: [430, 190]
+            size: [240, 76]
+          - id: stage
+            type: frontend
+            label: Stage + Speaker View
+            sublabel: Timing · notes · recording
+            pos: [875, 190]
+            size: [185, 76]
+        connections:
+          - id: source-renderer
+            from: source
+            to: renderer
+            label: validate + render
+            variant: emphasis
+          - id: renderer-stage
+            from: renderer
+            to: stage
+            label: present
+            variant: emphasis
+    source: Gamma Presenter runtime architecture
+    narration: The diagram is also live content. It can animate, expose focused views, and maintain semantic relationships as the architecture changes.
+
+  - layout: chart
+    variant: immersive
+    title: Move into three dimensions when the data needs space.
+    subtitle: This spatial scatter maps growth, quality, and scale to independent axes with a conventional fallback.
+    chart:
+      type: scatter
+      data:
+        datasets:
+          - label: Illustrative product surfaces
+            color: primary
+            points:
+              - { name: Author, x: 7, y: 9, z: 6, highlight: true }
+              - { name: Live media, x: 8, y: 8, z: 8, highlight: true }
+              - { name: Charts, x: 9, y: 9, z: 9, highlight: true }
+              - { name: Stage, x: 9, y: 8, z: 9, highlight: true }
+              - { name: Co-pilot, x: 8, y: 9, z: 7, highlight: true }
+      options:
+        x_label: Authoring depth
+        y_label: Live runtime depth
+        z_label: Operating depth
+        show_all_labels: true
+        show_legend: false
+    source: Gamma Presenter capability map · illustrative spatial coordinates
+    footnote: Coordinates are explanatory, not product benchmarks.
+    narration: Some material deserves more than two axes. Gamma can use a spatial scene without abandoning the precise labels and accessible fallback a serious presentation requires.
+
+  - layout: browser
+    title: Bring a browser scene into the story.
+    subtitle: Use a live browser surface for repositories, documentation, dashboards, or a web application when that is the evidence the audience needs.
+    browser:
+      url: https://github.com/hbfs-cloud/gamma-slides
+      label: Open the Gamma Slides repository
+    source: Public Gamma Slides repository
+    narration: A browser scene has its place when the audience must inspect a real system. It is part of the presenter's toolkit, alongside the source-authored slides.
+
+  - layout: visual
+    composition: feature
+    title: Run the room from an actual control surface.
+    subtitle: Presentation clocks, countdowns, overdue cues, action approvals, local MCP status, and Claude Code or Codex guidance stay visible to the human operator.
+    visual:
+      src: ../docs/images/gamma-presenter-control-room.png
+      alt: Gamma Presenter control room showing presentation timer, countdown, local AI co-pilot, and action approval controls.
+      caption: Actual Gamma Presenter control room. The bearer token is intentionally masked.
+    source: Packaged Gamma Presenter capture
+    narration: Gamma Presenter has live operations. It gives the presenter timing, cues, and a readable approval trail instead of making the operating layer invisible.
+
+  - layout: visual
+    composition: feature
+    title: Let the local co-pilot request. Let the presenter decide.
+    subtitle: Claude Code and Codex can assist locally. MCP is loopback-only and token protected; actions involving the live show queue for visible approval instead of silently reaching hardware or a shell.
+    visual:
+      alt: A local AI operator request flowing to a visible presenter approval boundary before reaching Stage.
+      mechanism:
+        type: queue
+        status: HUMAN APPROVAL IS THE LAST STEP
+        steps:
+          - { label: Claude Code / Codex, detail: Local instruction and bounded output, value: 'request' }
+          - { label: Loopback MCP, detail: 127.0.0.1 plus bearer token, value: 'authenticated' }
+          - { label: Author approval, detail: Approve or reject the exact action, value: 'human' }
+          - { label: Stage action, detail: Only after an explicit decision, value: 'executed' }
+    source: Gamma Presenter local co-pilot boundary
+    narration: The co-pilot is useful because it is bounded. It can inspect and request, but the presenter stays responsible for what reaches the live show.
+
+  - layout: table
+    composition: ledger
+    title: Finish with usable outputs.
+    subtitle: The same authored deck supports the operational, sharing, and record-keeping paths a presentation needs.
+    table:
+      headers: [Output, What remains intact, Intended use]
+      rows:
+        - ['Stage + Speaker View', 'Live deck, notes, clocks, cues', 'Deliver the room']
+        - [Recording, 'Camera and microphone after consent', 'Keep a local master']
+        - [HTML, 'Embedded runtime and local assets', 'Share a portable live deck']
+        - ['PDF / PNG / handout', 'Rendered evidence and speaker material', 'Review and distribution']
+        - [PPTX, 'Semantic content and notes; live scenes labelled honestly', Interchange]
+      column_types: [text, text, text]
+      highlight_column: 0
+    source: Gamma Presenter export and stage workflow
+    narration: "One deck supports more than a single screen. Gamma labels runtime scenes honestly in interchange formats and keeps the live version available where it belongs: on stage."
+
+  - layout: closing
+    composition: decisions
+    title: This is the complete Gamma Presenter surface.
+    subtitle: Start with the tour, inspect the deep-dive decks, then run the macOS app when the presentation needs a real operating system.
+    callout:
+      label: NEXT
+      value: Download Gamma Presenter for Apple silicon
+    source: Gamma Presenter · complete capability tour
+    narration: The tour is a starting point, not a substitute for the live application. Download the macOS app to author, present, record, and co-animate locally.

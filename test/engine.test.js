@@ -94,6 +94,7 @@ slides:
     const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
     assert.match(landing, /Gamma Presenter/);
     assert.match(landing, /Presentations with a live operating system/);
+    assert.match(landing, /Start with the complete capability tour/);
     assert.match(landing, /gamma-presenter-icon\.svg/);
     assert.match(landing, /class="source-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
     assert.match(landing, />Source</);
@@ -105,6 +106,17 @@ slides:
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
+});
+
+test('the complete Gamma Presenter capability tour keeps the product proof live and bounded', () => {
+  const deck = loadDeck('presentations/gamma-presenter-capabilities.yaml');
+  assert.equal(deck.meta.title, 'Gamma Presenter · Complete capability tour');
+  assert.equal(deck.slides.length, 12);
+  assert.ok(deck.slides.some(slide => slide.layout === 'media' && slide.media?.kind === 'video'));
+  assert.ok(deck.slides.some(slide => slide.layout === 'diagram' && slide.diagram?.type === 'architecture'));
+  assert.ok(deck.slides.some(slide => slide.layout === 'chart' && slide.variant === 'immersive'));
+  assert.ok(deck.slides.some(slide => slide.layout === 'browser'));
+  assert.match(deck.slides.find(slide => slide.visual?.mechanism?.type === 'queue').visual.mechanism.status, /HUMAN APPROVAL/);
 });
 
 test('video close-up diagrams build a readable mobile Archify composition', () => {

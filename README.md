@@ -8,6 +8,10 @@ Gamma Presenter brings writing, live visuals, presentation control, recording, a
 
 ![Gamma Presenter’s control room: timers, approved live-action requests, and a local AI co-pilot inside the Author workspace](docs/images/gamma-presenter-control-room.png)
 
+## See the complete product before installing
+
+[Open the complete capability tour](https://hbfs-cloud.github.io/gamma-slides/gamma-presenter-capabilities/) for one navigable deck covering the authoring workspace, local media, native charts, Archify diagrams, immersive 3D, browser scenes, presentation operations, recording, exports, and the locally bounded Claude Code / Codex co-pilot workflow. It is the product overview; the adjacent flagship, Studio, and immersive decks remain deeper proofs of individual runtimes.
+
 ## Everything needed to run a serious room
 
 | Moment | Gamma Presenter keeps it together |
