@@ -10,6 +10,7 @@
     <header class="titlebar">
       <div class="document-title"><strong id="document-name">New presentation</strong><span id="document-meta">2 slides · 1 min</span></div>
       <div class="title-actions">
+        <button id="open-templates" title="Start from a built-in template">Templates</button>
         <button id="open-document" title="Open (⌘O)">Open</button>
         <button id="save-document" title="Save (⌘S)">Save</button>
         <button class="play-button" id="present" title="Present (⌘↩)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.7 13 8 4 13.3Z"/></svg><span>Present</span></button>
@@ -113,6 +114,15 @@
         </section>
       </aside>
     </main>
+    <dialog class="template-dialog" id="template-dialog" aria-labelledby="template-dialog-title">
+      <section class="template-dialog-content">
+        <header class="template-dialog-header">
+          <div><h1 id="template-dialog-title">Start from a model</h1><p>Every model is built in, editable, and ready to run on Stage.</p></div>
+          <button id="close-templates" type="button" aria-label="Close template gallery">Close</button>
+        </header>
+        <div class="template-list" id="template-list" aria-label="Built-in presentation templates"></div>
+      </section>
+    </dialog>
     <script type="module" src="./author.js"></script>
   </body>
 </html>

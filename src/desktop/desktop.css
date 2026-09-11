@@ -40,6 +40,21 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .title-actions .play-button:hover { background: var(--accent-soft); }
 .play-button svg { width: 13px; height: 13px; fill: currentColor; }
 
+.template-dialog { width: min(760px, calc(100vw - 48px)); max-height: min(700px, calc(100vh - 72px)); padding: 0; border: 1px solid var(--line); border-radius: 16px; color: var(--ink); background: var(--chrome); box-shadow: 0 24px 64px color-mix(in srgb, var(--canvas), transparent 20%); }
+.template-dialog::backdrop { background: color-mix(in srgb, var(--canvas), transparent 18%); }
+.template-dialog-content { min-width: 0; }
+.template-dialog-header { display: flex; align-items: start; justify-content: space-between; gap: 24px; padding: 26px 28px 22px; border-bottom: 1px solid var(--line); }
+.template-dialog-header h1 { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.1; letter-spacing: -.025em; }
+.template-dialog-header p { max-width: 460px; margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.template-dialog-header button { min-height: 30px; padding: 0 10px; border-radius: 9px; color: var(--muted); background: var(--button); font-size: 12px; font-weight: 650; }
+.template-dialog-header button:hover { color: var(--ink); background: var(--accent); }
+.template-list { display: grid; gap: 1px; padding: 10px; background: var(--line); }
+.template-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; width: 100%; padding: 18px; border: 0; border-radius: 9px; color: var(--ink); background: var(--pane); text-align: left; }
+.template-option:hover { background: var(--button); }
+.template-option strong { display: block; font-size: 15px; line-height: 1.15; letter-spacing: -.015em; }
+.template-option p { max-width: 52ch; margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+.template-option span { align-self: start; padding: 4px 7px; border-radius: 9px; color: var(--accent-soft); background: var(--editor); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+
 .editor-workspace { display: grid; grid-template-columns: 242px minmax(420px, 1fr) 254px; height: calc(100vh - 54px); }
 .thumbnail-pane, .inspector-pane { min-width: 0; background: var(--pane); }
 .thumbnail-pane { display: flex; flex-direction: column; border-right: 1px solid var(--line); }

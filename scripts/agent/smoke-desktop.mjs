@@ -11,6 +11,7 @@ if (!requestedApp) throw new Error('Set GAMMA_DESKTOP_APP to a packaged Gamma Pr
 const appBundle = resolve(requestedApp);
 const appArgument = process.env.GAMMA_DESKTOP_APP_ARGUMENT ? resolve(process.env.GAMMA_DESKTOP_APP_ARGUMENT) : null;
 const screenshotPath = process.env.GAMMA_DESKTOP_SCREENSHOT ? resolve(process.env.GAMMA_DESKTOP_SCREENSHOT) : null;
+const templateScreenshotPath = process.env.GAMMA_DESKTOP_TEMPLATE_SCREENSHOT ? resolve(process.env.GAMMA_DESKTOP_TEMPLATE_SCREENSHOT) : null;
 const themeScreenshotDirectory = process.env.GAMMA_DESKTOP_THEME_SCREENSHOT_DIR ? resolve(process.env.GAMMA_DESKTOP_THEME_SCREENSHOT_DIR) : null;
 const themeReportPath = process.env.GAMMA_DESKTOP_THEME_REPORT ? resolve(process.env.GAMMA_DESKTOP_THEME_REPORT) : null;
 const executable = appBundle.endsWith('.app') ? join(appBundle, 'Contents', 'MacOS', 'Gamma Presenter') : appBundle;
@@ -79,6 +80,23 @@ try {
   if (!initial?.slideCount || initial.stageVisible) throw new Error('Author did not start as the sole working window.');
   if (!initial.mcp?.endpoint || !initial.mcp?.token) throw new Error('Desktop MCP endpoint was not exposed to the Author control room.');
   if (!initial.copilot?.available?.codex || !initial.copilot?.available?.claude) throw new Error('The installed Codex and Claude CLIs were not detected by the Author control room.');
+  if (!Array.isArray(initial.templates) || initial.templates.length < 5) throw new Error('Author did not expose the complete built-in template gallery.');
+  await author.click('#open-templates');
+  await author.waitForSelector('#template-dialog[open]');
+  if (await author.$$('[data-template-id]').then(items => items.length) !== initial.templates.length) throw new Error('Template gallery contents do not match the packaged template catalog.');
+  if (templateScreenshotPath) { await author.setViewport({ width: 1600, height: 1000, deviceScaleFactor: 1 }); await author.screenshot({ path: templateScreenshotPath }); }
+  await author.click('[data-template-id="architecture"]');
+  const templated = await eventually('runnable architecture template', async () => {
+    const snapshot = await authorRealm.evaluate(() => window.gammaDesktop?.getSnapshot());
+    return snapshot?.sourceKind === 'yaml' && snapshot?.slideCount >= 3 && snapshot?.title === 'Architecture review · live model' && snapshot.renderState === 'ready' ? snapshot : null;
+  });
+  const templateFrame = await eventually('architecture template renderer', async () => {
+    const candidate = author.frames().find(item => item.url().startsWith('gamma://deck/'));
+    return candidate && await candidate.mainRealm().evaluate(() => Boolean(window.__GAMMA_PRESENTER_READY__) && document.body.dataset.presentationTheme === 'signal-room') ? candidate : null;
+  });
+  const templateDiagram = await templateFrame.mainRealm().evaluate(() => Boolean(document.querySelector('[data-gamma-runtime*="archify"], .archify-diagram, .diagram-container')));
+  if (!templateDiagram) throw new Error('The packaged architecture template did not render its live diagram.');
+  lastAuthorState = templated;
   const themeProof = [];
   for (const theme of ['analyst-proof', 'cutting-room', 'signal-room']) {
     const beforeRevision = lastAuthorState?.rendererRevision || 0;

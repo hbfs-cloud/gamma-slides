@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { markdownToDeck } from '../src/desktop/markdown.js';
+import { getPresentationTemplate, listPresentationTemplates } from '../src/desktop/templates.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
 import { themePickerCSS } from '../src/engine/components/theme-picker.js';
@@ -35,6 +36,31 @@ test('Gamma Presenter Markdown supports local video and audio slides', () => {
   assert.deepEqual(video.slides[0].media, { kind: 'video', alt: 'Product demo', src: 'media/demo.mp4' });
   assert.equal(audio.slides[0].layout, 'media');
   assert.equal(audio.slides[0].media.kind, 'audio');
+});
+
+test('Gamma Presenter ships editable, runnable models in the packaged template gallery', () => {
+  const templates = listPresentationTemplates();
+  assert.deepEqual(templates.map(template => template.id), ['blank', 'narrative', 'board-update', 'architecture', 'live-rehearsal']);
+  assert.equal(Object.hasOwn(templates[0], 'source'), false);
+  assert.equal(getPresentationTemplate('unavailable'), null);
+
+  for (const summary of templates) {
+    const template = getPresentationTemplate(summary.id);
+    assert.equal(template.themeName, summary.themeName);
+    const deck = template.sourceKind === 'markdown'
+      ? markdownToDeck(template.source, { title: template.deckTitle, theme: template.themeName })
+      : loadDeck(template.source);
+    assert.ok(deck.slides.length >= 2, `${template.title} needs multiple runnable slides`);
+    assert.equal(deck.theme, template.themeName);
+    assert.match(renderDeck(deck), /data-presentation-theme=/);
+  }
+
+  const board = loadDeck(getPresentationTemplate('board-update').source);
+  assert.equal(board.slides[1].chart.type, 'bar');
+  const architecture = loadDeck(getPresentationTemplate('architecture').source);
+  assert.equal(architecture.slides[1].diagram.type, 'architecture');
+  const rehearsal = loadDeck(getPresentationTemplate('live-rehearsal').source);
+  assert.equal(rehearsal.slides[2].visual.mechanism.type, 'queue');
 });
 
 test('Gamma Presenter Markdown chooses quote, comparison, and table layouts from plain semantic patterns', () => {

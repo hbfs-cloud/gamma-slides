@@ -3,6 +3,8 @@ const slideList = document.querySelector('#thumbnail-list');
 const feedback = document.querySelector('#feedback');
 const preview = document.querySelector('#renderer-preview');
 const rendererStatus = document.querySelector('#renderer-status');
+const templateDialog = document.querySelector('#template-dialog');
+const templateList = document.querySelector('#template-list');
 const richInspector = document.querySelector('#rich-inspector');
 const rich = Object.fromEntries(['title', 'subtitle', 'layout', 'media-kind', 'media-src', 'notes', 'configuration'].map(name => [name, document.querySelector(`#rich-${name}`)]));
 const markdownInspector = document.querySelector('#markdown-inspector');
@@ -25,6 +27,18 @@ function selectSlide(index, focus = false) { selectedSlide = index; const range 
 function updateSource() { clearTimeout(pendingUpdate); renderThumbnails(); setFeedback('Local change · render pending…'); pendingUpdate = setTimeout(() => window.gammaDesktop.updateSource(source.value), 300); }
 function insertAtCursor(value) { source.setRangeText(value, source.selectionStart, source.selectionEnd, 'end'); source.dispatchEvent(new Event('input', { bubbles: true })); source.focus(); }
 async function run(message, action) { setFeedback(message); try { const result = await action(); if (result) applyState(result, true); setFeedback(result?.dirty ? 'Local changes' : 'Saved locally'); } catch (error) { setFeedback(`Error: ${error instanceof Error ? error.message : 'action unavailable'}`); } }
+function renderTemplates(templates = currentState.templates || []) {
+  templateList.replaceChildren(...templates.map(template => {
+    const option = document.createElement('button'); option.type = 'button'; option.className = 'template-option'; option.dataset.templateId = template.id;
+    const copy = document.createElement('div'); const title = document.createElement('strong'); const description = document.createElement('p'); const kind = document.createElement('span');
+    title.textContent = template.title; description.textContent = template.description; kind.textContent = `${template.kind} · ${template.theme}`;
+    copy.append(title, description); option.append(copy, kind); return option;
+  }));
+}
+function openTemplateDialog() {
+  renderTemplates();
+  if (!templateDialog.open) templateDialog.showModal();
+}
 function syncInspectors(state) { const editor = state.currentSlide?.editor, isRich = Boolean(editor), isMarkdown = state.sourceKind === 'markdown'; richInspector.hidden = !isRich; markdownInspector.hidden = !isMarkdown; document.querySelectorAll('[data-insert]').forEach(button => { button.hidden = isRich; }); if (isMarkdown) { markdown.title.value = state.currentSlide?.title || ''; markdown.subtitle.value = state.currentSlide?.subtitle || ''; markdown.notes.value = state.currentSlide?.notes || ''; } if (!editor) return; rich.layout.innerHTML = (state.richLayouts || []).map(layout => `<option value="${escapeHtml(layout)}">${escapeHtml(layout)}</option>`).join(''); rich.title.value = editor.title; rich.subtitle.value = editor.subtitle; rich.notes.value = editor.notes; rich.layout.value = editor.layout; rich['media-kind'].value = editor.media.kind; rich['media-src'].value = editor.media.src; rich.configuration.value = editor.configuration; }
 function renderOperatorRequests(requests = []) {
   const pending = requests.filter(request => request.status === 'pending' || request.status === 'running');
@@ -52,6 +66,7 @@ function applyState(state = {}, forceSource = false) {
   const isRich = state.sourceKind && state.sourceKind !== 'markdown'; source.classList.toggle('deck-source', isRich); source.spellcheck = !isRich; document.querySelector('#source-language').textContent = state.sourceLanguage || 'Markdown'; document.querySelector('#source-help').textContent = isRich ? `${state.sourceLanguage} is the source of truth. The inspector edits the selected slide, while full configuration covers charts, diagrams, media and animations.` : 'This text supports you and is not projected.'; syncInspectors(state);
   if (previewRevision !== state.rendererRevision) { previewRevision = state.rendererRevision; preview.src = `${state.rendererUrl}#/${state.currentIndex || 0}`; } else preview.contentWindow?.postMessage({ type: 'gamma-presenter-navigate', index: state.currentIndex || 0 }, '*'); preview.setAttribute('aria-busy', String(state.renderState === 'rendering'));
   rendererStatus.textContent = state.renderState === 'rendering' ? 'Gamma render in progress…' : state.renderState === 'invalid' ? 'Last valid render preserved' : isRich ? 'Rich Gamma render · source and inspector synchronized' : 'Live Gamma render'; syncControlRoom(state);
+  if (templateDialog.open) renderTemplates();
   if (state.error) setFeedback(`Error${state.error.line ? ` on line ${state.error.line}${state.error.column ? `:${state.error.column}` : ''}` : ''}: ${state.error.message}`); else if (state.recoveryRestored) setFeedback('Local draft recovered · save it to keep it'); else if (state.renderState === 'ready' && state.dirty) setFeedback('Local changes · render up to date'); renderThumbnails(); document.title = `${state.title || 'Gamma Presenter'} — Gamma Presenter`;
 }
 source.addEventListener('input', updateSource); slideList.addEventListener('click', event => { const item = event.target.closest('[data-index]'); if (item) selectSlide(Number(item.dataset.index), true); });
@@ -68,6 +83,15 @@ document.querySelector('#move-slide-up').addEventListener('click', () => mutateS
 document.querySelector('#move-slide-down').addEventListener('click', () => mutateSlides('move', selectedSlide + 1));
 document.querySelectorAll('[data-insert]').forEach(button => button.addEventListener('click', () => insertAtCursor(button.dataset.insert.replaceAll('\\n', '\n'))));
 document.querySelector('#import-media').addEventListener('click', () => run('Choosing local media…', () => window.gammaDesktop.importMedia(selectedSlide)));
+document.querySelector('#open-templates').addEventListener('click', openTemplateDialog);
+document.querySelector('#close-templates').addEventListener('click', () => templateDialog.close());
+templateDialog.addEventListener('click', event => { if (event.target === templateDialog) templateDialog.close(); });
+templateList.addEventListener('click', event => {
+  const option = event.target.closest('[data-template-id]'); if (!option) return;
+  const template = (currentState.templates || []).find(item => item.id === option.dataset.templateId); if (!template) return;
+  if (currentState.dirty && !window.confirm(`Start from “${template.title}”? Unsaved changes in the current presentation will be replaced.`)) return;
+  templateDialog.close(); run(`Starting ${template.title}…`, () => window.gammaDesktop.applyTemplate(template.id));
+});
 document.addEventListener('dragover', event => { if (!event.dataTransfer?.types.includes('Files')) return; event.preventDefault(); document.body.classList.add('dragging-media'); });
 document.addEventListener('dragleave', event => { if (event.relatedTarget) return; document.body.classList.remove('dragging-media'); });
 document.addEventListener('drop', event => { if (!event.dataTransfer?.files?.length) return; event.preventDefault(); document.body.classList.remove('dragging-media'); run('Importing dropped media…', () => window.gammaDesktop.importDroppedMedia(event.dataTransfer.files[0], selectedSlide)); });

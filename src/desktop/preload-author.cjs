@@ -9,6 +9,7 @@ function subscribe(callback) {
 contextBridge.exposeInMainWorld('gammaDesktop', {
   getSnapshot: () => ipcRenderer.invoke('presenter:snapshot'),
   updateSource: source => ipcRenderer.send('presenter:update-source', source),
+  applyTemplate: id => ipcRenderer.invoke('presenter:apply-template', id),
   patchRichSlide: (index, patch) => ipcRenderer.invoke('presenter:patch-rich-slide', index, patch),
   patchMarkdownSlide: (index, patch) => ipcRenderer.invoke('presenter:patch-markdown-slide', index, patch),
   mutateSlides: (action, index, targetIndex) => ipcRenderer.invoke('presenter:mutate-slides', action, index, targetIndex),

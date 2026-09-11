@@ -72,6 +72,10 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 
 - [x] DONE — Remove the generated host-script terminator that prevents Archify slides from initializing and stalls the published capability tour on slide one. The generated, Bun-bundled capability tour was checked to retain the runtime-safe terminator and to contain no raw `</script>` in the Archify host script.
 
+## Packaged template gallery — opened 2026-09-11
+
+- [x] DONE — Ship a built-in, English-first template gallery in the packaged Author app, with immediately runnable narrative, decision, data, architecture, and live-operator rehearsal models.
+
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
 - [x] DONE — Refaire le mode Présentation avec aperçu, téléprompteur et chronométrage réinitialisable.
@@ -124,6 +128,7 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - 2026-09-11 — Release readiness: the fresh unsigned arm64 ZIP and DMG were built locally, and the packaged Electron smoke completed Author → all three theme identities → authenticated MCP approval → Stage. The release workflow uploads only the DMG, ZIP, and SHA-256 manifest from a `v*` tag; the Pages/README/macOS guide use the stable latest-release ZIP URL.
 - 2026-09-11 — Landing recovery completed: the public surface is now a light paper/ink/cobalt editorial composition, with the actual English Author control-room capture as product proof, a first-viewport Apple-silicon download/source route, verified direct Release asset URL, and real deck routes. Electron captures were inspected at desktop and mobile sizes. The first capture revealed black lazy iframe previews; these were removed in favor of clear direct deck routes. Impeccable finish review disposition: `ship`.
 - 2026-09-11 — Complete capability proof added: `presentations/gamma-presenter-capabilities.yaml` is a 12-slide English, generated tour that combines actual packaged Author/control-room captures with local video, live chart, Archify architecture, immersive 3D, browser, operator-boundary, and output scenes. It is the primary landing route; focused flagship, Studio, and immersive decks remain the deeper runtime demonstrations. The deck contract is covered by the Node/Bun suite.
+- 2026-09-11 — Packaged template gallery delivered: Author now exposes five English-first, offline models (blank story, decision narrative, Analyst Proof board update, live Archify architecture review, and Cutting Room operator rehearsal). Selection safely replaces the unsaved source only after confirmation, resets to slide one, uses the matching theme, and remains fully editable/exportable. The arm64 packaged smoke opens the gallery, verifies all models, selects and renders the live architecture deck, then completes the existing MCP approval → Stage path. `bun run test` passes 100 tests with one intentional isolated-browser skip. Fresh unsigned artifacts are `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64.dmg` (SHA-256 `15b1c46ad8b85c233a04f6007089ac217a52b404d9396ee78d4a7536632a6f51`) and `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64-mac.zip` (SHA-256 `325c928a3f12c9160b1d1f351a0909a577cb52879b523b2075f3e4864cd9feee`); the DMG verifies as valid. The package is deliberately unsigned because no Developer ID identity is available.
 
 # Decisions
 
