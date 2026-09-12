@@ -15,7 +15,7 @@ export function renderDiagram(slide, theme, deck) {
   const compiled = compileDiagram(slide.diagram), facts = diagramFacts(slide.diagram.spec);
   const fr = deck.meta?.language?.startsWith('fr');
   const labels = { play:'Play story', pause:'Pause', all:'Overview', view:'Story', node:'Component or step', data:'Read relationships', inspect:'Select an element to read its relationships.', static:'Static view', zoomIn:'Zoom in', zoomOut:'Zoom out', fullscreen:'Full screen', close:'Back to slide' };
-  const config = { title:slide.title, ...facts, labels, language:deck.meta?.language || 'en', mobileOverview:slide.variant==='video-closeup', background:theme.background, text:theme.text, muted:theme.textMuted, primary:theme.primary };
+  const config = { title:slide.title, ...facts, labels, language:deck.meta?.language || 'en', background:theme.background, text:theme.text, muted:theme.textMuted, primary:theme.primary };
   const framedSVG=frameDiagramSVG(compiled.svg,slide.diagram.type,slide.variant==='video-closeup'?{node:40,context:24,edge:24}:null);
   // Short explanatory chains get a genuine vertical Archify composition on phones.
   const shortChain=slide.variant==='video-closeup'&&facts.nodes.length<=4&&facts.edges.length===facts.nodes.length-1&&facts.edges.every((edge,i)=>edge.from===facts.nodes[i]?.id&&edge.to===facts.nodes[i+1]?.id);
@@ -51,6 +51,8 @@ export function renderDiagram(slide, theme, deck) {
 export function archifySlideCSS() { return `
   .archify-slide { min-height:0; flex:1; display:flex; flex-direction:column; gap:16px; color:var(--gamma-text); font-family:Archivo,sans-serif; }
   .archify-controls { display:flex; align-items:center; gap:12px; padding:8px; background:var(--experience-surface); border:1px solid var(--experience-line); border-radius:16px; }
+  /* Story playback and focus are primary actions, even when the M menu mirrors them. */
+  @media screen { html:not(.gamma-clean-stage):not(.gamma-export) .archify-controls.gamma-orbit-managed { display:flex!important; } }
   .archify-slide button,.archify-slide select { min-height:44px; min-width:44px; padding:8px 12px; border:0; background:transparent; color:var(--gamma-text); font:500 14px/1.3 Archivo,sans-serif; border-radius:4px; }
   .archify-slide button { display:inline-flex; justify-content:center; align-items:center; gap:8px; cursor:pointer; white-space:nowrap; }
   .archify-slide button:hover { background:var(--experience-line); }
@@ -146,7 +148,8 @@ function initArchifySlides(bridgeSource) {
   const destroy = state => { state.frame?.remove();state.frame=null;state.root.dataset.ready='false';state.playing=false;state.root.querySelector('[data-archify-action="play"] span').textContent=state.config.labels.play;state.root.querySelector('[data-archify-action="play"]').setAttribute('aria-pressed','false'); };
   const mount = state => {
     if (state.frame) return;
-    if(!state.config.mobileOverview&&matchMedia('(max-width:900px)').matches&&!state.node&&!state.view)state.node=state.config.nodes[0]?.id || '';
+    // Start with the system overview on every screen. Zoom to an actor only
+    // after the presenter chooses one or starts the guided story.
     const frame=document.createElement('iframe');frame.title=state.section.querySelector('h2')?.textContent || 'Archify';
     frame.setAttribute('sandbox','allow-scripts allow-downloads');
     const css=`html,body{margin:0!important;padding:0!important;min-height:0!important;height:100%!important;background:var(--bg)!important;background-image:none!important}.container{width:100%!important;max-width:none!important;height:100%!important;margin:0!important;padding:0!important}.header,.toolbar,.guided-views,.cards,.diagram-nav,#focus-chip,.relationship-lens{display:none!important}.diagram-container{width:100%!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}.diagram-container>svg{display:block;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important}html[data-theme]{--bg:${theme().bg};--text:${theme().text};--text-muted:${theme()['text-muted']}}`;

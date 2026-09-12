@@ -1,0 +1,322 @@
+version: '1'
+theme: analyst-proof
+meta:
+  title: From HubSpot to trusted data
+  subtitle: A scalable pipeline, with its failure paths left in
+  company: Reference architecture · not a deployed integration
+  language: en
+  presentation: direct
+  experience: true
+  motion: presenter
+  tags: [data, architecture, hubspot, n8n, aws, dbt, security]
+  chapters:
+    - {start: 1, label: Follow the data}
+    - {start: 3, label: Scale the work}
+    - {start: 6, label: Protect and recover}
+slides:
+  - layout: diagram
+    title: One customer change. A trusted business view.
+    subtitle: Follow the data across six responsibilities. Security and recovery come next.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: The end-to-end data path
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: collect, label: Collect, focus: [crm, n8n, raw], note: HubSpot changes are ingested with durable buffering; n8n coordinates extraction.}
+            - {id: prepare, label: Prepare, focus: [raw, batch, warehouse], note: Batch prepares files; a scoped COPY job loads curated data into Redshift.}
+            - {id: trust, label: Publish, focus: [warehouse, dbt], note: dbt executes and tests SQL inside the warehouse before a business view is published.}
+        components:
+          - {id: crm, type: external, label: HubSpot, sublabel: Customer changes, pos: [45, 80], size: [220, 82]}
+          - {id: n8n, type: backend, label: n8n, sublabel: Coordinate ingestion, pos: [440, 80], size: [220, 82]}
+          - {id: raw, type: database, label: Amazon S3, sublabel: Raw · replayable files, pos: [835, 80], size: [220, 82]}
+          - {id: batch, type: backend, label: AWS Batch + S3, sublabel: Validate · curate files, pos: [835, 335], size: [220, 82]}
+          - {id: warehouse, type: database, label: Amazon Redshift, sublabel: Staging · core · marts, pos: [440, 335], size: [220, 82]}
+          - {id: dbt, type: frontend, label: dbt → business view, sublabel: SQL models · tests · BI, pos: [45, 335], size: [220, 82]}
+        connections:
+          - {id: changes, from: crm, to: n8n, label: ingest, variant: emphasis}
+          - {id: land, from: n8n, to: raw, label: checkpoint}
+          - {id: process, from: raw, to: batch, label: job + manifest, labelAt: [945, 245]}
+          - {id: load, from: batch, to: warehouse, label: curated COPY}
+          - {id: model, from: warehouse, to: dbt, label: transform + test}
+    source: Illustrative reference architecture · use focus views to explain each responsibility
+    narration: >-
+      This is a design walkthrough, not an installed connector or a measured performance claim.
+      The overview compresses the ingress queue and runner into their responsibilities; subsequent scenes expand them.
+      dbt sends SQL to Redshift; it is not a file-transfer service. BI reads only approved marts.
+
+  - layout: diagram
+    title: Accept a change only after it is durable.
+    subtitle: Verify the sender, buffer the event, then extract within the account's API limits.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Public ingress, bounded extraction
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: verify, label: Verify + buffer, focus: [hubspot, ingress, queue], note: The ingress checks the applicable HubSpot signature and acknowledges only a durable enqueue.}
+            - {id: extract, label: Extract, focus: [queue, workers, s3], note: 'n8n workers fetch permitted records, write raw files, and commit a checkpoint after success.'}
+            - {id: reconcile, label: Reconcile, focus: [schedule, workers, hubspot], note: A scheduled incremental reconciliation catches late or missed changes; backfills have a separate budget.}
+        components:
+          - {id: hubspot, type: external, label: HubSpot, sublabel: Webhooks + CRM API, pos: [45, 70], size: [220, 82]}
+          - {id: ingress, type: security, label: API Gateway + Lambda, sublabel: Signature validation, pos: [440, 70], size: [220, 82]}
+          - {id: queue, type: backend, label: Amazon SQS, sublabel: Durable event buffer, pos: [835, 70], size: [220, 82]}
+          - {id: schedule, type: backend, label: Reconciliation, sublabel: Watermark + backfill, pos: [45, 340], size: [220, 82]}
+          - {id: workers, type: backend, label: n8n workers, sublabel: OAuth · quotas · dedupe, pos: [440, 340], size: [220, 82]}
+          - {id: s3, type: database, label: S3 raw zone, sublabel: Files + checkpoints, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: webhook, from: hubspot, to: ingress, label: signed change}
+          - {id: enqueue, from: ingress, to: queue, label: persist first, variant: security}
+          - {id: consume, from: queue, to: workers, label: bounded polling}
+          - {id: poll, from: schedule, to: workers, label: reconcile, labelAt: [352, 440]}
+          - {id: api, from: workers, to: hubspot, label: scoped API read}
+          - {id: write, from: workers, to: s3, label: persist + commit, labelAt: [650, 440]}
+    source: HubSpot request validation and API usage guidance · links in the source notes
+    narration: >-
+      Signature handling depends on the HubSpot app and event version; do not assume every delivery uses v3.
+      Keep OAuth scopes minimal, respect 429 responses and endpoint-specific quotas, and avoid hardcoded universal limits.
+      Acknowledge the SQS message only after output and checkpoint persistence. Duplicate delivery is expected.
+      Sources: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/request-validation
+      and https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines
+
+  - layout: diagram
+    title: Scale orchestration separately from computation.
+    subtitle: n8n dispatches small jobs. Batch performs the expensive work. Files stay in S3.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: The n8n control plane
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: dispatch, label: Dispatch, focus: [main, redis, workers], note: The n8n main process dispatches execution jobs through Redis to bounded workers.}
+            - {id: state, label: Keep state, focus: [main, workers, postgres], note: PostgreSQL holds execution state; workers share the configured credential-encryption key securely.}
+            - {id: compute, label: Submit work, focus: [workers, batch, objects], note: Workers submit Batch jobs and pass S3 object references rather than large payloads through the execution queue.}
+        components:
+          - {id: main, type: backend, label: n8n main, sublabel: Workflow control, pos: [45, 70], size: [220, 82]}
+          - {id: redis, type: database, label: Redis, sublabel: Execution queue, pos: [440, 70], size: [220, 82]}
+          - {id: workers, type: backend, label: n8n workers × N, sublabel: Bounded concurrency, pos: [835, 70], size: [220, 82]}
+          - {id: postgres, type: database, label: PostgreSQL, sublabel: Workflow state, pos: [45, 340], size: [220, 82]}
+          - {id: objects, type: database, label: S3 object references, sublabel: Large files live here, pos: [440, 340], size: [220, 82]}
+          - {id: batch, type: backend, label: AWS Batch queue, sublabel: Heavy compute jobs, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: dispatch, from: main, to: redis, label: execution ID}
+          - {id: claim, from: redis, to: workers, label: claim work}
+          - {id: state-main, from: main, to: postgres, label: persist state, labelAt: [155, 166]}
+          - {id: state-worker, from: workers, to: postgres, label: read + write state, fromSide: bottom, toSide: top, via: [[945, 245], [155, 245]], labelAt: [550, 230]}
+          - {id: submit, from: workers, to: batch, label: submit + observe, labelAt: [1015, 290]}
+          - {id: files, from: batch, to: objects, label: object I/O}
+    source: Reference deployment · the Redis execution queue is separate from the SQS ingress buffer
+    narration: >-
+      Scale workers only within database, Redis, HubSpot and downstream capacity. Worker replication is not unlimited throughput.
+      This design uses explicit S3 operations and passes keys; it does not assume an n8n built-in external binary store is included in every license.
+      Production control-plane availability, supported queue-mode features and license requirements must be checked against the deployed n8n edition.
+      Source: https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode
+
+  - layout: diagram
+    title: A bad file must not become a bad dashboard.
+    subtitle: Version the input, validate in private workers, and publish only a complete output manifest.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Replayable compute, explicit quarantine
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: execute, label: Run, focus: [raw, queue, compute], note: 'Jobs reference an input version and a container version, with explicit CPU, memory and concurrency limits.'}
+            - {id: accept, label: Accept, focus: [compute, curated, load], note: 'Valid partitioned files are published through a complete manifest, then loaded once per committed input version.'}
+            - {id: reject, label: Quarantine, focus: [compute, quarantine], note: Schema or contract failures stop that batch from publication and retain a restricted diagnostic sample.}
+        components:
+          - {id: raw, type: database, label: S3 raw files, sublabel: Versioned input, pos: [45, 70], size: [220, 82]}
+          - {id: queue, type: backend, label: Batch job queue, sublabel: Retry + resource limits, pos: [440, 70], size: [220, 82]}
+          - {id: compute, type: backend, label: Private workers, sublabel: Normalize + validate, pos: [835, 70], size: [220, 82]}
+          - {id: load, type: database, label: Redshift staging, sublabel: Manifest-based COPY, pos: [45, 340], size: [220, 82]}
+          - {id: curated, type: database, label: S3 curated zone, sublabel: Partitioned + committed, pos: [440, 340], size: [220, 82]}
+          - {id: quarantine, type: security, label: Quarantine, sublabel: Restricted failed batch, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: plan, from: raw, to: queue, label: input manifest}
+          - {id: run, from: queue, to: compute, label: pinned image}
+          - {id: pass, from: compute, to: curated, label: valid output, variant: emphasis}
+          - {id: fail, from: compute, to: quarantine, label: contract failed, variant: security, labelAt: [945, 166]}
+          - {id: copy, from: curated, to: load, label: scoped COPY}
+    source: AWS Batch retry and Amazon Redshift COPY documentation · proposed publication contract
+    narration: >-
+      Batch retries do not make writes idempotent. Use deterministic output keys, version-aware load tracking and a publish manifest.
+      Enforce one committed load per input version with a durable load ledger and transactional publication; a retry flag alone cannot provide this guarantee.
+      Transient failures may retry within a budget; malformed records are quarantined rather than endlessly retried.
+      Use a scoped IAM role for Redshift COPY, not embedded static access keys.
+      Sources: https://docs.aws.amazon.com/batch/latest/userguide/job_retries.html
+      and https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-authorization.html
+
+  - layout: diagram
+    title: dbt turns loaded data into an accountable answer.
+    subtitle: SQL runs inside Redshift. Tests and freshness checks gate the business-facing views.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Warehouse transformations and their release gate
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: build, label: Build models, focus: [runner, staging, core], note: A versioned dbt runner submits dependency-ordered SQL using a scoped warehouse identity.}
+            - {id: verify, label: Verify, focus: [core, tests, marts], note: Tests and freshness checks must pass before the proposed publication gate updates approved views.}
+            - {id: consume, label: Explain the answer, focus: [marts, users], note: 'People query governed marts with documented definitions, ownership and lineage.'}
+        components:
+          - {id: runner, type: backend, label: dbt runner, sublabel: Git revision + identity, pos: [45, 70], size: [220, 82]}
+          - {id: staging, type: database, label: Staging models, sublabel: Types + source mapping, pos: [440, 70], size: [220, 82]}
+          - {id: core, type: database, label: Core models, sublabel: Customer + deal history, pos: [835, 70], size: [220, 82]}
+          - {id: users, type: frontend, label: Business users, sublabel: Governed BI views, pos: [45, 340], size: [220, 82]}
+          - {id: marts, type: database, label: Approved marts, sublabel: Revenue + funnel, pos: [440, 340], size: [220, 82]}
+          - {id: tests, type: security, label: Publication gate, sublabel: Tests + freshness, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: sql, from: runner, to: staging, label: submit SQL}
+          - {id: model, from: staging, to: core, label: model dependencies}
+          - {id: check, from: core, to: tests, label: validate, labelAt: [945, 166]}
+          - {id: release, from: tests, to: marts, label: publish if passing, variant: security}
+          - {id: query, from: marts, to: users, label: query approved view}
+    source: dbt incremental models and data tests · publication gating is an explicit deployment design
+    narration: >-
+      Configure incremental predicates and unique keys deliberately, including late updates, deletes and periodic reconciliation.
+      dbt tests identify invalid data; they do not automatically roll back every write. Build isolated candidate models and promote approved views only after checks.
+      Sources: https://docs.getdbt.com/docs/build/incremental-models and https://docs.getdbt.com/docs/build/data-tests
+
+  - layout: diagram
+    title: Draw the permissions, not just the network.
+    subtitle: Private compute, scoped workload identities, protected secrets and an auditable human path.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Trust boundaries and least privilege
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: people, label: People, focus: [operators, identity, workloads], note: Operators use SSO and role-separated access; production changes have an explicit approval boundary.}
+            - {id: services, label: Workloads, focus: [identity, workloads, data], note: 'Distinct job and service roles restrict object prefixes, warehouse operations and secret access.'}
+            - {id: perimeter, label: Network + audit, focus: [workloads, egress, audit, data], note: Private subnets use controlled public API egress and S3 endpoints; logs are redacted and audited.}
+        components:
+          - {id: operators, type: external, label: Operators, sublabel: SSO · reviewed changes, pos: [45, 70], size: [220, 82]}
+          - {id: identity, type: security, label: IAM + secrets, sublabel: Roles · Secrets Manager, pos: [440, 70], size: [220, 82]}
+          - {id: workloads, type: backend, label: Private compute, sublabel: n8n + Batch roles, pos: [835, 70], size: [220, 82]}
+          - {id: audit, type: security, label: Audit + retention, sublabel: Redacted logs · alerts, pos: [45, 340], size: [220, 82]}
+          - {id: data, type: database, label: S3 + Redshift, sublabel: KMS · scoped access, pos: [440, 340], size: [220, 82]}
+          - {id: egress, type: security, label: Network boundary, sublabel: API egress · endpoints, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: assume, from: operators, to: identity, label: limited role, variant: security}
+          - {id: credentials, from: identity, to: workloads, label: scoped identity, variant: security}
+          - {id: private, from: workloads, to: egress, label: controlled routes, labelAt: [1015, 290]}
+          - {id: objects, from: egress, to: data, label: private data path}
+          - {id: logs, from: data, to: audit, label: access events}
+          - {id: compute-logs, from: workloads, to: audit, label: redacted job events, fromSide: bottom, toSide: top, via: [[945, 245], [155, 245]], labelAt: [550, 230]}
+    source: Reference security controls · private networking is not a substitute for authorization
+    narration: >-
+      HubSpot is a public SaaS API: private workers still need controlled outbound HTTPS, for example via NAT and an egress proxy.
+      Use S3 VPC endpoints and appropriate Redshift enhanced VPC routing for the COPY path; do not generalize this to every warehouse feature.
+      Minimize CRM personal data, restrict raw and quarantine access, redact logs, and propagate retention and deletion to backups and marts.
+      Source: https://docs.aws.amazon.com/redshift/latest/mgmt/network-isolation.html
+
+  - layout: diagram
+    title: Recovery is a route, not a promise.
+    subtitle: Detect stale data, isolate the failed batch, and replay without duplicating business facts.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: From failure signal to verified recovery
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: detect, label: Detect, focus: [signal, owner, isolate], note: 'Queue age, freshness and failures page an accountable owner; the affected publication is held.'}
+            - {id: repair, label: Repair + replay, focus: [isolate, replay, verify], note: 'Repair the cause and replay a bounded input range with idempotency keys and version-aware checkpoints.'}
+            - {id: resume, label: Verify + resume, focus: [verify, resume, owner], note: 'Compare counts and key metrics, confirm freshness, then release the repaired view with an audit record.'}
+        components:
+          - {id: signal, type: backend, label: Health signals, sublabel: Queue age · freshness, pos: [45, 70], size: [220, 82]}
+          - {id: owner, type: external, label: On-call owner, sublabel: Triage + communicate, pos: [440, 70], size: [220, 82]}
+          - {id: isolate, type: security, label: DLQ / quarantine, sublabel: Hold affected publish, pos: [835, 70], size: [220, 82]}
+          - {id: resume, type: frontend, label: Resume service, sublabel: Verified business view, pos: [45, 340], size: [220, 82]}
+          - {id: verify, type: security, label: Reconcile, sublabel: Counts · keys · freshness, pos: [440, 340], size: [220, 82]}
+          - {id: replay, type: backend, label: Bounded replay, sublabel: Input version + job key, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: alert, from: signal, to: owner, label: actionable alert}
+          - {id: hold, from: owner, to: isolate, label: stop publication, variant: security}
+          - {id: replay, from: isolate, to: replay, label: repair then replay, labelAt: [945, 166]}
+          - {id: verify, from: replay, to: verify, label: compare + test}
+          - {id: resume, from: verify, to: resume, label: approved recovery}
+    source: Proposed operating procedure · no exactly-once or zero-loss guarantee
+    narration: >-
+      An SQS dead-letter queue holds exhausted delivery attempts; a schema quarantine holds invalid data. They serve different purposes.
+      Commit checkpoints only after durable outputs. Reprocessing must account for updated and deleted CRM objects, not just duplicate inserts.
+      Set and measure recovery-time and recovery-point targets for this workload; this demo does not claim any achieved SLO.
+
+  - layout: diagram
+    title: Growth needs budgets and a release discipline.
+    subtitle: Add workers where queues build up. Keep quotas, cost, data quality and recovery measurable.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Safe change and bounded scale
+          quality_profile: showcase
+          visual_preset: editorial
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - {id: release, label: Release, focus: [git, ci, prod], note: 'Review infrastructure, workflow and dbt changes; test in a separate environment before production approval.'}
+            - {id: capacity, label: Scale within limits, focus: [prod, capacity, costs], note: 'Bound worker counts and Batch resources by source quotas, warehouse capacity and cost budgets.'}
+            - {id: learn, label: Rehearse recovery, focus: [costs, drills, git], note: 'Observe cost and freshness, rehearse restore and replay, then improve the versioned design.'}
+        components:
+          - {id: git, type: external, label: Versioned source, sublabel: IaC · workflows · dbt, pos: [45, 70], size: [220, 82]}
+          - {id: ci, type: security, label: CI + review, sublabel: Test · scan · approve, pos: [440, 70], size: [220, 82]}
+          - {id: prod, type: backend, label: Production, sublabel: Separate roles + state, pos: [835, 70], size: [220, 82]}
+          - {id: drills, type: external, label: Recovery drills, sublabel: Restore + bounded replay, pos: [45, 340], size: [220, 82]}
+          - {id: costs, type: frontend, label: Operating dashboard, sublabel: Cost · freshness · errors, pos: [440, 340], size: [220, 82]}
+          - {id: capacity, type: backend, label: Capacity budgets, sublabel: API · workers · warehouse, pos: [835, 340], size: [220, 82]}
+        connections:
+          - {id: review, from: git, to: ci, label: proposed change}
+          - {id: release, from: ci, to: prod, label: gated deployment, variant: security}
+          - {id: budget, from: prod, to: capacity, label: bounded scaling, labelAt: [945, 166]}
+          - {id: observe, from: capacity, to: costs, label: measure saturation}
+          - {id: rehearse, from: costs, to: drills, label: prove recovery}
+          - {id: improve, from: drills, to: git, label: improve runbook}
+    source: Architecture walkthrough only · no cloud resources or credentials are provisioned by this demo
+    narration: >-
+      Scale the constrained layer rather than every layer. Test realistic data volume, skew, backfills, credential rotation and failure recovery.
+      Define owners, retention and deletion policies before onboarding CRM data. Validate costs, service limits and n8n licensing for the selected deployment.
+      Use this editable deck for an architecture discussion, not as proof that a production integration has been deployed or certified.

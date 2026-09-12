@@ -160,9 +160,9 @@ slides:
     const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
     assert.match(landing, /Gamma Presenter/);
     assert.match(landing, /Presentations with a live operating system/);
-    assert.match(landing, /A live gallery, not a wall of screenshots/);
+    assert.match(landing, /See what your slides can do/);
     assert.match(landing, /IntersectionObserver/);
-    assert.match(landing, /AI can propose the show\. You keep the controls/);
+    assert.match(landing, /A co-pilot, with you in control/);
     assert.match(landing, /Request, don’t seize/);
     assert.match(landing, /gamma-presenter-icon\.svg/);
     assert.match(landing, /<link rel="icon" href="\.\/assets\/gamma-presenter-icon\.svg" type="image\/svg\+xml">/);
@@ -236,20 +236,37 @@ test('repository-review live diagrams keep their audience copy in English', () =
 
 test('the public gallery lazy-loads real featured runtimes one at a time', () => {
   const tempDir = mkdtempSync(join(tmpdir(), 'gamma-live-gallery-'));
-  const sourceDir = join(tempDir, 'presentations');
   const outputDir = join(tempDir, '_site');
   try {
-    mkdirSync(sourceDir, { recursive: true });
-    ['gamma-presenter-capabilities', 'flagship', 'immersive-data'].forEach(slug => writeFileSync(join(sourceDir, `${slug}.yaml`), `meta:\n  title: ${slug}\n  language: en\nslides:\n  - layout: title\n    title: Live proof\n`));
-    buildPresentationLibrary({ inputDir: sourceDir, outputDir, language: 'en' });
+    buildPresentationLibrary({ inputDir: 'presentations', outputDir, language: 'en' });
     const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
     assert.equal((landing.match(/data-live-preview data-src=/g) || []).length, 6);
     assert.match(landing, /Loading the live runtime/);
-    assert.match(landing, /data-src="\.\/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/3"/);
-    assert.match(landing, /data-src="\.\/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/5"/);
-    assert.match(landing, /data-src="\.\/immersive-data\/\?gamma-preview=1&gamma-clean=gallery#\/1"/);
-    assert.match(landing, /Open the full Architecture in motion demo/);
+    for (const feature of ['architecture', 'charts', 'spatial', 'media', 'browser', 'ai']) {
+      assert.ok(landing.includes(`data-src="./gallery/${feature}.html?gamma-preview=1&amp;gamma-clean=gallery"`));
+      assert.ok(existsSync(join(outputDir, 'gallery', `${feature}.html`)));
+      assert.ok(existsSync(join(outputDir, 'assets', `gallery-${feature}.jpg`)));
+    }
+    assert.match(landing, /Open the full Architecture demo/);
+    assert.match(readFileSync(join(outputDir, 'gallery', 'browser.html'), 'utf8'), /demo.local\/requests/);
+    assert.match(readFileSync(join(outputDir, 'gallery', 'ai.html'), 'utf8'), /no live request is sent/);
     assert.match(landing, /activePreview\.removeAttribute\('src'\)/);
+    for (const [slug, count] of [['cyber-incident', 8], ['saas-explained', 7], ['data-pipeline', 8]]) {
+      assert.ok(landing.includes(`data-story="${slug}"`));
+      assert.ok(landing.includes(`href="./${slug}/"`));
+      assert.ok(existsSync(join(outputDir, 'assets', `story-${slug}.jpg`)));
+      const deck = loadDeck(`presentations/${slug}.yaml`);
+      assert.equal(deck.meta.language, 'en');
+      assert.equal(deck.slides.length, count);
+      for (const slide of deck.slides) {
+        assert.equal(slide.layout, 'diagram');
+        assert.equal(slide.diagram.spec.meta.animation, 'trace');
+        assert.ok(slide.diagram.spec.meta.views.length >= 2);
+        const nodes = new Set(slide.diagram.spec.components.map(node => node.id));
+        for (const view of slide.diagram.spec.meta.views) assert.ok(view.focus.every(id => nodes.has(id)));
+        for (const edge of slide.diagram.spec.connections) assert.ok(nodes.has(edge.from) && nodes.has(edge.to));
+      }
+    }
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }

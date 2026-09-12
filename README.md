@@ -18,7 +18,21 @@ Recorded from the running Gamma runtime: rotate the data, inspect a new perspect
 
 ![An English Gamma presentation with an interactive 3D chart changing perspective](docs/images/gamma-presenter-immersive-runtime.gif)
 
-[Explore the live gallery](https://hbfs-cloud.github.io/gamma-slides/#live-gallery) for animated architecture, data, media, and the presentation control workflow.
+[Explore the live gallery](https://hbfs-cloud.github.io/gamma-slides/#live-gallery): six focused demonstrations share one properly framed stage. Follow an Archify flow, inspect a financial chart, rotate a 3D dataset, play a complete YouTube frame, navigate a sample website, or rehearse an AI approval. Only one preview runs at a time; offscreen previews stop and reduced-motion visitors choose when to play. The public browser sample and AI approval simulation are labeled: they do not connect an account, invoke an LLM or operate your Mac.
+
+### Three ideas, explained through diagrams
+
+Each presentation is English, animated with Archify, and editable. Press **Play story**, select a focus view, or step through the slides. Every demo has a return link to the landing.
+
+| Story | What you can explain | Open and adapt |
+| --- | --- | --- |
+| Cybersecurity · 8 scenes | Actors, phishing, stolen access, attempted exfiltration, detection, containment and recovery. A fictional defensive incident, not an exploit tutorial. | [Play](https://hbfs-cloud.github.io/gamma-slides/cyber-incident/) · [Source](presentations/cyber-incident.yaml) · [Notes and references](docs/cyber-incident-demo.md) |
+| SaaS without jargon · 7 scenes | A customer books a visit; the app checks availability, confirms it, coordinates the team and keeps the service running. | [Play](https://hbfs-cloud.github.io/gamma-slides/saas-explained/) · [Source](presentations/saas-explained.yaml) · [Presenter guide](docs/saas-explained-demo.md) |
+| Data pipeline · 8 scenes | HubSpot → n8n → S3 → AWS Batch → Redshift + dbt, including permissions, bounded scaling, quarantine, replay and governance. A reference architecture, not provisioned infrastructure. | [Play](https://hbfs-cloud.github.io/gamma-slides/data-pipeline/) · [Source](presentations/data-pipeline.yaml) · [Design and references](docs/data-pipeline-demo.md) |
+
+![The reference data pipeline, rendered from its editable Archify source](docs/images/story-data-pipeline.jpg)
+
+The landing also uses a [generated concept illustration](docs/images/gamma-presenter-workflow-illustration.png) to explain document → stage → operator. It is labeled as an illustration, separate from actual product captures; [prompt and provenance](docs/images/gamma-presenter-workflow-illustration.md) are retained.
 
 ## Everything needed to run a serious room
 

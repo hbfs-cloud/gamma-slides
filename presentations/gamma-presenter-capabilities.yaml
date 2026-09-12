@@ -103,39 +103,86 @@ slides:
           viewBox: [1100, 500]
           views:
             - id: authoring
-              label: Authoring
-              focus: [source, renderer, stage]
-              note: One source enters one renderer and reaches one live stage.
+              label: Author + assets
+              focus: [source, local-assets, renderer]
+              note: Structured source and project-local media enter the same renderer.
+            - id: delivery
+              label: Stage delivery
+              focus: [renderer, stage, speaker]
+              note: One rendered deck drives the audience stage and speaker tools.
+            - id: approval
+              label: Approval boundary
+              focus: [ai-control, speaker, stage]
+              note: Local AI requests reach the stage only after presenter approval.
         components:
           - id: source
             type: external
             label: Source document
             sublabel: Markdown · YAML · JSON
-            pos: [40, 190]
+            pos: [40, 95]
+            size: [185, 76]
+          - id: local-assets
+            type: database
+            label: Local assets
+            sublabel: Images · video · audio · fonts
+            pos: [40, 325]
             size: [185, 76]
           - id: renderer
             type: backend
-            label: Gamma runtime
-            sublabel: Media · charts · diagrams · GPU
-            pos: [430, 190]
-            size: [240, 76]
+            label: Gamma renderer
+            sublabel: Validate · compose live runtimes
+            pos: [355, 210]
+            size: [235, 80]
           - id: stage
             type: frontend
-            label: Stage + Speaker View
-            sublabel: Timing · notes · recording
-            pos: [875, 190]
+            label: Audience Stage
+            sublabel: Live deck · media · diagrams
+            pos: [710, 95]
             size: [185, 76]
+          - id: speaker
+            type: frontend
+            label: Speaker View
+            sublabel: Notes · timing · approvals
+            pos: [710, 325]
+            size: [185, 76]
+          - id: ai-control
+            type: security
+            label: Local AI control
+            sublabel: Loopback MCP · request only
+            pos: [925, 325]
+            size: [145, 76]
         connections:
           - id: source-renderer
             from: source
             to: renderer
             label: validate + render
             variant: emphasis
+          - id: assets-renderer
+            from: local-assets
+            to: renderer
+            label: load locally
+            variant: emphasis
           - id: renderer-stage
             from: renderer
             to: stage
-            label: present
+            label: present live deck
             variant: emphasis
+          - id: renderer-speaker
+            from: renderer
+            to: speaker
+            label: notes + cues
+            variant: emphasis
+          - id: ai-speaker
+            from: ai-control
+            to: speaker
+            label: request approval
+            labelAt: [910, 415]
+            variant: security
+          - id: speaker-stage
+            from: speaker
+            to: stage
+            label: approved action
+            variant: security
     source: Gamma Presenter runtime architecture
     narration: The diagram is also live content. It can animate, expose focused views, and maintain semantic relationships as the architecture changes.
 

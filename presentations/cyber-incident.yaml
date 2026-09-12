@@ -1,0 +1,371 @@
+version: '1'
+theme: analyst-proof
+meta:
+  title: Fictional SaaS identity incident
+  subtitle: A defensive walkthrough from phishing signal to recovery
+  language: en
+  description: An educational, fictional incident story about identity, SaaS access, detection, containment, and recovery.
+  experience: true
+  presentation: direct
+  chapters:
+    - start: 1
+      label: Exposure
+    - start: 4
+      label: Investigation
+    - start: 7
+      label: Recovery
+slides:
+  - layout: diagram
+    title: A fictional incident, told as a system.
+    subtitle: We follow people, identity controls, SaaS access, and defenders—not an exploit recipe.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Incident scope and trust boundaries
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: people
+              label: People and signals
+              focus: [employee, mailbox, soc]
+              note: A reported email and a login signal are starting evidence, not proof of compromise.
+            - id: access
+              label: Access path
+              focus: [mailbox, idp, saas]
+              note: Identity and SaaS are separate trust boundaries with separate logs and controls.
+        components:
+          - {id: employee, type: external, label: Employee, sublabel: Fictional user, pos: [35, 215], size: [155, 70]}
+          - {id: mailbox, type: frontend, label: Mailbox, sublabel: Message and report, pos: [250, 80], size: [170, 70]}
+          - {id: idp, type: security, label: Identity provider, sublabel: Sign-in and policy, pos: [500, 80], size: [180, 70]}
+          - {id: saas, type: cloud, label: SaaS workspace, sublabel: Data and workflows, pos: [765, 80], size: [180, 70]}
+          - {id: soc, type: security, label: Security operations, sublabel: Triage and response, pos: [500, 345], size: [180, 70]}
+          - {id: owner, type: external, label: Business owner, sublabel: Recovery decisions, pos: [765, 345], size: [180, 70]}
+        boundaries:
+          - {kind: security-group, label: Identity boundary, wraps: [idp], pad: 28}
+          - {kind: region, label: SaaS tenant boundary, wraps: [saas], pad: 28}
+          - {kind: security-group, label: Response boundary, wraps: [soc, owner], pad: 28}
+        connections:
+          - {from: mailbox, to: employee, label: message reaches user, variant: emphasis}
+          - {from: employee, to: idp, label: sign-in attempt, variant: emphasis, fromSide: right, toSide: left, via: [[330, 250], [450, 250], [450, 115]], labelAt: [350, 290]}
+          - {from: idp, to: saas, label: authorized session, variant: emphasis, labelAt: [723, 164]}
+          - {from: idp, to: soc, label: sign-in telemetry, labelAt: [700, 250]}
+          - {from: soc, to: owner, label: decision support, labelAt: [722, 326]}
+    source: Fictional defensive scenario; terminology aligned to MITRE ATT&CK and CISA guidance.
+    notes: >-
+      Speaker note: Set the boundary of the story first. No organization, victim, indicator, exploit, or operational command is depicted.
+      Sources: https://attack.mitre.org/techniques/T1566/ ; https://www.cisa.gov/sites/default/files/2025-03/Phishing%20Guidance%20-%20Stopping%20the%20Attack%20Cycle%20at%20Phase%20One%20508.pdf
+
+  - layout: diagram
+    title: The first decision happens at the message.
+    subtitle: A phishing message can create a risky sign-in path; it does not establish that MFA was bypassed.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Phishing signal and conditional authentication outcome
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: prevention
+              label: Prevent and report
+              focus: [message, mailbox, employee, report]
+              note: Filtering, clear reporting, and user verification can stop the story before identity is involved.
+            - id: assumption
+              label: Conditional assumption
+              focus: [employee, idp, policy]
+              note: MFA can stop many attempts; this scenario only continues if a session is exposed despite controls.
+        components:
+          - {id: message, type: external, label: Fictional lure, sublabel: Social-engineering message, pos: [35, 80], size: [175, 70]}
+          - {id: mailbox, type: frontend, label: Mailbox controls, sublabel: Filter and warning, pos: [280, 80], size: [175, 70]}
+          - {id: employee, type: external, label: Employee, sublabel: Verifies or reports, pos: [280, 345], size: [175, 70]}
+          - {id: idp, type: security, label: Identity provider, sublabel: Sign-in challenge, pos: [535, 210], size: [175, 70]}
+          - {id: policy, type: security, label: Access policy, sublabel: Device and risk checks, pos: [790, 80], size: [190, 70]}
+          - {id: report, type: security, label: Report queue, sublabel: Analyst triage, pos: [790, 345], size: [190, 70]}
+        boundaries:
+          - {kind: security-group, label: Identity control boundary, wraps: [idp, policy], pad: 28}
+          - {kind: security-group, label: Security response boundary, wraps: [report], pad: 28}
+        connections:
+          - {from: message, to: mailbox, label: delivered message, variant: emphasis, labelAt: [245, 164]}
+          - {from: mailbox, to: employee, label: warning or click, labelAt: [368, 164]}
+          - {from: employee, to: report, label: reports suspicion, variant: emphasis}
+          - {from: employee, to: idp, label: sign-in path}
+          - {from: idp, to: policy, label: evaluate context, variant: emphasis}
+          - {from: policy, to: report, label: risky event signal, labelAt: [885, 164]}
+    source: MITRE ATT&CK T1566 phishing; NIST authentication guidance.
+    notes: >-
+      Speaker note: Be precise: phishing is an initial-access technique, while the result of an MFA challenge depends on the implementation and controls. This deck assumes a later session exposure only as a conditional branch.
+      Sources: https://attack.mitre.org/techniques/T1566/ ; https://pages.nist.gov/800-63-4/sp800-63b/authenticators/
+
+  - layout: diagram
+    title: A session can become the investigative pivot.
+    subtitle: 'Conditional branch: a session artifact is exposed after authentication; this is not a claim that all MFA fails.'
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Conditional session exposure and replay risk
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: evidence
+              label: Evidence trail
+              focus: [browser, session, telemetry, analyst]
+              note: The defender compares session use with device, location, user-agent, and timing context.
+            - id: controls
+              label: Control limits
+              focus: [idp, policy, saas]
+              note: Device-bound access, short session life, and reauthentication can reduce replay opportunity.
+        components:
+          - {id: browser, type: frontend, label: Employee browser, sublabel: Authenticated session, pos: [35, 80], size: [175, 70]}
+          - {id: session, type: security, label: Session artifact, sublabel: Conditional exposure, pos: [285, 80], size: [180, 70]}
+          - {id: idp, type: security, label: Identity provider, sublabel: Session issuance, pos: [285, 345], size: [180, 70]}
+          - {id: policy, type: security, label: Conditional access, sublabel: Device and risk checks, pos: [550, 80], size: [190, 70]}
+          - {id: saas, type: cloud, label: SaaS workspace, sublabel: Session use observed, pos: [550, 345], size: [190, 70]}
+          - {id: telemetry, type: database, label: Identity telemetry, sublabel: Sign-ins and sessions, pos: [825, 345], size: [190, 70]}
+          - {id: analyst, type: external, label: Security analyst, sublabel: Correlates evidence, pos: [825, 80], size: [190, 70]}
+        boundaries:
+          - {kind: security-group, label: Identity boundary, wraps: [idp, policy, telemetry], pad: 26}
+          - {kind: region, label: SaaS tenant boundary, wraps: [saas], pad: 28}
+        connections:
+          - {from: browser, to: session, label: conditional exposure, variant: emphasis, labelAt: [245, 164]}
+          - {from: session, to: policy, label: attempted reuse, variant: emphasis, labelAt: [507, 164]}
+          - {from: idp, to: saas, label: authorized session, labelAt: [507, 440]}
+          - {from: policy, to: saas, label: permit or challenge, labelAt: [645, 247]}
+          - {from: saas, to: telemetry, label: access record, labelAt: [783, 331]}
+          - {from: telemetry, to: analyst, label: investigate, labelAt: [920, 247]}
+    source: MITRE ATT&CK T1539 session-cookie guidance; illustrative incident branch.
+    notes: >-
+      Speaker note: Session replay is a risk category, not an automatic consequence of phishing. MITRE describes auditing authentication activity and anomalous behavior; controls can prevent or constrain reuse.
+      Source: https://attack.mitre.org/techniques/T1539/
+
+  - layout: diagram
+    title: SaaS access is bounded by the identity already in use.
+    subtitle: The question for responders is what the session could reach, what it actually touched, and what logs retain.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Scope SaaS access before assuming impact
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: scope
+              label: Permission scope
+              focus: [identity, workspace, data, automation]
+              note: Effective access is shaped by the user, the application, and the resources each can reach.
+            - id: audit
+              label: Audit trail
+              focus: [workspace, audit, analyst]
+              note: Investigation separates observed activity from possible-but-unseen access.
+        components:
+          - {id: identity, type: security, label: User session, sublabel: Effective permissions, pos: [35, 210], size: [175, 70]}
+          - {id: workspace, type: cloud, label: SaaS workspace, sublabel: Files and collaboration, pos: [285, 80], size: [185, 70]}
+          - {id: data, type: database, label: Sensitive content, sublabel: Access may be limited, pos: [285, 345], size: [185, 70]}
+          - {id: automation, type: backend, label: Automation feature, sublabel: Existing workflow, pos: [550, 80], size: [185, 70]}
+          - {id: audit, type: database, label: SaaS audit log, sublabel: Reads and changes, pos: [550, 345], size: [185, 70]}
+          - {id: analyst, type: external, label: Security analyst, sublabel: Scopes observed impact, pos: [825, 210], size: [190, 70]}
+        boundaries:
+          - {kind: region, label: SaaS tenant boundary, wraps: [workspace, data, automation, audit], pad: 28}
+          - {kind: security-group, label: Investigation boundary, wraps: [analyst], pad: 28}
+        connections:
+          - {from: identity, to: workspace, label: session access, variant: emphasis}
+          - {from: workspace, to: data, label: governed content, labelAt: [378, 164]}
+          - {from: workspace, to: automation, label: invoke feature}
+          - {from: workspace, to: audit, label: activity record}
+          - {from: data, to: audit, label: access event, labelAt: [420, 440]}
+          - {from: automation, to: audit, label: workflow event, labelAt: [643, 164]}
+          - {from: audit, to: analyst, label: evidence}
+    source: Defensive investigation model; Microsoft identity and SaaS audit concepts.
+    notes: >-
+      Speaker note: Do not equate a compromised session with full tenant compromise. Establish effective privileges, observed actions, and available evidence separately.
+      Source: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/protect-against-consent-phishing
+
+  - layout: diagram
+    title: Automation creates a second identity question.
+    subtitle: Existing integrations may act under a service identity, so ownership, consent, and scope need their own review.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: 'Automation identity misuse: investigate the delegated path'
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: delegated
+              label: Delegated path
+              focus: [session, automation, service, api]
+              note: A user-triggered automation can call services through a distinct non-human identity.
+            - id: governance
+              label: Governance evidence
+              focus: [service, owner, audit]
+              note: Owners, granted scopes, and audit records constrain the review.
+        components:
+          - {id: session, type: security, label: User session, sublabel: Requests a workflow, pos: [35, 210], size: [170, 70]}
+          - {id: automation, type: backend, label: Automation workflow, sublabel: Existing integration, pos: [280, 80], size: [185, 70]}
+          - {id: service, type: security, label: Service identity, sublabel: Delegated scope, pos: [280, 345], size: [185, 70]}
+          - {id: api, type: cloud, label: SaaS API, sublabel: Enforces permissions, pos: [545, 80], size: [180, 70]}
+          - {id: audit, type: database, label: Audit trail, sublabel: Consent and API events, pos: [545, 345], size: [180, 70]}
+          - {id: owner, type: external, label: Integration owner, sublabel: Validates intended use, pos: [815, 80], size: [190, 70]}
+          - {id: analyst, type: external, label: Security analyst, sublabel: Reviews misuse, pos: [815, 345], size: [190, 70]}
+        boundaries:
+          - {kind: security-group, label: Non-human identity boundary, wraps: [automation, service], pad: 26}
+          - {kind: region, label: SaaS tenant boundary, wraps: [api, audit], pad: 28}
+        connections:
+          - {from: session, to: automation, label: workflow request, variant: emphasis}
+          - {from: automation, to: service, label: delegated identity, variant: emphasis, labelAt: [373, 164]}
+          - {from: service, to: api, label: scoped API call, variant: emphasis, labelAt: [505, 440]}
+          - {from: api, to: audit, label: API event, labelAt: [635, 164]}
+          - {from: service, to: audit, label: consent record, labelAt: [505, 470]}
+          - {from: audit, to: analyst, label: investigate}
+    source: Microsoft Entra consent-phishing guidance; fictional delegated-access scenario.
+    notes: >-
+      Speaker note: This is not an instruction to create or misuse an integration. It shows why response teams inventory service identities, consent, scope, and owners as a separate branch of the investigation.
+      Source: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/protect-against-consent-phishing
+
+  - layout: diagram
+    title: The exfiltration attempt is where policy meets evidence.
+    subtitle: 'The story ends at an attempted transfer: controls may block, challenge, alert, or preserve evidence for review.'
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Attempted data transfer across the tenant boundary
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: attempt
+              label: Attempted transfer
+              focus: [data, export, destination]
+              note: The external destination is fictional and intentionally unnamed; no transfer mechanics are shown.
+            - id: detect
+              label: Detect and decide
+              focus: [export, telemetry, analyst]
+              note: Policy outcomes and telemetry inform the containment decision.
+        components:
+          - {id: data, type: database, label: Sensitive content, sublabel: Tenant-governed data, pos: [35, 210], size: [180, 70]}
+          - {id: export, type: security, label: Export control, sublabel: Policy evaluates action, pos: [285, 80], size: [185, 70]}
+          - {id: workspace, type: cloud, label: SaaS workspace, sublabel: Records activity, pos: [285, 345], size: [185, 70]}
+          - {id: destination, type: external, label: External destination, sublabel: Fictional untrusted endpoint, pos: [555, 80], size: [195, 70]}
+          - {id: telemetry, type: database, label: Security telemetry, sublabel: Alert and event context, pos: [555, 345], size: [195, 70]}
+          - {id: analyst, type: external, label: Security analyst, sublabel: Confirms and contains, pos: [830, 210], size: [190, 70]}
+        boundaries:
+          - {kind: region, label: SaaS tenant boundary, wraps: [data, export, workspace], pad: 28}
+          - {kind: security-group, label: Detection boundary, wraps: [telemetry, analyst], pad: 28}
+        connections:
+          - {from: data, to: export, label: requested transfer, variant: emphasis}
+          - {from: export, to: destination, label: 'block, challenge, or allow', labelAt: [513, 76]}
+          - {from: export, to: telemetry, label: policy result, variant: emphasis}
+          - {from: workspace, to: telemetry, label: SaaS event, labelAt: [420, 440]}
+          - {from: data, to: workspace, label: content access}
+          - {from: telemetry, to: analyst, label: alert and context, variant: emphasis}
+    source: CISA phishing-response guidance; fictional attempted-transfer branch.
+    notes: >-
+      Speaker note: Avoid claiming a control always prevents loss. The response team verifies the policy result and the evidence trail before stating what was or was not transferred.
+      Source: https://www.cisa.gov/sites/default/files/2025-03/Phishing%20Guidance%20-%20Stopping%20the%20Attack%20Cycle%20at%20Phase%20One%20508.pdf
+
+  - layout: diagram
+    title: Containment breaks the active paths, then preserves the facts.
+    subtitle: Revoke active access, disable unsafe delegated access, retain evidence, and coordinate with accountable owners.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Coordinated containment and evidence preservation
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: contain
+              label: Contain access
+              focus: [analyst, idp, saas, automation]
+              note: Containment actions should be authorized, scoped, recorded, and verified.
+            - id: preserve
+              label: Preserve evidence
+              focus: [idp, saas, evidence, owner]
+              note: Identity and SaaS logs support impact assessment and recovery decisions.
+        components:
+          - {id: analyst, type: external, label: Incident lead, sublabel: Coordinates response, pos: [35, 210], size: [180, 70]}
+          - {id: idp, type: security, label: Identity provider, sublabel: Revoke active sessions, pos: [280, 80], size: [190, 70]}
+          - {id: saas, type: cloud, label: SaaS admin plane, sublabel: Restrict affected access, pos: [280, 345], size: [190, 70]}
+          - {id: automation, type: security, label: Automation identity, sublabel: Disable if unsafe, pos: [550, 80], size: [190, 70]}
+          - {id: evidence, type: database, label: Evidence store, sublabel: Preserve logs and decisions, pos: [550, 345], size: [190, 70]}
+          - {id: owner, type: external, label: Business owner, sublabel: Approves service impact, pos: [825, 80], size: [190, 70]}
+          - {id: recovery, type: backend, label: Recovery plan, sublabel: Restore safe operations, pos: [825, 345], size: [190, 70]}
+        boundaries:
+          - {kind: security-group, label: Identity containment boundary, wraps: [idp, automation], pad: 26}
+          - {kind: region, label: SaaS containment boundary, wraps: [saas, evidence], pad: 26}
+        connections:
+          - {from: analyst, to: idp, label: revoke sessions, variant: emphasis}
+          - {from: analyst, to: saas, label: restrict access, variant: emphasis}
+          - {from: idp, to: evidence, label: identity records, labelAt: [510, 440]}
+          - {from: owner, to: recovery, label: approve priorities, labelAt: [920, 164]}
+          - {from: evidence, to: recovery, label: verified scope}
+    source: CISA incident-response and phishing guidance; defensive containment pattern.
+    notes: >-
+      Speaker note: Containment is a coordinated decision, not a checkbox. Preserve the evidence needed to validate scope while restoring only approved, safe access.
+      Sources: https://www.cisa.gov/resources-tools/resources/incident-response-plan-basics ; https://www.cisa.gov/sites/default/files/2025-03/Phishing%20Guidance%20-%20Stopping%20the%20Attack%20Cycle%20at%20Phase%20One%20508.pdf
+
+  - layout: diagram
+    title: Recovery turns one incident into stronger identity hygiene.
+    subtitle: Confirm scope, reset affected access, review delegated identities, improve controls, and rehearse the next response.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: Recovery and learning loop
+          quality_profile: showcase
+          animation: trace
+          viewBox: [1100, 500]
+          views:
+            - id: restore
+              label: Restore safely
+              focus: [evidence, identity, service, owner]
+              note: Restore access only after the team validates scope, ownership, and required controls.
+            - id: improve
+              label: Improve and rehearse
+              focus: [identity, training, exercise, soc]
+              note: Phishing-resistant authentication and practiced reporting improve resilience without promising immunity.
+        components:
+          - {id: evidence, type: database, label: Incident evidence, sublabel: Verified findings, pos: [35, 210], size: [180, 70]}
+          - {id: identity, type: security, label: Identity hardening, sublabel: Session and MFA review, pos: [285, 80], size: [190, 70]}
+          - {id: service, type: security, label: Service identity review, sublabel: Owners and scopes, pos: [285, 345], size: [190, 70]}
+          - {id: owner, type: external, label: Business owner, sublabel: Restores service, pos: [555, 80], size: [180, 70]}
+          - {id: training, type: external, label: Workforce guidance, sublabel: Verify and report, pos: [555, 345], size: [180, 70]}
+          - {id: exercise, type: backend, label: Response exercise, sublabel: Test the playbook, pos: [825, 80], size: [190, 70]}
+          - {id: soc, type: security, label: Security operations, sublabel: Measures readiness, pos: [825, 345], size: [190, 70]}
+        boundaries:
+          - {kind: security-group, label: Identity improvement boundary, wraps: [identity, service, soc], pad: 26}
+          - {kind: region, label: Business recovery boundary, wraps: [owner, training, exercise], pad: 26}
+        connections:
+          - {from: evidence, to: identity, label: findings inform change, variant: emphasis}
+          - {from: evidence, to: service, label: scope review}
+          - {from: identity, to: owner, label: safe access criteria, labelAt: [515, 164]}
+          - {from: training, to: exercise, label: practice reporting, labelAt: [780, 440]}
+          - {from: exercise, to: soc, label: test response, labelAt: [920, 164]}
+    source: CISA guidance on phishing-resistant MFA; NIST digital identity guidance.
+    notes: >-
+      Speaker note: The objective is resilience, not a promise of perfect prevention. Pair phishing-resistant authentication with scoped access, logged automation, reporting, and rehearsed response.
+      Sources: https://www.cisa.gov/sites/default/files/2023-11/aa23-320a_scattered_spider_0.pdf ; https://pages.nist.gov/800-63-4/sp800-63b/authenticators/

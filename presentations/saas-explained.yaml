@@ -1,0 +1,637 @@
+version: '1'
+theme: analyst-proof
+meta:
+  title: How a shared booking app works
+  subtitle: A visual tour of SaaS, in everyday words
+  company: Trailhead Bookings (fictional example)
+  language: en
+  presentation: direct
+  experience: true
+  motion: presenter
+  tags:
+    - saas
+    - explainer
+    - booking
+    - fictional-example
+  chapters:
+    - start: 1
+      label: A booking travels
+    - start: 4
+      label: A shared workspace
+    - start: 6
+      label: The service continues
+slides:
+  - layout: diagram
+    title: A customer starts with one simple request.
+    subtitle: 'Fictional example: Trailhead Bookings helps a shared activity business take bookings online.'
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: From “I want a slot” to a confirmed booking
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: customer-request
+              label: The customer asks
+              focus: [customer, booking-page]
+              note: A person chooses a time in an online booking page.
+            - id: availability-check
+              label: The workspace checks
+              focus: [booking-page, workspace, availability]
+              note: The shared workspace compares the request with open time.
+            - id: booking-result
+              label: Everyone gets an answer
+              focus: [availability, confirmation, customer]
+              note: An available slot becomes a clear confirmation.
+        components:
+          - id: customer
+            type: external
+            label: Customer
+            sublabel: Wants to book a visit
+            pos: [40, 205]
+            size: [155, 76]
+          - id: booking-page
+            type: frontend
+            label: Booking page
+            sublabel: Chooses a day and time
+            pos: [265, 205]
+            size: [175, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: The online booking app
+            pos: [525, 205]
+            size: [190, 76]
+          - id: availability
+            type: database
+            label: Availability
+            sublabel: Open times for this business
+            pos: [525, 345]
+            size: [190, 76]
+          - id: confirmation
+            type: frontend
+            label: Confirmation
+            sublabel: A booking reference
+            pos: [850, 205]
+            size: [175, 76]
+        connections:
+          - id: customer-starts
+            from: customer
+            to: booking-page
+            label: picks a time
+            variant: emphasis
+          - id: request-reaches-workspace
+            from: booking-page
+            to: workspace
+            label: sends request
+            variant: emphasis
+          - id: workspace-checks
+            from: workspace
+            to: availability
+            label: checks open time
+            labelAt: [620, 295]
+            variant: emphasis
+          - id: workspace-confirms
+            from: workspace
+            to: confirmation
+            label: creates confirmation
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      SaaS means software provided by a provider and used online. The business opens the application instead of
+      running the application itself. This is an illustrative booking journey, not a product claim.
+
+  - layout: diagram
+    title: The app checks the right diary before it says yes.
+    subtitle: 'One request becomes a quick choice: available, or choose another time.'
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: A booking request becomes an availability answer
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: request-details
+              label: What was requested
+              focus: [customer, request]
+              note: The request says who, when, and what they want to book.
+            - id: business-diary
+              label: Which diary matters
+              focus: [request, workspace, business-diary]
+              note: The workspace checks the diary belonging to this business.
+            - id: clear-answer
+              label: A clear answer
+              focus: [business-diary, answer, customer]
+              note: The customer sees an available time or a helpful alternative.
+        components:
+          - id: customer
+            type: external
+            label: Customer
+            sublabel: Wants a Tuesday visit
+            pos: [45, 205]
+            size: [150, 76]
+          - id: request
+            type: frontend
+            label: Booking request
+            sublabel: Day, time, activity
+            pos: [265, 205]
+            size: [175, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Uses the business’s rules
+            pos: [525, 205]
+            size: [190, 76]
+          - id: business-diary
+            type: database
+            label: Business diary
+            sublabel: Times already reserved
+            pos: [525, 345]
+            size: [190, 76]
+          - id: answer
+            type: frontend
+            label: Booking answer
+            sublabel: Confirmed or another time
+            pos: [850, 205]
+            size: [175, 76]
+        connections:
+          - id: customer-sends-request
+            from: customer
+            to: request
+            label: enters details
+            labelAt: [230, 295]
+            variant: emphasis
+          - id: request-is-checked
+            from: request
+            to: workspace
+            label: asks for a check
+            variant: emphasis
+          - id: diary-is-consulted
+            from: workspace
+            to: business-diary
+            label: reads open times
+            labelAt: [620, 295]
+            variant: emphasis
+          - id: answer-is-prepared
+            from: workspace
+            to: answer
+            label: prepares answer
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      Customer separation is intentional design: the app is set up to use the right business’s booking information.
+      It is a design goal, not an absolute guarantee against every possible mistake or failure.
+
+  - layout: diagram
+    title: A confirmation is a shared promise, not just a receipt.
+    subtitle: The customer gets clarity while the team gets the same booking to prepare for.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: One confirmed booking reaches the people who need it
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: booking-saved
+              label: The booking is saved
+              focus: [workspace, booking-record]
+              note: The shared workspace keeps a single booking record for the business.
+            - id: customer-notified
+              label: The customer is told
+              focus: [booking-record, confirmation, customer]
+              note: A confirmation gives the customer the practical details.
+            - id: team-prepares
+              label: The team can prepare
+              focus: [booking-record, staff-view, employee]
+              note: A permitted employee can see the booking in the team view.
+        components:
+          - id: customer
+            type: external
+            label: Customer
+            sublabel: Plans the visit
+            pos: [45, 95]
+            size: [150, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Keeps the booking together
+            pos: [315, 205]
+            size: [195, 76]
+          - id: booking-record
+            type: database
+            label: Booking record
+            sublabel: Time, activity, customer
+            pos: [585, 205]
+            size: [190, 76]
+          - id: confirmation
+            type: frontend
+            label: Confirmation
+            sublabel: Details for the customer
+            pos: [850, 95]
+            size: [175, 76]
+          - id: staff-view
+            type: frontend
+            label: Team view
+            sublabel: Today’s bookings
+            pos: [850, 335]
+            size: [175, 76]
+          - id: employee
+            type: external
+            label: Employee
+            sublabel: Prepares the visit
+            pos: [45, 335]
+            size: [150, 76]
+        connections:
+          - id: customer-starts-booking
+            from: customer
+            to: workspace
+            label: starts booking
+            variant: default
+          - id: workspace-saves-booking
+            from: workspace
+            to: booking-record
+            label: saves booking
+            variant: emphasis
+          - id: booking-confirms
+            from: booking-record
+            to: confirmation
+            label: sends details
+            variant: emphasis
+          - id: booking-appears-for-team
+            from: booking-record
+            to: staff-view
+            label: appears in team view
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      A SaaS workspace is a shared online place for a team’s work. The exact message channel is intentionally not
+      specified here; the diagram explains the shared flow, not a product feature list.
+
+  - layout: diagram
+    title: An employee can make a change when the day changes.
+    subtitle: The shared booking record keeps the update visible instead of leaving a paper trail to chase.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: A staff update changes one shared booking record
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: staff-change
+              label: A staff member updates
+              focus: [employee, staff-view]
+              note: A permitted employee changes the time or adds a useful note.
+            - id: record-updated
+              label: The shared record changes
+              focus: [staff-view, workspace, booking-record]
+              note: The workspace applies the update to the booking record.
+            - id: change-is-shared
+              label: The change can be seen
+              focus: [booking-record, customer-update, customer]
+              note: The customer can be given the updated details.
+        components:
+          - id: employee
+            type: external
+            label: Employee
+            sublabel: Needs to reschedule
+            pos: [40, 205]
+            size: [155, 76]
+          - id: staff-view
+            type: frontend
+            label: Team view
+            sublabel: Opens a booking
+            pos: [265, 205]
+            size: [175, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Applies the update
+            pos: [525, 205]
+            size: [190, 76]
+          - id: booking-record
+            type: database
+            label: Booking record
+            sublabel: The current details
+            pos: [525, 345]
+            size: [190, 76]
+          - id: customer-update
+            type: frontend
+            label: Updated details
+            sublabel: New time or note
+            pos: [850, 205]
+            size: [175, 76]
+          - id: customer
+            type: external
+            label: Customer
+            sublabel: Sees the change
+            pos: [850, 345]
+            size: [175, 76]
+        connections:
+          - id: employee-opens-booking
+            from: employee
+            to: staff-view
+            label: opens booking
+            variant: emphasis
+          - id: staff-sends-change
+            from: staff-view
+            to: workspace
+            label: saves change
+            variant: emphasis
+          - id: workspace-updates-record
+            from: workspace
+            to: booking-record
+            label: updates details
+            labelAt: [620, 295]
+            variant: emphasis
+          - id: workspace-shares-update
+            from: workspace
+            to: customer-update
+            label: prepares update
+            variant: emphasis
+          - id: customer-reads-update
+            from: customer-update
+            to: customer
+            label: shares new details
+            labelAt: [938, 295]
+            variant: default
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      “Current details” means the shared record used by this example. Real products need clear change history and
+      suitable permissions; this simplified diagram does not promise either one.
+
+  - layout: diagram
+    title: Teammates see the same plan, with different jobs.
+    subtitle: A workspace can give each person a view and actions that fit their role.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: One workspace, role-appropriate views
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: role-choice
+              label: The role is checked
+              focus: [employee, sign-in, workspace]
+              note: The workspace uses the person’s assigned role before showing actions.
+            - id: daily-plan
+              label: The team sees today
+              focus: [workspace, booking-record, teammate]
+              note: A teammate can see the bookings relevant to their work.
+            - id: focused-action
+              label: Actions stay focused
+              focus: [workspace, employee, teammate]
+              note: Different roles can be given different actions on the same shared plan.
+        components:
+          - id: employee
+            type: external
+            label: Front-desk employee
+            sublabel: Manages bookings
+            pos: [40, 95]
+            size: [185, 76]
+          - id: teammate
+            type: external
+            label: Activity teammate
+            sublabel: Prepares the visit
+            pos: [885, 335]
+            size: [185, 76]
+          - id: sign-in
+            type: security
+            label: Sign in
+            sublabel: Identifies the person
+            pos: [300, 205]
+            size: [175, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Applies role-based access
+            pos: [590, 205]
+            size: [205, 76]
+          - id: booking-record
+            type: database
+            label: Today’s bookings
+            sublabel: Shared business plan
+            pos: [885, 205]
+            size: [175, 76]
+        connections:
+          - id: employee-signs-in
+            from: employee
+            to: sign-in
+            label: signs in
+            variant: emphasis
+          - id: teammate-signs-in
+            from: teammate
+            to: sign-in
+            label: signs in
+            variant: emphasis
+          - id: sign-in-opens-workspace
+            from: sign-in
+            to: workspace
+            label: checks role
+            variant: security
+          - id: workspace-shows-plan
+            from: workspace
+            to: booking-record
+            label: shows relevant plan
+            labelAt: [840, 295]
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      Role-specific permissions are intentional design: they aim to give people only the views and actions needed
+      for their job. They reduce risk but are not an absolute guarantee against every error or misuse.
+
+  - layout: diagram
+    title: A subscription pays for the shared service around the app.
+    subtitle: The business uses the booking workspace; the provider runs, improves, and supports the service.
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: SaaS is a continuing service relationship
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: business-subscribes
+              label: The business subscribes
+              focus: [business, subscription, workspace]
+              note: The business pays to use the online booking workspace.
+            - id: provider-cares-for-service
+              label: The provider cares for it
+              focus: [subscription, provider-team, workspace]
+              note: The provider operates and improves the application it offers online.
+            - id: help-when-needed
+              label: Help has a path
+              focus: [business, support, provider-team]
+              note: The business can ask the provider’s support team for help.
+        components:
+          - id: business
+            type: external
+            label: Activity business
+            sublabel: Uses the booking service
+            pos: [40, 205]
+            size: [185, 76]
+          - id: subscription
+            type: frontend
+            label: Subscription
+            sublabel: Ongoing service agreement
+            pos: [280, 205]
+            size: [190, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Used online by the business
+            pos: [550, 95]
+            size: [200, 76]
+          - id: provider-team
+            type: backend
+            label: Provider team
+            sublabel: Operates and improves service
+            pos: [830, 95]
+            size: [200, 76]
+          - id: support
+            type: frontend
+            label: Support request
+            sublabel: A path to ask for help
+            pos: [550, 335]
+            size: [200, 76]
+        connections:
+          - id: business-starts-subscription
+            from: business
+            to: subscription
+            label: subscribes
+            variant: emphasis
+          - id: subscription-enables-workspace
+            from: subscription
+            to: workspace
+            label: enables service use
+            labelAt: [510, 185]
+            variant: emphasis
+          - id: provider-cares-for-workspace
+            from: provider-team
+            to: workspace
+            label: runs and improves
+            labelAt: [790, 91]
+            variant: emphasis
+          - id: support-reaches-provider
+            from: support
+            to: provider-team
+            label: routes question
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      “Cloud” here means a provider-managed application accessed online. Service terms, price, support hours,
+      availability, and responsibilities differ by provider and agreement; none are claimed by this example.
+
+  - layout: diagram
+    title: Reliability is what happens when the day does not go to plan.
+    subtitle: 'A responsible service has a recovery path: notice, investigate, restore, and tell people what changed.'
+    diagram:
+      type: architecture
+      spec:
+        schema_version: 1
+        diagram_type: architecture
+        meta:
+          title: An illustrative outage and recovery path
+          quality_profile: showcase
+          animation: trace
+          visual_preset: editorial
+          viewBox: [1100, 500]
+          views:
+            - id: notice-problem
+              label: A problem is noticed
+              focus: [business, workspace, status-message]
+              note: The business sees that the booking workspace is not working as expected.
+            - id: provider-recovers
+              label: The provider investigates
+              focus: [status-message, provider-team, workspace]
+              note: The provider team investigates and works to restore the service.
+            - id: people-are-updated
+              label: People get an update
+              focus: [workspace, status-message, business]
+              note: The business can see that service has returned and what to do next.
+        components:
+          - id: business
+            type: external
+            label: Activity business
+            sublabel: Needs the booking app
+            pos: [40, 205]
+            size: [185, 76]
+          - id: workspace
+            type: cloud
+            label: Shared workspace
+            sublabel: Temporarily unavailable
+            pos: [315, 205]
+            size: [200, 76]
+          - id: status-message
+            type: frontend
+            label: Status update
+            sublabel: Explains what is known
+            pos: [590, 95]
+            size: [195, 76]
+          - id: provider-team
+            type: backend
+            label: Provider team
+            sublabel: Investigates and restores
+            pos: [590, 335]
+            size: [195, 76]
+          - id: restored-workspace
+            type: cloud
+            label: Restored workspace
+            sublabel: Bookings can continue
+            pos: [860, 205]
+            size: [195, 76]
+        connections:
+          - id: business-notices-problem
+            from: business
+            to: workspace
+            label: cannot complete booking
+            labelAt: [270, 295]
+            variant: default
+          - id: workspace-prompts-status
+            from: workspace
+            to: status-message
+            label: prompts update
+            variant: emphasis
+          - id: status-reaches-provider
+            from: status-message
+            to: provider-team
+            label: signals problem
+            labelAt: [688, 185]
+            variant: emphasis
+          - id: provider-restores-service
+            from: provider-team
+            to: restored-workspace
+            label: works to restore
+            variant: emphasis
+    source: Fictional SaaS example · Trailhead Bookings
+    notes: >-
+      This is an illustrative recovery path, not a promise that every problem will be detected, solved, or
+      communicated in a particular time. A provider’s actual commitments belong in its service agreement.

@@ -4,6 +4,20 @@ Gamma Presenter is a presentation runtime with native macOS surfaces, local medi
 
 ## Executable gates
 
+### Current gallery and explanatory-story revision
+
+The six-feature gallery replaces the older full-deck miniatures. Its contract now exercises every feature at 390×844, 768×1024, 1440×900 and 2016×1230, plus keyboard selection, manual pause, reduced motion and offscreen teardown. A separate eight-case check covers the full YouTube player in normal and clean presentation modes. The earlier two-case Pages passes below are historical and do not certify this revised surface.
+
+The new explanatory-story contract visits all 23 cyber/SaaS/data slides on desktop and mobile, checks their Archify runtime, node containment, focus views, Play/Pause, navigation and return-to-home route. Viewport emulation is not a physical-device certification. These fictional/reference decks do not prove live integrations or infrastructure security.
+
+Reproduce the real high-resolution gallery stills with `bun scripts/agent/capture-gallery-posters.mjs`; add `--stories` for the three explanatory-deck posters. Both use the existing dedicated browser launcher and render actual source, not a mock interface. The separately generated workflow illustration is labeled and has retained [provenance](images/gamma-presenter-workflow-illustration.md).
+
+On 2026-09-12, final local unit/integration validation passed **150/150 with zero skipped**, using the dedicated Chromium configuration and `node --test --test-concurrency=1 test/*.test.js` (30.2 seconds). The affected browser suites passed **25 cases across their final successful runs**: gallery 5/5, YouTube layout 8/8, action orbit 10/10, and explanatory stories 2/2. The two story cases visit every scene at both 1440×900 and 390×844 (46 slide visits), and also check the landing cards. These are targeted results, not a claim that the whole browser matrix was rerun.
+
+The six final feature posters, three story posters, and final desktop/mobile confirmation captures were visually inspected after a bounded correction pass. Fixes include readable responsive browser/AI controls, eager loading of only the active preview, non-overlapping mobile home/menu controls, an unobscured cyber edge label, and complete YouTube framing. A concurrent test run collided while cleaning a shared trace directory; the affected YouTube suite subsequently passed all eight cases with a separate `--output` directory. This artifact collision is not counted as a passing combined run.
+
+Current deployment verification is tracked in `.agent/current-plan.md`. The publication status below distinguishes the preceding live revision from this locally validated change.
+
 | Layer | Command | What it proves | Current boundary |
 | --- | --- | --- | --- |
 | Unit and integration | `bun run test` | Schema/rendering contracts, source transformations, Writer semantics, revisions, corporate profiles, MCP authorization, terminal protocol, sharing, Drive download/restore boundaries, and injected delivery clients | 150 tests passed with zero skipped using the dedicated Chromium configuration and serial test execution. Injected provider tests do not prove real account consent or access. |

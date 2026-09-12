@@ -35,6 +35,32 @@ colors:
   studio-cobalt: "#315DFF"
   studio-focus: "#87A2FF"
 typography:
+  marketing-display:
+    fontFamily: "SourceSerif, Georgia, serif"
+    fontSize: "48px"
+    fontWeight: 440
+    lineHeight: 1.05
+    letterSpacing: "-0.035em"
+  marketing-body:
+    fontFamily: "Instrument, system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 450
+    lineHeight: 1.5
+  marketing-heading:
+    fontFamily: "Instrument, system-ui, sans-serif"
+    fontSize: "24px"
+    fontWeight: 650
+    lineHeight: 1.2
+  marketing-caption:
+    fontFamily: "Instrument, system-ui, sans-serif"
+    fontSize: "12px"
+    fontWeight: 450
+    lineHeight: 1.5
+  marketing-control:
+    fontFamily: "Instrument, system-ui, sans-serif"
+    fontSize: "14px"
+    fontWeight: 650
+    lineHeight: 1.5
   mechanism-title:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "48px"

@@ -2,6 +2,24 @@
 
 Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gamma riche intégré et une chaîne de développement, CI et packaging pilotée par Bun.
 
+## Six-feature visual recovery — 2026-09-12 (current request)
+
+- [x] DONE — Full-presentation YouTube containment passes all 8 normal/clean checks at four viewport sizes, including the reported wide-screen dimensions. Restore the full-player external action in normal mode.
+- [x] DONE — Six focused feature views replace unreadable whole-deck embeds; actual browser sample and labeled AI simulation accompany correctly sized charts, 3D, media and a complete six-node Archify system. Only one preview runs at a time.
+- [x] DONE — Generated an explicitly illustrative workflow image, integrated it with provenance, and kept it separate from real product evidence.
+- [x] DONE — Final local checks pass: gallery 5/5 across four viewport sizes, YouTube 8/8, and action-orbit 10/10. All six final high-resolution posters were inspected after one correction pass. Responsive browser/AI controls and eager loading of the sole active preview fix the mobile and loading findings. Separate Playwright output directories avoid concurrent trace-artifact cleanup collisions.
+- [x] DONE — README, companion guides and evidence updated; final unit/integration run passes 150/150, zero skips. Source and generated-library contracts pass, and the final diff has no whitespace errors. Earlier 2-test gallery passes did not establish six-feature visual quality and are superseded by this review.
+- [ ] IN PROGRESS — Commit/push the scoped changes, wait for GitHub Pages, then run the gallery and all-story checks against the actual public URLs. Desktop release remains independent.
+
+## Three explanatory demonstrations — added 2026-09-12
+
+- [x] DONE — Build an English diagram-led cybersecurity incident walkthrough, with actors, actions, boundaries, detection and containment. Educational and defensive; no exploit payloads or real target. Delivered `presentations/cyber-incident.yaml` (8 typed Archify architecture views) and `docs/cyber-incident-demo.md`, with MITRE ATT&CK, CISA, NIST, and Microsoft identity sources in speaker notes and companion documentation. `bun bin/gamma-slides.js validate -f presentations/cyber-incident.yaml` passed (8 slides, analyst-proof).
+- [x] DONE — English non-technical SaaS story: seven diagram scenes; loader and showcase validation pass.
+- [x] DONE — Eight-scene HubSpot/n8n/S3/Batch/Redshift/dbt reference architecture, including permissions, quarantine, reconciliation and bounded recovery. Loader/showcase validation passes. Restored explicit worker/database and compute/audit paths with non-overlapping routing; independent technical review finds no remaining material semantic defect.
+- [x] DONE — Landing story entries, README, companion guides and three real high-resolution posters delivered. The final two-case browser run passes all 23 scenes on both desktop and mobile, including contained actors, focus, Play/Pause, navigation, home and landing cards. The single cyber edge-label overlap is corrected; final desktop/mobile confirmation captures were inspected. Stories open directly, and primary Archify controls remain visible alongside non-overlapping mobile M/home controls. Publication verification is tracked above.
+
+Spatial thesis: lead each feature with a focused, consistently framed demonstration and a short concrete action, not oversized prose beside an unreadable miniature of an entire presentation. Browser/AI examples must distinguish public walkthroughs from privileged desktop operation.
+
 ## Active delivery audit — 2026-09-12 (supersedes historical completion claims)
 
 - [x] DONE — Native Writer preview/footer fit the window, including a long document; mobile 3D captions and percentage ticks no longer overlap. Targeted browser checks and fresh native captures inspected.
