@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { orbitAction } from './orbit-helpers.js';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -50,7 +51,8 @@ for (const [name, viewport] of [['desktop', { width: 1440, height: 900 }], ['mob
         const current = page.locator('section.present .cinema-stage');
         await expect(current).toHaveAttribute('data-cinema-renderer', 'webgl');
         await expect(page.locator('section.present .cinema-after')).toContainText('$');
-        await current.locator('[data-cinema-action="split"]').click();
+        await (await orbitAction(page, current.locator('[data-cinema-action="split"]'))).click();
+        await page.keyboard.press('Escape');
         await page.waitForTimeout(1200);
         await bounds(page);
       }

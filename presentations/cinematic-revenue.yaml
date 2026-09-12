@@ -1,39 +1,39 @@
 version: '1'
 meta:
-  title: Presque deux fois plus · Gamma Slides
-  subtitle: Revue de croissance · Données immersives
+  title: Nearly double · Gamma Slides
+  subtitle: Growth review · immersive data
   author: Gamma Slides
   company: Gamma Slides
   date: '2026-09-08'
-  language: fr
+  language: en
   tags: [demo, immersive, revenue, gpu]
-  description: Démonstration complète d'une présentation financière immersive.
+  description: Complete demonstration of an immersive financial presentation.
 branding:
-  watermark: DONNÉES ILLUSTRATIVES
+  watermark: ILLUSTRATIVE DATA
 theme: signal-room
 slides:
   - layout: title
     variant: editorial
     tone: dark
     transition: fade
-    kicker: DONNÉES ILLUSTRATIVES · REVUE DE CROISSANCE
+    kicker: ILLUSTRATIVE DATA · GROWTH REVIEW
     label: '01'
     badge: FY24 → FY25
-    title: Presque deux fois plus.
-    subtitle: Une année de croissance. Cinq segments. Une nouvelle échelle.
+    title: Nearly double.
+    subtitle: One year of growth. Five segments. A new scale.
     metrics:
-      - {label: Revenu FY25, value: '$16.2M'}
-      - {label: Variation, value: '+95.2%'}
-      - {label: Premier contributeur, value: Platforms}
-    source: Données illustratives · Revenus par segment
-    footnote: Les volumes sont proportionnels aux valeurs fournies.
-    narration: Le revenu passe de 8,3 à 16,2 millions de dollars. La suite montre d'où vient cette accélération.
+      - {label: FY25 revenue, value: '$16.2M'}
+      - {label: Change, value: '+95.2%'}
+      - {label: Lead contributor, value: Platforms}
+    source: Illustrative data · revenue by segment
+    footnote: Volumes are proportional to the supplied values.
+    narration: Revenue rises from 8.3 to 16.2 million dollars. The next scenes show where that acceleration came from.
 
   - layout: chart
     variant: cinematic
     transition: fade
-    title: Le revenu change d'échelle.
-    subtitle: FY24 et FY25, réunis dans deux volumes comparables.
+    title: Revenue changes scale.
+    subtitle: FY24 and FY25, placed in two comparable volumes.
     chart: &revenue
       type: bar
       data:
@@ -49,27 +49,27 @@ slides:
         format_y: currency_m
         show_legend: true
         show_values: true
-        x_label: Segment client
-        y_label: Revenu
-    source: Données illustratives · Revenus par segment
-    footnote: FY24 → FY25 · USD · Chaque volume est proportionnel au revenu.
-    narration: Les deux volumes rendent le quasi-doublement immédiatement visible. Les chiffres exacts restent accessibles dans Les chiffres.
+        x_label: Customer segment
+        y_label: Revenue
+    source: Illustrative data · revenue by segment
+    footnote: FY24 → FY25 · USD · Every volume is proportional to revenue.
+    narration: The two volumes make the near-doubling immediate. Exact figures remain available in Values.
 
   - layout: chart
     variant: cinematic
     transition: fade
-    title: Platforms a ouvert la brèche.
-    subtitle: Le même mouvement, ouvert segment par segment.
+    title: Platforms broke open the gap.
+    subtitle: The same move, revealed one segment at a time.
     chart: *revenue
-    source: Données illustratives · Variation de revenu par segment
-    footnote: Platforms ajoute 2,6 millions, soit 32,9 % de la variation nette.
-    narration: En ouvrant les volumes, Platforms apparaît comme la première contribution à la hausse, avec 2,6 millions de dollars.
+    source: Illustrative data · revenue change by segment
+    footnote: Platforms adds 2.6 million dollars, or 32.9% of net change.
+    narration: Once the volumes open, Platforms is the largest contribution to growth, at 2.6 million dollars.
 
   - layout: chart
     variant: cinematic
     transition: fade
-    title: La croissance a gardé sa qualité.
-    subtitle: Le profit brut progresse avec le revenu, segment par segment.
+    title: Growth kept its quality.
+    subtitle: Gross profit rises with revenue, segment by segment.
     chart:
       type: bar
       data:
@@ -85,24 +85,24 @@ slides:
         format_y: currency_m
         show_legend: true
         show_values: true
-        x_label: Segment client
-        y_label: Profit brut
-    source: Données illustratives · Profit brut par segment
-    footnote: Le profit brut passe de 5,55 à 10,66 millions de dollars.
-    narration: Le profit brut progresse lui aussi, de 5,55 à 10,66 millions. La croissance n'est pas seulement volumique.
+        x_label: Customer segment
+        y_label: Gross profit
+    source: Illustrative data · gross profit by segment
+    footnote: Gross profit rises from 5.55 to 10.66 million dollars.
+    narration: Gross profit also rises, from 5.55 to 10.66 million dollars. Growth is not only about volume.
 
   - layout: closing
     variant: decisions
     transition: fade
-    title: La question n'est plus si nous pouvons croître.
-    subtitle: C'est comment nous transformons cette nouvelle échelle en avantage durable.
+    title: The question is no longer whether we can grow.
+    subtitle: It is how we turn this new scale into a durable advantage.
     items:
-      - title: Protéger Platforms
-        description: Accélérer le segment qui apporte la première contribution nette.
-      - title: Financer la qualité
-        description: Convertir le profit brut additionnel en capacité d'exécution.
-      - title: Mesurer la suite
-        description: Suivre le mix, la marge et la répétabilité de chaque segment.
-    source: Données illustratives · Synthèse de démonstration
-    footnote: Exemple autonome pour Gamma Slides.
-    narration: La croissance est démontrée. Les trois décisions portent maintenant sur sa qualité, son financement et sa répétabilité.
+      - title: Protect Platforms
+        description: Accelerate the segment contributing the largest net gain.
+      - title: Fund quality
+        description: Turn incremental gross profit into execution capacity.
+      - title: Measure what follows
+        description: Track mix, margin, and repeatability by segment.
+    source: Illustrative data · demonstration summary
+    footnote: A self-contained Gamma Slides example.
+    narration: Growth is established. The three decisions now concern its quality, funding, and repeatability.

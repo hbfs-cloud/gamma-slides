@@ -51,7 +51,7 @@ function createServerFor(controller) {
   }, ({ action: countdownAction, seconds }) => action(() => controller.countdown(countdownAction, seconds)));
   server.registerTool('presenter_cue', {
     title: 'Set a speaker co-pilot cue',
-    description: 'Show a concise private cue in the speaker view and stage control overlay. Urgent cues are red and trigger a local notification.',
+    description: 'Show a concise private cue in the speaker view. Urgent cues are red and trigger a local notification.',
     inputSchema: {
       text: z.string().max(500),
       level: z.enum(['normal', 'urgent']).default('normal'),

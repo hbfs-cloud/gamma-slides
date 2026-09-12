@@ -127,7 +127,7 @@ export function themePickerJS(themes, defaultThemeId) {
     const gammaThemeParams=new URLSearchParams(window.location.search);
     const gammaThemeMeta=${JSON.stringify(themeMeta)};
     const gammaThemeQuery=(gammaThemeParams.get('theme')||'').toLowerCase();
-    const gammaThemeAutomation=gammaExportMode||gammaThemeParams.has('gamma-qa');
+    const gammaThemeAutomation=gammaExportMode||gammaThemeParams.has('gamma-qa')||gammaThemeParams.has('gamma-preview');
     let gammaPresentationTheme=gammaThemeMeta[gammaThemeQuery]?gammaThemeQuery:${JSON.stringify(defaultThemeId)};
     let gammaThemePicked=gammaThemeAutomation||Boolean(gammaThemeMeta[gammaThemeQuery]);
     let gammaThemeReturnFocus=null;

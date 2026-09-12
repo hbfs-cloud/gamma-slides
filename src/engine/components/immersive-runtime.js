@@ -180,11 +180,23 @@ function initImmersiveCharts() {
       const [x,y] = project(position, state);
       const maxWidth = el.classList.contains('axis-title') ? Math.min(200,width*.5) : state.model.kind === 'bar' ? Math.max(50,width/state.model.categories.length-12) : 130;
       const estimatedWidth=Math.min(maxWidth,el.textContent.length*7+8);
-      el.style.left=clamp(x,estimatedWidth/2+2,width-estimatedWidth/2-2)+'px'; el.style.top=(axis===0 ? height-12 : clamp(y,10,height-10))+'px';
+      const mobileDepthTitle = mobile.matches && state.model.kind === 'scatter' && axis === 2;
+      // On a phone the projected depth title shares the lower-right corner
+      // with its percentage ticks. Give that title an uncluttered viewport edge.
+      el.style.left=(mobileDepthTitle ? width-estimatedWidth/2-10 : clamp(x,estimatedWidth/2+2,width-estimatedWidth/2-2))+'px';
+      el.style.top=(mobileDepthTitle ? 18 : axis===0 ? height-12 : clamp(y,10,height-10))+'px';
       el.style.maxWidth = maxWidth+'px';
       el.style.overflow='hidden'; el.style.textOverflow='ellipsis';
       el.hidden = axis!==0 && (x < 12 || x > width - 12 || y < 8 || y > height - 8);
     });
+    if (mobile.matches && state.model.kind === 'scatter') {
+      const placed = [];
+      state.labels.filter(({el}) => !el.hidden && !el.classList.contains('axis-title') && /%$/.test(el.textContent)).reverse().forEach(label => {
+        const rect = label.el.getBoundingClientRect();
+        const overlaps = other => Math.max(rect.left, other.left) < Math.min(rect.right, other.right) && Math.max(rect.top, other.top) < Math.min(rect.bottom, other.bottom);
+        if (placed.some(overlaps)) label.el.hidden = true; else placed.push(rect);
+      });
+    }
     const selected = project(state.positions[state.selected], state);
     state.marker.style.left=selected[0]+'px'; state.marker.style.top=selected[1]+'px';
     state.root.dataset.spatialCamera = [state.yaw,state.pitch,state.zoom].map(v=>v.toFixed(3)).join(',');

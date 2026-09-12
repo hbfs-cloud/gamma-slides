@@ -2,13 +2,13 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "Un appel MCP, un artefact HTML",
+    "title": "One MCP call, one HTML artifact",
     "quality_profile": "showcase",
     "animation": "trace",
     "views": [
       {
         "id": "main",
-        "label": "Parcours principal",
+        "label": "Primary path",
         "focus": [
           "agent",
           "mcp",
@@ -16,7 +16,7 @@
           "renderer",
           "disk"
         ],
-        "note": "Un appel MCP, un artefact HTML"
+        "note": "One MCP call, one HTML artifact"
       }
     ],
     "column_fit": "spread",
@@ -29,7 +29,7 @@
     {
       "id": "agent",
       "type": "external",
-      "label": "Agent LLM"
+      "label": "LLM Agent"
     },
     {
       "id": "mcp",
@@ -49,7 +49,7 @@
     {
       "id": "disk",
       "type": "database",
-      "label": "Fichier"
+      "label": "File"
     }
   ],
   "messages": [
@@ -73,7 +73,7 @@
       "id": "message-2",
       "from": "loader",
       "to": "mcp",
-      "label": "deck validé",
+      "label": "validated deck",
       "y": 224,
       "variant": "return"
     },
@@ -89,7 +89,7 @@
       "id": "message-4",
       "from": "renderer",
       "to": "mcp",
-      "label": "document HTML",
+      "label": "HTML document",
       "y": 288,
       "variant": "return"
     },
@@ -105,7 +105,7 @@
       "id": "message-6",
       "from": "mcp",
       "to": "agent",
-      "label": "chemin de sortie",
+      "label": "output path",
       "y": 352,
       "variant": "return"
     }

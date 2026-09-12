@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { markdownToDeck } from '../src/desktop/markdown.js';
-import { highlightMarkdownWriter, writerLineKind } from '../src/desktop/writer.js';
+import { formatWriterLine, highlightMarkdownWriter, writerLineKind, writerLinePresentation, writerMomentGap } from '../src/desktop/writer.js';
 import { getPresentationTemplate, listPresentationTemplates } from '../src/desktop/templates.js';
+import { appendRevision, findRevision, revisionSummaries } from '../src/desktop/revisions.js';
+import { applyCorporateProfileSource, corporateProfileSummary, normalizeCorporateProfile } from '../src/desktop/corporate-profiles.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
 import { themePickerCSS } from '../src/engine/components/theme-picker.js';
@@ -13,6 +15,15 @@ import { mkdtemp, readFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { readFileSync } from 'fs';
+
+test('Present waits for the latest draft and reports native launch failures', () => {
+  const author = readFileSync(new URL('../src/desktop/author.js', import.meta.url), 'utf8');
+  assert.match(author, /await flushSource\(\); await window\.gammaDesktop\.present\(\); setFeedback\('Stage opened/);
+  for (const file of ['preload-author.js', 'preload-author.cjs']) {
+    assert.match(readFileSync(new URL(`../src/desktop/${file}`, import.meta.url), 'utf8'), /present: \(\) => ipcRenderer\.invoke\('presenter:present'\)/);
+  }
+  assert.match(readFileSync(new URL('../src/desktop/main.js', import.meta.url), 'utf8'), /ipcMain\.handle\('presenter:present', \(\) => present\(\)\)/);
+});
 
 test('Gamma Presenter Markdown keeps stage copy distinct from speaker notes', () => {
   const deck = markdownToDeck(`# Une histoire\n## Le message visible\n- Une preuve\n\nLa note privée.\n\n---\n\n# La suite\nTexte de téléprompteur.`);
@@ -35,8 +46,24 @@ test('Gamma Presenter treats Markdown as a document writer, not a syntax-only in
   assert.equal(writerLineKind('## What the audience should remember'), 'supporting');
   assert.equal(writerLineKind('This stays private.'), 'prose');
   assert.equal(writerLineKind('![Chart](media/chart.png)'), 'asset');
-  assert.match(highlightMarkdownWriter('# The decision\nOrdinary <prose>'), /writer-headline/);
-  assert.match(highlightMarkdownWriter('# The decision\nOrdinary <prose>'), /Ordinary &lt;prose&gt;/);
+  assert.deepEqual(writerLinePresentation('# The decision'), { kind: 'headline', marker: '# ', content: 'The decision', label: '' });
+  assert.equal(formatWriterLine('  > Existing thought', 'headline'), '  # Existing thought');
+  assert.equal(formatWriterLine('The proof', 'point'), '- The proof');
+  assert.equal(writerMomentGap('A line'), '\n\n\n');
+  assert.equal(writerMomentGap('A line\n\n'), '\n');
+  const documentSurface = highlightMarkdownWriter('# The decision\nOrdinary <prose>\n\n\n# The next moment');
+  assert.match(documentSurface, /writer-headline/);
+  assert.match(documentSurface, /writer-marker"># <\/span><span class="writer-content">The decision/);
+  assert.match(documentSurface, /Ordinary &lt;prose&gt;/);
+  assert.match(documentSurface, /writer-natural-moment/);
+  const [author, css] = [
+    readFileSync(new URL('../src/desktop/author.html', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/desktop.css', import.meta.url), 'utf8'),
+  ];
+  assert.match(author, /Show headline/);
+  assert.match(author, /id="toggle-raw-source"[^>]*>Markdown/);
+  assert.match(css, /\.writer-marker \{ color: transparent/);
+  assert.match(css, /\.writer-natural-moment::after/);
 });
 
 test('Gamma Presenter owns one macOS instance and a branded native icon', () => {
@@ -48,6 +75,15 @@ test('Gamma Presenter owns one macOS instance and a branded native icon', () => 
   assert.match(main, /app\.dock\.setIcon\(icon\)/);
   assert.match(icon, /aria-label="Gamma Presenter"/);
   assert.match(icon, /fill="#315DFF"/);
+});
+
+test('Author preview uses the selected theme without onboarding overlays or Markdown tools for rich source', () => {
+  const main = readFileSync(new URL('../src/desktop/main.js', import.meta.url), 'utf8');
+  const author = readFileSync(new URL('../src/desktop/author.js', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/desktop/desktop.css', import.meta.url), 'utf8');
+  assert.match(main, /theme=\$\{encodeURIComponent\(state\.theme\)\}/);
+  assert.match(author, /state\.rendererUrl\}&gamma-preview=1/);
+  assert.match(css, /\.writer-actions\[hidden\] \{ display: none; \}/);
 });
 
 test('Gamma Presenter Markdown supports an image slide and its local reference', () => {
@@ -88,6 +124,83 @@ test('Gamma Presenter ships editable, runnable models in the packaged template g
   assert.equal(architecture.slides[1].diagram.type, 'architecture');
   const rehearsal = loadDeck(getPresentationTemplate('live-rehearsal').source);
   assert.equal(rehearsal.slides[2].visual.mechanism.type, 'queue');
+});
+
+test('Gamma Presenter keeps a bounded local-only revision ledger for safe last-minute recovery', () => {
+  const document = { source: '# Brief\n## Decision', sourceKind: 'markdown', title: 'Brief', theme: 'signal-room', sourcePath: '/tmp/brief.md' };
+  const one = appendRevision([], document, { createdAt: 1, reason: 'Saved locally' });
+  assert.equal(one.length, 1);
+  assert.equal(appendRevision(one, document, { createdAt: 2 }).length, 1);
+  const next = appendRevision(one, { ...document, source: '# Brief\n## Updated' }, { createdAt: 3, reason: 'Edited locally' });
+  assert.equal(findRevision(next, next[1].id).source, '# Brief\n## Updated');
+  assert.deepEqual(Object.keys(revisionSummaries(next)[0]).sort(), ['createdAt', 'id', 'reason', 'sourceKind', 'sourcePath', 'theme', 'title']);
+  let bounded = [];
+  for (let index = 0; index < 45; index += 1) bounded = appendRevision(bounded, { ...document, source: `# ${index}` }, { createdAt: index + 10, limit: 40 });
+  assert.equal(bounded.length, 40);
+  assert.equal(bounded[0].source, '# 5');
+});
+
+test('Gamma Presenter flushes and durably preserves the current source before local history restore', () => {
+  const [main, author] = [
+    readFileSync(new URL('../src/desktop/main.js', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/author.js', import.meta.url), 'utf8'),
+  ];
+  assert.match(author, /historyList\.addEventListener\('click', async event => \{[\s\S]*?await flushSource\(\);[\s\S]*?restoreRevision/);
+  assert.match(main, /async function restoreRevision\(id\) \{[\s\S]*?await syncAuthorDraft\(\);[\s\S]*?await writeFile\(revisionsFile\(\), JSON\.stringify\(preserved\), 'utf8'\);[\s\S]*?await syncAuthorDraft\(\);[\s\S]*?state\.editRevision !== expectedRevision[\s\S]*?sourcePath: null/);
+});
+
+test('Gamma Presenter applies a portable corporate profile at deck level without changing slide content', () => {
+  const profile = normalizeCorporateProfile({ name: 'Northstar', company: 'Northstar Capital', theme: 'analyst-proof', apply_to_new_rich_decks: true, branding: { logo: 'https://example.test/logo.svg', watermark: 'Confidential', company_url: 'northstar.example' }, style: { primary_color: '#315DFF', accent_color: '#F5A623', font_heading: 'Inter' } });
+  const source = `meta:\n  title: Board review\nslides:\n  - layout: title\n    title: Keep this decision\n    subtitle: Slide content survives\n`;
+  const applied = applyCorporateProfileSource(source, 'yaml', profile);
+  const deck = loadDeck(applied);
+  assert.equal(deck.meta.company, 'Northstar Capital');
+  assert.equal(deck.branding.watermark, 'Confidential');
+  assert.equal(deck.style.accent_color, '#F5A623');
+  assert.equal(deck.slides[0].title, 'Keep this decision');
+  assert.deepEqual(corporateProfileSummary(profile), { name: 'Northstar', company: 'Northstar Capital', theme: 'analyst-proof', applyToNewRichDecks: true, hasLogo: true, colorCount: 2 });
+  assert.throws(() => applyCorporateProfileSource('# Markdown', 'markdown', profile), /rich YAML or JSON/);
+});
+
+test('Gamma Presenter exposes corporate identity as a guided form instead of requiring JSON editing', () => {
+  const [author, script, css] = [
+    readFileSync(new URL('../src/desktop/author.html', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/author.js', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/desktop.css', import.meta.url), 'utf8'),
+  ];
+  for (const id of ['name', 'company', 'theme', 'logo', 'watermark', 'url', 'primary', 'secondary', 'accent', 'heading-font', 'body-font', 'mono-font']) assert.match(author, new RegExp(`id="corporate-profile-${id}"`));
+  assert.doesNotMatch(author, /Corporate profile JSON/);
+  assert.match(script, /function syncCorporateProfile/);
+  assert.match(script, /branding: \{ logo: corporateProfileFields\.logo\.value/);
+  assert.match(css, /\.corporate-profile-form \{ display: grid/);
+});
+
+test('Gamma Presenter makes local draft and publish boundaries visible in the Author titlebar', () => {
+  const [author, script, css] = [
+    readFileSync(new URL('../src/desktop/author.html', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/author.js', import.meta.url), 'utf8'),
+    readFileSync(new URL('../src/desktop/desktop.css', import.meta.url), 'utf8'),
+  ];
+  assert.match(author, /id="document-status"[^>]*>New local draft/);
+  assert.match(script, /function syncDocumentStatus/);
+  assert.match(script, /Draft · not published/);
+  assert.match(script, /Saved locally/);
+  assert.match(css, /\.document-status\[data-tone="error"\]/);
+});
+
+test('Gamma Presenter exposes Google Drive backup only as an explicit Author action and packages its integration', async () => {
+  const [main, preload, author, packageJson] = await Promise.all([
+    readFile(new URL('../src/desktop/main.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/desktop/preload-author.js', import.meta.url), 'utf8'),
+    readFile(new URL('../src/desktop/author.html', import.meta.url), 'utf8'),
+    readFile(new URL('../package.json', import.meta.url), 'utf8'),
+  ]);
+  assert.match(main, /presenter:google-backup/);
+  assert.match(main, /Google Drive backup can be started from the Author window only/);
+  assert.match(main, /await import\('\.\.\/integrations\/google-drive\.js'\)/);
+  assert.match(preload, /backupToGoogleDrive/);
+  assert.match(author, /id="backup-google-drive"/);
+  assert.match(packageJson, /"src\/integrations\/\*\*"/);
 });
 
 test('Gamma Presenter Markdown chooses quote, comparison, and table layouts from plain semantic patterns', () => {

@@ -51,8 +51,8 @@ server.registerResource('flagship-example', 'gamma://examples/flagship', {
   }],
 }));
 
-server.registerResource('studio-guide','gamma://studio/guide',{title:'Studio vidéo et médias LLM',mimeType:'text/markdown'},async uri=>({contents:[{uri:uri.href,mimeType:'text/markdown',text:readFileSync(new URL('../../docs/presenter-studio.md',import.meta.url),'utf8')}]}));
-server.registerResource('studio-icons','gamma://studio/icons',{title:'Icônes disponibles',mimeType:'application/json'},async uri=>({contents:[{uri:uri.href,mimeType:'application/json',text:JSON.stringify(getIconNames())}]}));
+server.registerResource('studio-guide','gamma://studio/guide',{title:'Studio video and LLM media guide',mimeType:'text/markdown'},async uri=>({contents:[{uri:uri.href,mimeType:'text/markdown',text:readFileSync(new URL('../../docs/presenter-studio.md',import.meta.url),'utf8')}]}));
+server.registerResource('studio-icons','gamma://studio/icons',{title:'Available icons',mimeType:'application/json'},async uri=>({contents:[{uri:uri.href,mimeType:'application/json',text:JSON.stringify(getIconNames())}]}));
 
 server.registerPrompt('create_presentation', {
   title: 'Create a premium Gamma Slides presentation',

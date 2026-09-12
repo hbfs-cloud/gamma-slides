@@ -46,7 +46,7 @@ function initStudioProduction() {
   };
   const quality = node('div', { className: 'gamma-production-quality' });
   const qualityNote = node('p', { className: 'gamma-production-note' }); qualityNote.setAttribute('role', 'status');
-  const enlarge = node('button', { textContent: 'Agrandir la sortie' });
+  const enlarge = node('button', { textContent: 'Enlarge output' });
   const useSource = node('button', { textContent: 'Keep source resolution' });
   quality.append(qualityNote, enlarge, useSource);
   panel.querySelector('[data-live-support]').after(quality);
@@ -60,7 +60,7 @@ function initStudioProduction() {
   const selectors = {};
   for (const [kind, title] of [['camera', 'Camera'], ['mic', 'Microphone']]) {
     const label = node('label', { textContent: title }), select = node('select');
-    select.setAttribute('aria-label', title + ' du studio'); select.dataset.productionDevice = kind;
+    select.setAttribute('aria-label', 'Studio ' + title.toLowerCase()); select.dataset.productionDevice = kind;
     select.append(node('option', { value: '', textContent: 'Default device' })); label.append(select); devices.append(label); selectors[kind] = select;
     select.onchange = async () => { select.disabled = true; try { await api.setDevice(kind, select.value); } finally { select.disabled = false; } };
   }
@@ -85,7 +85,7 @@ function initStudioProduction() {
   // Replace the legacy wizard entry with the selectors that remain usable while recording.
   const configure = panel.querySelector('[data-live=configure]'); configure.hidden = true;
 
-  const mix = details('Son du programme'); mix.className = 'gamma-production-mix';
+  const mix = details('Program audio'); mix.className = 'gamma-production-mix';
   for (const [key, title] of [['micGain', 'Voice'], ['sharedGain', 'Media and browser']]) {
     const label = node('label', { textContent: title }), value = node('output', { textContent: '100 %' });
     const input = node('input', { type: 'range', min: '0', max: '200', step: '5', value: '100' }); input.setAttribute('aria-label', 'Volume ' + title.toLowerCase()); input.dataset.productionGain = key;
@@ -94,16 +94,16 @@ function initStudioProduction() {
   }
   const duckLabel = node('label', { textContent: 'Lower media while I speak' }), duck = node('input', { type: 'checkbox' });
   duck.dataset.productionDuck = ''; duckLabel.append(duck); mix.append(duckLabel); duck.onchange = () => api.setAudio({ ducking: duck.checked });
-  const stemsLabel = node('label', { textContent: 'Pistes brutes pour le montage (avant gains)' }), stems = node('input', { type: 'checkbox' }); stems.dataset.productionStems = ''; stemsLabel.append(stems); mix.append(stemsLabel); stems.onchange = () => api.setAudio({ audioStems: stems.checked });
+  const stemsLabel = node('label', { textContent: 'Raw tracks for editing (before gain)' }), stems = node('input', { type: 'checkbox' }); stems.dataset.productionStems = ''; stemsLabel.append(stems); mix.append(stemsLabel); stems.onchange = () => api.setAudio({ audioStems: stems.checked });
   mix.append(node('p', { className: 'gamma-production-note', textContent: 'Separate tracks are optional. Muting the microphone also mutes the voice track.' }));
   mix.append(node('p', { className: 'gamma-production-note', textContent: 'The limiter protects the mix. If the signal clips before the mixer, lower the device volume.' }));
   const meter = node('div', { className: 'gamma-production-meter' });
-  const meterLabel = node('span', { textContent: 'Son' }), level = node('meter', { min: -60, max: 0, value: -60 }), peak = node('span', { textContent: '— dBFS' });
+  const meterLabel = node('span', { textContent: 'Audio' }), level = node('meter', { min: -60, max: 0, value: -60 }), peak = node('span', { textContent: '— dBFS' });
   level.setAttribute('aria-label', 'Recorded audio peak'); meter.append(meterLabel, level, peak);
   const storageStatus = node('span', { className: 'gamma-production-storage' }); storageStatus.setAttribute('role', 'status');
   const transport = document.querySelector('.gamma-recording-badge'); transport?.append(meter, storageStatus);
   window.addEventListener('gamma:studio-audio', e => {
-    const data = e.detail, db = 20 * Math.log10(Math.max(0.001, data.output || 0)); level.value = db; peak.textContent = db <= -60 ? 'Silence' : db.toFixed(1) + ' dBFS'; meter.dataset.clip = String(!!data.clipping); meterLabel.textContent = data.clipping ? 'Baissez le gain' : data.ducked ? 'Voix prioritaire' : 'Son';
+    const data = e.detail, db = 20 * Math.log10(Math.max(0.001, data.output || 0)); level.value = db; peak.textContent = db <= -60 ? 'Silence' : db.toFixed(1) + ' dBFS'; meter.dataset.clip = String(!!data.clipping); meterLabel.textContent = data.clipping ? 'Lower gain' : data.ducked ? 'Voice priority' : 'Audio';
   });
 
   const takes = details('Takes stored on this device');
@@ -125,7 +125,7 @@ function initStudioProduction() {
         restore.disabled = active || !take.size; save.disabled = active || !take.size; remove.disabled = active;
         restore.onclick = () => api.recover(take.id).catch(e => takeStatus.textContent = e.message);
         save.onclick = async () => { try { const result = await window.__gammaTakeStore.save(take.id); takeStatus.textContent = result.saved ? 'File saved.' : 'Download started. Check the file.'; } catch (e) { takeStatus.textContent = 'Copy retained: ' + e.message; } };
-        remove.onclick = async () => { if (remove.dataset.armed !== 'true') { remove.dataset.armed = 'true'; remove.textContent = 'Confirmer la suppression'; return; } try { await window.__gammaTakeStore.remove(take.id); await refreshTakes(); } catch (e) { takeStatus.textContent = e.message; } };
+        remove.onclick = async () => { if (remove.dataset.armed !== 'true') { remove.dataset.armed = 'true'; remove.textContent = 'Confirm deletion'; return; } try { await window.__gammaTakeStore.remove(take.id); await refreshTakes(); } catch (e) { takeStatus.textContent = e.message; } };
         row.append(restore, save, remove); takeList.append(row);
       }
     } catch (e) { takeStatus.textContent = 'Local storage unavailable: ' + e.message; }

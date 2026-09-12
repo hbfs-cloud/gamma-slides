@@ -2,20 +2,20 @@
   "schema_version": 1,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "Enregistrer puis décider de sauvegarder",
+    "title": "Record, then decide to save",
     "quality_profile": "showcase",
     "animation": "trace",
     "views": [
       {
         "id": "main",
-        "label": "Parcours principal",
+        "label": "Primary path",
         "focus": [
           "ready",
           "recording",
           "finalizing",
           "review"
         ],
-        "note": "Enregistrer puis décider de sauvegarder"
+        "note": "Record, then decide to save"
       }
     ]
   },
@@ -33,14 +33,14 @@
     {
       "id": "ready",
       "type": "start",
-      "label": "Prêt",
+      "label": "Ready",
       "lane": "main",
       "col": 0
     },
     {
       "id": "recording",
       "type": "active",
-      "label": "Enregistrement",
+      "label": "Recording",
       "lane": "main",
       "col": 1
     },
@@ -54,14 +54,14 @@
     {
       "id": "finalizing",
       "type": "active",
-      "label": "Finalisation",
+      "label": "Finalizing",
       "lane": "main",
       "col": 2
     },
     {
       "id": "review",
       "type": "success",
-      "label": "Revue locale",
+      "label": "Local review",
       "lane": "main",
       "col": 3
     }
@@ -92,7 +92,7 @@
     {
       "from": "paused",
       "to": "recording",
-      "label": "reprendre",
+      "label": "resume",
       "fromSide": "top",
       "toSide": "right",
       "via": [
@@ -117,7 +117,7 @@
     {
       "from": "paused",
       "to": "finalizing",
-      "label": "terminer",
+      "label": "finish",
       "fromSide": "right",
       "toSide": "bottom",
       "via": [

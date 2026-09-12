@@ -7,7 +7,7 @@ import {tmpdir} from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {githubRepository,evidencePaths,inspectRepository} from '../src/repository/inspect.js';
-import {compileDiagram} from '../src/engine/archify.js';
+import {archifyChildEnvironment,compileDiagram} from '../src/engine/archify.js';
 import {presentRepository,serveRepositoryPresentation} from '../src/repository/present.js';
 import {publishRepositoryPresentation} from '../src/repository/publish.js';
 
@@ -35,6 +35,11 @@ for(const type of ['architecture','workflow','sequence','dataflow','lifecycle'])
 });
 test('invalid graph fails instead of using last successful output',()=>{
   const spec=JSON.parse(readFileSync('presentations/diagrams/repository.architecture.json'));spec.connections[0].to='missing-node';assert.throws(()=>compileDiagram({type:'architecture',spec}),/Archify/);
+});
+test('Archify compiler enters Node mode when invoked by packaged Electron',()=>{
+  const environment=archifyChildEnvironment({PATH:'/usr/bin',KEEP:'value'},{electron:'44.3.0'});
+  assert.equal(environment.ELECTRON_RUN_AS_NODE,'1');assert.equal(environment.ARCHIFY_UPDATE_CHECK_DISABLED,'1');assert.equal(environment.KEEP,'value');
+  assert.equal(archifyChildEnvironment({PATH:'/usr/bin'},{node:'22'}).ELECTRON_RUN_AS_NODE,undefined);
 });
 test('loopback server excludes source evidence and arbitrary paths',async()=>{
   const dir=mkdtempSync(join(tmpdir(),'gamma-serve-test-'));writeFileSync(join(dir,'index.html'),'<h1>deck</h1>');writeFileSync(join(dir,'private.txt'),'secret');const live=await serveRepositoryPresentation(dir,{port:0});

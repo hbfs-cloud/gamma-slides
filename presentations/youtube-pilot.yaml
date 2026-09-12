@@ -1,24 +1,24 @@
 version: "1"
 theme: signal-room
 meta:
-  title: "Gamma Slides : du dépôt à une vidéo compréhensible"
-  language: fr
+  title: "Gamma Slides: from repository to an understandable video"
+  language: en
   presentation: direct
   experience: true
   motion: none
   chapters:
     - start: 1
-      label: Le propos
+      label: The argument
     - start: 4
-      label: Le document
+      label: The document
     - start: 11
-      label: Le public
+      label: The audience
     - start: 15
-      label: La prise
+      label: The take
     - start: 19
-      label: À vous
+      label: Your turn
 narration:
-  voice: fr-FR-HenriNeural
+  voice: en-US-JennyNeural
   rate: "-5%"
   pitch: +0Hz
 video:
@@ -27,796 +27,475 @@ video:
   format: mp4
   subtitles: true
   youtube:
-    title: "Gamma Slides : du dépôt à une vidéo compréhensible"
+    title: "Gamma Slides: from repository to an understandable video"
     description: >-
-      Un épisode technique en français : du YAML au HTML, puis de la sortie propre à une prise
-      vérifiée. Exemples fondés sur le code local ; aucune validation de caméra ou de microphone
-      réels.
-    tags:
-      - Gamma Slides
-      - architecture
-      - presentation
-      - video
-      - MCP
+      An English technical episode: from YAML to HTML, then from clean output to a verified take.
+      Examples are grounded in local code; no real camera or microphone validation is claimed.
+    tags: [Gamma Slides, architecture, presentation, video, MCP]
     chapters: true
     privacy: private
 slides:
   - layout: title
     variant: video-story
     composition: brief
-    title: Du dépôt à la vidéo.
-    subtitle: Une démonstration que l’on comprend.
+    title: From repository to video.
+    subtitle: A demonstration people can follow.
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
-    source: Parcours fondé sur le dépôt Gamma Slides.
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
+    source: A walkthrough grounded in the Gamma Slides repository.
     narration: >-
-      Une présentation générée peut être correcte, impressionnante, et pourtant difficile à suivre
-      en vidéo. Dans cet épisode, nous allons partir de Gamma Slides pour comprendre comment passer
-      d’un fichier de contenu à une démonstration enregistrable. Nous suivrons trois choses : ce que
-      le moteur automatise, ce que le créateur doit vérifier, et ce que le public voit réellement. À
-      la fin, vous aurez un parcours concret pour préparer votre première prise.
+      A generated presentation can be correct, impressive, and still hard to follow on video. In
+      this episode, Gamma Slides shows how a content file becomes a recordable demonstration. We
+      follow what the engine automates, what the creator must verify, and what the audience sees.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : Parcours fondé sur le dépôt Gamma Slides.
-
-
-      Une présentation générée peut être correcte, impressionnante, et pourtant difficile à suivre
-      en vidéo. Dans cet épisode, nous allons partir de Gamma Slides pour comprendre comment passer
-      d’un fichier de contenu à une démonstration enregistrable. Nous suivrons trois choses : ce que
-      le moteur automatise, ce que le créateur doit vérifier, et ce que le public voit réellement. À
-      la fin, vous aurez un parcours concret pour préparer votre première prise.
+      Evidence: walkthrough grounded in the Gamma Slides repository.
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Générer ne suffit pas.
+    title: Generating is not enough.
     items:
-      - title: Le schéma vérifie une structure.
-      - title: Le public attend une explication.
+      - title: The schema checks structure.
+      - title: The audience expects an explanation.
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
     source: src/schema/deck.schema.json · docs/presenter-studio.md
     narration: >-
-      Le problème commence lorsque l’on confond deux résultats. Le générateur sait produire un
-      document qui respecte un schéma. Le spectateur, lui, cherche une réponse à une question. Il ne
-      peut pas cliquer dans votre vidéo pour lire une infobulle, changer de vue ou agrandir une
-      légende. La qualité de la présentation interactive ne garantit donc pas celle du film. Il faut
-      choisir ce qui doit être compris à chaque instant.
+      The generator can produce a document that conforms to a schema. The viewer is looking for an
+      answer to a question. They cannot click through a video to read a tooltip, change a view, or
+      enlarge a legend. Choose what needs to be understood at each moment.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : src/schema/deck.schema.json · docs/presenter-studio.md
-
-
-      Le problème commence lorsque l’on confond deux résultats. Le générateur sait produire un
-      document qui respecte un schéma. Le spectateur, lui, cherche une réponse à une question. Il ne
-      peut pas cliquer dans votre vidéo pour lire une infobulle, changer de vue ou agrandir une
-      légende. La qualité de la présentation interactive ne garantit donc pas celle du film. Il faut
-      choisir ce qui doit être compris à chaque instant.
+      Evidence: src/schema/deck.schema.json · docs/presenter-studio.md
   - layout: bullets
     variant: video-story
     composition: sequence
-    title: Trois responsabilités.
+    title: Three responsibilities.
     items:
-      - title: Écrire le propos
-      - title: Vérifier le rendu
-      - title: Conduire la prise
+      - title: Write the argument
+      - title: Verify the output
+      - title: Run the take
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Parcours de production proposé.
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Proposed production workflow.
     narration: >-
-      Nous allons séparer le travail en trois responsabilités. D’abord, écrire un propos avec un
-      début, une preuve et une conclusion. Ensuite, vérifier le rendu produit par le moteur : les
-      mots, les unités, les relations et la lisibilité. Enfin, conduire la prise : ouvrir la bonne
-      sortie, choisir les sources et enregistrer au bon rythme. Le logiciel relie ces étapes. Il ne
-      décide pas à votre place de ce que votre public doit retenir.
+      First, write an argument with a beginning, evidence, and conclusion. Next, verify the words,
+      units, relationships, and legibility the engine renders. Finally, open the right output,
+      choose the sources, and record at the right pace. Software connects these steps; it does not
+      decide what your audience should remember.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Parcours de production proposé.
-
-
-      Nous allons séparer le travail en trois responsabilités. D’abord, écrire un propos avec un
-      début, une preuve et une conclusion. Ensuite, vérifier le rendu produit par le moteur : les
-      mots, les unités, les relations et la lisibilité. Enfin, conduire la prise : ouvrir la bonne
-      sortie, choisir les sources et enregistrer au bon rythme. Le logiciel relie ces étapes. Il ne
-      décide pas à votre place de ce que votre public doit retenir.
+      Evidence: proposed production workflow.
   - layout: title
     variant: video-story
     composition: evidence
-    title: Le contenu reste lisible.
+    title: The content stays readable.
     quote: |-
       layout: title
-      title: Une idée claire
+      title: One clear idea
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Extrait minimal · src/schema/deck.schema.json
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Minimal excerpt · src/schema/deck.schema.json
     narration: >-
-      Le point de départ est un fichier YAML ou JSON. Ici, deux champs suffisent à montrer le
-      principe : le layout choisit une composition, et le titre porte le message. Cet extrait
-      appartient à une liste de slides dans un document complet. On peut aussi y déclarer des
-      graphiques, des médias, des diagrammes et une narration. Un LLM peut aider à rédiger ce
-      fichier. Cela ne dispense pas de relire ses affirmations et de vérifier les assets qu’il
-      référence.
+      The starting point is a YAML or JSON file. The layout chooses a composition and the title
+      carries the message. The document can also declare charts, media, diagrams, and narration.
+      An LLM can help draft it, but its claims and referenced assets still require review.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Extrait minimal · src/schema/deck.schema.json
-
-
-      Le point de départ est un fichier YAML ou JSON. Ici, deux champs suffisent à montrer le
-      principe : le layout choisit une composition, et le titre porte le message. Cet extrait
-      appartient à une liste de slides dans un document complet. On peut aussi y déclarer des
-      graphiques, des médias, des diagrammes et une narration. Un LLM peut aider à rédiger ce
-      fichier. Cela ne dispense pas de relire ses affirmations et de vérifier les assets qu’il
-      référence.
+      Evidence: minimal excerpt · src/schema/deck.schema.json
   - layout: diagram
     variant: video-closeup
-    title: Le schéma contrôle l’entrée.
-    subtitle: Avant la composition du document.
+    title: The schema controls the input.
+    subtitle: Before the document is composed.
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
     diagram:
       type: architecture
       spec:
         schema_version: 1
         diagram_type: architecture
         meta:
-          title: Le schéma contrôle l’entrée.
+          title: The schema controls the input.
           quality_profile: showcase
           animation: none
-          viewBox:
-            - 600
-            - 300
+          viewBox: [600, 300]
         components:
           - id: from
             type: backend
             label: Deck
-            pos:
-              - 30
-              - 85
-            size:
-              - 150
-              - 90
+            pos: [30, 85]
+            size: [150, 90]
           - id: to
             type: frontend
-            label: Schéma
-            pos:
-              - 340
-              - 85
-            size:
-              - 150
-              - 90
+            label: Schema
+            pos: [340, 85]
+            size: [150, 90]
         connections:
           - id: transfer
             from: from
             to: to
-            label: valider
+            label: validate
             variant: emphasis
-            labelAt:
-              - 260
-              - 210
+            labelAt: [260, 210]
     source: src/loader/index.js · src/schema/validate.js
     narration: >-
-      Le chargeur lit le YAML ou le JSON, puis appelle la validation du deck. Une structure invalide
-      déclenche une erreur au lieu d’être envoyée silencieusement au rendu. Pour un diagramme
-      Archify, le chargeur fait également compiler la spécification typée. C’est un garde-fou utile
-      : il attrape les contrats de données incorrects. Mais il ne sait pas si votre explication est
-      pertinente. Un titre vague ou une conclusion erronée peut être parfaitement valide.
+      The loader reads YAML or JSON, then calls deck validation. Invalid structure raises an error
+      instead of being silently rendered. For an Archify diagram, it also compiles the typed
+      specification. This catches incorrect data contracts, not vague titles or mistaken
+      conclusions.
     notes: >-
-      Gros plan de mécanisme, volontairement limité à deux éléments. Caméra masquée, micro actif. Le
-      diagramme simplifie le code ; il ne prétend pas représenter tous ses modules.
+      Mechanism close-up, deliberately limited to two elements. Camera hidden, microphone active.
+      The diagram simplifies the code; it does not claim to show every module.
 
-      Preuve : src/loader/index.js · src/schema/validate.js
-
-
-      Le chargeur lit le YAML ou le JSON, puis appelle la validation du deck. Une structure invalide
-      déclenche une erreur au lieu d’être envoyée silencieusement au rendu. Pour un diagramme
-      Archify, le chargeur fait également compiler la spécification typée. C’est un garde-fou utile
-      : il attrape les contrats de données incorrects. Mais il ne sait pas si votre explication est
-      pertinente. Un titre vague ou une conclusion erronée peut être parfaitement valide.
+      Evidence: src/loader/index.js · src/schema/validate.js
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Valide ne veut pas dire vrai.
+    title: Valid does not mean true.
     items:
-      - title: "Un chiffre : sa source."
-      - title: "Un graphique : ses unités."
+      - title: "A number: its source."
+      - title: "A chart: its units."
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
-    source: Contrôle éditorial proposé ; aucun chiffre financier utilisé.
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
+    source: Proposed editorial control; no financial figure is used.
     narration: >-
-      Voici la première vérification humaine. Pour un chiffre, retrouvez la source. Pour un
-      graphique, vérifiez les unités et les valeurs. Dans un diagramme, demandez-vous si la flèche
-      représente un appel, un transfert de données ou un simple lien logique. Une image convaincante
-      peut masquer une approximation. Dans cet épisode, nous montrons des relations simplifiées
-      issues du code local. Nous les présentons comme des gros plans explicatifs, pas comme une
-      carte exhaustive du dépôt.
+      For a number, find the source. For a chart, check its units and values. In a diagram, ask
+      whether an arrow means a call, a data transfer, or only a logical connection. We present
+      simplified relationships from local code as explanatory close-ups, not an exhaustive map.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : Contrôle éditorial proposé ; aucun chiffre financier utilisé.
-
-
-      Voici la première vérification humaine. Pour un chiffre, retrouvez la source. Pour un
-      graphique, vérifiez les unités et les valeurs. Dans un diagramme, demandez-vous si la flèche
-      représente un appel, un transfert de données ou un simple lien logique. Une image convaincante
-      peut masquer une approximation. Dans cet épisode, nous montrons des relations simplifiées
-      issues du code local. Nous les présentons comme des gros plans explicatifs, pas comme une
-      carte exhaustive du dépôt.
+      Evidence: proposed editorial control; no financial figure is used.
   - layout: bullets
     variant: video-story
     composition: sequence
-    title: Le moteur assemble le deck.
+    title: The engine assembles the deck.
     items:
-      - title: Contenu chargé
-      - title: Layouts et assets
-      - title: Document HTML
+      - title: Content loaded
+      - title: Layouts and assets
+      - title: HTML document
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
     source: src/engine/renderer.js · src/loader/assets.js
     narration: >-
-      Une fois le contenu chargé, le moteur assemble les slides avec leurs layouts, leurs styles et
-      leurs bibliothèques. Les assets locaux compatibles passent par le chargeur d’assets. Les
-      diagrammes utilisent le moteur Archify embarqué dans le dépôt. Le résultat est un document
-      HTML. Retenez cette distinction : nous sommes encore en train de fabriquer la présentation.
-      Nous n’avons pas enregistré les gestes du présentateur et nous n’avons pas encore produit une
-      prise vidéo.
+      Once content is loaded, the engine assembles slides with layouts, styles, and libraries.
+      Compatible local assets use the asset loader, while diagrams use the included Archify engine.
+      The result is an HTML document: we are making a presentation, not yet recording a take.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : src/engine/renderer.js · src/loader/assets.js
-
-
-      Une fois le contenu chargé, le moteur assemble les slides avec leurs layouts, leurs styles et
-      leurs bibliothèques. Les assets locaux compatibles passent par le chargeur d’assets. Les
-      diagrammes utilisent le moteur Archify embarqué dans le dépôt. Le résultat est un document
-      HTML. Retenez cette distinction : nous sommes encore en train de fabriquer la présentation.
-      Nous n’avons pas enregistré les gestes du présentateur et nous n’avons pas encore produit une
-      prise vidéo.
+      Evidence: src/engine/renderer.js · src/loader/assets.js
   - layout: diagram
     variant: video-closeup
-    title: Le résultat est un document.
-    subtitle: Le navigateur lui donne vie.
+    title: The result is a document.
+    subtitle: The browser brings it to life.
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
     diagram:
       type: architecture
       spec:
         schema_version: 1
         diagram_type: architecture
         meta:
-          title: Le résultat est un document.
+          title: The result is a document.
           quality_profile: showcase
           animation: none
-          viewBox:
-            - 600
-            - 300
+          viewBox: [600, 300]
         components:
           - id: from
             type: backend
-            label: Moteur
-            pos:
-              - 30
-              - 85
-            size:
-              - 150
-              - 90
+            label: Engine
+            pos: [30, 85]
+            size: [150, 90]
           - id: to
             type: frontend
             label: HTML
-            pos:
-              - 340
-              - 85
-            size:
-              - 150
-              - 90
+            pos: [340, 85]
+            size: [150, 90]
         connections:
           - id: transfer
             from: from
             to: to
-            label: rendre
+            label: render
             variant: emphasis
     source: src/engine/renderer.js · src/engine/layouts/index.js
     narration: >-
-      Ce deuxième gros plan relie le moteur au fichier HTML qu’il produit. Le navigateur affiche
-      ensuite ce document et Reveal orchestre les slides. Les composants peuvent activer des
-      graphiques, des diagrammes ou des médias. Il existe donc plusieurs comportements dans le même
-      deck. Une slide statique et une démonstration interactive ne demandent pas la même
-      préparation. Avant de filmer, il faut tester les interactions que l’on compte vraiment
-      montrer, dans l’ordre du récit.
+      This close-up links the engine to the HTML it produces. The browser displays that document
+      and Reveal orchestrates the slides. A deck can combine static slides and interactive
+      components, which need different preparation. Before filming, test the interactions you plan
+      to show in narrative order.
     notes: >-
-      Gros plan de mécanisme, volontairement limité à deux éléments. Caméra masquée, micro actif. Le
-      diagramme simplifie le code ; il ne prétend pas représenter tous ses modules.
+      Mechanism close-up, deliberately limited to two elements. Camera hidden, microphone active.
+      The diagram simplifies the code; it does not claim to show every module.
 
-      Preuve : src/engine/renderer.js · src/engine/layouts/index.js
-
-
-      Ce deuxième gros plan relie le moteur au fichier HTML qu’il produit. Le navigateur affiche
-      ensuite ce document et Reveal orchestre les slides. Les composants peuvent activer des
-      graphiques, des diagrammes ou des médias. Il existe donc plusieurs comportements dans le même
-      deck. Une slide statique et une démonstration interactive ne demandent pas la même
-      préparation. Avant de filmer, il faut tester les interactions que l’on compte vraiment
-      montrer, dans l’ordre du récit.
+      Evidence: src/engine/renderer.js · src/engine/layouts/index.js
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Embarqué, avec des limites.
+    title: Embedded, with limits.
     items:
-      - title: Les assets locaux voyagent.
-      - title: Les URL restent distantes.
+      - title: Local assets travel with the deck.
+      - title: URLs stay remote.
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
     source: src/loader/assets.js · docs/presenter-studio.md
     narration: >-
-      Le document peut embarquer ses polices, ses bibliothèques et des médias locaux pris en charge.
-      C’est pratique pour transporter un deck. Mais un asset référencé par une URL distante reste
-      dépendant du réseau. Un site peut aussi refuser d’être affiché dans une iframe. Le mode
-      navigateur local et le terminal nécessitent les options de serveur correspondantes. Avant une
-      démonstration, vérifiez donc les ressources effectivement utilisées. Un fichier HTML autonome
-      ne transforme pas tous les services externes en contenu hors ligne.
+      A document can embed fonts, libraries, and supported local media. A remote URL still depends
+      on the network, and a site can refuse an iframe. Local browser mode and the terminal need
+      relevant server options. A standalone HTML file does not turn every external service offline.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : src/loader/assets.js · docs/presenter-studio.md
-
-
-      Le document peut embarquer ses polices, ses bibliothèques et des médias locaux pris en charge.
-      C’est pratique pour transporter un deck. Mais un asset référencé par une URL distante reste
-      dépendant du réseau. Un site peut aussi refuser d’être affiché dans une iframe. Le mode
-      navigateur local et le terminal nécessitent les options de serveur correspondantes. Avant une
-      démonstration, vérifiez donc les ressources effectivement utilisées. Un fichier HTML autonome
-      ne transforme pas tous les services externes en contenu hors ligne.
+      Evidence: src/loader/assets.js · docs/presenter-studio.md
   - layout: title
     variant: video-story
     composition: evidence
-    title: Générer un premier rendu.
+    title: Generate a first render.
     quote: |-
       gamma-slides generate
       -f youtube-pilot.yaml
       -o ../output/pilot.html
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Commande illustrative · bin/gamma-slides.js
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Illustrative command · bin/gamma-slides.js
     narration: >-
-      Voici la commande de génération, répartie sur trois lignes pour la lecture. Pour l’exécuter,
-      réunissez ces lignes dans le terminal, depuis le dossier presentations, avec le CLI disponible
-      dans votre environnement. Le fichier youtube-pilot point yaml est celui de cet épisode. La
-      commande exacte avec node figure dans le guide de production. Cette étape produit un fichier à
-      ouvrir et à examiner. Ne passez pas directement à l’enregistrement simplement parce que la
-      commande s’est terminée sans erreur.
+      This generation command is split over three lines for readability. Run it from the
+      presentations folder with the CLI available in your environment. The production guide includes
+      the exact Bun command. Open and inspect the output; a successful command is not a reason to
+      skip review and start recording.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Commande illustrative · bin/gamma-slides.js
-
-
-      Voici la commande de génération, répartie sur trois lignes pour la lecture. Pour l’exécuter,
-      réunissez ces lignes dans le terminal, depuis le dossier presentations, avec le CLI disponible
-      dans votre environnement. Le fichier youtube-pilot point yaml est celui de cet épisode. La
-      commande exacte avec node figure dans le guide de production. Cette étape produit un fichier à
-      ouvrir et à examiner. Ne passez pas directement à l’enregistrement simplement parce que la
-      commande s’est terminée sans erreur.
+      Evidence: illustrative command · bin/gamma-slides.js
   - layout: title
     variant: video-story
     composition: evidence
-    title: Regarder comme le public.
-    subtitle: Un message doit survivre à 390 px.
+    title: Watch it as the audience will.
+    subtitle: A message must survive 390 px.
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Règle de composition de cet épisode.
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Composition rule for this episode.
     narration: >-
-      Maintenant, regardez le rendu comme le public le recevra. Une vidéo horizontale réduite dans
-      un lecteur de trois cent quatre-vingt-dix pixels ne devient pas une page responsive. Tout
-      rétrécit : le texte, les légendes et les détails. Dans cet épisode, les messages principaux
-      restent volontairement grands et les mécanismes sont divisés en gros plans. Les références
-      détaillées sont dans les notes et le guide. Si un détail essentiel devient illisible,
-      rapprochez la vue ou répartissez l’explication sur plusieurs scènes.
+      A horizontal video reduced to a 390-pixel player does not become a responsive page.
+      Everything shrinks: text, labels, and details. Keep the main message large, use close-ups for
+      mechanisms, and put detailed references in notes. If an essential detail is illegible, move
+      closer or spread the explanation across several scenes.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Règle de composition de cet épisode.
-
-
-      Maintenant, regardez le rendu comme le public le recevra. Une vidéo horizontale réduite dans
-      un lecteur de trois cent quatre-vingt-dix pixels ne devient pas une page responsive. Tout
-      rétrécit : le texte, les légendes et les détails. Dans cet épisode, les messages principaux
-      restent volontairement grands et les mécanismes sont divisés en gros plans. Les références
-      détaillées sont dans les notes et le guide. Si un détail essentiel devient illisible,
-      rapprochez la vue ou répartissez l’explication sur plusieurs scènes.
+      Evidence: composition rule for this episode.
   - layout: diagram
     variant: video-closeup
-    title: Le public a sa propre sortie.
-    subtitle: Les commandes restent côté opérateur.
+    title: The audience has its own output.
+    subtitle: Controls stay with the operator.
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
     diagram:
       type: architecture
       spec:
         schema_version: 1
         diagram_type: architecture
         meta:
-          title: Le public a sa propre sortie.
+          title: The audience has its own output.
           quality_profile: showcase
           animation: none
-          viewBox:
-            - 600
-            - 300
+          viewBox: [600, 300]
         components:
           - id: from
             type: backend
             label: Studio
-            pos:
-              - 30
-              - 85
-            size:
-              - 150
-              - 90
+            pos: [30, 85]
+            size: [150, 90]
           - id: to
             type: frontend
-            label: Public
-            pos:
-              - 340
-              - 85
-            size:
-              - 150
-              - 90
+            label: Audience
+            pos: [340, 85]
+            size: [150, 90]
         connections:
           - id: transfer
             from: from
             to: to
-            label: sortie
+            label: output
             variant: emphasis
     source: src/engine/components/studio-output.js · docs/presenter-studio.md
     narration: >-
-      Nous arrivons au point central du studio : la séparation des surfaces. La fenêtre de travail
-      contient les commandes. Une autre fenêtre contient la sortie destinée au public. Le studio
-      peut y composer les slides et la caméra, puis y envoyer une démonstration explicitement
-      choisie. Ouvrir un menu dans la fenêtre de travail ne doit pas l’ajouter au film. Cette
-      séparation vous laisse préparer l’étape suivante tout en gardant une image propre pour le
-      spectateur.
+      The studio separates surfaces. The work window contains controls; another window contains the
+      audience output. Studio can compose slides and camera there, then send an explicitly selected
+      demonstration to it. A menu in the work window must never enter the film.
     notes: >-
-      Gros plan de mécanisme, volontairement limité à deux éléments. Caméra masquée, micro actif. Le
-      diagramme simplifie le code ; il ne prétend pas représenter tous ses modules.
+      Mechanism close-up, deliberately limited to two elements. Camera hidden, microphone active.
+      The diagram simplifies the code; it does not claim to show every module.
 
-      Preuve : src/engine/components/studio-output.js · docs/presenter-studio.md
-
-
-      Nous arrivons au point central du studio : la séparation des surfaces. La fenêtre de travail
-      contient les commandes. Une autre fenêtre contient la sortie destinée au public. Le studio
-      peut y composer les slides et la caméra, puis y envoyer une démonstration explicitement
-      choisie. Ouvrir un menu dans la fenêtre de travail ne doit pas l’ajouter au film. Cette
-      séparation vous laisse préparer l’étape suivante tout en gardant une image propre pour le
-      spectateur.
+      Evidence: src/engine/components/studio-output.js · docs/presenter-studio.md
   - layout: bullets
     variant: video-story
     composition: sequence
-    title: Partager la bonne fenêtre.
+    title: Share the right window.
     items:
-      - title: Ouvrir la sortie vidéo
-      - title: Choisir son onglet
-      - title: Vérifier, puis enregistrer
+      - title: Open the video output
+      - title: Choose its tab
+      - title: Check, then record
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: docs/presenter-studio.md · mode Sortie propre
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: docs/presenter-studio.md · Clean Output mode
     narration: >-
-      Dans le menu M, ouvrez Studio. Gardez le mode Sortie propre, puis ouvrez la sortie vidéo.
-      Lorsque le navigateur demande quoi partager, choisissez précisément l’onglet de sortie. Le
-      studio vérifie cette identité lorsque le navigateur le permet. Ce choix évite de filmer par
-      erreur votre fenêtre de préparation. Regardez ensuite la composition réelle : caméra, cadrage,
-      format et contenu. Les autorisations de caméra, de microphone et de partage doivent être
-      validées dans votre navigateur avant la prise.
+      In the M menu, open Studio. Keep Clean Output mode, then open video output. When the browser
+      asks what to share, choose the output tab specifically. This prevents accidentally filming
+      your preparation window. Check camera, framing, format, and content before the take.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : docs/presenter-studio.md · mode Sortie propre
-
-
-      Dans le menu M, ouvrez Studio. Gardez le mode Sortie propre, puis ouvrez la sortie vidéo.
-      Lorsque le navigateur demande quoi partager, choisissez précisément l’onglet de sortie. Le
-      studio vérifie cette identité lorsque le navigateur le permet. Ce choix évite de filmer par
-      erreur votre fenêtre de préparation. Regardez ensuite la composition réelle : caméra, cadrage,
-      format et contenu. Les autorisations de caméra, de microphone et de partage doivent être
-      validées dans votre navigateur avant la prise.
+      Evidence: docs/presenter-studio.md · Clean Output mode
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Une seule démonstration diffusée.
+    title: One demonstration on air.
     items:
       - title: Slides
       - title: Terminal
-      - title: Navigateur
+      - title: Browser
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
-    source: docs/presenter-studio.md · diffusion explicite
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
+    source: docs/presenter-studio.md · explicit broadcast
     narration: >-
-      Vous pouvez préparer plusieurs outils, mais le choix de diffusion reste explicite. Dans les
-      démonstrations du studio, sélectionnez les slides, le terminal ou le navigateur. Le terminal
-      et le navigateur sont exclusifs : ouvrir l’un de ces outils ne suffit pas à l’envoyer à la
-      sortie publique. Pour garder un récit clair, annoncez le changement, montrez une seule action,
-      puis revenez aux slides avec ce que cette action prouve. Répétez ce passage avant
-      l’enregistrement.
+      You can prepare several tools, but the broadcast choice remains explicit. Select slides, the
+      terminal, or the browser. Opening either tool is not enough to send it to public output.
+      Announce a change, show one action, then return to the slides with what it proves. Rehearse
+      this handoff before recording.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : docs/presenter-studio.md · diffusion explicite
-
-
-      Vous pouvez préparer plusieurs outils, mais le choix de diffusion reste explicite. Dans les
-      démonstrations du studio, sélectionnez les slides, le terminal ou le navigateur. Le terminal
-      et le navigateur sont exclusifs : ouvrir l’un de ces outils ne suffit pas à l’envoyer à la
-      sortie publique. Pour garder un récit clair, annoncez le changement, montrez une seule action,
-      puis revenez aux slides avec ce que cette action prouve. Répétez ce passage avant
-      l’enregistrement.
+      Evidence: docs/presenter-studio.md · explicit broadcast
   - layout: title
     variant: video-story
     composition: evidence
-    title: La pause fait partie du rythme.
-    subtitle: Préparer. Reprendre. Expliquer.
+    title: Pause is part of the rhythm.
+    subtitle: Prepare. Resume. Explain.
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
-    source: docs/presenter-studio.md · barre de prise
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
+    source: docs/presenter-studio.md · take bar
     narration: >-
-      Une prise n’a pas besoin d’être une performance sans interruption. La barre d’enregistrement
-      propose une vraie pause du MediaRecorder. Vous pouvez préparer le prochain passage, reprendre,
-      puis poursuivre votre explication. Le microphone et la caméra se contrôlent séparément. Sur
-      les gros plans de cet épisode, la caméra est masquée pour libérer l’image, tandis que la
-      narration peut continuer. Ce sont les besoins de la scène qui guident la présence du visage,
-      pas une obligation de l’afficher en permanence.
+      A take does not need to be an unbroken performance. The recording bar offers a real
+      MediaRecorder pause: prepare the next passage, resume, and continue. Microphone and camera
+      are controlled separately. A face appears when the scene needs it, not by permanent
+      obligation.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : docs/presenter-studio.md · barre de prise
-
-
-      Une prise n’a pas besoin d’être une performance sans interruption. La barre d’enregistrement
-      propose une vraie pause du MediaRecorder. Vous pouvez préparer le prochain passage, reprendre,
-      puis poursuivre votre explication. Le microphone et la caméra se contrôlent séparément. Sur
-      les gros plans de cet épisode, la caméra est masquée pour libérer l’image, tandis que la
-      narration peut continuer. Ce sont les besoins de la scène qui guident la présence du visage,
-      pas une obligation de l’afficher en permanence.
+      Evidence: docs/presenter-studio.md · take bar
   - layout: bullets
     variant: video-story
     composition: sequence
-    title: La prise finit par une revue.
+    title: A take ends with review.
     items:
-      - title: Relire la prise
-      - title: Sauvegarder le fichier
-      - title: Vérifier sa lecture
+      - title: Replay the take
+      - title: Save the file
+      - title: Check its playback
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: docs/presenter-studio.md · revue et sauvegarde
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: docs/presenter-studio.md · review and save
     narration: >-
-      Après l’arrêt, la revue affiche le fichier réellement produit, ses dimensions, sa durée et sa
-      taille. Le format dépend des codecs disponibles dans le navigateur : ce peut être du MP4 ou du
-      WebM. Lisez la prise, sauvegardez-la, puis ouvrez le fichier enregistré. Tant qu’une prise
-      n’est pas sauvegardée, ne supposez pas qu’elle existe ailleurs que dans la mémoire de la page.
-      La sauvegarde et la vérification font partie de la production, au même titre que
-      l’enregistrement.
+      After stopping, review shows the actual file, dimensions, duration, and size. The browser may
+      produce MP4 or WebM, depending on its codecs. Play the take, save it, then open the saved
+      file. Until it is saved, do not assume it exists outside page memory.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : docs/presenter-studio.md · revue et sauvegarde
-
-
-      Après l’arrêt, la revue affiche le fichier réellement produit, ses dimensions, sa durée et sa
-      taille. Le format dépend des codecs disponibles dans le navigateur : ce peut être du MP4 ou du
-      WebM. Lisez la prise, sauvegardez-la, puis ouvrez le fichier enregistré. Tant qu’une prise
-      n’est pas sauvegardée, ne supposez pas qu’elle existe ailleurs que dans la mémoire de la page.
-      La sauvegarde et la vérification font partie de la production, au même titre que
-      l’enregistrement.
+      Evidence: docs/presenter-studio.md · review and save
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Ce qui reste à tester chez vous.
+    title: What you still need to test.
     items:
-      - title: Le visage et la lumière
-      - title: La voix et le niveau sonore
-      - title: La fluidité de la prise
+      - title: Face and lighting
+      - title: Voice and sound level
+      - title: Smoothness of the take
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Limites de validation matérielle · docs/presenter-studio.md
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Hardware validation limits · docs/presenter-studio.md
     narration: >-
-      Les essais logiciels ne remplacent pas un essai avec votre matériel. Une caméra synthétique
-      peut prouver qu’une composition apparaît, mais pas que votre visage est bien exposé. Un signal
-      audio de test peut prouver qu’une piste existe, mais pas que votre voix est agréable et
-      intelligible. Faites une courte prise avec votre caméra et votre microphone, puis écoutez-la.
-      Les sources de test de ce dépôt ne valident pas la qualité d’un appareil réel ni une qualité
-      universelle.
+      Software checks do not replace a test with your equipment. A synthetic camera can prove that
+      composition appears, not that your face is well lit. Test audio can prove a track exists, not
+      that your voice is clear. Make a short take with your own camera and microphone, then listen.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Limites de validation matérielle · docs/presenter-studio.md
-
-
-      Les essais logiciels ne remplacent pas un essai avec votre matériel. Une caméra synthétique
-      peut prouver qu’une composition apparaît, mais pas que votre visage est bien exposé. Un signal
-      audio de test peut prouver qu’une piste existe, mais pas que votre voix est agréable et
-      intelligible. Faites une courte prise avec votre caméra et votre microphone, puis écoutez-la.
-      Les sources de test de ce dépôt ne valident pas la qualité d’un appareil réel ni une qualité
-      universelle.
+      Evidence: hardware validation limits · docs/presenter-studio.md
   - layout: bullets
     variant: video-story
     composition: evidence
-    title: Deux façons de produire.
+    title: Two ways to produce.
     items:
-      - title: "CLI : slides et narration"
-      - title: "Studio : interactions en direct"
+      - title: "CLI: slides and narration"
+      - title: "Studio: live interactions"
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
     source: src/video/generate-v2.js · docs/presenter-studio.md
     narration: >-
-      Il existe deux façons de produire une vidéo. L’export narré du CLI compose des captures de
-      slides avec la narration déclarée et des transitions. Il sert à une version préparée du récit.
-      Le Studio enregistre les interactions que vous réalisez en direct avec vos sources. Ces deux
-      chemins peuvent utiliser le même contenu, mais ils ne fabriquent pas le même type de
-      démonstration. Choisissez le premier pour une explication montée à partir des scènes, et le
-      second pour montrer des gestes ou un parcours interactif.
+      The CLI’s narrated export composes slide captures with declared narration and transitions for
+      a prepared story. Studio records interactions you perform live with sources. Both use the
+      same content, but make different demonstrations: an edited explanation or an interactive
+      journey.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : src/video/generate-v2.js · docs/presenter-studio.md
-
-
-      Il existe deux façons de produire une vidéo. L’export narré du CLI compose des captures de
-      slides avec la narration déclarée et des transitions. Il sert à une version préparée du récit.
-      Le Studio enregistre les interactions que vous réalisez en direct avec vos sources. Ces deux
-      chemins peuvent utiliser le même contenu, mais ils ne fabriquent pas le même type de
-      démonstration. Choisissez le premier pour une explication montée à partir des scènes, et le
-      second pour montrer des gestes ou un parcours interactif.
+      Evidence: src/video/generate-v2.js · docs/presenter-studio.md
   - layout: bullets
     variant: video-story
     composition: sequence
-    title: Votre première prise.
+    title: Your first take.
     items:
-      - title: Une question précise
-      - title: Un mécanisme visible
-      - title: Une conclusion vérifiable
+      - title: One precise question
+      - title: One visible mechanism
+      - title: One verifiable conclusion
     transition: fade
-    scene:
-      camera:
-        visible: false
-        position: br
-        width: 0.18
-    source: Méthode éditoriale proposée.
+    scene: { camera: { visible: false, position: br, width: 0.18 } }
+    source: Proposed editorial method.
     narration: >-
-      Pour votre première prise, réduisez l’ambition à une question précise. Préparez les quelques
-      scènes qui permettent d’y répondre. Montrez un mécanisme réel, avec un exemple honnête, puis
-      formulez une conclusion que le spectateur peut vérifier. Générez le deck, contrôlez le petit
-      lecteur, répétez les changements de source et faites une prise courte. Cette boucle simple
-      vous apprendra davantage sur votre production qu’une présentation qui tente de montrer toutes
-      les capacités du moteur à la fois.
+      Reduce your first take to one precise question. Prepare the few scenes that answer it, show a
+      real mechanism with an honest example, and state a conclusion the viewer can verify. Generate
+      the deck, inspect the small player, rehearse source changes, and make a short take.
     notes: >-
-      Réalisation : caméra masquée ; conserver le microphone actif. Lire la narration, marquer une
-      respiration avant de changer de scène.
+      Direction: camera hidden; keep the microphone active. Read the narration and leave a breath
+      before changing scenes.
 
-      Preuve : Méthode éditoriale proposée.
-
-
-      Pour votre première prise, réduisez l’ambition à une question précise. Préparez les quelques
-      scènes qui permettent d’y répondre. Montrez un mécanisme réel, avec un exemple honnête, puis
-      formulez une conclusion que le spectateur peut vérifier. Générez le deck, contrôlez le petit
-      lecteur, répétez les changements de source et faites une prise courte. Cette boucle simple
-      vous apprendra davantage sur votre production qu’une présentation qui tente de montrer toutes
-      les capacités du moteur à la fois.
+      Evidence: proposed editorial method.
   - layout: title
     variant: video-story
     composition: brief
     title: |-
-      Le moteur compose.
-      Vous expliquez.
-    subtitle: Une preuve à la fois.
+      The engine composes.
+      You explain.
+    subtitle: One piece of evidence at a time.
     transition: fade
-    scene:
-      camera:
-        visible: true
-        position: br
-        width: 0.18
-    source: Gamma Slides · fin de l’épisode.
+    scene: { camera: { visible: true, position: br, width: 0.18 } }
+    source: Gamma Slides · end of episode.
     narration: >-
-      Nous avons suivi le chemin complet : déclarer le contenu, valider sa structure, générer le
-      document, vérifier ce qui se lit, puis préparer une sortie et une prise. Gamma Slides fournit
-      les pièces pour relier ces étapes. Le travail qui reste au créateur est décisif : sélectionner
-      la preuve, choisir le cadrage et donner du sens à ce qui apparaît. Vous pouvez maintenant
-      reprendre ce pilote, remplacer son sujet par le vôtre et construire une explication, une
-      preuve à la fois.
+      We followed the complete path: declare content, validate its structure, generate the
+      document, check what can be read, then prepare an output and a take. Gamma Slides provides
+      the pieces that connect these steps. You select the evidence, choose the framing, and give
+      meaning to what appears.
     notes: >-
-      Réalisation : caméra en bas à droite, largeur 18 %. Garder la zone droite inférieure libre.
-      Lire la narration, marquer une respiration avant de changer de scène.
+      Direction: camera bottom-right, 18% width. Keep the lower-right area clear. Read the
+      narration and leave a breath before changing scenes.
 
-      Preuve : Gamma Slides · fin de l’épisode.
-
-
-      Nous avons suivi le chemin complet : déclarer le contenu, valider sa structure, générer le
-      document, vérifier ce qui se lit, puis préparer une sortie et une prise. Gamma Slides fournit
-      les pièces pour relier ces étapes. Le travail qui reste au créateur est décisif : sélectionner
-      la preuve, choisir le cadrage et donner du sens à ce qui apparaît. Vous pouvez maintenant
-      reprendre ce pilote, remplacer son sujet par le vôtre et construire une explication, une
-      preuve à la fois.
+      Evidence: Gamma Slides · end of episode.

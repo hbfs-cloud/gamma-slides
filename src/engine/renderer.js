@@ -192,6 +192,7 @@ ${slidesHtml}
     window.__gammaScenes = ${serializeForScript(deck.slides.map(slide => slide.scene || null))};
     ${studioFrameClockJS()}
     const gammaExportMode = new URLSearchParams(window.location.search).has('gamma-export') || new URLSearchParams(window.location.search).has('print-pdf');
+    if (new URLSearchParams(window.location.search).has('gamma-preview')) document.documentElement.setAttribute('data-gamma-preview', '');
     if (gammaExportMode) document.documentElement.classList.add('gamma-export');
     const gammaThemeCssSets = ${serializeForScript(themeCssSets)};
     ${themesEnabled ? themePickerJS(themeFamily, defaultTheme.id) : ''}

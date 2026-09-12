@@ -1,8 +1,8 @@
 # Produce the pilot episode
 
-The [English pilot](../presentations/youtube-pilot.yaml) follows one question: how does declarative content become an understandable video? Its 20 scenes go from the YAML contract to HTML rendering, then from clean output to take review. Its three diagrams are close-ups of relationships observed in code; they do not represent the full architecture. Per-scene references live in `source` and notes.
+The [pilot](../presentations/youtube-pilot.yaml) follows one question: how does declarative content become an understandable video? Its 20 scenes go from the YAML contract to HTML rendering, then from clean output to take review. Its three diagrams are close-ups of relationships observed in code; they do not represent the full architecture. Per-scene references live in `source` and notes. This English regression source is included in the public catalog; use the [English capability tour](https://hbfs-cloud.github.io/gamma-slides/gamma-presenter-capabilities/) for the broader current product proof.
 
-The narration is approximately 1,520 words. Allow roughly 10–12 minutes at an explanatory pace; only generated audio or a real take establishes duration. The declared voice is `fr-FR-HenriNeural` at `-5%`. YouTube settings remain private: generating the deck or video is not publication.
+The narration is intentionally concise. Allow several minutes at an explanatory pace; only generated audio or a real take establishes duration. The declared voice is `en-US-JennyNeural` at `-5%`. YouTube settings remain private: generating the deck or video is not publication.
 
 ## Generate and present
 

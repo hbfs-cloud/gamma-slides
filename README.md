@@ -4,7 +4,7 @@
 
 Gamma Presenter brings writing, live visuals, presentation control, recording, and carefully bounded AI co-piloting into one macOS workspace. It is built on the open-source Gamma Slides engine, so the Markdown, YAML, and JSON you author remain durable, inspectable source—not a locked canvas.
 
-[Download for Apple silicon](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.3-arm64-mac.zip) · [Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
+[Download for Apple silicon](https://github.com/hbfs-cloud/gamma-slides/releases/download/v2.0.4/Gamma.Presenter-2.0.4-arm64-mac.zip) · [Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
 
 ![Gamma Presenter’s control room: timers, approved live-action requests, and a local AI co-pilot inside the Author workspace](docs/images/gamma-presenter-control-room.png)
 
@@ -12,16 +12,22 @@ Gamma Presenter brings writing, live visuals, presentation control, recording, a
 
 [Open the complete capability tour](https://hbfs-cloud.github.io/gamma-slides/gamma-presenter-capabilities/) for one navigable deck covering the authoring workspace, local media, native charts, Archify diagrams, immersive 3D, browser scenes, presentation operations, recording, exports, and the locally bounded Claude Code / Codex co-pilot workflow. It is the product overview; the adjacent flagship, Studio, and immersive decks remain deeper proofs of individual runtimes.
 
+Recorded from the running Gamma runtime: rotate the data, inspect a new perspective, then return to the story.
+
+![An English Gamma presentation with an interactive 3D chart changing perspective](docs/images/gamma-presenter-immersive-runtime.gif)
+
+[Explore the live gallery](https://hbfs-cloud.github.io/gamma-slides/#live-gallery) for animated architecture, data, media, and the presentation control workflow.
+
 ## Everything needed to run a serious room
 
 | Moment | Gamma Presenter keeps it together |
 | --- | --- |
-| Write | Markdown for velocity; YAML and JSON for full Gamma layouts, notes, themes, and advanced configuration. |
-| Shape | A source-aware slide rail, inspector, direct media import, and an embedded renderer preserve the story and the rich scene behind it. |
+| Write | A calm Writer view keeps Markdown markers out of sight while prose stays private and deliberate Show actions become stage copy; portable Markdown is one click away. YAML and JSON remain available for full Gamma layouts, notes, themes, and advanced configuration. |
+| Shape | A source-aware slide rail, inspector, direct media import, local revision history, and an embedded renderer preserve the story and the rich scene behind it. |
 | Present | A selected-display Stage, Speaker View, notes, elapsed timers, countdowns, private cues, Dock actions, and a menu-bar controller. |
 | Make it live | Images, GIFs, local video and audio, privacy-enhanced YouTube embeds, ECharts, Archify, D3, Pixi, Three.js, animation, browser demonstrations, and terminal scenes. |
 | Co-animate | A loopback-only MCP endpoint and local Codex/Claude CLI workflow. Consequential Stage, recording, capture, browser, terminal, and spoken-note requests require an explicit operator approval. |
-| Deliver | Standalone HTML, PDF, PNG, PowerPoint, speaker handouts, and local recording controls—without pretending interactive runtime scenes are editable PowerPoint objects. |
+| Deliver | Standalone HTML, PDF, PNG, PowerPoint, speaker handouts, local recording controls, source-only Drive backup and restore, intentional GitHub Pages/Vercel publishing, and portable iframe/share copy. |
 
 Gamma Presenter is deliberately local-first. Media remains project-local, the presentation MCP service only listens on `127.0.0.1` with an ephemeral bearer token, and capture or terminal access is never ambient. The [macOS guide](docs/gamma-presenter-macos.md) documents the functional coverage, security boundary, known limits, and comparison with iA Presenter, reveal.js, Marp, and Slidev.
 
@@ -36,7 +42,7 @@ bun install
 bun run desktop
 ```
 
-Download the current Apple-silicon ZIP from the [GitHub Release](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.3-arm64-mac.zip), or package it locally with `bun run desktop:package`. Releases are built by GitHub Actions from version tags. Apple signing and notarization need the product owner’s Apple Developer credentials, so the package is explicitly unsigned.
+Download the current Apple-silicon ZIP from the [GitHub Release](https://github.com/hbfs-cloud/gamma-slides/releases/download/v2.0.4/Gamma.Presenter-2.0.4-arm64-mac.zip), or package it locally with `bun run desktop:package`. Releases are built by GitHub Actions from version tags. Apple signing and notarization need the product owner’s Apple Developer credentials, so the package is explicitly unsigned.
 
 ## Gamma Slides engine
 
@@ -59,6 +65,21 @@ Then ask the agent in plain language:
 > Create a premium 12-slide executive presentation from `brief.md`, validate every slide, deploy it as `fy26-plan`, and return the public URL. Never invent facts.
 
 The agent can inspect the schema and flagship example, choose among the three themes, generate live ECharts, validate the deck, and create or update its stable GitHub Pages URL.
+
+## AI is a co-pilot, not an unbounded remote control
+
+Gamma Presenter makes two AI workflows explicit:
+
+- **Author and release:** Claude Code or Codex can use the local Gamma MCP tools to inspect the schema, create or revise the same Markdown/YAML/JSON source the team owns, validate it, and intentionally create or update a stable public URL.
+- **Co-animate the room:** the desktop control room exposes deck/slide timing, speaker cues, and local requests while presenting. An agent can request a Stage change, recording, capture, browser, terminal, clean output, or spoken note; each consequential request is visible and requires the presenter to approve or reject it.
+
+The desktop MCP endpoint is loopback-only (`127.0.0.1`) and bearer-token authenticated; the separate authoring MCP server runs locally over stdio in the selected AI client. Neither is a cloud service or exposes a shell or camera to a public URL. The desktop endpoint cannot silently turn on hardware. The source remains editable after an agent has produced it: restore a local revision if needed, edit in Author or in the source, validate, then run `deploy` again with the same slug when the update is actually ready to publish.
+
+## A candid comparison with iA Presenter
+
+[iA Presenter](https://ia.net/presenter) is the benchmark for a calm, writing-first way to prepare a talk: it deliberately keeps the author focused on the script while its design system handles the slides. Gamma Presenter’s Writer now follows the same essential discipline—write a thought, explicitly Show the few lines that belong on stage, and begin a slide with a natural break—while retaining a one-click portable Markdown view for teams that need source control.
+
+Gamma takes a different path when the presentation itself must run technical evidence or operate a room: editable rich source alongside Markdown, local media and YouTube, interactive charts, Archify and 3D scenes, browser and terminal demonstrations, recording, local source backups, intentional publishing, and an approval-gated local AI co-pilot.
 
 ## Deploy and manage presentations
 
@@ -85,7 +106,27 @@ gamma-slides delete-site fy26-plan --yes
 
 `deploy` is both Create and Update: the slug is the stable ID and URL. `pull` is Read. `delete-site` removes the source and the next Pages build removes the public route. For a fork or another Pages repository, append `--repo owner/repository`; configure that default for both agents with `setup --repo owner/repository`.
 
+### Re-edit, connect, and share
+
+The desktop Author keeps the last 40 source revisions on the Mac. Restoring one preserves the current draft as a new revision first; it never silently rewrites a public URL. Use `pull`, edit, validate, and run `deploy` with the same slug to intentionally release an update—even immediately before a presentation.
+
+For a published HTTPS URL, generate provider-neutral share copy instead of hand-writing an unsafe iframe:
+
+```bash
+gamma-slides share --url https://owner.github.io/repository/fy26-plan/ --title "FY26 plan"
+```
+
+The command returns a lazy, fullscreen-capable iframe plus Notion and Linear-ready copy. It creates text only: it does not validate the destination workspace or publication.
+
+In desktop Author, **Connect & share** first reads local status; it never starts consent or deployment merely by opening. To use Google Drive, import your own Desktop OAuth JSON with an `installed` client, then choose **Connect Google Drive** for explicit browser consent. Backups contain Markdown/YAML/JSON source, including speaker notes, but never local `media/` assets, recordings, credentials, or arbitrary files. **Browse backups** lists only backups tagged by Gamma Presenter; **Open as draft** restores a selected source as an unsaved draft after preserving the current local source as a recoverable revision.
+
+GitHub Pages and Vercel use their installed CLIs rather than an in-app provider OAuth form. Run `gh auth login` for an existing Gamma Pages repository, or `vercel login` and `vercel link` for the directory you select. Publishing requires an explicit confirmation that public output includes speaker notes. A GitHub Pages action generates and publishes a rich YAML/JSON deck; the original local Markdown stays editable. A Vercel action stages only the rendered `index.html`, never the selected project files. Both actions report a remote submission separately from verified public availability.
+
+For recurring company identity, save a **Corporate profile** from the Author Appearance panel. Its guided form applies company metadata, theme, logo/watermark, palette, and typography at deck level to rich YAML/JSON decks while preserving every slide’s content and overrides. Enable **Apply this profile to new rich templates** when new board, architecture, or rehearsal models should start branded; existing decks still require the explicit **Apply to this deck** action. Markdown remains intentionally simple until converted to a rich deck. The Author titlebar always distinguishes a local draft from a saved source; publishing remains a separate intentional `deploy` action.
+
 See [the complete Claude/Codex and CRUD guide](docs/LLM_QUICKSTART.md).
+
+For the executable test matrix, macOS packaging limits, visual-review boundaries, and release checklist, see [quality evidence and release gates](docs/quality-evidence.md). The [contrarian review](docs/contrarian-review.md) records the remaining release gates rather than hiding them behind marketing claims.
 
 ## Local development
 
@@ -123,7 +164,7 @@ Reveal, ECharts, and the presentation fonts are embedded from pinned npm package
 
 M → Studio opens the live controls for camera, microphone, recording and demonstrations. Its separate **video output** keeps operator menus out of a clean recording; terminal and browser content enter that output only when explicitly selected for broadcast. The camera can be moved and resized, microphone and camera controls are independent, and recording supports pause, resume and review before saving. Clean capture checks the selected output tab's identity; use normal Chrome, since private browsing can prevent that verification.
 
-The [20-scene French YouTube pilot](docs/youtube-production.md) adds a coherent narrated episode, large text and architecture closeups. Studio writes recoverable fragments locally, validates native capture resolution, and provides voice/media mixing plus optional separate audio tracks.
+The [20-scene YouTube pilot](docs/youtube-production.md) adds a coherent narrated episode, large text and architecture closeups. Studio writes recoverable fragments locally, validates native capture resolution, and provides voice/media mixing plus optional separate audio tracks.
 
 The [Presenter Studio guide](docs/presenter-studio.md) covers the 47-slide demo, local `--browser --terminal` launch, LLM-authored SVG/images/GIF/audio/video, native JSON ECharts, recording and responsive limits. Mobile slide rendering does not imply mobile screen-capture support; each recording has one chosen output aspect ratio.
 

@@ -60,7 +60,8 @@ test('video closeups retain readable labels in live and deterministic SVG output
   await page.waitForSelector('section.present .archify-slide[data-ready=true]');
   const iframe=await frame(page);await expect.poll(()=>outside(iframe)).toEqual([]);
   const labels=await iframe.evaluate(()=>[...document.querySelectorAll('text[data-node-label]')].map(node=>({font:parseFloat(getComputedStyle(node).fontSize),height:node.getBoundingClientRect().height})));
-  expect(labels.every(label=>label.font===22 && label.height>=40)).toBe(true);
+  expect(labels).toHaveLength(2);
+  expect(labels.every(label=>label.font===40 && label.height>=40)).toBe(true);
   const svg=await page.locator('section.present .archify-static').getAttribute('src');
-  expect(Buffer.from(svg.split(',')[1],'base64').toString()).toContain("svg { font-family:'JetBrains Mono',ui-monospace,monospace; }");
+  expect(Buffer.from(svg.split(',')[1],'base64').toString()).toContain("svg { font-family:'Azeret Mono',ui-monospace,monospace; }");
 });

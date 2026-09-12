@@ -8,9 +8,14 @@ permissions:
   contents: write
 
 jobs:
+  verify:
+    uses: ./.github/workflows/quality.yml
+
   package-and-release:
+    needs: verify
     name: Package arm64 app and publish release
     runs-on: macos-14
+    timeout-minutes: 45
     steps:
       - name: Check out source
         uses: actions/checkout@v6
@@ -23,11 +28,51 @@ jobs:
       - name: Install locked dependencies
         run: bun ci
 
+      - name: Check tag matches package version
+        run: test "${GITHUB_REF_NAME}" = "v$(bun -p 'require("./package.json").version')"
+
+      - name: Run unit tests
+        run: bun run test
+
       - name: Build unsigned macOS artifacts
         run: bunx electron-builder --mac --arm64 --publish never
 
+      - name: Verify packaged artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d 'dist/mac-arm64/Gamma Presenter.app'
+          dmgs=(dist/"Gamma Presenter-"*.dmg)
+          zips=(dist/"Gamma Presenter-"*-mac.zip)
+          test "${#dmgs[@]}" -eq 1
+          test "${#zips[@]}" -eq 1
+          hdiutil verify "${dmgs[0]}"
+          unzip -t "${zips[0]}"
+
+      - name: Smoke packaged Gamma Presenter
+        env:
+          GAMMA_DESKTOP_APP: dist/mac-arm64/Gamma Presenter.app
+          GAMMA_DESKTOP_SCREENSHOT: output/desktop-delivery/author.png
+          GAMMA_DESKTOP_WRITER_SCREENSHOT: output/desktop-delivery/writer.png
+          GAMMA_DESKTOP_TEMPLATE_SCREENSHOT: output/desktop-delivery/templates.png
+          GAMMA_DESKTOP_CONNECTIONS_SCREENSHOT: output/desktop-delivery/connections.png
+          GAMMA_DESKTOP_THEME_SCREENSHOT_DIR: output/desktop-delivery/themes
+          GAMMA_DESKTOP_THEME_REPORT: output/desktop-delivery/themes.json
+        run: |
+          mkdir -p output/desktop-delivery
+          bun run desktop:smoke
+
       - name: Record artifact checksums
         run: shasum -a 256 "dist/Gamma Presenter-"*.dmg "dist/Gamma Presenter-"*-mac.zip > dist/SHA256SUMS.txt
+
+      - name: Upload desktop delivery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gamma-presenter-desktop-delivery-evidence
+          path: output/desktop-delivery/
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Publish GitHub Release
         env:

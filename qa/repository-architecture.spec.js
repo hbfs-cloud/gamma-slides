@@ -28,7 +28,7 @@ test('theme contrast follows analyst-proof and reduced motion retains manual rea
  await page.emulateMedia({reducedMotion:'reduce'});await open(page,5,'?theme=analyst-proof');const frame=page.frames().find(f=>f.parentFrame());await expect.poll(()=>frame.evaluate(()=>document.documentElement.dataset.theme)).toBe('light');
  expect(await frame.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--text').trim())).not.toBe('#F3F6F2');
  await page.locator('.gamma-orbit-hub').click();await page.locator('[data-orbit=actions]').click();await page.locator('[data-orbit-action=play]').click();expect(await frame.evaluate(()=>Archify.guidedViews.isPlaying())).toBe(false);expect(await page.evaluate(()=>window.__gammaPresenterMotion.active)).toBe(0);
- await page.locator('[data-orbit-control=archify-node]').selectOption('mcp');await expect(page.locator('section.present [data-archify-status]')).toContainText('Serveur MCP');
+ await page.locator('[data-orbit-control=archify-node]').selectOption('mcp');await expect(page.locator('section.present [data-archify-status]')).toContainText('MCP server');
  await frame.locator('body').press('Escape');await expect(page.locator('.gamma-orbit-hub')).toBeFocused();
  await page.emulateMedia({media:'print'});await expect(page.locator('.archify-canvas iframe')).toHaveCount(0);await expect(page.locator('section.present .archify-static')).toBeVisible();
 });

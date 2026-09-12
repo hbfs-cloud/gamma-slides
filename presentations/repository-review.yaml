@@ -5,10 +5,10 @@ meta:
     repository: hbfs-cloud/gamma-slides
     revision: e2f999677748f1630fcd3f6ab0d4c45734e26be0
     collected_at: '2026-09-09T08:52:35Z'
-  title: Gamma Slides · du code à la décision
-  subtitle: Revue technique de dépôt
+  title: Gamma Slides · from code to decision
+  subtitle: Technical repository review
   company: Gamma Slides
-  language: fr
+  language: en
   date: '2026-09-09'
   presentation: direct
   experience: true
@@ -19,110 +19,110 @@ meta:
     - technical-review
   chapters:
     - start: 1
-      label: La décision
+      label: The decision
     - start: 6
-      label: Le système
+      label: The system
     - start: 12
-      label: Les alternatives
+      label: Alternatives
     - start: 15
-      label: La confiance
+      label: Confidence
     - start: 20
-      label: Le pilote
+      label: The pilot
 slides:
   - layout: title
     variant: editorial
-    title: Du code à la décision.
-    subtitle: 'Gamma Slides : faut-il en faire notre atelier de présentations techniques ?'
+    title: From code to decision.
+    subtitle: 'Gamma Slides: should it become our technical-presentation workshop?'
     metrics:
-      - label: Révision analysée
+      - label: Reviewed revision
         value: e2f9996
-      - label: Fichiers suivis
+      - label: Tracked files
         value: '283'
-      - label: Familles de diagrammes
+      - label: Diagram families
         value: '5'
-    source: Revue du 9 septembre 2026 · Archify ajouté dans cette démonstration
-    footnote: Les fonctions du dépôt et la nouvelle intégration sont distinguées.
+    source: Review dated September 9, 2026 · Archify added in this demonstration
+    footnote: Repository capabilities and the new integration are distinguished.
   - layout: dashboard
     composition: brief
-    title: Adopter par un pilote.
-    subtitle: Une proposition de décision, fondée sur le code lu.
+    title: Adopt through a pilot.
+    subtitle: A decision proposal grounded in the code reviewed.
     panels:
       - type: metric
-        title: Le produit
+        title: The product
         value: HTML
-        delta: Observé
-        subtitle: Un moteur déclaratif de slides et de vidéo, pilotable par CLI ou MCP.
+        delta: Observed
+        subtitle: A declarative slide and video engine, controllable through CLI or MCP.
       - type: metric
-        title: Le bénéfice
+        title: The benefit
         value: '1'
-        delta: Hypothèse à tester
-        subtitle: Une même source éditable pour le deck, la revue et les exports.
+        delta: Hypothesis to test
+        subtitle: One editable source for the deck, review, and exports.
       - type: metric
-        title: Le verrou
+        title: The constraint
         value: QA
-        delta: À qualifier
-        subtitle: La qualité finale dépend du contenu, du rendu et de la validation humaine.
-    source: Code observé · e2f9996 · src/mcp/server.js
+        delta: To qualify
+        subtitle: Final quality depends on content, rendering, and human validation.
+    source: Observed code · e2f9996 · src/mcp/server.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/video/generate-v2.js
   - layout: bullets
     composition: sequence
-    title: Trois personnes, trois décisions.
-    subtitle: Personas proposés pour le pilote ; aucun usage client mesuré.
+    title: Three people, three decisions.
+    subtitle: Pilot personas proposed; no customer usage measured.
     items:
-      - title: Architecte
-        description: Expliquer les frontières du système et défendre ses choix.
+      - title: Architect
+        description: Explain system boundaries and defend design choices.
       - title: Sales engineer
-        description: Relier les fonctions techniques aux enjeux du prospect.
-      - title: Responsable plateforme
-        description: Évaluer le déploiement, les risques et le coût d’exploitation.
-    source: Interprétation · hypothèses de personas à confronter aux utilisateurs
+        description: Connect technical capabilities to the prospect's priorities.
+      - title: Platform owner
+        description: Assess deployment, risk, and operating cost.
+    source: Interpretation · persona hypotheses to validate with users
   - layout: metrics
     composition: scorecard
-    title: Un dépôt jeune, un périmètre lisible.
-    subtitle: Mesures observées le 9 septembre 2026.
+    title: A young repository with a legible scope.
+    subtitle: Metrics observed on September 9, 2026.
     metrics:
-      - label: Fichiers suivis à la révision
+      - label: Tracked files at revision
         value: '283'
-        delta: git ls-tree · inclut les outils de développement
-      - label: Étoiles publiques
+        delta: git ls-tree · includes development tools
+      - label: Public stars
         value: '0'
-        delta: GitHub API · popularité, pas qualité
-      - label: Forks publics
+        delta: GitHub API · popularity, not quality
+      - label: Public forks
         value: '0'
-        delta: GitHub API · aucun signal d’adoption établi
-      - label: Issues et PR ouvertes
+        delta: GitHub API · no established adoption signal
+      - label: Open issues and PRs
         value: '0'
         delta: GitHub open_issues_count
     source: Git e2f9996 · api.github.com/repos/hbfs-cloud/gamma-slides
     notes: >-
-      Métadonnées collectées le 2026-09-09T08:52:35Z. Les statistiques GitHub sont courantes à cette date, pas
-      historiques au commit.
+      Metadata collected on 2026-09-09T08:52:35Z. GitHub statistics are current at that date, not historical at the
+      commit.
   - layout: bullets
     variant: pillars
-    title: Un marché d’usage à tester.
-    subtitle: Cibles proposées ; ni taille de marché ni traction démontrées.
+    title: A usage market to test.
+    subtitle: Proposed targets; neither market size nor traction is demonstrated.
     items:
-      - title: Revue d’architecture
-        description: Réunir diagrammes, limites, risques et décision dans un support présentable.
-      - title: Démonstration avant-vente
-        description: Adapter les explications et les parcours au contexte du prospect.
-      - title: Comité technique
-        description: Conserver des preuves et rendre visibles les inconnues avant adoption.
-    source: Code observé · e2f9996 · README.md
+      - title: Architecture review
+        description: Bring diagrams, limits, risks, and decisions together in a presentable artifact.
+      - title: Pre-sales demonstration
+        description: Adapt explanations and journeys to the prospect's context.
+      - title: Technical committee
+        description: Retain evidence and make unknowns visible before adoption.
+    source: Observed code · e2f9996 · README.md
     notes: https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/README.md
   - layout: diagram
-    title: Voir les frontières avant les détails.
-    subtitle: Architecture logique observée · cli et export vidéo omis de cette vue.
+    title: See boundaries before details.
+    subtitle: Observed logical architecture · CLI and video export omitted from this view.
     diagram:
       type: architecture
       spec:
         schema_version: 1
         diagram_type: architecture
         meta:
-          title: Du dépôt au navigateur
+          title: From repository to browser
           quality_profile: showcase
           animation: trace
           viewBox:
@@ -130,31 +130,31 @@ slides:
             - 500
           views:
             - id: authoring
-              label: Décrire et vérifier
+              label: Describe and validate
               focus:
                 - agent
                 - mcp
                 - loader
-              note: Le LLM produit le contenu. Le schéma contrôle sa structure.
+              note: The LLM produces content. The schema controls its structure.
             - id: rendering
-              label: Composer le document
+              label: Compose the document
               focus:
                 - loader
                 - renderer
                 - html
-              note: Le moteur assemble les slides, polices et bibliothèques embarquées.
+              note: The engine assembles slides, fonts, and embedded libraries.
             - id: presenting
-              label: Présenter et enregistrer
+              label: Present and record
               focus:
                 - html
                 - browser
                 - studio
-              note: Reveal orchestre les slides ; le Studio capture le média local.
+              note: Reveal orchestrates slides; Studio captures local media.
         components:
           - id: agent
             type: external
             label: Agent LLM
-            sublabel: Contenu et analyse
+            sublabel: Content and analysis
             pos:
               - 40
               - 90
@@ -163,8 +163,8 @@ slides:
               - 72
           - id: mcp
             type: backend
-            label: Serveur MCP
-            sublabel: Outils de génération
+            label: MCP server
+            sublabel: Generation tools
             pos:
               - 300
               - 90
@@ -173,8 +173,8 @@ slides:
               - 72
           - id: loader
             type: security
-            label: Chargement
-            sublabel: YAML / JSON + schéma
+            label: Loading
+            sublabel: YAML / JSON + schema
             pos:
               - 590
               - 90
@@ -183,8 +183,8 @@ slides:
               - 72
           - id: renderer
             type: backend
-            label: Moteur de slides
-            sublabel: Layouts et graphiques
+            label: Slide engine
+            sublabel: Layouts and charts
             pos:
               - 590
               - 330
@@ -193,8 +193,8 @@ slides:
               - 72
           - id: html
             type: database
-            label: HTML autonome
-            sublabel: Polices et runtime inclus
+            label: Self-contained HTML
+            sublabel: Fonts and runtime included
             pos:
               - 300
               - 330
@@ -203,7 +203,7 @@ slides:
               - 72
           - id: browser
             type: frontend
-            label: Navigateur
+            label: Browser
             sublabel: Reveal · SVG · GPU
             pos:
               - 40
@@ -214,7 +214,7 @@ slides:
           - id: studio
             type: frontend
             label: Presenter Studio
-            sublabel: Caméra, micro, capture
+            sublabel: Camera, microphone, capture
             pos:
               - 870
               - 330
@@ -235,7 +235,7 @@ slides:
           - id: loader-renderer
             from: loader
             to: renderer
-            label: valider
+            label: validate
             variant: emphasis
             labelAt:
               - 685
@@ -248,77 +248,77 @@ slides:
           - id: html-browser
             from: html
             to: browser
-            label: ouvrir
+            label: open
             variant: emphasis
           - id: renderer-studio
             from: renderer
             to: studio
-            label: embarquer
-    source: Code observé · e2f9996 · src/mcp/server.js
+            label: embed
+    source: Observed code · e2f9996 · src/mcp/server.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/loader/index.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
   - layout: diagram
-    title: La génération ne termine pas le travail.
-    subtitle: 'Parcours proposé : la revue humaine relie le HTML généré à la démo.'
+    title: Generation does not finish the work.
+    subtitle: 'Proposed path: human review connects generated HTML to the demonstration.'
     diagram:
       type: workflow
       spec:
         schema_version: 2
         diagram_type: workflow
         meta:
-          title: Générer, contrôler, présenter
+          title: Generate, inspect, present
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - author
                 - schema
                 - render
                 - inspect
                 - present
-              note: Générer, contrôler, présenter
+              note: Generate, inspect, present
           viewBox:
             - 1100
             - 500
         lanes:
           - id: authoring
-            label: Auteur et moteur
+            label: Author and engine
           - id: review
-            label: Validation humaine
+            label: Human validation
         nodes:
           - id: author
             lane: authoring
             col: 0
             type: external
-            label: Décrire le deck
+            label: Describe the deck
             width: 160
           - id: schema
             lane: authoring
             col: 1
             type: security
-            label: Valider le schéma
+            label: Validate the schema
             width: 160
           - id: render
             lane: authoring
             col: 2
             type: backend
-            label: Générer le HTML
+            label: Generate HTML
             width: 160
           - id: inspect
             lane: review
             col: 2
             type: frontend
-            label: Examiner le rendu
+            label: Inspect rendering
             width: 160
           - id: present
             lane: review
             col: 3
             type: frontend
-            label: Présenter
+            label: Present
             width: 160
         edges:
           - from: author
@@ -326,40 +326,40 @@ slides:
             label: YAML
           - from: schema
             to: render
-            label: valide
+            label: valid
           - from: render
             to: inspect
             label: HTML
           - from: inspect
             to: present
-            label: accepté
-    source: Code observé · e2f9996 · bin/gamma-slides.js
+            label: accepted
+    source: Observed code · e2f9996 · bin/gamma-slides.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/bin/gamma-slides.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/loader/index.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/qa/visual.js
   - layout: diagram
-    title: Un appel MCP, un fichier présentable.
-    subtitle: Chemin nominal de gamma_generate_deck ; les erreurs arrêtent la génération.
+    title: One MCP call, one presentable file.
+    subtitle: Happy path for gamma_generate_deck; errors stop generation.
     diagram:
       type: sequence
       spec:
         schema_version: 1
         diagram_type: sequence
         meta:
-          title: Un appel MCP, un artefact HTML
+          title: One MCP call, one HTML artifact
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - agent
                 - mcp
                 - loader
                 - renderer
                 - disk
-              note: Un appel MCP, un artefact HTML
+              note: One MCP call, one HTML artifact
           column_fit: spread
           viewBox:
             - 1000
@@ -379,7 +379,7 @@ slides:
             label: Renderer
           - id: disk
             type: database
-            label: Fichier
+            label: File
         messages:
           - id: message-0
             from: agent
@@ -396,7 +396,7 @@ slides:
           - id: message-2
             from: loader
             to: mcp
-            label: deck validé
+            label: validated deck
             'y': 224
             variant: return
           - id: message-3
@@ -408,7 +408,7 @@ slides:
           - id: message-4
             from: renderer
             to: mcp
-            label: document HTML
+            label: HTML document
             'y': 288
             variant: return
           - id: message-5
@@ -420,40 +420,40 @@ slides:
           - id: message-6
             from: mcp
             to: agent
-            label: chemin de sortie
+            label: output path
             'y': 352
             variant: return
-    source: Code observé · e2f9996 · src/mcp/server.js
+    source: Observed code · e2f9996 · src/mcp/server.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/loader/index.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
   - layout: diagram
-    title: Suivre les données jusqu’à l’artefact.
-    subtitle: Polices et bibliothèques embarquées ; médias externes à contrôler séparément.
+    title: Follow data to the artifact.
+    subtitle: Fonts and libraries are embedded; external media must be checked separately.
     diagram:
       type: dataflow
       spec:
         schema_version: 1
         diagram_type: dataflow
         meta:
-          title: Les données deviennent un document autonome
+          title: Data becomes a self-contained document
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - yaml
                 - deck
                 - html
                 - screen
-              note: Les données deviennent un document autonome
+              note: Data becomes a self-contained document
         stages:
-          - label: Entrées
-          - label: Modèle validé
+          - label: Inputs
+          - label: Validated model
           - label: Document
-          - label: Sorties
+          - label: Outputs
         nodes:
           - id: yaml
             type: external
@@ -463,31 +463,31 @@ slides:
             height: 64
           - id: assets
             type: database
-            label: Polices + JS
+            label: Fonts + JS
             stage: 0
             row: 1
             height: 64
           - id: deck
             type: backend
-            label: Deck chargé
+            label: Loaded deck
             stage: 1
             row: 0
             height: 64
           - id: html
             type: backend
-            label: HTML embarqué
+            label: Embedded HTML
             stage: 2
             row: 0
             height: 64
           - id: screen
             type: frontend
-            label: Présentation
+            label: Presentation
             stage: 3
             row: 0
             height: 64
           - id: frames
             type: database
-            label: Images / vidéo
+            label: Images / video
             stage: 3
             row: 1
             height: 64
@@ -504,12 +504,12 @@ slides:
             route: bottom-channel
           - from: html
             to: screen
-            label: navigateur
+            label: browser
             route: straight
           - from: html
             to: frames
             label: capture
-    source: Code observé · e2f9996 · src/engine/renderer.js
+    source: Observed code · e2f9996 · src/engine/renderer.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
 
@@ -517,26 +517,26 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/video/generate-v2.js
   - layout: diagram
-    title: Le fichier vidéo reste un choix explicite.
-    subtitle: 'Cycle nominal simplifié : permissions et erreurs de capture hors de cette vue.'
+    title: The video file remains an explicit choice.
+    subtitle: 'Simplified nominal cycle: permissions and capture errors are outside this view.'
     diagram:
       type: lifecycle
       spec:
         schema_version: 1
         diagram_type: lifecycle
         meta:
-          title: Enregistrer puis décider de sauvegarder
+          title: Record, then decide to save
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - ready
                 - recording
                 - finalizing
                 - review
-              note: Enregistrer puis décider de sauvegarder
+              note: Record, then decide to save
         lanes:
           - id: main
             label: Session
@@ -545,27 +545,27 @@ slides:
         states:
           - id: ready
             type: start
-            label: Prêt
+            label: Ready
             lane: main
             col: 0
           - id: recording
             type: active
-            label: Enregistrement
+            label: Recording
             lane: main
             col: 1
           - id: paused
             type: waiting
-            label: Pause
+            label: Paused
             lane: events
             col: 0
           - id: finalizing
             type: active
-            label: Finalisation
+            label: Finalizing
             lane: main
             col: 2
           - id: review
             type: success
-            label: Revue locale
+            label: Local review
             lane: main
             col: 3
         transitions:
@@ -584,7 +584,7 @@ slides:
                 - 307
           - from: paused
             to: recording
-            label: reprendre
+            label: resume
             fromSide: top
             toSide: right
             via:
@@ -599,7 +599,7 @@ slides:
               - 205
           - from: paused
             to: finalizing
-            label: terminer
+            label: finish
             fromSide: right
             toSide: bottom
             via:
@@ -612,75 +612,75 @@ slides:
             labelAt:
               - 490
               - 250
-    source: Code observé · e2f9996 · src/engine/components/presenter-studio.js
+    source: Observed code · e2f9996 · src/engine/components/presenter-studio.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/components/presenter-studio.js
   - layout: table
-    title: Chaque moteur a un rôle précis.
-    subtitle: Dépendances déclarées dans package.json ; GPU soumis au navigateur.
+    title: Every engine has a specific role.
+    subtitle: Dependencies declared in package.json; GPU capability is browser-dependent.
     table:
       headers:
-        - Moteur
-        - Rôle dans le produit
-        - Conséquence
+        - Engine
+        - Product role
+        - Implication
       rows:
         - - Reveal.js
-          - Navigation et présentation
-          - HTML interactif
+          - Navigation and presentation
+          - Interactive HTML
         - - ECharts / D3
-          - Graphiques et calcul visuel
-          - Données inspectables
+          - Charts and visual computation
+          - Inspectable data
         - - Three.js / PixiJS
-          - Scènes 3D / rendu GPU
-          - WebGL ou WebGPU selon le contexte
-        - - Archify · extension actuelle
-          - Diagrammes SVG et parcours animés
-          - Rendu vectoriel ; ne requiert pas le GPU
-    source: Code observé · e2f9996 · package.json
+          - 3D scenes / GPU rendering
+          - WebGL or WebGPU depending on context
+        - - Archify · current extension
+          - SVG diagrams and animated journeys
+          - Vector rendering; does not require a GPU
+    source: Observed code · e2f9996 · package.json
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/package.json
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/components/immersive-runtime.js
   - layout: table
-    title: Trois alternatives, trois périmètres.
-    subtitle: Comparaison de fonction documentée, pas un benchmark.
+    title: Three alternatives, three scopes.
+    subtitle: Documented capability comparison, not a benchmark.
     table:
       headers:
         - Option
-        - Source auteur
-        - Spécialité
+        - Authoring source
+        - Specialty
       rows:
         - - Reveal.js
           - HTML / Markdown
-          - Framework de présentation
+          - Presentation framework
         - - Marp
           - Markdown
-          - Chaîne de présentation Markdown
+          - Markdown presentation pipeline
         - - Archify
-          - JSON typé
-          - Diagrammes et parcours animés
+          - Typed JSON
+          - Diagrams and animated journeys
         - - Gamma Slides
           - YAML / JSON + MCP
-          - Composition de decks, graphiques et vidéo
-    source: Sources officielles consultées le 9 septembre 2026
+          - Deck, chart, and video composition
+    source: Official sources consulted September 9, 2026
     notes: |-
       https://revealjs.com/
       https://marp.app/
       https://github.com/tt-a1i/archify
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/package.json
-    footnote: Reveal.js est aussi une dépendance de Gamma Slides. Archify est ici intégré.
+    footnote: Reveal.js is also a Gamma Slides dependency. Archify is integrated here.
   - layout: bullets
     variant: pillars
-    title: Ce que cette approche rend possible.
-    subtitle: Capacités observées ; gain de temps à mesurer sur le pilote.
+    title: What this approach makes possible.
+    subtitle: Observed capabilities; time saved must be measured in the pilot.
     items:
-      - title: Éditer la source
-        description: Le LLM peut produire et corriger une spécification contrôlée par schéma.
-      - title: Montrer le mécanisme
-        description: Graphiques interactifs, vues 3D et diagrammes racontent un système.
-      - title: Reprendre le même contenu
-        description: HTML, captures et vidéo partagent la définition du deck.
-    source: Code observé · e2f9996 · src/schema/deck.schema.json
+      - title: Edit the source
+        description: The LLM can produce and correct a schema-controlled specification.
+      - title: Show the mechanism
+        description: Interactive charts, 3D views, and diagrams explain a system.
+      - title: Reuse the same content
+        description: HTML, captures, and video share the deck definition.
+    source: Observed code · e2f9996 · src/schema/deck.schema.json
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/schema/deck.schema.json
 
@@ -688,52 +688,52 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/video/generate-v2.js
   - layout: table
-    title: Les limites font partie de la proposition.
-    subtitle: Les tests du projet ne constituent pas une garantie de production.
+    title: Limits are part of the proposal.
+    subtitle: Project tests do not constitute a production guarantee.
     table:
       headers:
-        - Limite
-        - Effet
-        - Réponse proposée
+        - Limitation
+        - Effect
+        - Proposed response
       rows:
-        - - Contenu généré
-          - Une affirmation peut être fausse
-          - Lier les preuves au commit
-        - - Navigateurs / GPU
-          - Rendu et capture variables
-          - Matrice desktop / mobile + repli
-        - - HTML embarqué
-          - Artefacts volumineux
-          - Mesurer le poids et le chargement
-        - - Diagrammes denses
-          - Lecture mobile difficile
-          - Chapitres, zoom et relations textuelles
-    source: Code observé · e2f9996 · src/engine/renderer.js
+        - - Generated content
+          - A claim may be false
+          - Link evidence to the commit
+        - - Browsers / GPU
+          - Rendering and capture vary
+          - Desktop / mobile matrix plus fallback
+        - - Embedded HTML
+          - Large artifacts
+          - Measure payload and loading
+        - - Dense diagrams
+          - Difficult mobile reading
+          - Chapters, zoom, and textual relationships
+    source: Observed code · e2f9996 · src/engine/renderer.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/browser.js
   - layout: table
-    title: 'Sécurité : définir les frontières de confiance.'
-    subtitle: Points de contrôle proposés à partir des surfaces observées.
+    title: 'Security: define trust boundaries.'
+    subtitle: Proposed checks based on observed surfaces.
     table:
       headers:
         - Surface
-        - Constat
-        - Validation requise
+        - Observation
+        - Required validation
       rows:
-        - - Spécification
-          - JSON/YAML validé ; HTML libre possible
-          - Réserver les specs à des auteurs de confiance
+        - - Specification
+          - Validated JSON/YAML; unrestricted HTML is possible
+          - Restrict specifications to trusted authors
         - - MCP / CLI
-          - Écriture de fichiers et outils locaux
-          - Permissions et chemins autorisés
-        - - Publication
-          - Accès GitHub et opérations de déploiement
-          - Portée du jeton et approbation
-        - - Caméra / écran
-          - Permissions du navigateur
-          - Consentement et politique de conservation
-    source: Code observé · e2f9996 · src/schema/deck.schema.json
+          - Local file writes and tools
+          - Permissions and allowed paths
+        - - Publishing
+          - GitHub access and deployment operations
+          - Token scope and approval
+        - - Camera / screen
+          - Browser permissions
+          - Consent and retention policy
+    source: Observed code · e2f9996 · src/schema/deck.schema.json
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/schema/deck.schema.json
 
@@ -743,105 +743,105 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/components/presenter-studio.js
   - layout: table
-    title: 'Entreprise : le chantier reste explicite.'
-    subtitle: Ces garanties ne sont pas établies par cette revue de code bornée.
+    title: 'Enterprise: the remaining work is explicit.'
+    subtitle: This bounded code review does not establish these guarantees.
     table:
       headers:
-        - Exigence
-        - Statut de cette revue
-        - Preuve attendue
+        - Requirement
+        - Review status
+        - Expected evidence
       rows:
         - - SSO / RBAC
-          - Non vérifié
-          - Contrôle d’accès et tests de rôles
-        - - Journal d’audit
-          - Non vérifié
-          - Traçabilité des actions et rétention
-        - - Isolation des clients
-          - Non vérifié
-          - Architecture et tests d’isolation
+          - Not verified
+          - Access control and role tests
+        - - Audit log
+          - Not verified
+          - Action traceability and retention
+        - - Tenant isolation
+          - Not verified
+          - Architecture and isolation tests
         - - SLA / support
-          - Non vérifié
-          - Engagement opérationnel et astreinte
-    source: Code observé · e2f9996 · README.md
+          - Not verified
+          - Operating commitment and on-call coverage
+    source: Observed code · e2f9996 · README.md
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/README.md
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
   - layout: bullets
     composition: sequence
-    title: Prêt pour un pilote. Production à qualifier.
-    subtitle: Recommandation de cette revue, pas certification du produit.
+    title: Ready for a pilot. Production still needs qualification.
+    subtitle: A review recommendation, not product certification.
     items:
-      - title: Construire
-        description: Reproduire l’installation et figer dépendances, navigateur et artefact.
-      - title: Éprouver
-        description: Tester charge, erreurs, permissions, reprise et compatibilité des exports.
-      - title: Exploiter
-        description: Attribuer un responsable, un rollback et des objectifs de service.
-    source: Code observé · e2f9996 · Dockerfile
+      - title: Build
+        description: Reproduce installation and pin dependencies, browser, and artifact.
+      - title: Exercise
+        description: Test load, errors, permissions, recovery, and export compatibility.
+      - title: Operate
+        description: Assign an owner, rollback, and service objectives.
+    source: Observed code · e2f9996 · Dockerfile
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/Dockerfile
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/docker-compose.yml
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/package.json
   - layout: table
-    title: Observer le parcours, pas seulement le processus.
-    subtitle: Plan d’instrumentation proposé ; aucune télémétrie de production revendiquée.
+    title: Observe the journey, not only the process.
+    subtitle: Proposed instrumentation plan; no production telemetry is claimed.
     table:
       headers:
-        - Signal à ajouter
-        - Question opérationnelle
-        - Critère du pilote
+        - Signal to add
+        - Operating question
+        - Pilot criterion
       rows:
-        - - Durée de génération
-          - Quel coût par deck et par slide ?
-          - Distribution mesurée sur corpus fixé
-        - - Échecs de validation / rendu
-          - Où le parcours échoue-t-il ?
-          - Étape, raison et corrélation identifiables
-        - - Poids / temps d’ouverture
-          - Le HTML est-il utilisable chez le client ?
-          - Budget décidé sur desktop et mobile
+        - - Generation duration
+          - What is the cost per deck and per slide?
+          - Distribution measured on a fixed corpus
+        - - Validation / rendering failures
+          - Where does the journey fail?
+          - Identifiable step, reason, and correlation
+        - - Payload / opening time
+          - Is the HTML usable by the customer?
+          - Budget set for desktop and mobile
         - - Export / capture
-          - Le média final est-il complet ?
-          - Contrôle du nombre de slides et du fichier
-    source: Code observé · e2f9996 · src/qa/visual.js
+          - Is the final media complete?
+          - Check slide count and file output
+    source: Observed code · e2f9996 · src/qa/visual.js
     notes: |-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/qa/visual.js
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/video/generate-v2.js
   - layout: bullets
     variant: pillars
-    title: Le LLM prépare. Les preuves décident.
-    subtitle: Nouveau parcours livré avec cette intégration.
+    title: The LLM prepares. Evidence decides.
+    subtitle: New journey delivered with this integration.
     items:
-      - title: Inspecter
-        description: gamma_inspect_repository fixe la révision et collecte un échantillon de sources.
-      - title: Composer
-        description: create_repository_presentation couvre système, marché, limites et adoption.
-      - title: Vérifier
-        description: Schémas Archify, validation du deck et contrôle navigateur avant partage.
-    source: Extension actuelle · src/repository/inspect.js · src/mcp/server.js
+      - title: Inspect
+        description: gamma_inspect_repository pins the revision and collects a source sample.
+      - title: Compose
+        description: create_repository_presentation covers system, market, limits, and adoption.
+      - title: Verify
+        description: Archify schemas, deck validation, and browser checks precede sharing.
+    source: Current extension · src/repository/inspect.js · src/mcp/server.js
   - layout: bullets
     composition: roadmap
-    title: Un pilote en trois portes.
-    subtitle: Séquence proposée ; durée et responsables à convenir.
+    title: A pilot through three gates.
+    subtitle: Proposed sequence; duration and owners still need agreement.
     items:
       - title: 01 · Corpus
-        description: Choisir trois dépôts et leurs audiences; exit on sources et questions validées
-      - title: 02 · Démonstration
-        description: Produire les decks et tester les appareils cibles; exit on zéro contenu manquant et parcours compris
+        description: Choose three repositories and their audiences; exit when sources and questions are validated
+      - title: 02 · Demonstration
+        description: Produce decks and test target devices; exit with no missing content and a understood journey
       - title: 03 · Adoption
-        description: Mesurer temps, corrections et coût d’exploitation; exit on décision documentée et propriétaire nommé
-    source: Plan proposé · aucune durée ou performance promise
+        description: Measure time, revisions, and operating cost; exit with a documented decision and named owner
+    source: Proposed plan · no duration or performance promised
   - layout: closing
     variant: decisions
     composition: decisions
-    title: Expliquer mieux. Adopter avec des preuves.
-    subtitle: 'Décision proposée : lancer un pilote borné de présentations techniques.'
+    title: Explain better. Adopt with evidence.
+    subtitle: 'Proposed decision: run a bounded pilot of technical presentations.'
     items:
-      - title: Choisir le premier dépôt
-        description: Une question de décision, une audience et une révision.
-      - title: Nommer le propriétaire
-        description: Architecture, sources et validation visuelle ont un responsable.
-      - title: Fixer la porte de sortie
-        description: Adoption, corrections supplémentaires ou abandon motivé.
-    source: Synthèse de la revue · hypothèses et inconnues conservées dans les notes
+      - title: Choose the first repository
+        description: One decision question, one audience, and one revision.
+      - title: Name the owner
+        description: Architecture, sources, and visual validation have an accountable owner.
+      - title: Set the exit gate
+        description: Adoption, further revisions, or a reasoned decision not to proceed.
+    source: Review summary · hypotheses and unknowns retained in the notes

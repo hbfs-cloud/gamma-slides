@@ -9,6 +9,17 @@ export const archifyRoot = fileURLToPath(new URL('../vendor/archify/', import.me
 export const diagramTypes = ['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle'];
 const cache = new Map();
 
+/**
+ * `process.execPath` is Electron itself in the packaged Author app.  Its
+ * Archify compiler and the compiler's renderer children are ordinary Node
+ * scripts, so preserve Electron's supported Node mode for this process tree.
+ */
+export function archifyChildEnvironment(environment = process.env, versions = process.versions) {
+  const childEnvironment = { ...environment, ARCHIFY_UPDATE_CHECK_DISABLED: '1' };
+  if (versions?.electron) childEnvironment.ELECTRON_RUN_AS_NODE = '1';
+  return childEnvironment;
+}
+
 /** Run the pinned, unmodified Archify delivery pipeline; never accept last-good output after failure. */
 export function compileDiagram(diagram) {
   if (!diagramTypes.includes(diagram?.type) || !diagram.spec || diagram.spec.diagram_type !== diagram.type) throw new Error('Archify requires a supported type and a matching typed spec.');
@@ -21,7 +32,7 @@ export function compileDiagram(diagram) {
     writeFileSync(input, source);
     const child = spawnSync(process.execPath, [join(archifyRoot, 'bin/archify.mjs'), 'deliver', diagram.type, input, output, '--quality', 'showcase', '--json'], {
       encoding: 'utf8', timeout: 30_000, maxBuffer: 4 * 1024 * 1024,
-      env: { ...process.env, ARCHIFY_UPDATE_CHECK_DISABLED: '1' },
+      env: archifyChildEnvironment(),
     });
     let receipt;
     try { receipt = JSON.parse(child.stdout); } catch { /* Surface the upstream diagnostic below. */ }

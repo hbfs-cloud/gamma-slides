@@ -130,6 +130,12 @@
         ],
         "createdAt": "2026-09-11T17:02:43.944Z",
         "reason": "Agent: This responsive public landing composes the documented display, editorial, and report scales with intentional fluid endpoints."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#ff00ff",
+        "createdAt": "2026-09-12T06:46:38.277Z",
+        "reason": "Agent: high-contrast magenta test canary proves operator pixels never enter a recorded audience frame"
       }
     ]
   }

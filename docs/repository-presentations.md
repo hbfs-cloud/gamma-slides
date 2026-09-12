@@ -69,4 +69,4 @@ Gamma embeds the real renderer, validator, and viewer without modifying upstream
 - `create_repository_presentation`: complete technical-review prompt.
 - `gamma_validate_deck`, `gamma_generate_deck`: strict Archify validation and generation.
 
-The MCP prompt points to CLI evidence for the local server or published bytes. Full example: `presentations/repository-review.yaml`, a 21-slide Gamma Slides review at `e2f9996`. Rebuild it with `node scripts/build-repository-demo.mjs`. The example’s GitHub numbers are dated September 9, 2026; refresh them through a new collection and review.
+The MCP prompt points to CLI evidence for the local server or published bytes. The historical `presentations/repository-review.yaml` is a 21-slide English-language regression example at `e2f9996`. Rebuild it with `node scripts/build-repository-demo.mjs`. The example’s GitHub numbers are dated September 9, 2026; refresh them through a new collection and review.

@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld('gammaDesktop', {
   saveDocument: () => ipcRenderer.invoke('presenter:save-document'),
   saveDocumentAs: () => ipcRenderer.invoke('presenter:save-document-as'),
   exportPdf: () => ipcRenderer.invoke('presenter:export-pdf'),
-  present: () => ipcRenderer.send('presenter:present'),
+  present: () => ipcRenderer.invoke('presenter:present'),
   stopPresenting: () => ipcRenderer.send('presenter:stop-presenting'),
   openSpeaker: () => ipcRenderer.send('presenter:open-speaker'),
   moveStage: displayId => ipcRenderer.send('presenter:move-stage', displayId),

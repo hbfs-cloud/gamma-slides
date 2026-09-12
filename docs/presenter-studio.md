@@ -9,7 +9,7 @@ bun bin/gamma-slides.js generate -f presentations/studio-demo.yaml -o output/stu
 bun bin/gamma-slides.js serve -f output/studio-demo.html --port 4173 --browser --terminal
 ```
 
-Open `http://127.0.0.1:4173` in a regular Chrome window. The [demo source](../presentations/studio-demo.yaml) has 47 slides: illustrations, Archify architectures/workflows, browser, video, native ECharts, tables, trading, and GPU visualizations. Financial data and calibration clip are illustrative.
+Open `http://127.0.0.1:4173` in a regular Chrome window. The [Studio regression source](../presentations/studio-demo.yaml) has 47 slides: illustrations, Archify architectures/workflows, browser, video, native ECharts, tables, trading, and GPU visualizations. Financial data and calibration clip are illustrative. It is an English-language regression corpus in the public library and remains excluded from the packaged template gallery; use the [English capability tour](https://hbfs-cloud.github.io/gamma-slides/gamma-presenter-capabilities/) for the concise product proof.
 
 `--browser` enables an isolated browser session; `--terminal` enables the local shell. Both are optional and stay on the local server. For a verified repository deck, use `repo-present --browser --terminal` or `serve -d output/review/site --browser --terminal`.
 

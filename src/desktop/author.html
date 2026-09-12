@@ -8,11 +8,13 @@
   </head>
   <body class="author-shell">
     <header class="titlebar">
-      <div class="document-title"><strong id="document-name">New presentation</strong><span id="document-meta">2 slides · 1 min</span></div>
+      <div class="document-title"><strong id="document-name">New presentation</strong><span id="document-meta">2 slides · 1 min</span><span id="document-status" class="document-status" role="status" title="Publishing is always an intentional operation">New local draft</span></div>
       <div class="title-actions">
         <button id="open-templates" title="Start from a built-in template">Templates</button>
+        <button id="open-history" title="Restore a local revision">History</button>
         <button id="open-document" title="Open (⌘O)">Open</button>
         <button id="save-document" title="Save (⌘S)">Save</button>
+        <button id="backup-google-drive" title="Connect accounts, back up, restore and publish">Connect & share</button>
         <button class="play-button" id="present" title="Present (⌘↩)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.7 13 8 4 13.3Z"/></svg><span>Present</span></button>
       </div>
     </header>
@@ -32,14 +34,14 @@
         <div class="editor-toolbar">
           <span id="current-slide-label">Slide 1</span>
           <div class="writer-actions" id="writer-actions" aria-label="Writing controls">
-            <button type="button" data-writer-command="headline" title="Make this line a headline">Headline</button>
-            <button type="button" data-writer-command="supporting" title="Make this line supporting copy">Supporting line</button>
-            <button type="button" data-writer-command="point" title="Make this line a key point">Key point</button>
-            <button type="button" data-writer-command="quote" title="Make this line a quote">Quote</button>
-            <button type="button" data-writer-command="moment" title="Start a new slide moment (⌘⇧↩)">New moment</button>
+            <button type="button" data-writer-command="headline" title="Show this line as the slide headline">Show headline</button>
+            <button type="button" data-writer-command="supporting" title="Show this line as supporting copy">Show supporting</button>
+            <button type="button" data-writer-command="point" title="Show this line as a key point">Show point</button>
+            <button type="button" data-writer-command="quote" title="Show this line as a quote">Show quote</button>
+            <button type="button" data-writer-command="moment" title="Start the next slide (⌘⇧↩)">New slide</button>
             <button type="button" id="writer-import-media" title="Import a local image, GIF, video, or audio file">Media…</button>
           </div>
-          <span class="source-language" id="source-language">Document</span><button class="source-toggle" id="toggle-raw-source" type="button" aria-pressed="false" title="Show plain Markdown source">Source</button><span id="feedback" role="status" aria-live="polite">Ready</span>
+          <span class="source-language" id="source-language">Writer</span><button class="source-toggle" id="toggle-raw-source" type="button" aria-pressed="false" title="Show portable Markdown source">Markdown</button><span id="feedback" role="status" aria-live="polite">Ready</span>
         </div>
         <section class="writer-shell" id="writer-shell" aria-label="Document writing surface">
           <pre class="writer-highlights" id="writer-highlights" aria-hidden="true"></pre>
@@ -49,14 +51,14 @@
           <div class="preview-toolbar"><strong>Gamma render</strong><span id="renderer-status">All Gamma runtime capabilities are available</span><button id="focus-preview" type="button" aria-pressed="false">Expand preview</button></div>
           <iframe id="renderer-preview" title="Faithful Gamma presentation preview" allow="autoplay; fullscreen"></iframe>
         </section>
-        <footer class="editor-footer"><span>Write freely: headings are shown, prose is private.</span><span><kbd>⌘⇧↩</kbd> new moment</span><span><kbd>⌘↩</kbd> present</span><span><kbd>⌘S</kbd> save</span></footer>
+        <footer class="editor-footer"><span>Write freely. Private prose stays in your speaker notes; use Show only for audience copy.</span><span><kbd>⌘⇧↩</kbd> new slide</span><span><kbd>⌘↩</kbd> present</span><span><kbd>⌘S</kbd> save</span></footer>
       </section>
       <aside class="inspector-pane" aria-label="Inspector">
         <div class="pane-heading"><span>Inspector</span></div>
         <section class="inspector-section markdown-guide" id="markdown-guide">
           <h2>Write the talk first</h2>
-          <p id="source-help">Ordinary prose is your private script. A headline and supporting line become what the audience sees.</p>
-          <p>Use the writing controls when you need a display line. Press <kbd>⌘⇧↩</kbd>, or return three times, to begin the next moment.</p>
+          <p id="source-help">Ordinary prose is your private script. Choose Show only when a line belongs on the stage.</p>
+          <p>Press <kbd>⌘⇧↩</kbd>, or return three times, to begin the next slide. Portable Markdown remains available when you need it.</p>
         </section>
         <section class="inspector-section rich-inspector" id="rich-inspector" hidden>
           <h2>Selected slide</h2>
@@ -80,6 +82,28 @@
           <h2>Appearance</h2>
           <label>Theme <select id="theme" aria-label="Presentation theme"></select></label>
           <label>Display <select id="display" aria-label="Stage display"></select></label>
+          <details class="rich-advanced">
+            <summary>Corporate profile</summary>
+            <p class="render-capabilities">Saved on this Mac. Apply it to a rich YAML or JSON deck; slide content and slide-level overrides remain untouched.</p>
+            <div class="corporate-profile-form" aria-label="Corporate profile settings">
+              <label>Profile name <input id="corporate-profile-name" type="text" maxlength="120" autocomplete="organization"></label>
+              <label>Company <input id="corporate-profile-company" type="text" maxlength="120" autocomplete="organization"></label>
+              <label>Default theme <select id="corporate-profile-theme" aria-label="Corporate profile default theme"></select></label>
+              <label>Logo URL or local path <input id="corporate-profile-logo" type="text" maxlength="120" placeholder="media/company-logo.svg"></label>
+              <label>Watermark <input id="corporate-profile-watermark" type="text" maxlength="120" placeholder="Confidential"></label>
+              <label>Company URL <input id="corporate-profile-url" type="url" maxlength="120" placeholder="https://company.example"></label>
+              <div class="profile-colors" aria-label="Corporate profile palette">
+                <label>Primary <input id="corporate-profile-primary" type="color" value="#315DFF"></label>
+                <label>Secondary <input id="corporate-profile-secondary" type="color" value="#111827"></label>
+                <label>Accent <input id="corporate-profile-accent" type="color" value="#315DFF"></label>
+              </div>
+              <label>Heading font <input id="corporate-profile-heading-font" type="text" maxlength="120" placeholder="e.g. Inter"></label>
+              <label>Body font <input id="corporate-profile-body-font" type="text" maxlength="120" placeholder="e.g. Source Serif 4"></label>
+              <label>Code font <input id="corporate-profile-mono-font" type="text" maxlength="120" placeholder="e.g. Azeret Mono"></label>
+            </div>
+            <label><input id="corporate-profile-autofill" type="checkbox"> Apply this profile to new rich templates</label>
+            <div class="compact-actions"><button id="save-corporate-profile" type="button">Save profile</button><button id="apply-corporate-profile" type="button">Apply to this deck</button></div>
+          </details>
           <p class="render-capabilities">The integrated renderer preserves images, GIFs, video, audio, ECharts, D3/Pixi, Archify, Three.js and deck animations.</p>
         </section>
         <section class="inspector-section control-room-section">
@@ -123,6 +147,67 @@
         </header>
         <div class="template-list" id="template-list" aria-label="Built-in presentation templates"></div>
       </section>
+    </dialog>
+    <dialog class="template-dialog" id="history-dialog" aria-labelledby="history-dialog-title">
+      <section class="template-dialog-content">
+        <header class="template-dialog-header">
+          <div><h1 id="history-dialog-title">Local revision history</h1><p>Every revision stays on this Mac. Restoring one first preserves the current draft as another revision.</p></div>
+          <button id="close-history" type="button" aria-label="Close revision history">Close</button>
+        </header>
+        <div class="template-list" id="history-list" aria-label="Local presentation revisions"></div>
+      </section>
+    </dialog>
+    <dialog class="template-dialog connections-dialog" id="connections-dialog" aria-labelledby="connections-title">
+      <header class="template-dialog-header">
+        <div><h1 id="connections-title">Connect & share</h1><p>Local editing is always available. Only an action you choose connects to an account or publishes content.</p></div>
+        <button type="button" id="close-connections">Close</button>
+      </header>
+      <p id="connections-status" role="status" aria-live="polite">Checking local connections…</p>
+      <div class="connections-content">
+        <fieldset id="connections-controls">
+          <section aria-labelledby="drive-heading">
+            <h2 id="drive-heading">Google Drive backups</h2>
+            <p id="drive-status">Not checked yet.</p>
+            <p>Import your Google Desktop OAuth client JSON once, then authorize in your browser. Backups contain the source only, not local media.</p>
+            <div class="connection-actions">
+              <button type="button" data-connection="google-import">Import OAuth client…</button>
+              <button type="button" data-connection="google-connect">Connect Google Drive</button>
+              <button type="button" data-connection="google-disconnect">Disconnect</button>
+              <button type="button" data-connection="google-backup">Back up saved source</button>
+              <button type="button" data-connection="google-list">Browse backups</button>
+            </div>
+            <div id="drive-backups" aria-live="polite"></div>
+          </section>
+          <section aria-labelledby="publish-heading">
+            <h2 id="publish-heading">Publish this presentation</h2>
+            <p id="delivery-status">Checking GitHub and Vercel CLIs…</p>
+            <p>Use <code>gh auth login</code> or <code>vercel login</code> to authorize the installed CLI. Gamma never asks you to paste a provider token.</p>
+            <label for="publish-repo">Existing Gamma Pages repository</label>
+            <input id="publish-repo" placeholder="your-team/presentations" autocomplete="off" spellcheck="false" maxlength="180">
+            <label for="publish-slug">Presentation URL name</label>
+            <input id="publish-slug" placeholder="quarterly-review" autocomplete="off" spellcheck="false" maxlength="64">
+            <div class="connection-actions">
+              <button type="button" data-connection="github-publish">Publish to GitHub Pages…</button>
+              <button type="button" data-connection="vercel-publish">Publish to linked Vercel project…</button>
+              <button type="button" data-connection="status">Recheck connections</button>
+            </div>
+            <p>GitHub requires an existing Gamma Pages workflow. For Vercel, select a directory already linked with <code>vercel link</code>; only the rendered deck is uploaded.</p>
+            <p id="publication-result" role="status"></p>
+          </section>
+          <section aria-labelledby="share-heading">
+            <h2 id="share-heading">Embed or share a published deck</h2>
+            <label for="share-url">Public HTTPS presentation URL</label>
+            <input id="share-url" type="url" placeholder="https://your-team.github.io/presentations/quarterly-review/" autocomplete="off">
+            <div class="connection-actions">
+              <button type="button" data-share="url">Copy link</button>
+              <button type="button" data-share="iframe">Copy iframe</button>
+              <button type="button" data-share="notion">Copy Notion instructions</button>
+              <button type="button" data-share="linear">Copy Linear link</button>
+            </div>
+            <p>Notion and Linear may restrict embeds. Copying a URL does not verify publication or the destination workspace’s policy.</p>
+          </section>
+        </fieldset>
+      </div>
     </dialog>
     <script type="module" src="./author.js"></script>
   </body>

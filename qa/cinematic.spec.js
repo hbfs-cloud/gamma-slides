@@ -19,7 +19,7 @@ test('cinematic story, exact data, finite GPU work and restored presentation',as
  const count=await page.locator('section.present .cinema-stage').getAttribute('data-cinema-frames');await page.waitForTimeout(300);expect(await page.locator('section.present .cinema-stage').getAttribute('data-cinema-frames')).toBe(count);
  const gpu=await page.locator('section.present .cinema-canvas canvas').evaluate(c=>({pixels:c.width*c.height,coverage:c.width/c.getBoundingClientRect().width,error:c.getContext('webgl2').getError()}));expect(gpu.pixels).toBeLessThanOrEqual(2005000);expect(gpu.error).toBe(0);expect(gpu.coverage).toBeGreaterThanOrEqual(.95);
  await (await orbitAction(page,page.locator('section.present [data-cinema-action=values]'))).click();await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('row').filter({hasText:'Platforms'})).toContainText('$1.4M');await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toBeHidden();
- await split(page);await expect(page.locator('section.present .cinema-heading')).toContainText('Le revenu change');expect(errors).toEqual([]);expect(network).toEqual([]);
+ await split(page);await expect(page.locator('section.present .cinema-heading')).toContainText('Revenue changes');expect(errors).toEqual([]);expect(network).toEqual([]);
 });
 test('cinematic phone composition and reduced motion',async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:'reduce'});await open(page);await bounds(page);await page.screenshot({path:out+'/mobile-total.png'});await split(page);await expect(page.locator('section.present .cinema-stage')).toHaveAttribute('data-cinema-mode','split');await expect(page.locator('section.present .cinema-feature')).toBeVisible();await bounds(page);await page.screenshot({path:out+'/mobile-split.png'});
@@ -32,7 +32,7 @@ test('cinematic GPU loss falls back cleanly and restoration works',async({page})
  await page.evaluate(()=>window.testLoss.restoreContext());await expect(page.locator('section.present .cinema-stage')).toHaveAttribute('data-cinema-renderer','webgl');
 });
 test('cinematic no GPU and export retain readable chart and provenance',async({page})=>{
- await page.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:get.call(this,type,...args);};});await open(page);await expect(page.locator('section.present .cinema-fallback svg')).toBeVisible();await expect(page.locator('section.present [data-cinema-action=split]')).toBeDisabled();await expect(page.locator('section.present .slide-source')).toContainText('Données illustratives');
+ await page.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:get.call(this,type,...args);};});await open(page);await expect(page.locator('section.present .cinema-fallback svg')).toBeVisible();await expect(page.locator('section.present [data-cinema-action=split]')).toBeDisabled();await expect(page.locator('section.present .slide-source')).toContainText('Illustrative data');
  await open(page,'?gamma-export=1');await expect(page.locator('section.present .cinema-fallback svg')).toBeVisible();await expect(page.locator('section.present .cinema-canvas canvas')).toHaveCount(0);await page.screenshot({path:out+'/export.png'});
 });
 test('cinematic themes, interrupted navigation, and print lifecycle',async({page})=>{

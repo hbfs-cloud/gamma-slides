@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { escapeHtml, safeUrl, richText } from '../src/engine/html.js';
@@ -16,6 +16,8 @@ import { injectLiveReload } from '../src/preview.js';
 import { buildStaticSite } from '../src/site/build.js';
 import { buildPresentationLibrary } from '../src/site/library.js';
 import { normalizePagesRepo, presentationSlug, presentationUrl } from '../src/site/github-pages.js';
+import { presentationEmbed, presentationShareKit, publicPresentationUrl } from '../src/site/sharing.js';
+import { backupMetadata, backupPresentationToGoogleDrive } from '../src/integrations/google-drive.js';
 
 test('preview runtime is injected at the real closing body, not inside bundled source strings', () => {
   const html = '<!doctype html><html><head></head><body><script>const markup="<body></body>";</script><main>Deck</main></body></html>';
@@ -89,6 +91,52 @@ slides:
   }
 });
 
+test('public presentations produce portable, privacy-conscious embed and share copy', () => {
+  const url = 'https://hbfs-cloud.github.io/gamma-slides/board-review/';
+  assert.equal(publicPresentationUrl(url), url);
+  const iframe = presentationEmbed({ url, title: 'Board review' });
+  assert.match(iframe, /loading="lazy"/);
+  assert.match(iframe, /allow="autoplay; fullscreen"/);
+  assert.match(iframe, /referrerpolicy="strict-origin-when-cross-origin"/);
+  assert.match(iframe, /aspect-ratio:16 \/ 9/);
+  const kit = presentationShareKit({ url, title: 'Board review' });
+  assert.match(kit.notion, /choose “Embed”/);
+  assert.equal(kit.linear, '[Board review](https://hbfs-cloud.github.io/gamma-slides/board-review/)');
+  assert.throws(() => presentationEmbed({ url: 'http://localhost:4173/' }), /public HTTPS URL|public HTTPS/);
+  for (const privateUrl of ['https://localhost.', 'https://stage.local', 'https://10.0.0.1', 'https://192.168.1.1', 'https://172.16.0.1', 'https://[::1]', 'https://[::ffff:7f00:1]', 'https://user:password@example.com']) assert.throws(() => publicPresentationUrl(privateUrl), /public HTTPS/);
+  assert.throws(() => presentationEmbed({ url, aspectRatio: 'wide' }), /Aspect ratio/);
+});
+
+test('Google Drive backup keeps a source-only, explicitly typed payload', () => {
+  const yaml = backupMetadata('/tmp/board.yaml', new Date('2026-09-12T08:00:00.000Z'));
+  assert.equal(yaml.mimeType, 'application/x-yaml');
+  assert.equal(yaml.name, 'Gamma Presenter backup — board.yaml');
+  assert.deepEqual(yaml.appProperties, { gammaPresenter: 'true', backedUpAt: '2026-09-12T08:00:00.000Z', sourceName: 'board.yaml' });
+  assert.equal(backupMetadata('/tmp/board.md').mimeType, 'text/markdown');
+  assert.throws(() => backupMetadata('/tmp/board.mp4'), /presentation source/);
+});
+
+test('Google Drive backup uploads exactly the saved source through an injected Drive client', async () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'gamma-google-drive-'));
+  const source = join(tempDir, 'board.yaml');
+  writeFileSync(source, 'meta:\n  title: Board review\n');
+  let request;
+  try {
+    const result = await backupPresentationToGoogleDrive({
+      file: source,
+      now: new Date('2026-09-12T08:00:00.000Z'),
+      drive: { files: { create: async value => { request = value; let body = ''; for await (const chunk of value.media.body) body += chunk; assert.equal(body, 'meta:\n  title: Board review\n'); return { data: { id: 'drive-file-1', name: value.requestBody.name, webViewLink: 'https://drive.google.com/file/d/drive-file-1/view', modifiedTime: '2026-09-12T08:00:01.000Z' } }; } } },
+    });
+    assert.equal(request.requestBody.appProperties.gammaPresenter, 'true');
+    assert.equal(request.media.mimeType, 'application/x-yaml');
+    assert.match(request.requestBody.name, /board\.yaml$/);
+    assert.equal(result.id, 'drive-file-1');
+    assert.equal(result.source, source);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
 test('presentation libraries expose stable routes and a machine-readable catalog', () => {
   const tempDir = mkdtempSync(join(tmpdir(), 'gamma-library-'));
   const sourceDir = join(tempDir, 'presentations');
@@ -112,12 +160,17 @@ slides:
     const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
     assert.match(landing, /Gamma Presenter/);
     assert.match(landing, /Presentations with a live operating system/);
-    assert.match(landing, /Start with the complete capability tour/);
+    assert.match(landing, /A live gallery, not a wall of screenshots/);
+    assert.match(landing, /IntersectionObserver/);
+    assert.match(landing, /AI can propose the show\. You keep the controls/);
+    assert.match(landing, /Request, don’t seize/);
     assert.match(landing, /gamma-presenter-icon\.svg/);
     assert.match(landing, /<link rel="icon" href="\.\/assets\/gamma-presenter-icon\.svg" type="image\/svg\+xml">/);
     assert.match(landing, /class="source-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
     assert.match(landing, />Source</);
-    assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.3-arm64-mac\.zip/);
+    const version = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
+    assert.ok(landing.includes(`/releases/download/v${version}/Gamma.Presenter-${version}-arm64-mac.zip`));
+    assert.ok(landing.includes(`/releases/tag/v${version}`));
     assert.match(landing, /gamma-presenter-immersive-runtime\.gif/);
     assert.match(landing, /gamma-presenter-cinematic-runtime\.gif/);
     assert.match(landing, /prefers-reduced-motion: no-preference/);
@@ -145,6 +198,53 @@ slides:
     const englishResult = buildPresentationLibrary({ inputDir: sourceDir, outputDir: englishOutput, include: [fallback], language: 'en' });
     assert.deepEqual(englishResult.entries.map(entry => entry.slug), ['english-launch']);
     assert.doesNotMatch(readFileSync(join(englishOutput, 'index.html'), 'utf-8'), /Comité FY26/);
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('every shipped presentation source is explicitly English-first', () => {
+  const sourceDirectory = join(process.cwd(), 'presentations');
+  const sourceFiles = readdirSync(sourceDirectory).filter(file => /\.(?:ya?ml|json)$/i.test(file));
+  assert.ok(sourceFiles.length > 0, 'the shipped presentation directory must not be empty');
+
+  const nonEnglish = sourceFiles
+    .map(file => ({ file, deck: loadDeck(join(sourceDirectory, file)) }))
+    .filter(({ deck }) => String(deck.meta?.language || '').toLowerCase() !== 'en')
+    .map(({ file, deck }) => `${file} (${deck.meta?.language || 'missing language'})`);
+
+  assert.deepEqual(nonEnglish, [], `public presentation sources must declare English metadata: ${nonEnglish.join(', ')}`);
+});
+
+test('repository-review live diagrams keep their audience copy in English', () => {
+  const diagramDirectory = join(process.cwd(), 'presentations', 'diagrams');
+  const diagrams = ['architecture', 'workflow', 'sequence', 'dataflow', 'lifecycle']
+    .map(type => readFileSync(join(diagramDirectory, `repository.${type}.json`), 'utf-8'));
+  const serialized = diagrams.join('\n');
+
+  assert.match(serialized, /From repository to browser/);
+  assert.match(serialized, /Generate, review, present/);
+  assert.match(serialized, /Data becomes a standalone document/);
+  assert.match(serialized, /Record, then decide to save/);
+  assert.doesNotMatch(serialized, /Du dépôt|Générer|Présenter|données deviennent|Enregistrer puis/i);
+});
+
+test('the public gallery lazy-loads real featured runtimes one at a time', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'gamma-live-gallery-'));
+  const sourceDir = join(tempDir, 'presentations');
+  const outputDir = join(tempDir, '_site');
+  try {
+    mkdirSync(sourceDir, { recursive: true });
+    ['gamma-presenter-capabilities', 'flagship', 'immersive-data'].forEach(slug => writeFileSync(join(sourceDir, `${slug}.yaml`), `meta:\n  title: ${slug}\n  language: en\nslides:\n  - layout: title\n    title: Live proof\n`));
+    buildPresentationLibrary({ inputDir: sourceDir, outputDir, language: 'en' });
+    const landing = readFileSync(join(outputDir, 'index.html'), 'utf-8');
+    assert.equal((landing.match(/data-live-preview data-src=/g) || []).length, 6);
+    assert.match(landing, /Loading the live runtime/);
+    assert.match(landing, /data-src="\.\/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/3"/);
+    assert.match(landing, /data-src="\.\/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/5"/);
+    assert.match(landing, /data-src="\.\/immersive-data\/\?gamma-preview=1&gamma-clean=gallery#\/1"/);
+    assert.match(landing, /Open the full Architecture in motion demo/);
+    assert.match(landing, /activePreview\.removeAttribute\('src'\)/);
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
@@ -238,6 +338,11 @@ slides:
   assert.match(html, /data-testid="studio-mode-terminal"/);
   assert.match(html, /data-studio-theme-grid/);
   assert.match(html, /Step '\+state\.step\+' of 4/);
+  assert.match(html, /const presentOnly=state\.step===2/);
+  assert.match(html, /next\.hidden=state\.step===4\|\|presentOnly/);
+  assert.match(html, /start\.hidden=state\.step!==4&&!presentOnly/);
+  assert.match(html, /env\(safe-area-inset-bottom\)/);
+  assert.match(html, /gamma-wizard-foot \.gamma-action\{min-height:44px\}/);
   assert.match(html, /data-testid="studio-terminal-drag"/);
   assert.match(html, /data-testid="studio-terminal-splitter"/);
   assert.match(html, /data-testid','studio-terminal-restore/);

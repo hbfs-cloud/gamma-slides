@@ -1,6 +1,6 @@
 {
   "name": "gamma-slides",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "packageManager": "bun@1.3.11",
   "description": "Professional presentation & video generator — declarative YAML/JSON decks, narrated videos, LLM-pilotable via MCP",
   "type": "module",
@@ -21,6 +21,8 @@
     ".agents/skills/repo-presentation/",
     "docs/repository-presentations.md",
     "docs/gamma-presenter-macos.md",
+    "docs/quality-evidence.md",
+    "docs/contrarian-review.md",
     "docs/images/",
     "docs/presenter-studio.md",
     "docs/youtube-production.md"
@@ -110,6 +112,9 @@
       "src/engine/**",
       "src/themes/**",
       "src/loader/**",
+      "src/integrations/**",
+      "src/site/sharing.js",
+      "src/site/github-pages.js",
       "src/schema/**",
       "src/vendor/**",
       "build/icon.svg",

@@ -169,7 +169,7 @@ test('capture stops on native quota failure with a playable durable prefix and n
     take: await __gammaTakeStore.get(captureState.lastRecording.storageId),
     bytes: Array.from(new Uint8Array(await captureState.lastRecording.blob.arrayBuffer())),
   }));
-  expect(result.notices.join(' ')).toContain('stockage local plein');
+  expect(result.notices.join(' ')).toContain('local storage is full');
   expect(result.retainedChunks).toBe(0); expect(result.take.size).toBeGreaterThan(1000); expect(result.storage.error).toBeTruthy();
   // A completely full quota can also prevent persisting the final status;
   // unfinished ('recording') takes are recovery candidates after a restart.

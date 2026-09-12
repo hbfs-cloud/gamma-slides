@@ -1,52 +1,52 @@
 version: '1'
 theme: signal-room
 meta:
-  title: Gamma Studio · du récit au direct
-  language: fr
+  title: Gamma Studio · from story to live
+  language: en
   presentation: direct
   experience: true
   motion: presenter
   chapters:
     - start: 1
-      label: Le studio
+      label: The studio
     - start: 3
-      label: Les architectures
+      label: Architectures
     - start: 8
-      label: La démonstration
+      label: The demonstration
     - start: 11
-      label: Les données
+      label: Data
 slides:
   - layout: title
     variant: editorial
-    title: Du récit au direct.
-    subtitle: Graphiques interactifs · architectures animées · studio vidéo
-    kicker: STUDIO DE DÉMONSTRATION
-    source: Données et médias de test, sans valeur financière réelle.
+    title: From story to live.
+    subtitle: Interactive charts · animated architectures · video studio
+    kicker: DEMONSTRATION STUDIO
+    source: Test data and media; no actual financial value.
   - layout: visual
-    title: Le signal, sans le bruit.
-    subtitle: Les commandes restent dans le studio. Le public voit votre démonstration.
-    kicker: UNE SORTIE DÉDIÉE AU PUBLIC
+    title: The signal, without the noise.
+    subtitle: Controls remain in Studio. The audience sees your demonstration.
+    kicker: A DEDICATED AUDIENCE OUTPUT
     visual:
       src: assets/studio-signal.svg
-      alt: Courbe de signal ascendante sur une grille, illustration vectorielle.
-      caption: Illustration SVG créée pour cette démonstration.
+      alt: Rising signal curve on a grid, vector illustration.
+      caption: SVG illustration created for this demonstration.
       icons:
         - name: camera
-          label: Votre présence
+          label: Your presence
         - name: play
-          label: Votre rythme
+          label: Your pace
         - name: shield
-          label: Vos preuves
+          label: Your evidence
   - layout: diagram
-    title: Voir les frontières avant les détails.
-    subtitle: Architecture logique observée · cli et export vidéo omis de cette vue.
+    title: See boundaries before details.
+    subtitle: Observed logical architecture · CLI and video export omitted from this view.
     diagram:
       type: architecture
       spec:
         schema_version: 1
         diagram_type: architecture
         meta:
-          title: Du dépôt au navigateur
+          title: From repository to browser
           quality_profile: showcase
           animation: trace
           viewBox:
@@ -54,31 +54,31 @@ slides:
             - 500
           views:
             - id: authoring
-              label: Décrire et vérifier
+              label: Describe and validate
               focus:
                 - agent
                 - mcp
                 - loader
-              note: Le LLM produit le contenu. Le schéma contrôle sa structure.
+              note: The LLM produces content. The schema controls its structure.
             - id: rendering
-              label: Composer le document
+              label: Compose the document
               focus:
                 - loader
                 - renderer
                 - html
-              note: Le moteur assemble les slides, polices et bibliothèques embarquées.
+              note: The engine assembles slides, fonts, and embedded libraries.
             - id: presenting
-              label: Présenter et enregistrer
+              label: Present and record
               focus:
                 - html
                 - browser
                 - studio
-              note: Reveal orchestre les slides ; le Studio capture le média local.
+              note: Reveal orchestrates slides; Studio captures local media.
         components:
           - id: agent
             type: external
             label: Agent LLM
-            sublabel: Contenu et analyse
+            sublabel: Content and analysis
             pos:
               - 40
               - 90
@@ -87,8 +87,8 @@ slides:
               - 72
           - id: mcp
             type: backend
-            label: Serveur MCP
-            sublabel: Outils de génération
+            label: MCP server
+            sublabel: Generation tools
             pos:
               - 300
               - 90
@@ -97,8 +97,8 @@ slides:
               - 72
           - id: loader
             type: security
-            label: Chargement
-            sublabel: YAML / JSON + schéma
+            label: Loading
+            sublabel: YAML / JSON + schema
             pos:
               - 590
               - 90
@@ -107,8 +107,8 @@ slides:
               - 72
           - id: renderer
             type: backend
-            label: Moteur de slides
-            sublabel: Layouts et graphiques
+            label: Slide engine
+            sublabel: Layouts and charts
             pos:
               - 590
               - 330
@@ -117,8 +117,8 @@ slides:
               - 72
           - id: html
             type: database
-            label: HTML autonome
-            sublabel: Polices et runtime inclus
+            label: Self-contained HTML
+            sublabel: Fonts and runtime included
             pos:
               - 300
               - 330
@@ -127,7 +127,7 @@ slides:
               - 72
           - id: browser
             type: frontend
-            label: Navigateur
+            label: Browser
             sublabel: Reveal · SVG · GPU
             pos:
               - 40
@@ -138,7 +138,7 @@ slides:
           - id: studio
             type: frontend
             label: Presenter Studio
-            sublabel: Caméra, micro, capture
+            sublabel: Camera, microphone, capture
             pos:
               - 870
               - 330
@@ -159,7 +159,7 @@ slides:
           - id: loader-renderer
             from: loader
             to: renderer
-            label: valider
+            label: validate
             variant: emphasis
             labelAt:
               - 685
@@ -172,13 +172,13 @@ slides:
           - id: html-browser
             from: html
             to: browser
-            label: ouvrir
+            label: open
             variant: emphasis
           - id: renderer-studio
             from: renderer
             to: studio
-            label: embarquer
-    source: Code observé · e2f9996 · src/mcp/server.js
+            label: embed
+    source: Observed code · e2f9996 · src/mcp/server.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
 
@@ -186,65 +186,65 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
   - layout: diagram
-    title: La génération ne termine pas le travail.
-    subtitle: 'Parcours proposé : la revue humaine relie le HTML généré à la démo.'
+    title: Generation does not finish the work.
+    subtitle: 'Proposed path: human review connects generated HTML to the demonstration.'
     diagram:
       type: workflow
       spec:
         schema_version: 2
         diagram_type: workflow
         meta:
-          title: Générer, contrôler, présenter
+          title: Generate, inspect, present
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - author
                 - schema
                 - render
                 - inspect
                 - present
-              note: Générer, contrôler, présenter
+              note: Generate, inspect, present
           viewBox:
             - 1100
             - 500
         lanes:
           - id: authoring
-            label: Auteur et moteur
+            label: Author and engine
           - id: review
-            label: Validation humaine
+            label: Human validation
         nodes:
           - id: author
             lane: authoring
             col: 0
             type: external
-            label: Décrire le deck
+            label: Describe the deck
             width: 160
           - id: schema
             lane: authoring
             col: 1
             type: security
-            label: Valider le schéma
+            label: Validate the schema
             width: 160
           - id: render
             lane: authoring
             col: 2
             type: backend
-            label: Générer le HTML
+            label: Generate HTML
             width: 160
           - id: inspect
             lane: review
             col: 2
             type: frontend
-            label: Examiner le rendu
+            label: Inspect rendering
             width: 160
           - id: present
             lane: review
             col: 3
             type: frontend
-            label: Présenter
+            label: Present
             width: 160
         edges:
           - from: author
@@ -252,14 +252,14 @@ slides:
             label: YAML
           - from: schema
             to: render
-            label: valide
+            label: valid
           - from: render
             to: inspect
             label: HTML
           - from: inspect
             to: present
-            label: accepté
-    source: Code observé · e2f9996 · bin/gamma-slides.js
+            label: accepted
+    source: Observed code · e2f9996 · bin/gamma-slides.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/bin/gamma-slides.js
 
@@ -267,27 +267,27 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/qa/visual.js
   - layout: diagram
-    title: Un appel MCP, un fichier présentable.
-    subtitle: Chemin nominal de gamma_generate_deck ; les erreurs arrêtent la génération.
+    title: One MCP call, one presentable file.
+    subtitle: Happy path for gamma_generate_deck; errors stop generation.
     diagram:
       type: sequence
       spec:
         schema_version: 1
         diagram_type: sequence
         meta:
-          title: Un appel MCP, un artefact HTML
+          title: One MCP call, one HTML artifact
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - agent
                 - mcp
                 - loader
                 - renderer
                 - disk
-              note: Un appel MCP, un artefact HTML
+              note: One MCP call, one HTML artifact
           column_fit: spread
           viewBox:
             - 1000
@@ -307,7 +307,7 @@ slides:
             label: Renderer
           - id: disk
             type: database
-            label: Fichier
+            label: File
         messages:
           - id: message-0
             from: agent
@@ -324,7 +324,7 @@ slides:
           - id: message-2
             from: loader
             to: mcp
-            label: deck validé
+            label: validated deck
             'y': 224
             variant: return
           - id: message-3
@@ -336,7 +336,7 @@ slides:
           - id: message-4
             from: renderer
             to: mcp
-            label: document HTML
+            label: HTML document
             'y': 288
             variant: return
           - id: message-5
@@ -348,10 +348,10 @@ slides:
           - id: message-6
             from: mcp
             to: agent
-            label: chemin de sortie
+            label: output path
             'y': 352
             variant: return
-    source: Code observé · e2f9996 · src/mcp/server.js
+    source: Observed code · e2f9996 · src/mcp/server.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/mcp/server.js
 
@@ -359,31 +359,31 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
   - layout: diagram
-    title: Suivre les données jusqu’à l’artefact.
-    subtitle: Polices et bibliothèques embarquées ; médias externes à contrôler séparément.
+    title: Follow data to the artifact.
+    subtitle: Fonts and libraries are embedded; external media must be checked separately.
     diagram:
       type: dataflow
       spec:
         schema_version: 1
         diagram_type: dataflow
         meta:
-          title: Les données deviennent un document autonome
+          title: Data becomes a self-contained document
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - yaml
                 - deck
                 - html
                 - screen
-              note: Les données deviennent un document autonome
+              note: Data becomes a self-contained document
         stages:
-          - label: Entrées
-          - label: Modèle validé
+          - label: Inputs
+          - label: Validated model
           - label: Document
-          - label: Sorties
+          - label: Outputs
         nodes:
           - id: yaml
             type: external
@@ -393,31 +393,31 @@ slides:
             height: 64
           - id: assets
             type: database
-            label: Polices + JS
+            label: Fonts + JS
             stage: 0
             row: 1
             height: 64
           - id: deck
             type: backend
-            label: Deck chargé
+            label: Loaded deck
             stage: 1
             row: 0
             height: 64
           - id: html
             type: backend
-            label: HTML embarqué
+            label: Embedded HTML
             stage: 2
             row: 0
             height: 64
           - id: screen
             type: frontend
-            label: Présentation
+            label: Presentation
             stage: 3
             row: 0
             height: 64
           - id: frames
             type: database
-            label: Images / vidéo
+            label: Images / video
             stage: 3
             row: 1
             height: 64
@@ -434,12 +434,12 @@ slides:
             route: bottom-channel
           - from: html
             to: screen
-            label: navigateur
+            label: browser
             route: straight
           - from: html
             to: frames
             label: capture
-    source: Code observé · e2f9996 · src/engine/renderer.js
+    source: Observed code · e2f9996 · src/engine/renderer.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/renderer.js
 
@@ -447,26 +447,26 @@ slides:
 
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/video/generate-v2.js
   - layout: diagram
-    title: Le fichier vidéo reste un choix explicite.
-    subtitle: 'Cycle nominal simplifié : permissions et erreurs de capture hors de cette vue.'
+    title: The video file remains an explicit choice.
+    subtitle: 'Simplified nominal cycle: permissions and capture errors are outside this view.'
     diagram:
       type: lifecycle
       spec:
         schema_version: 1
         diagram_type: lifecycle
         meta:
-          title: Enregistrer puis décider de sauvegarder
+          title: Record, then decide to save
           quality_profile: showcase
           animation: trace
           views:
             - id: main
-              label: Parcours principal
+              label: Main path
               focus:
                 - ready
                 - recording
                 - finalizing
                 - review
-              note: Enregistrer puis décider de sauvegarder
+              note: Record, then decide to save
         lanes:
           - id: main
             label: Session
@@ -475,27 +475,27 @@ slides:
         states:
           - id: ready
             type: start
-            label: Prêt
+            label: Ready
             lane: main
             col: 0
           - id: recording
             type: active
-            label: Enregistrement
+            label: Recording
             lane: main
             col: 1
           - id: paused
             type: waiting
-            label: Pause
+            label: Paused
             lane: events
             col: 0
           - id: finalizing
             type: active
-            label: Finalisation
+            label: Finalizing
             lane: main
             col: 2
           - id: review
             type: success
-            label: Revue locale
+            label: Local review
             lane: main
             col: 3
         transitions:
@@ -514,7 +514,7 @@ slides:
                 - 307
           - from: paused
             to: recording
-            label: reprendre
+            label: resume
             fromSide: top
             toSide: right
             via:
@@ -529,7 +529,7 @@ slides:
               - 205
           - from: paused
             to: finalizing
-            label: terminer
+            label: finish
             fromSide: right
             toSide: bottom
             via:
@@ -542,26 +542,26 @@ slides:
             labelAt:
               - 490
               - 250
-    source: Code observé · e2f9996 · src/engine/components/presenter-studio.js
+    source: Observed code · e2f9996 · src/engine/components/presenter-studio.js
     notes: >-
       https://github.com/hbfs-cloud/gamma-slides/blob/e2f999677748f1630fcd3f6ab0d4c45734e26be0/src/engine/components/presenter-studio.js
   - layout: browser
-    title: Le dépôt, en direct.
-    subtitle: Inspectez le code, les issues et la documentation depuis le studio.
+    title: The repository, live.
+    subtitle: Inspect code, issues, and documentation from Studio.
     browser:
       url: https://github.com/hbfs-cloud/gamma-slides
-      label: Explorer le dépôt
+      label: Explore the repository
   - layout: media
-    title: Le mouvement et le son.
-    subtitle: 'Clip de calibration de quatre secondes : vidéo 30 fps et tonalité 440 Hz.'
+    title: Motion and sound.
+    subtitle: 'Four-second calibration clip: 30 fps video and a 440 Hz tone.'
     media:
       kind: video
       src: assets/studio-motion.mp4
-      alt: Mire vidéo animée de calibration
-      caption: Média de test généré localement avec FFmpeg.
+      alt: Animated video calibration pattern
+      caption: Test media generated locally with FFmpeg.
   - layout: chart
-    title: Une option ECharts native.
-    subtitle: Séries, légende et zoom déclarés directement en JSON.
+    title: A native ECharts option.
+    subtitle: Series, legend, and zoom declared directly in JSON.
     chart:
       type: echarts
       data: {}
@@ -582,11 +582,11 @@ slides:
           xAxis:
             type: category
             data:
-              - Lun
-              - Mar
-              - Mer
-              - Jeu
-              - Ven
+              - Mon
+              - Tue
+              - Wed
+              - Thu
+              - Fri
             axisLabel:
               color: '#A3ADB8'
           yAxis:
@@ -600,7 +600,7 @@ slides:
               start: 0
               end: 100
           series:
-            - name: Volume illustratif
+            - name: Illustrative volume
               type: bar
               data:
                 - 12
@@ -608,7 +608,7 @@ slides:
                 - 15
                 - 26
                 - 34
-            - name: Signal illustratif
+            - name: Illustrative signal
               type: line
               data:
                 - 10

@@ -33,6 +33,9 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .document-title { display: flex; min-width: 0; align-items: baseline; gap: 10px; }
 .document-title strong { overflow: hidden; font-size: 14px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
 .document-title span { color: var(--quiet); font-size: 11px; white-space: nowrap; }
+.document-title .document-status { padding: 3px 6px; border: 1px solid var(--line); border-radius: 9px; color: var(--accent-soft); background: var(--editor); font-size: 10px; font-weight: 700; letter-spacing: .035em; text-transform: uppercase; }
+.document-title .document-status[data-tone="saved"] { color: var(--ink); border-color: color-mix(in srgb, var(--accent-soft), var(--line) 50%); }
+.document-title .document-status[data-tone="error"] { color: var(--danger); border-color: color-mix(in srgb, var(--danger), var(--line) 55%); }
 .title-actions { display: flex; align-items: center; gap: 6px; -webkit-app-region: no-drag; }
 .title-actions button { min-height: 30px; padding: 0 10px; border-radius: 9px; color: var(--muted); background: transparent; font-size: 12px; font-weight: 600; }
 .title-actions button:hover { color: var(--ink); background: var(--button); }
@@ -55,8 +58,27 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .template-option p { max-width: 52ch; margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .template-option span { align-self: start; padding: 4px 7px; border-radius: 9px; color: var(--accent-soft); background: var(--editor); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
 
-.editor-workspace { display: grid; grid-template-columns: 242px minmax(420px, 1fr) 254px; height: calc(100vh - 54px); }
-.thumbnail-pane, .inspector-pane { min-width: 0; background: var(--pane); }
+.connections-dialog[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr); overflow: hidden; }
+.connections-dialog .template-dialog-header button { min-height: 44px; flex-shrink: 0; }
+#connections-status { margin: 0; padding: 12px 28px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+#connections-status.is-error { color: var(--danger); }
+.connections-content { min-height: 0; overflow-y: auto; padding: 0 28px 28px; }
+.connections-content fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.connections-content section { padding: 24px 0; border-bottom: 1px solid var(--line); }
+.connections-content h2 { margin: 0 0 12px; font-size: 20px; }
+.connections-content p { margin: 12px 0; color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.connections-content label { display: block; margin: 16px 0 6px; font-size: 14px; }
+.connections-content input { width: 100%; min-height: 44px; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--editor); color: var(--ink); font: inherit; }
+.connections-content input:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 2px; }
+.connection-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.connection-actions button { min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 9px; background: var(--button); color: var(--ink); font-size: 14px; }
+.connection-actions button:hover:not(:disabled) { border-color: var(--accent-soft); }
+.connections-content :disabled { cursor: wait; opacity: .6; }
+#drive-backups { display: grid; gap: 8px; }
+#drive-backups .template-option { grid-template-columns: minmax(0, 1fr); }
+
+.editor-workspace { display: grid; grid-template-columns: 242px minmax(420px, 1fr) 254px; grid-template-rows: minmax(0, 1fr); height: calc(100vh - 54px); }
+.thumbnail-pane, .inspector-pane { min-width: 0; min-height: 0; background: var(--pane); }
 .thumbnail-pane { display: flex; flex-direction: column; border-right: 1px solid var(--line); }
 .inspector-pane { overflow: auto; border-left: 1px solid var(--line); }
 .pane-heading { display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
@@ -81,9 +103,10 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .slide-actions .danger-action:hover:not(:disabled) { background: var(--danger); }
 .thumbnail-footer { padding: 13px 16px; border-top: 1px solid var(--line); color: var(--quiet); font-size: 10px; }
 
-.editor-pane { position: relative; display: grid; grid-template-rows: 44px minmax(180px, 1fr) minmax(200px, .9fr) 38px; min-width: 0; background: var(--editor); }
+.editor-pane { position: relative; display: grid; grid-template-rows: 44px minmax(180px, 1fr) minmax(200px, .9fr) 38px; min-width: 0; min-height: 0; background: var(--editor); }
 .editor-toolbar, .editor-footer { display: flex; align-items: center; justify-content: space-between; padding: 0 18px; color: var(--quiet); font-size: 11px; }
 .writer-actions { display: flex; min-width: 0; align-items: center; gap: 3px; margin-left: 16px; overflow-x: auto; scrollbar-width: none; }
+.writer-actions[hidden] { display: none; }
 .writer-actions::-webkit-scrollbar { display: none; }
 .writer-actions button, .source-toggle { min-height: 26px; flex: 0 0 auto; padding: 0 7px; border-radius: 9px; color: var(--muted); background: transparent; font-size: 11px; font-weight: 650; white-space: nowrap; }
 .writer-actions button:hover, .source-toggle:hover { color: var(--ink); background: var(--button); }
@@ -99,13 +122,16 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .writer-shell textarea { z-index: 1; resize: none; outline: 0; color: transparent; background: transparent; caret-color: var(--accent-soft); -webkit-text-fill-color: transparent; }
 .writer-shell textarea.deck-source, .writer-shell.rich-source textarea, .writer-shell.raw-source textarea { color: var(--ink); font: 450 13px/1.5 "Azeret Mono", ui-monospace, monospace; letter-spacing: 0; -webkit-text-fill-color: var(--ink); }
 .writer-shell.rich-source .writer-highlights, .writer-shell.raw-source .writer-highlights { display: none; }
-.writer-line { color: var(--ink); }
-.writer-line.writer-headline { color: var(--accent-soft); font-family: "Instrument Sans", system-ui, sans-serif; font-weight: 750; letter-spacing: -.022em; }
-.writer-line.writer-supporting { color: var(--hot); font-family: "Instrument Sans", system-ui, sans-serif; font-weight: 700; letter-spacing: -.018em; }
+.writer-line { position: relative; color: var(--ink); }
+.writer-marker { color: transparent; user-select: none; }
+.writer-line.writer-headline { color: var(--accent-soft); font-weight: 650; }
+.writer-line.writer-supporting { color: var(--hot); font-weight: 600; }
 .writer-line.writer-point { color: var(--accent-soft); }
 .writer-line.writer-quote { color: var(--muted); font-style: italic; }
 .writer-line.writer-asset, .writer-line.writer-table { color: var(--hot); font-family: "Azeret Mono", ui-monospace, monospace; font-size: .82em; letter-spacing: 0; }
-.writer-line.writer-moment { color: var(--quiet); font-family: "Azeret Mono", ui-monospace, monospace; font-size: .8em; letter-spacing: .08em; }
+.writer-line.writer-moment { color: transparent; font-family: "Azeret Mono", ui-monospace, monospace; font-size: .8em; letter-spacing: .08em; }
+.writer-line.writer-moment::after { position: absolute; left: 0; color: var(--quiet); content: attr(data-writer-label); font-family: "Instrument Sans", system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.writer-line.writer-natural-moment::after { color: var(--accent-soft); content: "Next slide"; }
 .writer-shell textarea::selection { background: color-mix(in srgb, var(--selection), transparent 20%); -webkit-text-fill-color: var(--ink); }
 .writer-shell textarea::placeholder { color: var(--quiet); }
 .writer-shell textarea::-webkit-scrollbar, .thumbnail-list::-webkit-scrollbar, .inspector-pane::-webkit-scrollbar { width: 10px; }
@@ -145,6 +171,13 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
 .render-capabilities { margin-top: 16px !important; color: var(--accent-soft) !important; font-size: 11px !important; }
 .appearance-section label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 12px; }
 .appearance-section select { max-width: 142px; padding: 6px 24px 6px 8px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--button); font-size: 11px; }
+.corporate-profile-form { display: grid; gap: 9px; margin-top: 12px; padding-top: 2px; }
+.appearance-section .corporate-profile-form > label { display: grid; align-items: stretch; gap: 5px; margin: 0; }
+.corporate-profile-form input, .corporate-profile-form select { box-sizing: border-box; width: 100%; max-width: none; min-height: 31px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--editor); font: 500 11px/1.4 "Azeret Mono", ui-monospace, monospace; }
+.corporate-profile-form input:not([type="color"]), .corporate-profile-form select { padding: 7px 8px; }
+.profile-colors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.appearance-section .profile-colors label { display: grid; align-items: stretch; gap: 5px; margin: 0; font-size: 10px; }
+.corporate-profile-form input[type="color"] { min-width: 0; padding: 3px; cursor: pointer; }
 .control-room-section { background: color-mix(in srgb, var(--pane), var(--accent) 5%); }
 .live-clocks { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 12px 0; }
 .live-clocks span { display: grid; gap: 3px; padding: 9px; border: 1px solid var(--line); border-radius: 9px; background: var(--editor); }
@@ -234,6 +267,7 @@ button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2p
   .inspector-pane, .presentation-rail { display: none; }
   .presentation-main, .thumbnails-mode .presentation-main, .thumbnails-mode .teleprompter-panel { grid-template-columns: 1fr; }
   .titlebar { padding-left: 82px; }
+  .document-status { display: none; }
   .writer-highlights, .writer-shell textarea { padding: 28px 32px; }
   .editor-pane { grid-template-rows: 44px minmax(150px, 1fr) minmax(180px, .9fr) 38px; }
 }

@@ -24,6 +24,8 @@ import {
   presentationUrl,
 } from '../src/site/github-pages.js';
 import { setupAgentClients } from '../src/integrations/setup.js';
+import { presentationShareKit } from '../src/site/sharing.js';
+import { backupPresentationToGoogleDrive } from '../src/integrations/google-drive.js';
 
 const program = new Command();
 
@@ -217,6 +219,37 @@ program
     const url = presentationUrl(opts.repo, slug);
     console.log(chalk.cyan(url));
     (await import('open')).default(url);
+  });
+
+program
+  .command('share')
+  .description('Create safe embed and share copy for an already-public HTTPS presentation')
+  .requiredOption('--url <https-url>', 'Public HTTPS presentation URL')
+  .option('--title <title>', 'Accessible presentation title', 'Gamma Presenter presentation')
+  .option('--aspect <ratio>', 'Embed aspect ratio', '16:9')
+  .action(opts => {
+    try {
+      const kit = presentationShareKit({ url: opts.url, title: opts.title, aspectRatio: opts.aspect });
+      console.log(`Public URL:\n${kit.url}\n\nIframe:\n${kit.iframe}\n\nNotion:\n${kit.notion}\n\nLinear Markdown:\n${kit.linear}\n\nStatic hosting:\n${kit.staticHost}\n\nVercel:\n${kit.vercel}`);
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exitCode = 1;
+    }
+  });
+
+program
+  .command('google-backup')
+  .description('Back up a presentation source to the connected user’s Google Drive')
+  .requiredOption('-f, --file <path>', 'Deck source: YAML, JSON, or Markdown')
+  .action(async opts => {
+    try {
+      const result = await backupPresentationToGoogleDrive({ file: opts.file });
+      console.log(chalk.green('✓') + ` Google Drive backup created: ${chalk.bold(result.name)}`);
+      console.log(result.webViewLink || `  Drive file id: ${result.id}`);
+    } catch (err) {
+      console.error(chalk.red('✗') + ` ${err.message}`);
+      process.exitCode = 1;
+    }
   });
 
 program
