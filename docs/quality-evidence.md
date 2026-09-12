@@ -37,7 +37,7 @@ Gamma Presenter is a presentation runtime with native macOS surfaces, local medi
 
 ### Reusable post-deployment Pages check
 
-The same public-gallery contract targets the deployed Pages URL without a separate workflow. On 2026-09-12 it passed 2/2 in 8.3 seconds against the actual public site, at desktop 1440×900 and mobile 390×844. It exercises six gallery routes, YouTube/Archify previews, one-active-preview lifecycle, offscreen teardown and reduced-motion manual playback. Remote captures in `output/deployed-gallery/` were inspected, including the complete 16:9 YouTube player and mobile Archify controls:
+The same public-gallery contract targets the deployed Pages URL without a separate workflow. On 2026-09-12 the final rerun passed 2/2 in 8.6 seconds against the actual public site, at desktop 1440×900 and mobile 390×844. It checks six available preview entries and exercises YouTube/Archify previews, one-active-preview lifecycle, offscreen teardown and reduced-motion manual playback. Remote captures in `output/deployed-gallery-final/` were inspected, including the complete 16:9 YouTube player and mobile Archify preview:
 
 ```bash
 GAMMA_GALLERY_BASE_URL=https://hbfs-cloud.github.io/gamma-slides/ GAMMA_GALLERY_EVIDENCE=output/deployed-gallery bunx playwright test qa/public-gallery.spec.js --reporter=list
@@ -47,7 +47,7 @@ GAMMA_GALLERY_BASE_URL=https://hbfs-cloud.github.io/gamma-slides/ GAMMA_GALLERY_
 
 The live site follows `main` independently of desktop packaging. Pages resolves the latest published macOS ZIP from GitHub release metadata; it does not construct a download to an unpublished package version. The current available desktop download is v2.0.3. The v2.0.4 tag did not produce a release because CI failed; local package evidence above is not a remote release sign-off.
 
-The gallery from main `0376548` was published successfully at 12:52 UTC on 2026-09-12 in [Pages run 34694839859](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34694839859). The public favicon and runtime GIF respond with HTTP 200; the available desktop ZIP link resolves successfully. This remote check is separate from desktop release validation.
+The gallery from main `0376548` was published successfully at 12:52 UTC on 2026-09-12 in [Pages run 34694839859](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34694839859). The subsequent Three lifecycle correction (`3f29d3d`) deployed at 13:00 UTC in [Pages run 34695163187](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34695163187), followed by the passing public-URL rerun above. The public favicon and runtime GIF respond with HTTP 200; the available desktop ZIP link resolves successfully. This remote check is separate from desktop release validation.
 
 Remote validation exposed missing recording tools, a mismatched browser, an Ubuntu sandbox restriction, and asynchronous isolated-browser teardown. The CI matrix now pins Chromium, installs FFmpeg, and divides Linux interaction tests into three shards on Ubuntu 22.04 with the browser sandbox enabled. Two complete 1080p performance scenarios retain the strict >24 fps gate on macOS. In run `34694839778`, broadcast passed, but isolated-browser streaming measured 19.07 fps and failed the performance gate. The Three lifecycle change is unrelated to that capture path. These failures are not hidden by the earlier local pass.
 
