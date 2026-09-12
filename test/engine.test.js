@@ -96,6 +96,7 @@ slides:
     assert.match(landing, /Presentations with a live operating system/);
     assert.match(landing, /Start with the complete capability tour/);
     assert.match(landing, /gamma-presenter-icon\.svg/);
+    assert.match(landing, /<link rel="icon" href="\.\/assets\/gamma-presenter-icon\.svg" type="image\/svg\+xml">/);
     assert.match(landing, /class="source-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
     assert.match(landing, />Source</);
     assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.2-arm64-mac\.zip/);
@@ -107,6 +108,8 @@ slides:
     assert.match(demo, /Décider maintenant/);
     assert.match(demo, /id="gamma-library-return" href="\.\.\/"/);
     assert.match(demo, /Return to the Gamma Presenter home page/);
+    assert.ok(demo.indexOf('../assets/gamma-presenter-icon.svg') < demo.indexOf('</head>'), 'demo favicon belongs in the document head, not runtime source text');
+    assert.match(demo, /<link rel="icon" href="\.\.\/assets\/gamma-presenter-icon\.svg" type="image\/svg\+xml">/);
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-control-room.png')));
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-immersive-runtime.gif')));
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-cinematic-runtime.gif')));

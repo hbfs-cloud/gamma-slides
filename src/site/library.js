@@ -36,6 +36,7 @@ function catalogHtml(entries) {
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="description" content="Gamma Presenter is the local macOS presentation studio for source-first decks, live visuals, recording, and operator-controlled AI co-piloting.">
+  <link rel="icon" href="./assets/gamma-presenter-icon.svg" type="image/svg+xml">
   <title>Gamma Presenter — a macOS stage for live presentations</title>
   <style>
     @font-face{font-family:Instrument;src:url("./assets/instrument-sans-latin-wght-normal.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
