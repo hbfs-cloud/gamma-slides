@@ -93,7 +93,7 @@ The adjacent **Local AI co-pilot** panel detects `codex` and `claude` on your `P
 
 ## Build the macOS application
 
-For an Apple-silicon Mac, download the [current Gamma Presenter ZIP](https://github.com/hbfs-cloud/gamma-slides/releases/download/v2.0.4/Gamma.Presenter-2.0.4-arm64-mac.zip). The versioned link resolves to the matching GitHub Release and contains the `.app`; the package is unsigned until a Developer ID identity is supplied.
+For an Apple-silicon Mac, download the [current Gamma Presenter ZIP](https://github.com/hbfs-cloud/gamma-slides/releases/download/v2.0.3/Gamma.Presenter-2.0.3-arm64-mac.zip). The versioned link resolves to the matching GitHub Release and contains the `.app`; the package is unsigned until a Developer ID identity is supplied. The live demos and source can advance independently while the next desktop package is being validated.
 
 ```bash
 bun run desktop:package

@@ -14,10 +14,7 @@ const featuredDecks = [
 ];
 
 const repositoryUrl = 'https://github.com/hbfs-cloud/gamma-slides';
-const releaseVersion = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version;
-const releaseUrl = `${repositoryUrl}/releases/tag/v${releaseVersion}`;
-// GitHub normalizes spaces in uploaded release asset names to periods.
-const macDownloadUrl = `${repositoryUrl}/releases/download/v${releaseVersion}/Gamma.Presenter-${releaseVersion}-arm64-mac.zip`;
+const packageVersion = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version;
 
 function featuredDeckHtml(entries) {
   return featuredDecks.map(content => {
@@ -36,7 +33,11 @@ function featuredDeckHtml(entries) {
   }).join('');
 }
 
-function catalogHtml(entries) {
+function catalogHtml(entries, releaseVersion) {
+  const releaseUrl = `${repositoryUrl}/releases/tag/v${releaseVersion}`;
+  // GitHub normalizes spaces in uploaded release asset names to periods.
+  const macDownloadUrl = `${repositoryUrl}/releases/download/v${releaseVersion}/Gamma.Presenter-${releaseVersion}-arm64-mac.zip`;
+  const releaseNote = releaseVersion === packageVersion ? '' : `<p class="download-note">Live demos follow the latest source. The desktop download remains v${releaseVersion} while the next update is being validated.</p>`;
   const demos = featuredDeckHtml(entries);
   return `<!doctype html>
 <html lang="en">
@@ -84,7 +85,7 @@ function catalogHtml(entries) {
     <section class="runtime-proof shell" aria-labelledby="runtime-title"><div><h2 id="runtime-title">Make the visual do the explaining.</h2><p>Build beyond static slides: cinematic scenes, charts, Archify diagrams, 3D, media, browser experiences, recording, and presenter controls are all native parts of the same deck.</p><a href="./immersive-data/">Open the immersive data demo <b aria-hidden="true">→</b></a></div><figure class="runtime-loop"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="./assets/gamma-presenter-cinematic-runtime.gif" type="image/gif"><img src="./assets/gamma-presenter-control-room.png" alt="The Gamma Presenter Author workspace with its local presentation control room"></picture><figcaption><strong>Motion belongs to the argument.</strong> A second captured runtime loop shows a cinematic data scene; reduced-motion visitors receive the real Author workspace instead.</figcaption></figure></section>
     <section class="ai-boundary shell" id="ai" aria-labelledby="ai-title"><h2 id="ai-title">AI can propose the show. You keep the controls.</h2><div class="ai-copy"><p>Claude Code and Codex can inspect the source, generate a deck, validate it, and work through a local MCP endpoint while you rehearse. They never receive ambient access to the room.</p><ol class="approval-path"><li><strong>Write and validate</strong><span>Use the same editable Markdown, YAML, or JSON source the team will review and release.</span></li><li><strong>Request, don’t seize</strong><span>Stage, recording, capture, browser, terminal, and spoken-note actions arrive as named requests in the Author control room.</span></li><li><strong>Approve or reject</strong><span>The presenter decides each consequential action, with a visible local activity trail and no public MCP listener.</span></li></ol><a href="${repositoryUrl}/blob/main/docs/LLM_QUICKSTART.md">Read the Claude and Codex workflow <b aria-hidden="true">→</b></a></div></section>
     <section class="decks shell" id="live-gallery" aria-labelledby="decks-title"><div class="deck-intro"><h2 id="decks-title">A live gallery, not a wall of screenshots.</h2><p>Each viewport below is a lazy-loaded instance of a generated deck. Watch it move here; open the full demo to explore the controls, navigation, values, and source-linked output yourself.</p></div>${demos || '<p>No featured presentations have been deployed yet.</p>'}</section>
-    <section class="install shell" id="download" aria-labelledby="download-title"><div class="install-copy"><h2 id="download-title">Install the app. Keep the runtime.</h2><p>Gamma Presenter is available now for Apple-silicon Macs. The release contains the Gamma Presenter app in a ZIP and is explicitly unsigned while Apple Developer signing credentials are not configured.</p></div><div class="install-meta"><a class="action" href="${macDownloadUrl}">Download for Apple silicon</a><p class="download-note">Direct GitHub Release download · v${releaseVersion} · ZIP + DMG · <a href="${releaseUrl}">checksums and release notes</a></p><pre class="source-command"><code>git clone ${repositoryUrl}.git
+    <section class="install shell" id="download" aria-labelledby="download-title"><div class="install-copy"><h2 id="download-title">Install the app. Keep the runtime.</h2><p>Gamma Presenter is available now for Apple-silicon Macs. The release contains the Gamma Presenter app in a ZIP and is explicitly unsigned while Apple Developer signing credentials are not configured.</p>${releaseNote}</div><div class="install-meta"><a class="action" href="${macDownloadUrl}">Download for Apple silicon</a><p class="download-note">Direct GitHub Release download · v${releaseVersion} · ZIP + DMG · <a href="${releaseUrl}">checksums and release notes</a></p><pre class="source-command"><code>git clone ${repositoryUrl}.git
 cd gamma-slides
 bun install
 bun run desktop</code></pre></div></section>
@@ -158,7 +159,8 @@ function copyMarketingAssets(destination) {
   assets.forEach(([source, target]) => copyFileSync(resolve(source), resolve(assetDirectory, target)));
 }
 
-export function buildPresentationLibrary({ inputDir = './presentations', outputDir = './_site', include = [], language = '' } = {}) {
+export function buildPresentationLibrary({ inputDir = './presentations', outputDir = './_site', include = [], language = '', releaseVersion = process.env.GAMMA_PUBLIC_RELEASE_VERSION || packageVersion } = {}) {
+  if (!/^\d+\.\d+\.\d+$/.test(releaseVersion)) throw new Error('Public release version must be a stable semantic version, such as 2.0.3.');
   const destination = resolve(outputDir);
   rmSync(destination, { recursive: true, force: true });
   mkdirSync(destination, { recursive: true });
@@ -181,7 +183,7 @@ export function buildPresentationLibrary({ inputDir = './presentations', outputD
     const result = buildStaticSite(deck, resolve(destination, slug), { homeHref: '../' });
     return { index: index + 1, slug, title: result.title, slides: result.slides, theme: result.theme };
   });
-  writeFileSync(resolve(destination, 'index.html'), catalogHtml(entries), 'utf-8');
+  writeFileSync(resolve(destination, 'index.html'), catalogHtml(entries, releaseVersion), 'utf-8');
   writeFileSync(resolve(destination, '.nojekyll'), '', 'utf-8');
   writeFileSync(resolve(destination, 'presentations.json'), JSON.stringify(entries, null, 2), 'utf-8');
   return { outputDir: destination, entries };

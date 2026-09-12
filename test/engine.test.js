@@ -195,9 +195,14 @@ slides:
     title: Ready for the English-first library
 `);
     const englishOutput = join(tempDir, '_site-en');
-    const englishResult = buildPresentationLibrary({ inputDir: sourceDir, outputDir: englishOutput, include: [fallback], language: 'en' });
+    const englishResult = buildPresentationLibrary({ inputDir: sourceDir, outputDir: englishOutput, include: [fallback], language: 'en', releaseVersion: '2.0.3' });
     assert.deepEqual(englishResult.entries.map(entry => entry.slug), ['english-launch']);
     assert.doesNotMatch(readFileSync(join(englishOutput, 'index.html'), 'utf-8'), /Comité FY26/);
+    const publishedLanding = readFileSync(join(englishOutput, 'index.html'), 'utf-8');
+    assert.match(publishedLanding, /releases\/download\/v2\.0\.3\/Gamma\.Presenter-2\.0\.3-arm64-mac\.zip/);
+    assert.match(publishedLanding, /Live demos follow the latest source/);
+    assert.throws(() => buildPresentationLibrary({ outputDir: englishOutput, releaseVersion: '2.0.3"><script>' }), /stable semantic version/);
+    assert.equal(readFileSync(join(englishOutput, 'index.html'), 'utf-8'), publishedLanding, 'invalid metadata must not replace the built site');
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }

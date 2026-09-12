@@ -28,7 +28,9 @@ jobs:
 
   browser-e2e:
     name: Chromium visual and interaction matrix (${{ matrix.shard }}/3)
-    runs-on: ubuntu-latest
+    # Ubuntu 24's AppArmor policy blocks downloaded Chrome user namespaces.
+    # Keep the isolated browser sandbox enabled on a supported 22.04 runner.
+    runs-on: ubuntu-22.04
     timeout-minutes: 20
     strategy:
       fail-fast: false

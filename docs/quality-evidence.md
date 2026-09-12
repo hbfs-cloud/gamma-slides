@@ -42,6 +42,14 @@ The same public-gallery contract can target the deployed Pages URL without a sep
 GAMMA_GALLERY_BASE_URL=https://hbfs-cloud.github.io/gamma-slides/ GAMMA_GALLERY_EVIDENCE=output/deployed-gallery bunx playwright test qa/public-gallery.spec.js --reporter=list
 ```
 
+### Publication status
+
+The live site follows `main` independently of desktop packaging. Pages resolves the latest published macOS ZIP from GitHub release metadata; it does not construct a download to an unpublished package version. The current available desktop download is v2.0.3. The v2.0.4 tag did not produce a release because CI failed; local package evidence above is not a remote release sign-off.
+
+Remote validation exposed missing recording tools, a mismatched browser, an Ubuntu sandbox restriction, and asynchronous isolated-browser teardown. The CI matrix now pins Chromium, installs FFmpeg, and divides Linux interaction tests into three shards. Two complete 1080p performance scenarios retain the strict >24 fps gate on macOS; the broadcast scenario passed, while the subsequent stream scenario requires teardown correction and a fresh run. These failures are not hidden by the earlier local pass.
+
+The browser teardown correction now has two deterministic regressions: concurrent shutdown callers share completion, and a replacement browser waits for the previous process to close. The complete local suite passed 146/146 with zero skips after that correction. This rerun used `node --test --test-concurrency=1 test/*.test.js` because concurrent temporary artifacts exhausted the host disk; the earlier disk-full run is retained as failed evidence. Both strict macOS 1080p capture scenarios also passed locally, 2/2 in 16.7 seconds, after teardown correction. Linux 3D transition failures remain under investigation independently of the published gallery.
+
 ## Remaining release and distribution gates
 
 1. Verify the generated site and any GitHub Pages update from its stable public URL; test iframe paste in the target Notion/Linear workspace where it will be used.

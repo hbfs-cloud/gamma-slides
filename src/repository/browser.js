@@ -4,9 +4,12 @@ import {launchBrowser} from '../browser.js';
 /** Opt-in, isolated Chrome. Only its target tab is captured, never the user's desktop. */
 export function browserHandler({enabled=false,launch=launchBrowser}={}) {
  const token=randomBytes(24).toString('hex'),captureTitle=`GAMMA_REMOTE_${randomBytes(12).toString('hex')}`;
- let browser,page,controller,starting,launchFailure,busy=false,streamEpoch=0,closePending=0;
+ let browser,page,controller,starting,closing,launchFailure,busy=false,streamEpoch=0,closePending=0;
  const dimensions={width:1920,height:1080};
  const getPage=async()=>{
+  // A replacement must never launch while the previous isolated Chromium is
+  // still releasing its capture resources.
+  await closing;
   if(page&&!page.isClosed())return page;
   if(launchFailure)throw launchFailure;
   if(!starting)starting=(async()=>{
@@ -23,7 +26,18 @@ export function browserHandler({enabled=false,launch=launchBrowser}={}) {
   })().finally(()=>starting=null);
   return starting;
  };
- const close=async()=>{streamEpoch++;closePending=0;await starting?.catch(()=>{});const old=browser;browser=page=controller=launchFailure=null;await old?.close();};
+ const close=()=>{
+  if(closing)return closing;
+  closing=(async()=>{
+   streamEpoch++;closePending=0;
+   await starting?.catch(()=>{});
+   const old=browser;
+   await old?.close();
+   browser=page=controller=launchFailure=null;
+  })();
+  closing=closing.finally(()=>{closing=null;});
+  return closing;
+ };
  const finish=async()=>{try{if(closePending===streamEpoch&&closePending)await close().catch(()=>{});}finally{busy=false;}};
  const answer=async(origin,offer)=>{
   const epoch=++streamEpoch,p=await getPage();
