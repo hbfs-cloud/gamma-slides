@@ -27,6 +27,37 @@ export function threeExplorationCSS() { return `
   @media print { .d3-depth-scene { display:none!important; } .d3-webgpu-stage[data-d3-view="3d"] .d3-webgpu-fallback { visibility:visible!important; } }
 `; }
 
+// Releasing a WebGL context while its loss listener still owns the current
+// renderer can re-enter a 3D → 2D transition.  Mark and detach first; the
+// explicit release is deferred until the input/print handler has returned.
+export function teardownThreeRenderer(state, defer = callback => setTimeout(callback, 0)) {
+  const renderer = state.renderer;
+  state.renderer = null;
+  state.disposed = true;
+  if (!renderer) return;
+  const listener = state.onContextLost;
+  if (listener) renderer.domElement?.removeEventListener('webglcontextlost', listener);
+  state.onContextLost = null;
+  renderer.dispose?.();
+  renderer.domElement?.remove?.();
+  defer(() => {
+    try {
+      if (!renderer.getContext?.()?.isContextLost?.()) renderer.forceContextLoss?.();
+    } catch {}
+  });
+}
+
+export function transitionThreeMode(state, enabled, { update, notify, build, dispose }) {
+  if (state.active === enabled) return false;
+  state.active = enabled;
+  update(enabled);
+  // A 2D transition must dispose the old WebGL renderer before waking the
+  // Pixi path, otherwise a context loss can race its new renderer creation.
+  if (enabled) { notify(); build(); }
+  else { dispose(); notify(); }
+  return true;
+}
+
 function initThreeExploration() {
   const T = window.GammaThree;
   const toggles = [...document.querySelectorAll('.d3-depth-toggle')];
@@ -108,8 +139,7 @@ function initThreeExploration() {
   function dispose(state) {
     (window.__gammaCancelFrame || cancelAnimationFrame)(state.frame); state.frame = 0;
     if (state.scene) state.scene.traverse(object => { object.geometry?.dispose(); if (Array.isArray(object.material)) object.material.forEach(material => material.dispose()); else object.material?.dispose(); });
-    const renderer = state.renderer; state.renderer = null;
-    renderer?.dispose(); renderer?.forceContextLoss(); renderer?.domElement.remove(); state.scene = null; state.points = [];
+    teardownThreeRenderer(state); state.scene = null; state.points = [];
     state.labelLayer.replaceChildren(); state.leaders.replaceChildren(); state.labels = []; state.fitBounds = [];
   }
   function select(state, index) {
@@ -129,18 +159,21 @@ function initThreeExploration() {
     request(state);
   }
   function setMode(state, enabled) {
-    if (state.active === enabled) return;
-    state.active = enabled;
-    state.root.dataset.d3View = enabled ? '3d' : '2d';
-    state.toggle.setAttribute('aria-pressed', String(enabled));
-    state.toggle.textContent = enabled ? (state.fr ? 'Comparer en 2D' : 'Compare in 2D') : (state.fr ? 'Explorer en 3D' : 'Explore in 3D');
-    const subtitle = state.root.querySelector('.d3-webgpu-heading p');
-    if (subtitle) subtitle.textContent = state.subtitle;
-    const flatState = window.__gammaGPUCharts?.states.find(candidate => candidate.root === state.root);
-    const flatSelection = flatState?.scene?.hits.find(hit => hit.key === flatState.selected)?.label;
-    state.readout.textContent = enabled ? state.depthHint : flatSelection || state.hint;
-    document.dispatchEvent(new CustomEvent('gamma:gpu-view-changed'));
-    if (enabled) build(state); else dispose(state);
+    transitionThreeMode(state, enabled, {
+      update: active => {
+        state.root.dataset.d3View = active ? '3d' : '2d';
+        state.toggle.setAttribute('aria-pressed', String(active));
+        state.toggle.textContent = active ? (state.fr ? 'Comparer en 2D' : 'Compare in 2D') : (state.fr ? 'Explorer en 3D' : 'Explore in 3D');
+        const subtitle = state.root.querySelector('.d3-webgpu-heading p');
+        if (subtitle) subtitle.textContent = state.subtitle;
+        const flatState = window.__gammaGPUCharts?.states.find(candidate => candidate.root === state.root);
+        const flatSelection = flatState?.scene?.hits.find(hit => hit.key === flatState.selected)?.label;
+        state.readout.textContent = active ? state.depthHint : flatSelection || state.hint;
+      },
+      notify: () => document.dispatchEvent(new CustomEvent('gamma:gpu-view-changed')),
+      build: () => build(state),
+      dispose: () => dispose(state),
+    });
   }
   function build(state) {
     if (!T || !window.d3) { setMode(state, false); state.toggle.disabled = true; return; }
@@ -159,8 +192,10 @@ function initThreeExploration() {
       state.viewport.prepend(state.renderer.domElement);
       state.host.dataset.depthRenderer = 'webgl';
       state.renderer.domElement.setAttribute('aria-hidden', 'true');
+      state.disposed = false;
       const activeRenderer = state.renderer;
-      state.renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); if (state.renderer === activeRenderer) { setMode(state, false); state.toggle.disabled = true; } }, { once: true });
+      state.onContextLost = event => { event.preventDefault(); if (state.renderer === activeRenderer && !state.disposed) { setMode(state, false); state.toggle.disabled = true; } };
+      state.renderer.domElement.addEventListener('webglcontextlost', state.onContextLost, { once: true });
       const hemi = new T.HemisphereLight(color('text'), color('bg'), 2.2); state.scene.add(hemi);
       const light = new T.DirectionalLight(color('text'), 3); light.position.set(-3, 8, 6); state.scene.add(light);
       const fill = new T.DirectionalLight(color('secondary'), 1.5); fill.position.set(5, 1, -4); state.scene.add(fill);
@@ -269,4 +304,6 @@ function initThreeExploration() {
   sync();
 }
 
-export function threeExplorationJS() { return initThreeExploration.toString(); }
+export function threeExplorationJS() {
+  return [teardownThreeRenderer, transitionThreeMode, initThreeExploration].map(fn => fn.toString()).join('\n');
+}
