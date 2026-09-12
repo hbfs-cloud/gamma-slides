@@ -56,15 +56,15 @@ slides:
     narration: Content remains a document. Rich configuration and local media travel with the deck rather than being copied into a disconnected presentation canvas.
 
   - layout: media
-    title: Play real media on the stage.
-    subtitle: This local calibration clip is embedded into the generated deck. Video, audio, still imagery, and GIFs remain live presentation content.
+    title: Play a real YouTube scene on the stage.
+    subtitle: A privacy-enhanced YouTube embed stays inside the deck, with an explicit source link when the room needs to open the original.
     media:
-      kind: video
-      src: assets/studio-motion.mp4
-      alt: Short locally generated video calibration clip.
-      caption: Local MP4 embedded directly in this demonstration.
-    source: Gamma Slides local media fixture
-    narration: The deck itself contains the local media reference. The renderer carries it into the portable output, without a hosted asset dependency.
+      kind: youtube
+      src: https://www.youtube.com/watch?v=o8NiE3XMPrM
+      alt: Google I/O 2025 keynote embedded from YouTube.
+      caption: The YouTube player is embedded through youtube-nocookie.com; use the visible source link whenever a network policy blocks playback.
+    source: Google I/O '25 Keynote · official YouTube video
+    narration: Hosted video is a deliberate live source. Gamma keeps it embedded in Stage, provides a direct source link, and still supports project-local video, audio, still imagery, and GIFs when the deck must travel offline.
 
   - layout: chart
     composition: feature
@@ -203,17 +203,17 @@ slides:
     narration: The co-pilot is useful because it is bounded. It can inspect and request, but the presenter stays responsible for what reaches the live show.
 
   - layout: table
+    variant: editorial
     composition: ledger
-    title: Finish with usable outputs.
-    subtitle: The same authored deck supports the operational, sharing, and record-keeping paths a presentation needs.
+    title: Finish with useful outputs.
+    subtitle: One authored deck covers the room, a local master, a portable link, and review material.
     table:
       headers: [Output, What remains intact, Intended use]
       rows:
         - ['Stage + Speaker View', 'Live deck, notes, clocks, cues', 'Deliver the room']
         - [Recording, 'Camera and microphone after consent', 'Keep a local master']
-        - [HTML, 'Embedded runtime and local assets', 'Share a portable live deck']
-        - ['PDF / PNG / handout', 'Rendered evidence and speaker material', 'Review and distribution']
-        - [PPTX, 'Semantic content and notes; live scenes labelled honestly', Interchange]
+        - ['Portable deck', 'HTML runtime and local assets', 'Share a live link']
+        - ['Review pack', 'PDF · PNG · handout · PPTX notes', 'Review and interchange']
       column_types: [text, text, text]
       highlight_column: 0
     source: Gamma Presenter export and stage workflow

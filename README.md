@@ -4,7 +4,7 @@
 
 Gamma Presenter brings writing, live visuals, presentation control, recording, and carefully bounded AI co-piloting into one macOS workspace. It is built on the open-source Gamma Slides engine, so the Markdown, YAML, and JSON you author remain durable, inspectable source—not a locked canvas.
 
-[Download for Apple silicon](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.2-arm64-mac.zip) · [Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
+[Download for Apple silicon](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.3-arm64-mac.zip) · [Run it locally](#run-gamma-presenter-on-macos) · [Read the macOS guide](docs/gamma-presenter-macos.md) · [See the GitHub Pages landing](https://hbfs-cloud.github.io/gamma-slides/) · [Explore the source](https://github.com/hbfs-cloud/gamma-slides)
 
 ![Gamma Presenter’s control room: timers, approved live-action requests, and a local AI co-pilot inside the Author workspace](docs/images/gamma-presenter-control-room.png)
 
@@ -19,7 +19,7 @@ Gamma Presenter brings writing, live visuals, presentation control, recording, a
 | Write | Markdown for velocity; YAML and JSON for full Gamma layouts, notes, themes, and advanced configuration. |
 | Shape | A source-aware slide rail, inspector, direct media import, and an embedded renderer preserve the story and the rich scene behind it. |
 | Present | A selected-display Stage, Speaker View, notes, elapsed timers, countdowns, private cues, Dock actions, and a menu-bar controller. |
-| Make it live | Images, GIFs, video, audio, ECharts, Archify, D3, Pixi, Three.js, animation, browser demonstrations, and terminal scenes. |
+| Make it live | Images, GIFs, local video and audio, privacy-enhanced YouTube embeds, ECharts, Archify, D3, Pixi, Three.js, animation, browser demonstrations, and terminal scenes. |
 | Co-animate | A loopback-only MCP endpoint and local Codex/Claude CLI workflow. Consequential Stage, recording, capture, browser, terminal, and spoken-note requests require an explicit operator approval. |
 | Deliver | Standalone HTML, PDF, PNG, PowerPoint, speaker handouts, and local recording controls—without pretending interactive runtime scenes are editable PowerPoint objects. |
 
@@ -36,7 +36,7 @@ bun install
 bun run desktop
 ```
 
-Download the current Apple-silicon ZIP from the [GitHub Release](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.2-arm64-mac.zip), or package it locally with `bun run desktop:package`. Releases are built by GitHub Actions from version tags. Apple signing and notarization need the product owner’s Apple Developer credentials, so the package is explicitly unsigned.
+Download the current Apple-silicon ZIP from the [GitHub Release](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.3-arm64-mac.zip), or package it locally with `bun run desktop:package`. Releases are built by GitHub Actions from version tags. Apple signing and notarization need the product owner’s Apple Developer credentials, so the package is explicitly unsigned.
 
 ## Gamma Slides engine
 
@@ -56,7 +56,7 @@ It installs the current GitHub version and connects its MCP server to every inst
 
 Then ask the agent in plain language:
 
-> Create a premium 12-slide presentation in French from `brief.md`, validate every slide, deploy it as `fy26-plan`, and return the public URL. Never invent facts.
+> Create a premium 12-slide executive presentation from `brief.md`, validate every slide, deploy it as `fy26-plan`, and return the public URL. Never invent facts.
 
 The agent can inspect the schema and flagship example, choose among the three themes, generate live ECharts, validate the deck, and create or update its stable GitHub Pages URL.
 

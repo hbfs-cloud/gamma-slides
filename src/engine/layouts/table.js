@@ -47,7 +47,7 @@ export function renderTable(slide, theme, deck) {
   const tableLabel = escapeHtml(slide.title || 'Data table');
   const unit = deck?.meta?.experience && /^[$€£¥][KMB]?$/.test(spec.headers[0] || '') ? `<caption class="experience-table-unit">Amounts in ${escapeHtml(spec.headers[0])}</caption>` : '';
 
-  if (slide.variant === 'editorial') {
+  if (slide.variant === 'editorial' || (deck?.meta?.experience && slide.composition === 'ledger')) {
     return `${renderSlideHeader(slide)}<div class="editorial-table-wrap"><table class="data-table" data-columns="${spec.headers.length}" aria-label="${tableLabel}">
       ${unit}<thead><tr>${headers}</tr></thead><tbody>${bodyRows}${overflow}</tbody>
     </table></div>${renderInsight(slide)}${renderSource(slide)}`;

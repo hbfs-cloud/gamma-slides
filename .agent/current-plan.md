@@ -90,6 +90,12 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 
 Motion thesis: the hero is a short, finite journey from written argument to a live architecture scene; the secondary proof is the running Stage. The landing remains fully readable before either loop loads, records no sound, offers a still fallback for reduced motion, and keeps each GIF under a small, page-appropriate transfer budget.
 
+## Public proof quality recovery — opened 2026-09-12
+
+- [x] DONE — Replace the public test-pattern media proof with a first-class, privacy-enhanced YouTube embed, retain a source fallback, and expose it in the native rich inspector.
+- [x] DONE — Correct the broken ledger composition, improve spatial-canvas legibility, and exclude non-English legacy decks from the English-first Pages catalog.
+- [x] DONE — Rebuild the public artifact, run source/runtime regressions, inspect the deployed tour, and record the result.
+
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
 - [x] DONE — Refaire le mode Présentation avec aperçu, téléprompteur et chronométrage réinitialisable.
@@ -145,6 +151,7 @@ Motion thesis: the hero is a short, finite journey from written argument to a li
 - 2026-09-11 — Packaged template gallery delivered: Author now exposes five English-first, offline models (blank story, decision narrative, Analyst Proof board update, live Archify architecture review, and Cutting Room operator rehearsal). Selection safely replaces the unsaved source only after confirmation, resets to slide one, uses the matching theme, and remains fully editable/exportable. The arm64 packaged smoke opens the gallery, verifies all models, selects and renders the live architecture deck, then completes the existing MCP approval → Stage path. `bun run test` passes 100 tests with one intentional isolated-browser skip. Fresh unsigned artifacts are `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64.dmg` (SHA-256 `15b1c46ad8b85c233a04f6007089ac217a52b404d9396ee78d4a7536632a6f51`) and `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64-mac.zip` (SHA-256 `325c928a3f12c9160b1d1f351a0909a577cb52879b523b2075f3e4864cd9feee`); the DMG verifies as valid. The package is deliberately unsigned because no Developer ID identity is available.
 - 2026-09-12 — Landing motion and navigation refresh: the light editorial landing now uses two actual Gamma runtime GIFs (960×600, 2.8 MB; 960×540, 1.4 MB) with `prefers-reduced-motion` still fallbacks, and each of the eight generated demos has an accessible fixed Gamma Presenter home control. The library rebuild verifies all routes, both assets, and the fallback markup. `bun run test`: 102 pass, 1 explicit isolated-browser skip.
 - 2026-09-12 — macOS identity refresh: the dark legacy monogram was replaced by a high-contrast cobalt presentation-screen icon with a live cue; the app now acquires a single-instance lock and foregrounds its existing Author window on a repeated launch. Fresh unsigned arm64 ZIP: `dist-presenter-icon-fix/Gamma Presenter-2.0.2-arm64-mac.zip` (SHA-256 `ed7f30032d397809c63d1d382b5654430d411b623b1e99a0de319beb10476e02`). Its `Info.plist` and packaged `icon.icns` were inspected. Electron/Chrome launched by Bun under cmux abort in macOS `HIServices` before application code; no further in-shell GUI launch attempts are made.
+- 2026-09-12 — Public proof recovery: the capability tour now uses a validated, allowlisted `youtube-nocookie.com` embed with an explicit YouTube fallback rather than a calibration-pattern asset. Ledger tables use their intended editorial composition, spatial canvases supersample up to a bounded 4 MP, and the Pages workflow emits only decks explicitly marked `en`. The generated catalog contains exactly flagship, capability tour, live demo, and immersive data. Focused engine/desktop validation passes 61/61; the full Bun suite remains the final pre-deploy gate.
 
 # Decisions
 

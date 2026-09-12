@@ -6,6 +6,7 @@ import { join } from 'path';
 import { escapeHtml, safeUrl, richText } from '../src/engine/html.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
+import { renderMedia, youtubeEmbedUrl } from '../src/engine/layouts/media.js';
 import { buildEChartsConfig } from '../src/engine/components/chart-builder.js';
 import { archifySlideJS, renderDiagram } from '../src/engine/components/archify-slide.js';
 import { getTheme } from '../src/themes/index.js';
@@ -30,6 +31,22 @@ test('HTML helpers escape content and reject active URL schemes', () => {
   assert.equal(safeUrl('javascript:alert(1)'), '');
   assert.equal(safeUrl('https://example.com/a?x=1&y=2'), 'https://example.com/a?x=1&amp;y=2');
   assert.equal(richText('A **safe** <tag>'), 'A <strong>safe</strong> &lt;tag&gt;');
+});
+
+test('YouTube media is rendered through an allowlisted privacy-enhanced player', () => {
+  assert.equal(youtubeEmbedUrl('https://www.youtube.com/watch?v=o8NiE3XMPrM'), 'https://www.youtube-nocookie.com/embed/o8NiE3XMPrM?rel=0&modestbranding=1&playsinline=1');
+  assert.equal(youtubeEmbedUrl('https://youtu.be/o8NiE3XMPrM?t=4'), 'https://www.youtube-nocookie.com/embed/o8NiE3XMPrM?rel=0&modestbranding=1&playsinline=1');
+  assert.equal(youtubeEmbedUrl('https://example.com/embed/o8NiE3XMPrM'), '');
+  assert.equal(youtubeEmbedUrl('javascript:alert(1)'), '');
+
+  const html = renderMedia({
+    title: 'A live source',
+    media: { kind: 'youtube', src: 'https://www.youtube.com/watch?v=o8NiE3XMPrM' },
+  });
+  assert.match(html, /class="studio-youtube-media"/);
+  assert.match(html, /youtube-nocookie\.com\/embed\/o8NiE3XMPrM/);
+  assert.match(html, /Open on YouTube/);
+  assert.doesNotMatch(html, /studio-slide-media/);
 });
 
 test('a minimal YAML deck loads and renders', () => {
@@ -82,6 +99,7 @@ test('presentation libraries expose stable routes and a machine-readable catalog
     writeFileSync(join(sourceDir, 'Comité FY26.yaml'), `
 meta:
   title: Comité FY26
+  language: fr
 slides:
   - layout: title
     title: Décider maintenant
@@ -99,7 +117,7 @@ slides:
     assert.match(landing, /<link rel="icon" href="\.\/assets\/gamma-presenter-icon\.svg" type="image\/svg\+xml">/);
     assert.match(landing, /class="source-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
     assert.match(landing, />Source</);
-    assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.2-arm64-mac\.zip/);
+    assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.3-arm64-mac\.zip/);
     assert.match(landing, /gamma-presenter-immersive-runtime\.gif/);
     assert.match(landing, /gamma-presenter-cinematic-runtime\.gif/);
     assert.match(landing, /prefers-reduced-motion: no-preference/);
@@ -114,6 +132,19 @@ slides:
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-immersive-runtime.gif')));
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-cinematic-runtime.gif')));
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-icon.svg')));
+
+    writeFileSync(join(sourceDir, 'English launch.yaml'), `
+meta:
+  title: English launch
+  language: en
+slides:
+  - layout: title
+    title: Ready for the English-first library
+`);
+    const englishOutput = join(tempDir, '_site-en');
+    const englishResult = buildPresentationLibrary({ inputDir: sourceDir, outputDir: englishOutput, include: [fallback], language: 'en' });
+    assert.deepEqual(englishResult.entries.map(entry => entry.slug), ['english-launch']);
+    assert.doesNotMatch(readFileSync(join(englishOutput, 'index.html'), 'utf-8'), /Comité FY26/);
   } finally {
     rmSync(tempDir, { recursive: true, force: true });
   }
@@ -123,7 +154,7 @@ test('the complete Gamma Presenter capability tour keeps the product proof live 
   const deck = loadDeck('presentations/gamma-presenter-capabilities.yaml');
   assert.equal(deck.meta.title, 'Gamma Presenter · Complete capability tour');
   assert.equal(deck.slides.length, 12);
-  assert.ok(deck.slides.some(slide => slide.layout === 'media' && slide.media?.kind === 'video'));
+  assert.ok(deck.slides.some(slide => slide.layout === 'media' && slide.media?.kind === 'youtube'));
   assert.ok(deck.slides.some(slide => slide.layout === 'diagram' && slide.diagram?.type === 'architecture'));
   assert.ok(deck.slides.some(slide => slide.layout === 'chart' && slide.variant === 'immersive'));
   assert.ok(deck.slides.some(slide => slide.layout === 'browser'));
@@ -132,7 +163,10 @@ test('the complete Gamma Presenter capability tour keeps the product proof live 
   assert.ok(archifyRuntime.includes("const bridgeScript='<script>('+bridgeSource+')()'+String.fromCharCode(60,47,115,99,114,105,112,116,62);"));
   assert.doesNotMatch(archifyRuntime, /<\/script>/i);
   assert.doesNotThrow(() => new Function(archifyRuntime));
-  assert.match(renderDeck(deck), /function initArchifySlides/);
+  const html = renderDeck(deck);
+  assert.match(html, /function initArchifySlides/);
+  assert.match(html, /studio-youtube-media/);
+  assert.match(html, /section[^>]+data-composition="ledger"[\s\S]*?class="editorial-table-wrap"/);
 });
 
 test('video close-up diagrams build a readable mobile Archify composition', () => {

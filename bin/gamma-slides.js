@@ -119,10 +119,11 @@ program
   .description('Build a static library containing every managed presentation')
   .option('-d, --directory <dir>', 'Directory containing managed YAML/JSON decks', './presentations')
   .option('-i, --include <path...>', 'Additional deck files to include')
+  .option('--language <code>', 'Only include decks whose meta.language begins with this code')
   .option('-o, --output <dir>', 'Static library directory', './_site')
   .action((opts) => {
     try {
-      const result = buildPresentationLibrary({ inputDir: opts.directory, outputDir: opts.output, include: opts.include || [] });
+      const result = buildPresentationLibrary({ inputDir: opts.directory, outputDir: opts.output, include: opts.include || [], language: opts.language });
       console.log(chalk.green('✓') + ` Library ready: ${chalk.bold(result.outputDir)}`);
       console.log(chalk.dim(`  ${result.entries.length} presentation${result.entries.length === 1 ? '' : 's'} • index.html + presentations.json`));
     } catch (err) {

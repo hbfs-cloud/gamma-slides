@@ -88,7 +88,7 @@ export function immersiveCSS() {
   .reveal .slides section.variant-immersive { justify-content:flex-start; }
   .reveal .slides section.variant-immersive > .slide-header { margin-bottom:12px; }
   .reveal .slides section.variant-immersive h2 { font-size:2.15em; letter-spacing:-.03em; }
-  .immersive-chart { display:flex; flex-direction:column; flex:1; min-height:0; width:100%; text-align:left; --spatial-line:color-mix(in srgb,var(--gamma-muted) 30%,transparent); --spatial-label-size:12px; --spatial-value-size:24px; --spatial-caption-size:10px; }
+  .immersive-chart { display:flex; flex-direction:column; flex:1; min-height:0; width:100%; text-align:left; --spatial-line:color-mix(in srgb,var(--gamma-muted) 30%,transparent); --spatial-label-size:13px; --spatial-value-size:24px; --spatial-caption-size:10px; }
   .spatial-toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:6px 0 0; border-top:1px solid var(--spatial-line); order:2; position:relative; }
   .spatial-views,.spatial-camera { display:flex; gap:4px; }
   .immersive-chart button { min-height:44px; min-width:44px; padding:6px 12px; border:0; border-radius:4px; background:transparent; color:var(--gamma-text); font:550 15px/1.2 Archivo,system-ui,sans-serif; cursor:pointer; }
@@ -111,7 +111,7 @@ export function immersiveCSS() {
   .spatial-viewport canvas,.spatial-labels { position:absolute; inset:0; width:100%; height:100%; }
   .spatial-labels { pointer-events:none; }
   .spatial-marker { position:absolute; width:18px; height:18px; border:2px solid var(--gamma-text); border-radius:50%; transform:translate(-50%,-50%); pointer-events:none; }
-  .spatial-labels span { position:absolute; font:500 12px/1.2 Archivo,system-ui,sans-serif; color:var(--gamma-muted); white-space:nowrap; transform:translate(-50%,-50%); padding:2px 4px; background:var(--gamma-bg); }
+  .spatial-labels span { position:absolute; font:550 var(--spatial-label-size)/1.2 Archivo,system-ui,sans-serif; color:var(--gamma-muted); white-space:nowrap; transform:translate(-50%,-50%); padding:2px 4px; background:var(--gamma-bg); }
   .spatial-labels span.axis-title { color:var(--gamma-text); font-weight:650; }
   .spatial-flat { min-width:0; min-height:0; }
   .spatial-flat .chart-container { height:100%; }

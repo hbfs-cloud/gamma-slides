@@ -196,9 +196,10 @@ function initImmersiveCharts() {
     if (!current) return;
     const viewport = current.root.querySelector('.spatial-viewport');
     width = Math.max(1, viewport.clientWidth); height = Math.max(1, viewport.clientHeight);
-    // Use the actual stage scale, and bound the allocation even on a 4K screen.
+    // Use the actual stage scale, supersample projection lines on ordinary
+    // external displays, and still bound allocation on a 4K stage.
     const bounds = viewport.getBoundingClientRect();
-    ratio = Math.min(2, devicePixelRatio * bounds.width / width, Math.sqrt(2e6 / (width * height)));
+    ratio = Math.min(2.25, Math.max(1.5, devicePixelRatio * bounds.width / width), Math.sqrt(4e6 / (width * height)));
     canvas.width = Math.max(1, Math.round(width * ratio)); canvas.height = Math.max(1, Math.round(height * ratio));
     request();
   }

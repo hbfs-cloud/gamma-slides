@@ -19,7 +19,7 @@ Open a file directly:
 bun run desktop -- ./my-presentation.md
 ```
 
-Gamma YAML and JSON decks are also accepted. Source remains the durable format: the selected slide inspector exposes title, subtitle, notes, layout, and media; **Full configuration** exposes that slide’s JSON object for charts, diagrams, GPU scenes, and animation. Changes pass Gamma validation before replacing the preview. A failed render keeps the last valid preview and reports the YAML line when available.
+Gamma YAML and JSON decks are also accepted. Source remains the durable format: the selected slide inspector exposes title, subtitle, notes, layout, and media—including local video/audio and privacy-enhanced YouTube embeds; **Full configuration** exposes that slide’s JSON object for charts, diagrams, GPU scenes, and animation. Changes pass Gamma validation before replacing the preview. A failed render keeps the last valid preview and reports the YAML line when available.
 
 ## Author a presentation
 
@@ -82,7 +82,7 @@ The adjacent **Local AI co-pilot** panel detects `codex` and `claude` on your `P
 
 ## Build the macOS application
 
-For an Apple-silicon Mac, download the [current Gamma Presenter ZIP](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.2-arm64-mac.zip). The link resolves to the latest GitHub Release and contains the `.app`; the package is unsigned until a Developer ID identity is supplied.
+For an Apple-silicon Mac, download the [current Gamma Presenter ZIP](https://github.com/hbfs-cloud/gamma-slides/releases/latest/download/Gamma.Presenter-2.0.3-arm64-mac.zip). The link resolves to the latest GitHub Release and contains the `.app`; the package is unsigned until a Developer ID identity is supplied.
 
 ```bash
 bun run desktop:package

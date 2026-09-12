@@ -29,7 +29,7 @@ The committed `.mcp.json` and `.codex/config.toml` remain useful when working in
 
 Use the MCP prompt `create_presentation`, or ask directly:
 
-> Create a 12-slide board presentation in French about our FY2026 operating plan for the executive committee. Use only the facts in `brief.md`. Build a strong decision narrative, use live ECharts where quantitative evidence helps, validate the YAML, deploy it as `fy26-plan`, and return the public URL.
+> Create a 12-slide board presentation about our FY2026 operating plan for the executive committee. Use only the facts in `brief.md`. Build a strong decision narrative, use live ECharts where quantitative evidence helps, validate the YAML, deploy it as `fy26-plan`, and return the public URL.
 
 The reliable agent workflow is:
 

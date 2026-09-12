@@ -1,6 +1,6 @@
 {
   "name": "gamma-slides",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "packageManager": "bun@1.3.11",
   "description": "Professional presentation & video generator — declarative YAML/JSON decks, narrated videos, LLM-pilotable via MCP",
   "type": "module",

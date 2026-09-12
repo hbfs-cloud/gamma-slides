@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: bun ci
       - name: Build presentation library
-        run: bun bin/gamma-slides.js library -d presentations -i src/schema/examples/corporate-demo.yaml -o _site
+        run: bun bin/gamma-slides.js library -d presentations -i src/schema/examples/corporate-demo.yaml --language en -o _site
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

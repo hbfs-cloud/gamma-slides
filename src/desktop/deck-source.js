@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 
-export const richLayouts = ['blank', 'bullets', 'image', 'visual', 'chart', 'diagram', 'quote', 'split', 'timeline', 'comparison'];
+export const richLayouts = ['title', 'closing', 'blank', 'bullets', 'image', 'visual', 'media', 'browser', 'chart', 'diagram', 'quote', 'split', 'timeline', 'comparison', 'table', 'agenda', 'metrics', 'dashboard'];
 
 export function parseRichSource(source, sourceKind) {
   if (sourceKind === 'json') return JSON.parse(source);
@@ -15,7 +15,7 @@ export function stringifyRichSource(document, sourceKind) {
 
 export function richSlideEditor(slide = {}) {
   const media = slide.media?.src
-    ? { kind: 'media', src: slide.media.src }
+    ? { kind: slide.media.kind || 'video', src: slide.media.src }
     : slide.visual?.src
       ? { kind: 'visual', src: slide.visual.src }
       : slide.image?.src
@@ -52,7 +52,7 @@ export function patchRichSlideSource(source, sourceKind, index, patch) {
       const src = String(patch.media.src || '').trim();
       if (src && patch.media.kind === 'image') slide.image = { src, alt: slide.title || '' };
       if (src && patch.media.kind === 'visual') slide.visual = { src, alt: slide.title || '' };
-      if (src && patch.media.kind === 'media') slide.media = { src };
+      if (src && ['video', 'audio', 'youtube'].includes(patch.media.kind)) slide.media = { kind: patch.media.kind, src };
     }
   }
   return stringifyRichSource(document, sourceKind);

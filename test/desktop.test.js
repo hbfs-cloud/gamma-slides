@@ -185,6 +185,21 @@ slides:
   assert.deepEqual(richSlideRanges(patched, 'yaml'), [{ start: patched.indexOf('  - layout:'), end: patched.length }]);
 });
 
+test('Gamma Presenter rich inspector preserves a first-class YouTube slide', () => {
+  const source = `meta: { title: Embedded source, language: en }
+slides:
+  - layout: media
+    title: Watch it live
+`;
+  const patched = patchRichSlideSource(source, 'yaml', 0, {
+    layout: 'media',
+    media: { kind: 'youtube', src: 'https://www.youtube.com/watch?v=o8NiE3XMPrM' },
+  });
+  const deck = loadDeck(patched);
+  assert.equal(deck.slides[0].media.kind, 'youtube');
+  assert.equal(deck.slides[0].media.src, 'https://www.youtube.com/watch?v=o8NiE3XMPrM');
+});
+
 test('Gamma Presenter locates JSON slides for source-aware rich editing', () => {
   const source = '{\n  "meta": { "title": "JSON" },\n  "slides": [\n    { "layout": "blank", "title": "A" },\n    { "layout": "blank", "title": "B" }\n  ]\n}';
   const ranges = richSlideRanges(source, 'json');
