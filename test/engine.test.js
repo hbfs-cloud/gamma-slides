@@ -98,10 +98,18 @@ slides:
     assert.match(landing, /gamma-presenter-icon\.svg/);
     assert.match(landing, /class="source-link" href="https:\/\/github\.com\/hbfs-cloud\/gamma-slides"/);
     assert.match(landing, />Source</);
-    assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.0-arm64-mac\.zip/);
+    assert.match(landing, /releases\/latest\/download\/Gamma\.Presenter-2\.0\.2-arm64-mac\.zip/);
+    assert.match(landing, /gamma-presenter-immersive-runtime\.gif/);
+    assert.match(landing, /gamma-presenter-cinematic-runtime\.gif/);
+    assert.match(landing, /prefers-reduced-motion: no-preference/);
     assert.match(readFileSync(join(outputDir, 'presentations.json'), 'utf-8'), /"slug": "comite-fy26"/);
-    assert.match(readFileSync(join(outputDir, 'comite-fy26', 'index.html'), 'utf-8'), /Décider maintenant/);
+    const demo = readFileSync(join(outputDir, 'comite-fy26', 'index.html'), 'utf-8');
+    assert.match(demo, /Décider maintenant/);
+    assert.match(demo, /id="gamma-library-return" href="\.\.\/"/);
+    assert.match(demo, /Return to the Gamma Presenter home page/);
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-control-room.png')));
+    assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-immersive-runtime.gif')));
+    assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-cinematic-runtime.gif')));
     assert.ok(existsSync(join(outputDir, 'assets', 'gamma-presenter-icon.svg')));
   } finally {
     rmSync(tempDir, { recursive: true, force: true });

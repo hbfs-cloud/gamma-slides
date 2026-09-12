@@ -1,4 +1,10 @@
+import { highlightMarkdownWriter } from './writer.js';
+
 const source = document.querySelector('#source');
+const writerShell = document.querySelector('#writer-shell');
+const writerHighlights = document.querySelector('#writer-highlights');
+const writerActions = document.querySelector('#writer-actions');
+const rawSourceToggle = document.querySelector('#toggle-raw-source');
 const slideList = document.querySelector('#thumbnail-list');
 const feedback = document.querySelector('#feedback');
 const preview = document.querySelector('#renderer-preview');
@@ -7,8 +13,8 @@ const templateDialog = document.querySelector('#template-dialog');
 const templateList = document.querySelector('#template-list');
 const richInspector = document.querySelector('#rich-inspector');
 const rich = Object.fromEntries(['title', 'subtitle', 'layout', 'media-kind', 'media-src', 'notes', 'configuration'].map(name => [name, document.querySelector(`#rich-${name}`)]));
-const markdownInspector = document.querySelector('#markdown-inspector');
-const markdown = Object.fromEntries(['title', 'subtitle', 'notes'].map(name => [name, document.querySelector(`#markdown-${name}`)]));
+const markdownGuide = document.querySelector('#markdown-guide');
+const markdownTools = document.querySelector('#markdown-tools');
 const control = { presentation: document.querySelector('#presentation-elapsed'), slide: document.querySelector('#slide-elapsed'), minutes: document.querySelector('#countdown-minutes'), toggle: document.querySelector('#toggle-countdown'), status: document.querySelector('#countdown-status'), cue: document.querySelector('#copilot-cue'), cli: document.querySelector('#copilot-cli'), copilotStatus: document.querySelector('#copilot-status'), output: document.querySelector('#copilot-output'), endpoint: document.querySelector('#mcp-endpoint'), token: document.querySelector('#mcp-token'), scope: document.querySelector('#mcp-scope'), approvalStatus: document.querySelector('#approval-status'), operatorRequests: document.querySelector('#operator-requests') };
 let pendingUpdate; let selectedSlide = 0; let currentState = {}; let previewRevision = -1; let thumbnailTimer; let draggingSlide = null;
 const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
@@ -23,8 +29,14 @@ function renderThumbnails() {
   document.querySelector('#move-slide-up').disabled = selectedSlide === 0 || currentState.renderState === 'rendering'; document.querySelector('#move-slide-down').disabled = selectedSlide >= all.length - 1 || currentState.renderState === 'rendering'; document.querySelector('#duplicate-slide').disabled = currentState.renderState === 'rendering'; document.querySelector('#delete-slide').disabled = currentState.renderState === 'rendering';
 }
 const setFeedback = message => { feedback.textContent = message; };
-function selectSlide(index, focus = false) { selectedSlide = index; const range = currentState.sourceKind !== 'markdown' ? currentState.sourceRanges?.[index] : markdownSlides(source.value)[index]; if (range) { source.setSelectionRange(range.start, range.start); source.scrollTop = Math.max(0, source.value.slice(0, range.start).split('\n').length * 20 - source.clientHeight / 3); if (focus) source.focus(); } renderThumbnails(); window.gammaDesktop.navigate(index); }
-function updateSource() { clearTimeout(pendingUpdate); renderThumbnails(); setFeedback('Local change · render pending…'); pendingUpdate = setTimeout(() => window.gammaDesktop.updateSource(source.value), 300); }
+function syncWriterHighlight() {
+  if (currentState.sourceKind === 'markdown' || !currentState.sourceKind) writerHighlights.innerHTML = highlightMarkdownWriter(source.value);
+  else writerHighlights.textContent = source.value;
+  writerHighlights.scrollTop = source.scrollTop;
+  writerHighlights.scrollLeft = source.scrollLeft;
+}
+function selectSlide(index, focus = false) { selectedSlide = index; const range = currentState.sourceKind !== 'markdown' ? currentState.sourceRanges?.[index] : markdownSlides(source.value)[index]; if (range) { source.setSelectionRange(range.start, range.start); source.scrollTop = Math.max(0, source.value.slice(0, range.start).split('\n').length * 20 - source.clientHeight / 3); syncWriterHighlight(); if (focus) source.focus(); } renderThumbnails(); window.gammaDesktop.navigate(index); }
+function updateSource() { clearTimeout(pendingUpdate); syncWriterHighlight(); renderThumbnails(); setFeedback('Local change · render pending…'); pendingUpdate = setTimeout(() => window.gammaDesktop.updateSource(source.value), 300); }
 function insertAtCursor(value) { source.setRangeText(value, source.selectionStart, source.selectionEnd, 'end'); source.dispatchEvent(new Event('input', { bubbles: true })); source.focus(); }
 async function run(message, action) { setFeedback(message); try { const result = await action(); if (result) applyState(result, true); setFeedback(result?.dirty ? 'Local changes' : 'Saved locally'); } catch (error) { setFeedback(`Error: ${error instanceof Error ? error.message : 'action unavailable'}`); } }
 function renderTemplates(templates = currentState.templates || []) {
@@ -39,7 +51,7 @@ function openTemplateDialog() {
   renderTemplates();
   if (!templateDialog.open) templateDialog.showModal();
 }
-function syncInspectors(state) { const editor = state.currentSlide?.editor, isRich = Boolean(editor), isMarkdown = state.sourceKind === 'markdown'; richInspector.hidden = !isRich; markdownInspector.hidden = !isMarkdown; document.querySelectorAll('[data-insert]').forEach(button => { button.hidden = isRich; }); if (isMarkdown) { markdown.title.value = state.currentSlide?.title || ''; markdown.subtitle.value = state.currentSlide?.subtitle || ''; markdown.notes.value = state.currentSlide?.notes || ''; } if (!editor) return; rich.layout.innerHTML = (state.richLayouts || []).map(layout => `<option value="${escapeHtml(layout)}">${escapeHtml(layout)}</option>`).join(''); rich.title.value = editor.title; rich.subtitle.value = editor.subtitle; rich.notes.value = editor.notes; rich.layout.value = editor.layout; rich['media-kind'].value = editor.media.kind; rich['media-src'].value = editor.media.src; rich.configuration.value = editor.configuration; }
+function syncInspectors(state) { const editor = state.currentSlide?.editor, isRich = Boolean(editor), isMarkdown = state.sourceKind === 'markdown'; richInspector.hidden = !isRich; markdownGuide.hidden = !isMarkdown; markdownTools.hidden = !isMarkdown; writerActions.hidden = !isMarkdown; rawSourceToggle.hidden = !isMarkdown; if (!editor) return; rich.layout.innerHTML = (state.richLayouts || []).map(layout => `<option value="${escapeHtml(layout)}">${escapeHtml(layout)}</option>`).join(''); rich.title.value = editor.title; rich.subtitle.value = editor.subtitle; rich.notes.value = editor.notes; rich.layout.value = editor.layout; rich['media-kind'].value = editor.media.kind; rich['media-src'].value = editor.media.src; rich.configuration.value = editor.configuration; }
 function renderOperatorRequests(requests = []) {
   const pending = requests.filter(request => request.status === 'pending' || request.status === 'running');
   control.approvalStatus.textContent = pending.length ? `${pending.length} live action${pending.length === 1 ? '' : 's'} awaiting operator approval.` : 'No pending co-pilot actions.';
@@ -63,13 +75,48 @@ function syncControlRoom(state) {
 function applyState(state = {}, forceSource = false) {
   currentState = { ...currentState, ...state }; if (typeof state.source === 'string' && (forceSource || document.activeElement !== source)) source.value = state.source; if (state.title) document.querySelector('#document-name').textContent = state.title; if (Number.isFinite(state.currentIndex)) selectedSlide = state.currentIndex;
   const theme = document.querySelector('#theme'), display = document.querySelector('#display'); if (Array.isArray(state.themes) && !theme.options.length) theme.innerHTML = state.themes.map(item => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.label || item.name)}</option>`).join(''); if (Array.isArray(state.displays) && !display.options.length) display.innerHTML = state.displays.map(item => `<option value="${item.id}">${escapeHtml(item.label)}</option>`).join(''); if (state.theme) theme.value = state.theme; if (state.stageDisplayId) display.value = state.stageDisplayId;
-  const isRich = state.sourceKind && state.sourceKind !== 'markdown'; source.classList.toggle('deck-source', isRich); source.spellcheck = !isRich; document.querySelector('#source-language').textContent = state.sourceLanguage || 'Markdown'; document.querySelector('#source-help').textContent = isRich ? `${state.sourceLanguage} is the source of truth. The inspector edits the selected slide, while full configuration covers charts, diagrams, media and animations.` : 'This text supports you and is not projected.'; syncInspectors(state);
+  const isRich = state.sourceKind && state.sourceKind !== 'markdown'; source.classList.toggle('deck-source', isRich); writerShell.classList.toggle('rich-source', isRich); source.spellcheck = !isRich; document.querySelector('#source-language').textContent = isRich ? state.sourceLanguage || 'Source' : 'Document'; document.querySelector('#source-help').textContent = isRich ? `${state.sourceLanguage} is the source of truth. The inspector edits the selected slide, while full configuration covers charts, diagrams, media and animations.` : 'Ordinary prose is your private script. A headline and supporting line become what the audience sees.'; syncInspectors(state); syncWriterHighlight();
   if (previewRevision !== state.rendererRevision) { previewRevision = state.rendererRevision; preview.src = `${state.rendererUrl}#/${state.currentIndex || 0}`; } else preview.contentWindow?.postMessage({ type: 'gamma-presenter-navigate', index: state.currentIndex || 0 }, '*'); preview.setAttribute('aria-busy', String(state.renderState === 'rendering'));
   rendererStatus.textContent = state.renderState === 'rendering' ? 'Gamma render in progress…' : state.renderState === 'invalid' ? 'Last valid render preserved' : isRich ? 'Rich Gamma render · source and inspector synchronized' : 'Live Gamma render'; syncControlRoom(state);
   if (templateDialog.open) renderTemplates();
   if (state.error) setFeedback(`Error${state.error.line ? ` on line ${state.error.line}${state.error.column ? `:${state.error.column}` : ''}` : ''}: ${state.error.message}`); else if (state.recoveryRestored) setFeedback('Local draft recovered · save it to keep it'); else if (state.renderState === 'ready' && state.dirty) setFeedback('Local changes · render up to date'); renderThumbnails(); document.title = `${state.title || 'Gamma Presenter'} — Gamma Presenter`;
 }
-source.addEventListener('input', updateSource); slideList.addEventListener('click', event => { const item = event.target.closest('[data-index]'); if (item) selectSlide(Number(item.dataset.index), true); });
+function currentLineRange() {
+  const start = source.value.lastIndexOf('\n', Math.max(0, source.selectionStart - 1)) + 1;
+  const endAt = source.value.indexOf('\n', source.selectionEnd);
+  return { start, end: endAt < 0 ? source.value.length : endAt };
+}
+function formatCurrentLine(prefix) {
+  const { start, end } = currentLineRange();
+  const line = source.value.slice(start, end);
+  const indent = line.match(/^\s*/)?.[0] || '';
+  const content = line.slice(indent.length).replace(/^(?:#{1,6}\s+|[-*+]\s+|>\s?)/, '').trimStart();
+  const next = `${indent}${prefix}${content}`;
+  source.setRangeText(next, start, end, 'end');
+  source.dispatchEvent(new Event('input', { bubbles: true }));
+  source.focus();
+}
+function startNewMoment() {
+  const before = source.value.slice(0, source.selectionStart);
+  const gap = before.endsWith('\n\n\n') ? '' : before.endsWith('\n\n') ? '\n' : before.endsWith('\n') ? '\n\n' : '\n\n\n';
+  insertAtCursor(gap);
+}
+function insertWriterStructure(kind) {
+  const structures = {
+    comparison: '\n\n| Before | After |\n| --- | --- |\n| Manual | Automated |\n',
+    table: '\n\n| Signal | Owner | Status |\n| --- | --- | --- |\n| Decision | Team | Active |\n',
+  };
+  insertAtCursor(structures[kind] || '');
+}
+function writerCommand(command) {
+  if (command === 'headline') formatCurrentLine('# ');
+  if (command === 'supporting') formatCurrentLine('## ');
+  if (command === 'point') formatCurrentLine('- ');
+  if (command === 'quote') formatCurrentLine('> ');
+  if (command === 'moment') startNewMoment();
+}
+
+source.addEventListener('input', updateSource); source.addEventListener('scroll', syncWriterHighlight); slideList.addEventListener('click', event => { const item = event.target.closest('[data-index]'); if (item) selectSlide(Number(item.dataset.index), true); });
 slideList.addEventListener('dragstart', event => { const item = event.target.closest('[data-index]'); if (!item) return; draggingSlide = Number(item.dataset.index); event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', String(draggingSlide)); item.classList.add('dragging'); });
 slideList.addEventListener('dragover', event => { if (draggingSlide === null || !event.target.closest('[data-index]')) return; event.preventDefault(); event.dataTransfer.dropEffect = 'move'; });
 slideList.addEventListener('drop', event => { const item = event.target.closest('[data-index]'); if (!item || draggingSlide === null) return; event.preventDefault(); const destination = Number(item.dataset.index); const origin = draggingSlide; draggingSlide = null; document.querySelectorAll('.thumbnail.dragging').forEach(node => node.classList.remove('dragging')); if (origin !== destination) mutateSlides('move', destination); });
@@ -81,8 +128,18 @@ document.querySelector('#duplicate-slide').addEventListener('click', () => mutat
 document.querySelector('#delete-slide').addEventListener('click', () => mutateSlides('delete'));
 document.querySelector('#move-slide-up').addEventListener('click', () => mutateSlides('move', selectedSlide - 1));
 document.querySelector('#move-slide-down').addEventListener('click', () => mutateSlides('move', selectedSlide + 1));
-document.querySelectorAll('[data-insert]').forEach(button => button.addEventListener('click', () => insertAtCursor(button.dataset.insert.replaceAll('\\n', '\n'))));
+writerActions.addEventListener('click', event => { const button = event.target.closest('[data-writer-command]'); if (button) writerCommand(button.dataset.writerCommand); });
+document.querySelectorAll('[data-writer-insert]').forEach(button => button.addEventListener('click', () => insertWriterStructure(button.dataset.writerInsert)));
 document.querySelector('#import-media').addEventListener('click', () => run('Choosing local media…', () => window.gammaDesktop.importMedia(selectedSlide)));
+document.querySelector('#writer-import-media').addEventListener('click', () => run('Choosing local media…', () => window.gammaDesktop.importMedia(selectedSlide)));
+rawSourceToggle.addEventListener('click', () => {
+  const raw = writerShell.classList.toggle('raw-source');
+  source.classList.toggle('raw-source', raw);
+  rawSourceToggle.setAttribute('aria-pressed', String(raw));
+  rawSourceToggle.textContent = raw ? 'Document' : 'Source';
+  rawSourceToggle.title = raw ? 'Return to the document writing view' : 'Show plain Markdown source';
+  source.focus();
+});
 document.querySelector('#open-templates').addEventListener('click', openTemplateDialog);
 document.querySelector('#close-templates').addEventListener('click', () => templateDialog.close());
 templateDialog.addEventListener('click', event => { if (event.target === templateDialog) templateDialog.close(); });
@@ -96,9 +153,8 @@ document.addEventListener('dragover', event => { if (!event.dataTransfer?.types.
 document.addEventListener('dragleave', event => { if (event.relatedTarget) return; document.body.classList.remove('dragging-media'); });
 document.addEventListener('drop', event => { if (!event.dataTransfer?.files?.length) return; event.preventDefault(); document.body.classList.remove('dragging-media'); run('Importing dropped media…', () => window.gammaDesktop.importDroppedMedia(event.dataTransfer.files[0], selectedSlide)); });
 for (const key of ['title', 'subtitle', 'layout', 'media-kind', 'media-src', 'notes']) rich[key].addEventListener('change', () => run('Updating slide…', () => window.gammaDesktop.patchRichSlide(selectedSlide, { title: rich.title.value, subtitle: rich.subtitle.value, notes: rich.notes.value, layout: rich.layout.value, media: { kind: rich['media-kind'].value, src: rich['media-src'].value } })));
-document.querySelector('#apply-markdown-slide').addEventListener('click', () => run('Updating slide…', () => window.gammaDesktop.patchMarkdownSlide(selectedSlide, { title: markdown.title.value, subtitle: markdown.subtitle.value, notes: markdown.notes.value })));
 document.querySelector('#apply-rich-configuration').addEventListener('click', () => run('Validating configuration…', () => window.gammaDesktop.patchRichSlide(selectedSlide, { configuration: rich.configuration.value }))); document.querySelector('#theme').addEventListener('change', event => run('Applying theme…', () => window.gammaDesktop.setTheme(event.target.value))); document.querySelector('#display').addEventListener('change', event => { window.gammaDesktop.moveStage(event.target.value); setFeedback('Stage moved'); }); document.querySelector('#open-document').addEventListener('click', () => run('Opening…', () => window.gammaDesktop.openDocument())); document.querySelector('#save-document').addEventListener('click', () => run('Saving…', () => window.gammaDesktop.saveDocument())); document.querySelector('#present').addEventListener('click', () => { window.gammaDesktop.present(); setFeedback('Stage opened on the selected display'); });
 document.querySelector('#set-countdown').addEventListener('click', () => run('Setting countdown…', () => window.gammaDesktop.countdown('set', Number(control.minutes.value)))); document.querySelector('#toggle-countdown').addEventListener('click', () => run('Updating countdown…', () => window.gammaDesktop.countdown(currentState.timing?.countdownRunning ? 'pause' : 'start'))); document.querySelector('#clear-countdown').addEventListener('click', () => run('Clearing countdown…', () => window.gammaDesktop.countdown('clear'))); document.querySelector('#send-cue').addEventListener('click', () => run('Showing speaker cue…', () => window.gammaDesktop.setCue(control.cue.value, 'normal'))); document.querySelector('#send-urgent-cue').addEventListener('click', () => run('Sending urgent cue…', () => window.gammaDesktop.setCue(control.cue.value, 'urgent'))); document.querySelector('#clear-cue').addEventListener('click', () => run('Clearing speaker cue…', () => window.gammaDesktop.clearCue())); document.querySelector('#run-copilot').addEventListener('click', () => run('Starting local co-pilot…', () => window.gammaDesktop.runCopilot(control.cli.value, document.querySelector('#copilot-prompt').value))); document.querySelector('#reveal-mcp-token').addEventListener('click', event => { const reveal = control.token.type === 'password'; control.token.type = reveal ? 'text' : 'password'; event.currentTarget.textContent = reveal ? 'Hide token' : 'Reveal token'; }); document.querySelector('#copy-mcp-config').addEventListener('click', async () => { const config = JSON.stringify({ mcpServers: { 'gamma-presenter': { url: control.endpoint.value, headers: { Authorization: `Bearer ${control.token.value}` } } } }, null, 2); try { await navigator.clipboard.writeText(config); setFeedback('MCP connection copied'); } catch { setFeedback('Clipboard access unavailable'); } });
 control.operatorRequests.addEventListener('click', event => { const button = event.target.closest('[data-operator-request]'); if (!button) return; const approved = button.dataset.operatorDecision === 'approve'; run(approved ? 'Approving live action…' : 'Rejecting live action…', () => window.gammaDesktop.resolveOperatorAction(button.dataset.operatorRequest, approved)); });
-document.querySelector('#focus-preview').addEventListener('click', event => { const active = document.body.classList.toggle('preview-focus'); event.currentTarget.setAttribute('aria-pressed', String(active)); event.currentTarget.textContent = active ? 'Return to editor' : 'Expand preview'; }); document.addEventListener('keydown', event => { if (!event.metaKey) return; if (event.key.toLowerCase() === 'o') { event.preventDefault(); run('Opening…', () => window.gammaDesktop.openDocument()); } if (event.key.toLowerCase() === 's') { event.preventDefault(); run('Saving…', () => window.gammaDesktop.saveDocument()); } if (event.key.toLowerCase() === 'd') { event.preventDefault(); document.body.classList.toggle('focus-mode'); } });
+document.querySelector('#focus-preview').addEventListener('click', event => { const active = document.body.classList.toggle('preview-focus'); event.currentTarget.setAttribute('aria-pressed', String(active)); event.currentTarget.textContent = active ? 'Return to editor' : 'Expand preview'; }); document.addEventListener('keydown', event => { if (!event.metaKey) return; if (event.key.toLowerCase() === 'o') { event.preventDefault(); run('Opening…', () => window.gammaDesktop.openDocument()); } if (event.key.toLowerCase() === 's') { event.preventDefault(); run('Saving…', () => window.gammaDesktop.saveDocument()); } if (event.key.toLowerCase() === 'd') { event.preventDefault(); document.body.classList.toggle('focus-mode'); } if (event.key === 'Enter' && event.shiftKey && currentState.sourceKind === 'markdown') { event.preventDefault(); startNewMoment(); } });
 window.gammaDesktop.onState(applyState); applyState(await window.gammaDesktop.getSnapshot());

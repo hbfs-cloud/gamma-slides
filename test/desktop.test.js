@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { markdownToDeck } from '../src/desktop/markdown.js';
+import { highlightMarkdownWriter, writerLineKind } from '../src/desktop/writer.js';
 import { getPresentationTemplate, listPresentationTemplates } from '../src/desktop/templates.js';
 import { loadDeck } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
@@ -11,6 +12,7 @@ import { writeDeckPptx } from '../src/desktop/pptx.js';
 import { mkdtemp, readFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
+import { readFileSync } from 'fs';
 
 test('Gamma Presenter Markdown keeps stage copy distinct from speaker notes', () => {
   const deck = markdownToDeck(`# Une histoire\n## Le message visible\n- Une preuve\n\nLa note privée.\n\n---\n\n# La suite\nTexte de téléprompteur.`);
@@ -21,6 +23,31 @@ test('Gamma Presenter Markdown keeps stage copy distinct from speaker notes', ()
   assert.deepEqual(deck.slides[0].items, [{ text: 'Une preuve' }]);
   assert.equal(deck.slides[0].notes, 'La note privée.');
   assert.equal(deck.slides[1].notes, 'Texte de téléprompteur.');
+});
+
+test('Gamma Presenter treats Markdown as a document writer, not a syntax-only input', () => {
+  const prose = '# The decision\n## What the audience should remember\n\nThis stays in the private script.\n\n\n# The next moment\n- One proof';
+  const deck = markdownToDeck(prose);
+  assert.equal(deck.slides.length, 2, 'three returns create a new moment without a visible separator');
+  assert.equal(deck.slides[0].notes, 'This stays in the private script.');
+  assert.equal(deck.slides[1].items[0].text, 'One proof');
+  assert.equal(writerLineKind('# The decision'), 'headline');
+  assert.equal(writerLineKind('## What the audience should remember'), 'supporting');
+  assert.equal(writerLineKind('This stays private.'), 'prose');
+  assert.equal(writerLineKind('![Chart](media/chart.png)'), 'asset');
+  assert.match(highlightMarkdownWriter('# The decision\nOrdinary <prose>'), /writer-headline/);
+  assert.match(highlightMarkdownWriter('# The decision\nOrdinary <prose>'), /Ordinary &lt;prose&gt;/);
+});
+
+test('Gamma Presenter owns one macOS instance and a branded native icon', () => {
+  const main = readFileSync(new URL('../src/desktop/main.js', import.meta.url), 'utf8');
+  const icon = readFileSync(new URL('../build/icon.svg', import.meta.url), 'utf8');
+  assert.match(main, /app\.setName\('Gamma Presenter'\)/);
+  assert.match(main, /app\.requestSingleInstanceLock\(\)/);
+  assert.match(main, /app\.on\('second-instance'/);
+  assert.match(main, /app\.dock\.setIcon\(icon\)/);
+  assert.match(icon, /aria-label="Gamma Presenter"/);
+  assert.match(icon, /fill="#315DFF"/);
 });
 
 test('Gamma Presenter Markdown supports an image slide and its local reference', () => {

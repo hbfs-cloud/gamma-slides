@@ -76,6 +76,20 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 
 - [x] DONE — Ship a built-in, English-first template gallery in the packaged Author app, with immediately runnable narrative, decision, data, architecture, and live-operator rehearsal models.
 
+## Document-first Markdown authoring — reopened 2026-09-12
+
+- [ ] IN PROGRESS — Replace the syntax-first Markdown editing path with a document-first writing flow modelled on the verified iA “write → show” interaction: ordinary prose remains private, deliberate display lines become visible slide material, and slide breaks are created without Markdown ceremony.
+- [ ] TODO — Preserve raw Markdown as a reversible expert surface and retain lossless support for media and rich Gamma YAML/JSON decks.
+- [ ] TODO — Add behavioral tests, packaged-desktop smoke coverage, and a bounded visual review of the authoring flow.
+
+## Animated product proof — opened 2026-09-12
+
+- [x] DONE — Replace the static landing hero proof with compact, honest GIF recordings from the real Gamma runtime, with still Author/Stage fallbacks for reduced-motion visitors.
+- [x] DONE — Add an immediately legible live-motion route for the complete capability tour, using the Archify-inspired principle of an explorable artifact rather than decorative motion; every generated demo now carries a fixed return-to-home control.
+- [ ] IN PROGRESS — Rebuild the Pages artifact, inspect desktop/mobile renders, test asset delivery and the no-motion fallback, then update the regression contract. Static build, asset and fallback contracts are complete; in-shell macOS UI capture is blocked before application code by the host LaunchServices abort and needs a Finder-launched visual check.
+
+Motion thesis: the hero is a short, finite journey from written argument to a live architecture scene; the secondary proof is the running Stage. The landing remains fully readable before either loop loads, records no sound, offers a still fallback for reduced motion, and keeps each GIF under a small, page-appropriate transfer budget.
+
 - [x] DONE — Examiner les captures et les modes iA réellement utilisés (Editor, miniatures, Inspector, Presentation Mode).
 - [x] DONE — Recomposer l'éditeur autour de ces interactions fondamentales et corriger le contrat de navigation.
 - [x] DONE — Refaire le mode Présentation avec aperçu, téléprompteur et chronométrage réinitialisable.
@@ -129,6 +143,8 @@ Livrer Gamma Presenter macOS avec une fenêtre de travail unique, un aperçu Gam
 - 2026-09-11 — Landing recovery completed: the public surface is now a light paper/ink/cobalt editorial composition, with the actual English Author control-room capture as product proof, a first-viewport Apple-silicon download/source route, verified direct Release asset URL, and real deck routes. Electron captures were inspected at desktop and mobile sizes. The first capture revealed black lazy iframe previews; these were removed in favor of clear direct deck routes. Impeccable finish review disposition: `ship`.
 - 2026-09-11 — Complete capability proof added: `presentations/gamma-presenter-capabilities.yaml` is a 12-slide English, generated tour that combines actual packaged Author/control-room captures with local video, live chart, Archify architecture, immersive 3D, browser, operator-boundary, and output scenes. It is the primary landing route; focused flagship, Studio, and immersive decks remain the deeper runtime demonstrations. The deck contract is covered by the Node/Bun suite.
 - 2026-09-11 — Packaged template gallery delivered: Author now exposes five English-first, offline models (blank story, decision narrative, Analyst Proof board update, live Archify architecture review, and Cutting Room operator rehearsal). Selection safely replaces the unsaved source only after confirmation, resets to slide one, uses the matching theme, and remains fully editable/exportable. The arm64 packaged smoke opens the gallery, verifies all models, selects and renders the live architecture deck, then completes the existing MCP approval → Stage path. `bun run test` passes 100 tests with one intentional isolated-browser skip. Fresh unsigned artifacts are `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64.dmg` (SHA-256 `15b1c46ad8b85c233a04f6007089ac217a52b404d9396ee78d4a7536632a6f51`) and `dist-presenter-templates-20260911/Gamma Presenter-2.0.0-arm64-mac.zip` (SHA-256 `325c928a3f12c9160b1d1f351a0909a577cb52879b523b2075f3e4864cd9feee`); the DMG verifies as valid. The package is deliberately unsigned because no Developer ID identity is available.
+- 2026-09-12 — Landing motion and navigation refresh: the light editorial landing now uses two actual Gamma runtime GIFs (960×600, 2.8 MB; 960×540, 1.4 MB) with `prefers-reduced-motion` still fallbacks, and each of the eight generated demos has an accessible fixed Gamma Presenter home control. The library rebuild verifies all routes, both assets, and the fallback markup. `bun run test`: 102 pass, 1 explicit isolated-browser skip.
+- 2026-09-12 — macOS identity refresh: the dark legacy monogram was replaced by a high-contrast cobalt presentation-screen icon with a live cue; the app now acquires a single-instance lock and foregrounds its existing Author window on a repeated launch. Fresh unsigned arm64 ZIP: `dist-presenter-icon-fix/Gamma Presenter-2.0.2-arm64-mac.zip` (SHA-256 `ed7f30032d397809c63d1d382b5654430d411b623b1e99a0de319beb10476e02`). Its `Info.plist` and packaged `icon.icns` were inspected. Electron/Chrome launched by Bun under cmux abort in macOS `HIServices` before application code; no further in-shell GUI launch attempts are made.
 
 # Decisions
 

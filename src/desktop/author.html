@@ -29,29 +29,34 @@
         <footer class="thumbnail-footer"><span id="deck-duration">Estimated duration: 1 min</span></footer>
       </aside>
       <section class="editor-pane" aria-label="Presentation editor">
-        <div class="editor-toolbar"><span id="current-slide-label">Slide 1</span><span class="source-language" id="source-language">Markdown</span><span id="feedback" role="status" aria-live="polite">Ready</span></div>
-        <textarea id="source" spellcheck="true" aria-label="Presentation source"></textarea>
+        <div class="editor-toolbar">
+          <span id="current-slide-label">Slide 1</span>
+          <div class="writer-actions" id="writer-actions" aria-label="Writing controls">
+            <button type="button" data-writer-command="headline" title="Make this line a headline">Headline</button>
+            <button type="button" data-writer-command="supporting" title="Make this line supporting copy">Supporting line</button>
+            <button type="button" data-writer-command="point" title="Make this line a key point">Key point</button>
+            <button type="button" data-writer-command="quote" title="Make this line a quote">Quote</button>
+            <button type="button" data-writer-command="moment" title="Start a new slide moment (⌘⇧↩)">New moment</button>
+            <button type="button" id="writer-import-media" title="Import a local image, GIF, video, or audio file">Media…</button>
+          </div>
+          <span class="source-language" id="source-language">Document</span><button class="source-toggle" id="toggle-raw-source" type="button" aria-pressed="false" title="Show plain Markdown source">Source</button><span id="feedback" role="status" aria-live="polite">Ready</span>
+        </div>
+        <section class="writer-shell" id="writer-shell" aria-label="Document writing surface">
+          <pre class="writer-highlights" id="writer-highlights" aria-hidden="true"></pre>
+          <textarea id="source" spellcheck="true" aria-label="Write your presentation"></textarea>
+        </section>
         <section class="renderer-preview" aria-label="Live Gamma render">
           <div class="preview-toolbar"><strong>Gamma render</strong><span id="renderer-status">All Gamma runtime capabilities are available</span><button id="focus-preview" type="button" aria-pressed="false">Expand preview</button></div>
           <iframe id="renderer-preview" title="Faithful Gamma presentation preview" allow="autoplay; fullscreen"></iframe>
         </section>
-        <footer class="editor-footer"><span><kbd>⌘↩</kbd> present</span><span><kbd>⌘D</kbd> focus</span><span><kbd>⌘S</kbd> save</span></footer>
+        <footer class="editor-footer"><span>Write freely: headings are shown, prose is private.</span><span><kbd>⌘⇧↩</kbd> new moment</span><span><kbd>⌘↩</kbd> present</span><span><kbd>⌘S</kbd> save</span></footer>
       </section>
       <aside class="inspector-pane" aria-label="Inspector">
         <div class="pane-heading"><span>Inspector</span></div>
-        <section class="inspector-section">
-          <h2>Speaker notes</h2>
-          <p id="source-help">This text supports you and is not projected.</p>
-          <button class="inspector-action" data-insert="\n\nYour speaker note.\n">Add note</button>
-          <button class="inspector-action" data-insert="\n\nA sentence to say with intent.\n">Add note emphasis</button>
-        </section>
-        <section class="inspector-section markdown-inspector" id="markdown-inspector" hidden>
-          <h2>Selected slide</h2>
-          <p>Use the visual editor for the selected Markdown slide. Lists, quotes, tables, and media stay in source untouched.</p>
-          <label>Title <input id="markdown-title" type="text" autocomplete="off"></label>
-          <label>Subtitle <input id="markdown-subtitle" type="text" autocomplete="off"></label>
-          <label>Speaker notes <textarea id="markdown-notes" rows="5"></textarea></label>
-          <button id="apply-markdown-slide" type="button">Apply selected slide</button>
+        <section class="inspector-section markdown-guide" id="markdown-guide">
+          <h2>Write the talk first</h2>
+          <p id="source-help">Ordinary prose is your private script. A headline and supporting line become what the audience sees.</p>
+          <p>Use the writing controls when you need a display line. Press <kbd>⌘⇧↩</kbd>, or return three times, to begin the next moment.</p>
         </section>
         <section class="inspector-section rich-inspector" id="rich-inspector" hidden>
           <h2>Selected slide</h2>
@@ -64,15 +69,11 @@
           <label>Notes <textarea id="rich-notes" rows="4"></textarea></label>
           <details class="rich-advanced"><summary>Full slide configuration</summary><textarea id="rich-configuration" rows="12" spellcheck="false"></textarea><button id="apply-rich-configuration" type="button">Apply configuration</button></details>
         </section>
-        <section class="inspector-section">
+        <section class="inspector-section markdown-tools" id="markdown-tools">
           <h2>On the slide</h2>
-          <button class="inspector-action" data-insert="\n## Your message\n">Subtitle</button>
-          <button class="inspector-action" data-insert="\n- One idea\n">List</button>
-          <button class="inspector-action" data-insert="\n> “A sentence worth remembering.” — Speaker\n">Quote layout</button>
-          <button class="inspector-action" data-insert="\n| Before | After |\n| --- | --- |\n| Manual | Automated |\n">Comparison</button>
-          <button class="inspector-action" data-insert="\n| Signal | Owner | Status |\n| --- | --- | --- |\n| Decision | Team | Active |\n">Table</button>
-          <button class="inspector-action" data-insert="\n![Description](image.png)\n">Image</button>
-          <button class="inspector-action" data-insert="\n![Animation](animation.gif)\n">Animated GIF</button>
+          <p>Keep writing in the document; add a structured visual only when the story asks for one.</p>
+          <button class="inspector-action" data-writer-insert="comparison">Add comparison</button>
+          <button class="inspector-action" data-writer-insert="table">Add table</button>
           <button class="inspector-action" id="import-media" type="button">Import local media…</button>
         </section>
         <section class="inspector-section appearance-section">

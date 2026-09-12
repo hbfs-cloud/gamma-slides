@@ -23,6 +23,14 @@ const desktopFile = name => resolve(root, name);
 const desktopIcon = () => resolve(app.getAppPath(), 'build', 'icon.svg.png');
 const recoveryFile = () => resolve(app.getPath('userData'), 'presenter-recovery.json');
 app.setName('Gamma Presenter');
+const ownsDesktopInstance = app.requestSingleInstanceLock();
+if (!ownsDesktopInstance) app.quit();
+else app.on('second-instance', () => {
+  if (!authorWindow || authorWindow.isDestroyed()) return;
+  if (authorWindow.isMinimized()) authorWindow.restore();
+  authorWindow.show();
+  authorWindow.focus();
+});
 const state = { source: starterMarkdown, sourcePath: null, title: 'New presentation', theme: 'signal-room', deck: null, rawDeck: null, html: '', currentIndex: 0, stageDisplayId: null, sourceKind: 'markdown', revision: 0, editRevision: 0, dirty: false, renderState: 'idle', error: null, sourceRanges: [], recoveryRestored: false, presentationStartedAt: 0, slideStartedAt: 0, countdownRemainingMs: 0, countdownEndsAt: 0, countdownExpired: false, cue: null, activity: [], operatorRequests: [], copilot: { available: {}, running: false, output: '', status: 'Choose a local CLI to draft a private co-pilot response.' } };
 let authorWindow; let stageWindow; let speakerWindow; let recoveryTimer; let tray; let desktopMcp; let timingTicker;
 const indexOf = value => Math.max(0, Math.min(Number(value) || 0, Math.max((state.deck?.slides?.length || 1) - 1, 0)));

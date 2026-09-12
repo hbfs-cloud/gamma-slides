@@ -11,6 +11,7 @@ if (!requestedApp) throw new Error('Set GAMMA_DESKTOP_APP to a packaged Gamma Pr
 const appBundle = resolve(requestedApp);
 const appArgument = process.env.GAMMA_DESKTOP_APP_ARGUMENT ? resolve(process.env.GAMMA_DESKTOP_APP_ARGUMENT) : null;
 const screenshotPath = process.env.GAMMA_DESKTOP_SCREENSHOT ? resolve(process.env.GAMMA_DESKTOP_SCREENSHOT) : null;
+const writerScreenshotPath = process.env.GAMMA_DESKTOP_WRITER_SCREENSHOT ? resolve(process.env.GAMMA_DESKTOP_WRITER_SCREENSHOT) : null;
 const templateScreenshotPath = process.env.GAMMA_DESKTOP_TEMPLATE_SCREENSHOT ? resolve(process.env.GAMMA_DESKTOP_TEMPLATE_SCREENSHOT) : null;
 const themeScreenshotDirectory = process.env.GAMMA_DESKTOP_THEME_SCREENSHOT_DIR ? resolve(process.env.GAMMA_DESKTOP_THEME_SCREENSHOT_DIR) : null;
 const themeReportPath = process.env.GAMMA_DESKTOP_THEME_REPORT ? resolve(process.env.GAMMA_DESKTOP_THEME_REPORT) : null;
@@ -81,6 +82,14 @@ try {
   if (!initial.mcp?.endpoint || !initial.mcp?.token) throw new Error('Desktop MCP endpoint was not exposed to the Author control room.');
   if (!initial.copilot?.available?.codex || !initial.copilot?.available?.claude) throw new Error('The installed Codex and Claude CLIs were not detected by the Author control room.');
   if (!Array.isArray(initial.templates) || initial.templates.length < 5) throw new Error('Author did not expose the complete built-in template gallery.');
+  const writerSurface = await authorRealm.evaluate(() => ({
+    label: document.querySelector('#source-language')?.textContent,
+    headline: Boolean(document.querySelector('#writer-highlights .writer-headline')),
+    momentControl: Boolean(document.querySelector('[data-writer-command="moment"]')),
+    sourceMode: document.querySelector('#toggle-raw-source')?.textContent,
+  }));
+  if (writerSurface.label !== 'Document' || !writerSurface.headline || !writerSurface.momentControl || writerSurface.sourceMode !== 'Source') throw new Error(`Author did not expose the document-first Markdown writer: ${JSON.stringify(writerSurface)}`);
+  if (writerScreenshotPath) { await author.setViewport({ width: 1600, height: 1000, deviceScaleFactor: 1 }); await author.screenshot({ path: writerScreenshotPath }); }
   await author.click('#open-templates');
   await author.waitForSelector('#template-dialog[open]');
   if (await author.$$('[data-template-id]').then(items => items.length) !== initial.templates.length) throw new Error('Template gallery contents do not match the packaged template catalog.');
