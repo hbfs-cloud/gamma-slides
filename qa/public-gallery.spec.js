@@ -41,6 +41,7 @@ test('the public gallery keeps live proof, full demos, and mobile width availabl
   await previews.first().scrollIntoViewIfNeeded();
   await expect.poll(() => previews.first().getAttribute('src')).toMatch(/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/3/);
   await expect(previews.first().locator('..').locator('..')).toHaveAttribute('data-live-ready', '', { timeout: 20000 });
+  await expect(previews.first()).toHaveCSS('opacity', '1');
   const mediaDeck = await previews.first().elementHandle().then(handle => handle.contentFrame());
   await expect(mediaDeck.locator('#gamma-theme-chooser')).not.toBeVisible();
   await expect(mediaDeck.locator('section.present')).toContainText('Play a real YouTube scene');
@@ -48,6 +49,20 @@ test('the public gallery keeps live proof, full demos, and mobile width availabl
   await expect(gallery.getByRole('link', { name: 'Open the full Architecture in motion demo' })).toHaveAttribute('href', './gamma-presenter-capabilities/#/5');
   const desktopBox = await previews.first().boundingBox();
   expect(desktopBox.width / desktopBox.height).toBeGreaterThan(1.7);
+  const desktopMedia = mediaDeck.locator('section.present .studio-youtube-media');
+  const [desktopMediaBox, desktopViewport] = await Promise.all([
+    desktopMedia.evaluate(node => node.getBoundingClientRect().toJSON()),
+    mediaDeck.evaluate(() => ({ width: innerWidth, height: innerHeight })),
+  ]);
+  expect(desktopMediaBox.width / desktopMediaBox.height).toBeGreaterThan(1.7);
+  expect(desktopMediaBox.width / desktopMediaBox.height).toBeLessThan(1.9);
+  expect(desktopMediaBox.height).toBeGreaterThan(desktopViewport.height * .4);
+  expect(desktopMediaBox.y).toBeGreaterThanOrEqual(0);
+  expect(desktopMediaBox.y + desktopMediaBox.height).toBeLessThanOrEqual(desktopViewport.height);
+  const youtubeFrame = await desktopMedia.elementHandle().then(handle => handle.contentFrame());
+  // Wait for the external player to settle for evidence, without treating a
+  // provider/network policy as an app-layout failure (the full deck has a link).
+  await youtubeFrame?.waitForLoadState('load', { timeout: 5000 }).catch(() => {});
   await page.screenshot({ path: join(evidence, 'desktop-media-preview.png') });
   await page.screenshot({ path: join(evidence, 'desktop-live-gallery.png'), fullPage: true });
 
@@ -57,6 +72,7 @@ test('the public gallery keeps live proof, full demos, and mobile width availabl
   await mobilePreview.scrollIntoViewIfNeeded();
   await expect.poll(() => mobilePreview.getAttribute('src')).toMatch(/gamma-presenter-capabilities\/\?gamma-preview=1&gamma-clean=gallery#\/3/);
   await expect(mobilePreview.locator('..').locator('..')).toHaveAttribute('data-live-ready', '', { timeout: 20000 });
+  await expect(mobilePreview).toHaveCSS('opacity', '1');
   const mobileBox = await mobilePreview.boundingBox();
   expect(mobileBox.width).toBeLessThanOrEqual(358);
   expect(mobileBox.height).toBeGreaterThan(500);

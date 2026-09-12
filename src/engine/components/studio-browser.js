@@ -5,6 +5,16 @@ export function studioBrowserCSS(){return `
 .gamma-browser-resize{position:absolute;right:0;bottom:0;z-index:2;width:28px;height:28px;cursor:nwse-resize;touch-action:none}.gamma-browser-resize::after{content:'';position:absolute;right:8px;bottom:8px;width:9px;height:9px;border-right:2px solid var(--studio-blue-soft);border-bottom:2px solid var(--studio-blue-soft)}.gamma-browser.is-expanded .gamma-browser-drag,.gamma-browser.is-expanded .gamma-browser-resize{display:none}
 @media(max-width:900px){.gamma-browser{inset:16px 16px 160px;width:auto;height:auto;min-width:0;min-height:240px;max-width:none;max-height:none}.gamma-browser header form{order:2;flex-basis:100%;min-width:0}.gamma-browser header{gap:8px}.gamma-browser footer{flex-wrap:wrap}.gamma-browser footer input{flex:1 0 100%}.gamma-browser footer a{padding:8px}.gamma-browser-drag{order:-1;flex:1}.gamma-browser-resize{display:none}}
 .studio-content-slide{display:flex;flex-direction:column;gap:24px;min-width:0}.studio-content-slide h2{color:var(--gamma-text)}.studio-content-kicker{color:var(--gamma-primary)!important;font:500 14px Archivo,sans-serif}.studio-site-address{font-family:Azeret Mono,monospace;overflow-wrap:anywhere}.studio-slide-media{width:100%;max-height:52dvh;object-fit:contain}.studio-youtube-media{display:block;width:100%;aspect-ratio:16/9;max-height:52dvh;border:0;background:#05070a}.studio-youtube-unavailable{display:grid;min-height:220px;place-items:center;padding:24px;border:1px solid var(--studio-line);color:var(--gamma-muted);text-align:center}.studio-slide-actions{display:flex;flex-wrap:wrap;gap:10px}.studio-slide-actions button,.studio-slide-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;font:500 16px Archivo,sans-serif;padding:12px 24px;color:var(--gamma-bg);background:var(--gamma-primary);border:0;border-radius:9px;text-decoration:none}
+/* A short, landscape gallery frame has no operator footer. Reserve its space
+   for the player, and size media from the remaining content row, not dvh twice. */
+@media(min-width:591px) and (max-width:900px){
+ html[data-gamma-preview] body.gamma-experience:has(section.present .studio-youtube-media) .reveal{height:calc(100% - 64px)}
+ html[data-gamma-preview] body.gamma-experience .reveal:not(.overview) .slides>section:has(.studio-youtube-media){padding:16px 24px!important;overflow:hidden}
+ html[data-gamma-preview] .studio-content-slide:has(>.studio-youtube-media){display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;height:100%;min-height:0}
+ html[data-gamma-preview] .studio-content-slide:has(>.studio-youtube-media)>.studio-content-kicker{display:none}
+ html[data-gamma-preview] .studio-content-slide:has(>.studio-youtube-media)>:is(h2,p){margin:0!important}
+ html[data-gamma-preview] .studio-youtube-media{align-self:center;justify-self:center;width:auto;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%}
+}
 @media print{.gamma-browser{display:none!important}}
 `;}
 function initStudioBrowser(){
