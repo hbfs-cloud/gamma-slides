@@ -16,12 +16,12 @@ On 2026-09-12, final local unit/integration validation passed **150/150 with zer
 
 The six final feature posters, three story posters, and final desktop/mobile confirmation captures were visually inspected after a bounded correction pass. Fixes include readable responsive browser/AI controls, eager loading of only the active preview, non-overlapping mobile home/menu controls, an unobscured cyber edge label, and complete YouTube framing. A concurrent test run collided while cleaning a shared trace directory; the affected YouTube suite subsequently passed all eight cases with a separate `--output` directory. This artifact collision is not counted as a passing combined run.
 
-Current deployment verification is tracked in `.agent/current-plan.md`. The publication status below distinguishes the preceding live revision from this locally validated change.
+The revision was deployed from `e9e3a3a` by [Pages run 34705679106](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34705679106), completed at 16:35:47 UTC on 2026-09-12. The same gallery and explanatory-story contracts then passed **7/7 against the actual public URL** (1.2 minutes). This includes all six features at four viewport sizes and all 23 scenes on desktop/mobile. Deployed landing, mobile story, Archify, YouTube and mobile AI captures were inspected. All three story routes/posters, the favicon and the published v2.0.3 desktop ZIP returned HTTP 200. No new desktop release is implied by this Pages deployment.
 
 | Layer | Command | What it proves | Current boundary |
 | --- | --- | --- | --- |
 | Unit and integration | `bun run test` | Schema/rendering contracts, source transformations, Writer semantics, revisions, corporate profiles, MCP authorization, terminal protocol, sharing, Drive download/restore boundaries, and injected delivery clients | 150 tests passed with zero skipped using the dedicated Chromium configuration and serial test execution. Injected provider tests do not prove real account consent or access. |
-| Browser interaction | `bun run test:browser` | Real Chromium interactions: themes, responsive layouts, recording, browser/terminal streams, live-gallery lifecycle and desktop connection-panel recovery | The completed 109-scenario endurance run passed with zero skipped at `GAMMA_ENDURANCE_SECONDS=60`. The browser matrix is now 110; its final focused regression passed 15/15 with zero skipped (immersive 7, desktop connections 6, public gallery 2). Ubuntu CI uses Xvfb for headed capture tests and retains evidence for seven days. Viewport emulation is not a physical-device matrix. |
+| Browser interaction | `bun run test:browser` | Real Chromium interactions: themes, responsive layouts, recording, browser/terminal streams, live-gallery lifecycle and desktop connection-panel recovery | Current gallery/story revision: 25 affected local cases across successful runs, then 7/7 public-URL checks. The earlier 109-scenario endurance run and 15/15 operating-system regression are historical evidence below, not a full rerun of today's expanded matrix. Ubuntu CI uses Xvfb for headed capture tests and retains evidence for seven days. Viewport emulation is not a physical-device matrix. |
 | Static delivery | `gamma-slides site` / `gamma-slides deploy`; Author **Connect & share** | Self-contained output, stable GitHub source/receipt workflow, and isolated Vercel staging | Desktop submission is explicitly unverified until its URL is checked. Provider authentication remains with the owner’s CLIs. |
 | Native package | `bun run desktop:package` and `bun run desktop:smoke` | The rebuilt arm64 package smoke passed with exit 0: Writer height, connection status/error recovery, stable live Archify template, three themes, authenticated MCP approval, stop → Author → edit → Present, and cue privacy (Speaker only, absent from Stage). | Current-package DMG/ZIP integrity completed successfully. Signing/notarization and real camera/microphone/multi-display checks remain separate gates. |
 | Visual design | Impeccable detector plus captured desktop/mobile review | Token consistency, interaction contracts and inspected product states | The detector currently lacks its optional HTML/CSS parsers in this checkout, so it is a supplementary signal—not visual certification. |
@@ -35,7 +35,7 @@ Current deployment verification is tracked in `.agent/current-plan.md`. The publ
 - Corporate profiles touch deck-level identity only. Existing decks are not auto-rebranded; template auto-branding is opt-in.
 - Interactive media, GPU scenes, and browser/terminal demonstrations remain runtime experiences. PDF/PNG/PowerPoint exports preserve an honest static/semantic representation rather than claiming equivalence.
 
-## Latest local evidence — 2026-09-12
+## Earlier operating-system evidence — 2026-09-12
 
 - The final dedicated-Chromium unit/integration run passed 150 tests with zero skipped in 14.7 seconds (`output/desktop-delivery/final-main-unit-150.log`). The earlier full 109-scenario browser endurance run passed with `GAMMA_ENDURANCE_SECONDS=60` and zero skipped. The matrix is now 110; later affected-path checks passed 15/15 in 47.8 seconds: immersive (7), desktop connections (6), and public gallery (2). Retained evidence includes `output/final-focused/`, `output/immersive-qa/`, and `output/public-gallery/`.
 - Three context disposal now detaches the old loss listener, releases the context outside the input/print handler, and disposes the old renderer before notifying the 2D path. Four deterministic tests include evaluation of the actual generated browser JavaScript; all 14 affected 2D/3D browser scenarios passed (`output/three-lifecycle-results/`). This is local regression evidence, not a claim that the remote Linux matrix is green.
@@ -51,17 +51,21 @@ Current deployment verification is tracked in `.agent/current-plan.md`. The publ
 
 ### Reusable post-deployment Pages check
 
-The same public-gallery contract targets the deployed Pages URL without a separate workflow. On 2026-09-12 the final rerun passed 2/2 in 8.6 seconds against the actual public site, at desktop 1440×900 and mobile 390×844. It checks six available preview entries and exercises YouTube/Archify previews, one-active-preview lifecycle, offscreen teardown and reduced-motion manual playback. Remote captures in `output/deployed-gallery-final/` were inspected, including the complete 16:9 YouTube player and mobile Archify preview:
+The public-gallery and explanatory-story contracts target the deployed Pages URL without a separate workflow or local rebuild. The current revision passes 7/7 against the public site: the gallery at 390×844, 768×1024, 1440×900 and 2016×1230, lifecycle/keyboard/reduced-motion checks, and the 23 scenes at desktop and mobile sizes. Evidence is retained in `output/deployed-gallery-20260912/`, `output/deployed-stories-20260912/` and `output/deployed-pages-validation/`. Configure `GAMMA_BROWSER_EXECUTABLE` to the dedicated test Chromium before running:
 
 ```bash
-GAMMA_GALLERY_BASE_URL=https://hbfs-cloud.github.io/gamma-slides/ GAMMA_GALLERY_EVIDENCE=output/deployed-gallery bunx playwright test qa/public-gallery.spec.js --reporter=list
+GAMMA_GALLERY_BASE_URL=https://hbfs-cloud.github.io/gamma-slides/ \
+GAMMA_GALLERY_EVIDENCE=output/deployed-gallery-20260912 \
+GAMMA_EXPLANATORY_STORIES_EVIDENCE=output/deployed-stories-20260912 \
+bun run test:browser qa/public-gallery.spec.js qa/explanatory-stories.spec.js \
+  --workers=1 --output=output/deployed-pages-validation
 ```
 
 ### Publication status
 
 The live site follows `main` independently of desktop packaging. Pages resolves the latest published macOS ZIP from GitHub release metadata; it does not construct a download to an unpublished package version. The current available desktop download is v2.0.3. The v2.0.4 tag did not produce a release because CI failed; local package evidence above is not a remote release sign-off.
 
-The gallery from main `0376548` was published successfully at 12:52 UTC on 2026-09-12 in [Pages run 34694839859](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34694839859). The subsequent Three lifecycle correction (`3f29d3d`) deployed at 13:00 UTC in [Pages run 34695163187](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34695163187), followed by the passing public-URL rerun above. The public favicon and runtime GIF respond with HTTP 200; the available desktop ZIP link resolves successfully. This remote check is separate from desktop release validation.
+The current six-feature gallery and three explanatory stories are live from `e9e3a3a`, published by [Pages run 34705679106](https://github.com/hbfs-cloud/gamma-slides/actions/runs/34705679106), with the 7/7 public-URL result above. The earlier gallery `0376548` and Three lifecycle correction `3f29d3d` were published in runs `34694839859` and `34695163187`; their older two-case checks do not substitute for current validation. This remote check remains separate from desktop release validation.
 
 Remote validation exposed missing recording tools, a mismatched browser, an Ubuntu sandbox restriction, and asynchronous isolated-browser teardown. The CI matrix now pins Chromium, installs FFmpeg, and divides Linux interaction tests into three shards on Ubuntu 22.04 with the browser sandbox enabled. Two complete 1080p performance scenarios retain the strict >24 fps gate on macOS. In run `34694839778`, broadcast passed, but isolated-browser streaming measured 19.07 fps and failed the performance gate. The Three lifecycle change is unrelated to that capture path. These failures are not hidden by the earlier local pass.
 
