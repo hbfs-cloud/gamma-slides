@@ -230,3 +230,21 @@ Motion thesis: the hero is a short, finite journey from written argument to a li
 - Browser crash mitigation: `bun run test` passes 85/86 with the sole Chromium integration test skipped when no explicit executable is configured; a deterministic injected-launcher test proves failure latching and explicit re-arming.
 - Electron : capture Auteur Markdown, YAML riche et scène graphique/3D effectuées dans `.impeccable/review/presenter-rich/`. Le détecteur Impeccable ne rapporte aucun constat (parseur HTML indisponible, résultat sous-estimé) ; revue visuelle indépendante : `ship`.
 - Packaging Electron arm64 : la destination usuelle `dist/mac-arm64` était ouverte et n'a pas été remplacée ; build finale vérifiée dans `dist-presenter-review/mac-arm64/Gamma Presenter.app`, non signée faute d'identité Developer ID.
+
+# Weekly ticker Shorts — 2026-09-14
+- DONE — CLI shorts/shorts-assets, mobile EUR chart and cached Qwen voice stage installed.
+- DONE — Targeted tests13PASS, media portrait29s verified; full29batch in production.
+- IN PROGRESS — Final29video QA and durable delivery in trading research archive.
+- No commit or push for this new feature; unrelated original untracked files preserved.
+
+- DONE — Final33batch (29company + 4ETF):29s/1080x1920,33receipts PASS, no failures.
+- DONE — Durable archive and gallery delivered in trading/data/research/week-2026-09-14-shorts.
+- DONE — Full suite162PASS/1SKIP, card/voice/hash verification PASS; reusable batch documented.
+- Shorts publication remains separate; no upload, commit or push performed for this feature.
+
+# Reusable market videos and authorized publication
+- DONE — 33 Shorts published and independently verified public, processed and HD.
+- DONE — Versioned Signal Room skill, approved voice profile, long adapters and Shorts publisher.
+- DONE — Full suite169PASS/1SKIP; real Chromium capture1920x1080 without margins.
+- DONE — Exact-duration long-video finalization smoke and full decoding passed.
+- IN PROGRESS — Authorized commit/push and global skill installation; unrelated files preserved.

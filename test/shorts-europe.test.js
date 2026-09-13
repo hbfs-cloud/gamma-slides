@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {sma,europeanChart} from '../src/shorts/europe-chart.js';
+test('moving averages use all supplied history before a visible window',()=>{const a=sma(Array.from({length:210},(_,i)=>i+1),200);assert.equal(a[198],null);assert.equal(a[199],100.5);assert.equal(a[209],110.5);});
+test('daily chart rejects invalid prices and stale reference dates',()=>{const p={bars:[['2026-09-10',10,12,9,11,100],['2026-09-11',11,13,10,12,120]]},o={ticker:'EU',from:'2026-09-01',asof:'2026-09-11'};assert.match(europeanChart(p,o),/width="836"/);assert.throws(()=>europeanChart(p,{...o,asof:'2026-09-12'}),/reference date/);assert.throws(()=>europeanChart({bars:[['2026-09-11',10,8,9,11,100]]},o),/OHLCV/);});

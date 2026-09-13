@@ -4,6 +4,9 @@ import { presentRepository, serveRepositoryPresentation } from '../src/repositor
 
 import { inspectRepository } from '../src/repository/inspect.js';
 import { Command } from 'commander';
+import { acquireAssets } from '../src/shorts/assets.js';
+import { loadBatch } from '../src/shorts/cards.js';
+import { renderBatch } from '../src/shorts/render.js';
 import chalk from 'chalk';
 import { loadDeckFile } from '../src/loader/index.js';
 import { renderDeck } from '../src/engine/renderer.js';
@@ -28,6 +31,34 @@ import { presentationShareKit } from '../src/site/sharing.js';
 import { backupPresentationToGoogleDrive } from '../src/integrations/google-drive.js';
 
 const program = new Command();
+
+program.command('shorts-assets')
+  .description('Acquire dated chart/logo assets from a reviewed issuer registry')
+  .requiredOption('-f, --file <path>', 'Reviewed issuer registry')
+  .requiredOption('--asof <date>', 'Operator-confirmed reference date YYYY-MM-DD')
+  .requiredOption('-o, --output <directory>', 'Asset output directory')
+  .action(async opts=>{try{const r=await acquireAssets(opts);const blocked=r.items.filter(x=>x.blocked).length;console.log(JSON.stringify({manifest:r.manifestPath,acquired:r.items.length-blocked,blocked}));if(blocked)process.exitCode=1;}catch(e){console.error(e.message);process.exitCode=1;}});
+
+program.command('shorts')
+  .description('Validate or render a reviewed batch of 29-second portrait market Shorts')
+  .requiredOption('-f, --file <path>', 'Reviewed cards JSON')
+  .option('--validate-only', 'Validate editorial data without rendering or network calls')
+  .option('--assets <path>', 'Chart/logo provenance manifest JSON')
+  .option('--voice <directory>', 'Voice WAV cache containing manifest.json')
+  .option('--browser <path>', 'Isolated Chromium executable')
+  .option('--keep-going', 'Retain successful exports and report individual failures')
+  .option('--tickers <symbols>', 'Comma-separated subset, e.g. HPE,DELL')
+  .option('--week <label>', 'Human-readable weekly label (required for rendering)')
+  .option('-o, --output <directory>', 'Output gallery and MP4s', './output/shorts')
+  .action(async opts=>{
+    try {
+      const cards=loadBatch(opts.file);
+      if(opts.validateOnly){console.log(JSON.stringify({valid:true,cards:cards.length}));return;}
+      if(!opts.assets||!opts.voice)throw Error('--assets and --voice are required for rendering');
+      if(!opts.week)throw Error("--week is required for rendering");
+      const result=await renderBatch(opts);console.log(JSON.stringify({complete:true,shorts:result.length,output:resolve(opts.output)}));
+    }catch(error){console.error(error.message);process.exitCode=1;}
+  });
 
 program
   .name('gamma-slides')

@@ -19,6 +19,8 @@
     "docker-compose.yml",
     "README.md",
     ".agents/skills/repo-presentation/",
+    ".agents/skills/market-videos/",
+    "docs/market-shorts.md",
     "docs/repository-presentations.md",
     "docs/gamma-presenter-macos.md",
     "docs/quality-evidence.md",
